@@ -16,7 +16,7 @@ To validate that the DUT handles multiple RDK Service API calls invoked simultan
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure iterations in StabilityTestVariables | `iterations` must be set to the desired number of stress test cycles in StabilityTestVariables (default: "200"). | The iterations variable should be configured with a valid integer string value. |
@@ -26,7 +26,7 @@ To validate that the DUT handles multiple RDK Service API calls invoked simultan
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Reboot device before stress test | Reboot the device as a pre-requisite before starting the synchronous call stress test. The device is rebooted by invoking the Thunder Controller harakiri method and the script waits for `rebootwaitTime` (150) seconds for the device to come back online. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.harakiri"}` | Device should reboot successfully and come back online within the configured wait time. |
 | 2 | Verify required test variables are configured | Check that `iterations` and `methods` are present and non-empty in StabilityTestVariables. If either is missing or empty, the test is marked as FAILURE and aborted. | Both `iterations` and `methods` variables should be properly configured before proceeding. |
@@ -38,7 +38,7 @@ To validate that the DUT handles multiple RDK Service API calls invoked simultan
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 10 mins
 

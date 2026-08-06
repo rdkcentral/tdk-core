@@ -121,9 +121,9 @@ lightning_objects_animation_test_app_url = lightning_apps_loc + "objectanimation
 
 #HTML player application url
 html_video_test_app_url = lightning_apps_loc + "htmlplayer.html"
-html_dash_test_app_url    = lightning_apps_loc + "UnifiedMediaHTMLPlayer.html?player=dashjs"
-html_hls_test_app_url     = lightning_apps_loc + "UnifiedMediaHTMLPlayer.html?player=hls"
-html_shaka_test_app_url   = lightning_apps_loc + "UnifiedMediaHTMLPlayer.html?player=shaka"
+html_dash_test_app_url = lightning_apps_loc + "htmlplayer.html?player=dashjs"
+html_hls_test_app_url = lightning_apps_loc + "htmlplayer.html?player=hls"
+html_shaka_test_app_url = lightning_apps_loc + "htmlplayer.html?player=shaka"
 
 #bolt packages config
 unified_player_app_id = "com.rdkcentral.lightning-unified-player"

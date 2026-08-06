@@ -33,8 +33,14 @@ graphical_plugins_list = []
 
 ping_test_destination = "google.com"
 
+method = "org.rdk.AppManager.1.getInstalledApps"
+
 #AppManager environment variables
 app_download_url = ""
 google_bundle=""
 channelchange_bundle=""
 keytest_bundle=""
+invalid_download_url = "http://invalid.com/"
+
+#Configure any file of size upto 1GB
+Large_Validation_File = ""

@@ -34,11 +34,17 @@ RPI_VENDOR_MANIFEST_REPO="https://github.com/rdkcentral/vendor-manifest-raspberr
 REALTEK_VENDOR_MANIFEST_REPO="https://code.rdkcentral.com/r/collaboration/soc/realtek/vendor-manifest-rdke-realtek"
 BROADCOM_VENDOR_MANIFEST_REPO="https://code.rdkcentral.com/r/collaboration/soc/broadcom/vendor-manifest-rdke-broadcom"
 
-RPI_VENDOR_VERSION=4.11.0
-REALTEK_VENDOR_VERSION=4.5.1
-BROADCOM_VENDOR_VERSION=4.5.0
+#Realtek OSS vendor layer containing vulkan-headers patches
+REALTEK_VULKAN_HEADERS_OSS_REPO="https://code.rdkcentral.com/r/collaboration/soc/realtek/yocto_oe/layers/meta-vendor-rdke-realtek-oss"
 
-MIDDLEWARE_VERSION=8.5.3.0
+RPI_VENDOR_VERSION=4.11.1
+REALTEK_VENDOR_VERSION=4.6.0
+BROADCOM_VENDOR_VERSION=4.8.0
+
+#OSS reference version used to fetch the vkmark recipe (vkmark_git.bb) and its patches from meta-rdk-oss-reference
+OSS_VERSION=4.13.0
+
+MIDDLEWARE_VERSION=8.6.3.0
 
 ##############################################################################################
 # VULKAN VERSION is based of vulkaninfo output
@@ -50,8 +56,8 @@ MIDDLEWARE_VERSION=8.5.3.0
 #
 # Update the below vulkan version if compiling vkmark or vkcube
 ##############################################################################################
-REALTEK_VULKAN_VERSION="1.3.247"
-BROADCOM_VULKAN_VERSION="1.3.296"
+REALTEK_VULKAN_VERSION="1.4.303"
+BROADCOM_VULKAN_VERSION="1.4.341"
 RPI4_VULKAN_VERSION="1.3.204"
 
 #Choose from HYBRID, MEDIACLIENT
@@ -88,7 +94,7 @@ DEEPSLEEPHAL_FLAGS=" -DENABLE_DEEPSLEEP_WAKEUP_EVT "
 FLAGS_HAL="-DENABLE_DEEPSLEEP_WAKEUP_EVT -DENABLE_THERMAL_PROTECTION -DENABLE_LLAMA_PLATCO -DNO_DEVICE_READY_EVENT"
 
 #Do you want to enable any modules which are not enabled?
-DISTRO_CONFIGURE=" --enable-fireboltcompliance --enable-bluetoothhal"
+DISTRO_CONFIGURE=" --enable-graphicstestapps --enable-bluetoothhal"
 
 
 #Do you want to exclude any files from copying to device?
@@ -130,4 +136,4 @@ PARSEJSON_LIB_VERSION=0
 DWNLUTILS_LIB_VERSION=0
 RFCAPI_LIB_VERSION=0
 
-TDK_REVISION="TDK_M150"
+TDK_REVISION="TDK_M151"

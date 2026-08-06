@@ -1,0 +1,898 @@
+## TestScript Name
+RDKV_CERT_AVS_LifecycleManager
+
+## Table of Contents
+
+1. [Objective](#objective)
+2. [Plugin Pre-conditions](#plugin-pre-conditions)
+3. [Test Cases](#test-cases)
+   - [LifecycleManager_AppReady_Valid_AppId](#lifecyclemanager_appready_valid_appid)
+   - [LifecycleManager_AppReady_Empty_AppId](#lifecyclemanager_appready_empty_appid)
+   - [LifecycleManager_AppReady_Numeric_AppId](#lifecyclemanager_appready_numeric_appid)
+   - [LifecycleManager_AppReady_Special_Char_AppId](#lifecyclemanager_appready_special_char_appid)
+   - [LifecycleManager_AppReady_Long_String_AppId](#lifecyclemanager_appready_long_string_appid)
+   - [LifecycleManager_AppReady_Boolean_AppId](#lifecyclemanager_appready_boolean_appid)
+   - [LifecycleManager_AppReady_Without_Parameters](#lifecyclemanager_appready_without_parameters)
+   - [LifecycleManager_CloseApp_Valid_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_valid_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Valid_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_valid_appid_error_closereason)
+   - [LifecycleManager_CloseApp_ValidAppId_EmptyCloseReason](#lifecyclemanager_closeapp_validappid_emptyclosereason)
+   - [LifecycleManager_CloseApp_Empty_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_empty_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Empty_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_empty_appid_error_closereason)
+   - [LifecycleManager_CloseApp_Empty_AppId_KILL_AND_RUN_CloseReason](#lifecyclemanager_closeapp_empty_appid_kill_and_run_closereason)
+   - [LifecycleManager_CloseApp_Empty_AppId_KILL_AND_ACTIVATE_CloseReason](#lifecyclemanager_closeapp_empty_appid_kill_and_activate_closereason)
+   - [LifecycleManager_CloseApp_Empty_Params](#lifecyclemanager_closeapp_empty_params)
+   - [LifecycleManager_CloseApp_Without_Parameters](#lifecyclemanager_closeapp_without_parameters)
+   - [LifecycleManager_CloseApp_Invalid_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_invalid_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Invalid_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_invalid_appid_error_closereason)
+   - [LifecycleManager_CloseApp_Invalid_AppId_KILL_AND_RUN_CloseReason](#lifecyclemanager_closeapp_invalid_appid_kill_and_run_closereason)
+   - [LifecycleManager_CloseApp_Invalid_AppId_KILL_AND_ACTIVATE_CloseReason](#lifecyclemanager_closeapp_invalid_appid_kill_and_activate_closereason)
+   - [LifecycleManager_CloseApp_Numeric_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_numeric_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Numeric_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_numeric_appid_error_closereason)
+   - [LifecycleManager_CloseApp_Numeric_AppId_KILL_AND_RUN_CloseReason](#lifecyclemanager_closeapp_numeric_appid_kill_and_run_closereason)
+   - [LifecycleManager_CloseApp_Numeric_AppId_KILL_AND_ACTIVATE_CloseReason](#lifecyclemanager_closeapp_numeric_appid_kill_and_activate_closereason)
+   - [LifecycleManager_CloseApp_Special_Char_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_special_char_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Special_Char_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_special_char_appid_error_closereason)
+   - [LifecycleManager_CloseApp_Special_Char_AppId_KILL_AND_RUN_CloseReason](#lifecyclemanager_closeapp_special_char_appid_kill_and_run_closereason)
+   - [LifecycleManager_CloseApp_Special_Char_AppId_KILL_AND_ACTIVATE_CloseReason](#lifecyclemanager_closeapp_special_char_appid_kill_and_activate_closereason)
+   - [LifecycleManager_CloseApp_Boolean_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_boolean_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Boolean_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_boolean_appid_error_closereason)
+   - [LifecycleManager_CloseApp_Boolean_AppId_KILL_AND_RUN_CloseReason](#lifecyclemanager_closeapp_boolean_appid_kill_and_run_closereason)
+   - [LifecycleManager_CloseApp_Boolean_AppId_KILL_AND_ACTIVATE_CloseReason](#lifecyclemanager_closeapp_boolean_appid_kill_and_activate_closereason)
+   - [LifecycleManager_CloseApp_Long_String_AppId_USER_EXIT_CloseReason](#lifecyclemanager_closeapp_long_string_appid_user_exit_closereason)
+   - [LifecycleManager_CloseApp_Long_String_AppId_ERROR_CloseReason](#lifecyclemanager_closeapp_long_string_appid_error_closereason)
+   - [LifecycleManager_CloseApp_Long_String_AppId_KILL_AND_RUN_CloseReason](#lifecyclemanager_closeapp_long_string_appid_kill_and_run_closereason)
+   - [LifecycleManager_CloseApp_Long_String_AppId_KILL_AND_ACTIVATE_CloseReason](#lifecyclemanager_closeapp_long_string_appid_kill_and_activate_closereason)
+   - [LifecycleManager_CloseApp_Valid_AppId_Numeric_CloseReason](#lifecyclemanager_closeapp_valid_appid_numeric_closereason)
+   - [LifecycleManager_CloseApp_Valid_AppId_Special_Char_CloseReason](#lifecyclemanager_closeapp_valid_appid_special_char_closereason)
+   - [LifecycleManager_CloseApp_Valid_AppId_Boolean_CloseReason](#lifecyclemanager_closeapp_valid_appid_boolean_closereason)
+   - [LifecycleManager_CloseApp_Valid_AppId_Long_String_CloseReason](#lifecyclemanager_closeapp_valid_appid_long_string_closereason)
+4. [Plugin Post-conditions](#plugin-post-conditions)
+5. [Test Attributes](#test-attributes)
+
+## Objective
+
+The **LifecycleManager** plugin is a Thunder (WPEFramework) component
+accessible via JSON-RPC under the callsign `org.rdk.LifecycleManager` (version 1)
+
+## Plugin Pre-conditions
+
+### Plugin Pre-condition 1: Activate_AppStorageManager_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of AppStorageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppStorageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate AppStorageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppStorageManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of AppStorageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppStorageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+
+### Plugin Pre-condition 2: Activate_DownloadManager_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of DownloadManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DownloadManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DownloadManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of DownloadManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+
+### Plugin Pre-condition 3: Activate_AppPackageManager_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppPackageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppPackageManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppPackageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+
+### Plugin Pre-condition 4: Activate_AppManager_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of AppManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate AppManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of AppManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+
+### Plugin Pre-condition 5: Activate_LifecycleManager_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of LifecycleManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.LifecycleManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate LifecycleManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.LifecycleManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of LifecycleManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.LifecycleManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+
+### Plugin Pre-condition 6: Check_Existing_Package_Before_Install
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check existing package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
+| 2 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 3 | Download valid parameters | Download on DownloadManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
+| 4 | Install package on device | Install on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_4>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 5 | Verify installed package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
+
+### Plugin Pre-condition 7: Configure_Device_Parameter
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Configure packagemanager application name | `PACKAGEMANAGER_APPLICATION_NAME` must be set to the application/package name to be installed | The `PACKAGEMANAGER_APPLICATION_NAME` value should be correctly configured in the device-specific config file |
+| 2 | Configure packagemanager application version | `PACKAGEMANAGER_APPLICATION_VERSION` must be set to the application version to be installed | The `PACKAGEMANAGER_APPLICATION_VERSION` value should be correctly configured in the device-specific config file |
+| 3 | Configure packagemanager application hosted URL | `PACKAGEMANAGER_APPLICATION_HOSTEDURL` must be set to the hosted URL of the primary application/package | The `PACKAGEMANAGER_APPLICATION_HOSTEDURL` value should be correctly configured in the device-specific config file |
+| 4 | Configure packagemanager additionalmetadata name | `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` must be set to the additional metadata key associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_NAME` value should be correctly configured in the device-specific config file |
+| 5 | Configure packagemanager additionalmetadata value | `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` must be set to the additional metadata value associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` value should be correctly configured in the device-specific config file |
+| 6 | Configure packagemanager application MD5 checksum value | `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` must be set to the expected MD5 checksum of the application package for download integrity verification | The `PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE` value should be correctly configured in the device-specific config file |
+## Test Cases
+
+<a id="lifecyclemanager_appready_valid_appid"></a>
+### TestCase Name
+LifecycleManager_AppReady_Valid_AppId
+
+### TestCase ID
+LCM_01
+
+### TestCase Objective
+Verify appReady with a valid appId string
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Launch_Application
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check loaded apps | Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
+| 2 | Launch app valid params | *(Conditional statement executed only if package/app is currently present)*<br>Launch App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "intent": "", "launchArgs": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 3 | Check app launched | *(Conditional statement executed only if package/app is currently present)*<br>Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Notify LifecycleManager that app is ready | Invoke appReady on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.appReady", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+
+### TestCase Post-condition
+
+#### TestCase Post-condition 1: Terminate_Application
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Terminate app valid param | Terminate app on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+
+---
+
+<a id="lifecyclemanager_appready_empty_appid"></a>
+### TestCase Name
+LifecycleManager_AppReady_Empty_AppId
+
+### TestCase ID
+LCM_02
+
+### TestCase Objective
+Verify appReady with an empty appId string
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Notify LifecycleManager that app is ready | Invoke appReady on org.rdk.LifecycleManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.appReady", "params": {"appId": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_appready_numeric_appid"></a>
+### TestCase Name
+LifecycleManager_AppReady_Numeric_AppId
+
+### TestCase ID
+LCM_03
+
+### TestCase Objective
+Verify appReady with a numeric value for appId
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Notify LifecycleManager that app is ready | Invoke appReady on org.rdk.LifecycleManager with appId: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.appReady", "params": {"appId": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_appready_special_char_appid"></a>
+### TestCase Name
+LifecycleManager_AppReady_Special_Char_AppId
+
+### TestCase ID
+LCM_04
+
+### TestCase Objective
+Verify appReady with a special character string as appId.
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Verify AppReady special char | Invoke appReady on org.rdk.LifecycleManager with appId: "!()*^"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.appReady", "params": {"appId": "!()*^"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_appready_long_string_appid"></a>
+### TestCase Name
+LifecycleManager_AppReady_Long_String_AppId
+
+### TestCase ID
+LCM_05
+
+### TestCase Objective
+Verify appReady with a very long string as appId.
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Verify AppReady long string | Invoke appReady on org.rdk.LifecycleManager with appId: "VeryLongStringForAppIdTestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.appReady", "params": {"appId": "VeryLongStringForAppIdTestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_appready_boolean_appid"></a>
+### TestCase Name
+LifecycleManager_AppReady_Boolean_AppId
+
+### TestCase ID
+LCM_06
+
+### TestCase Objective
+Verify appReady with a boolean value for appId
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Verify AppReady boolean AppId | Invoke appReady on org.rdk.LifecycleManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.appReady", "params": {"appId": true}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_appready_without_parameters"></a>
+### TestCase Name
+LifecycleManager_AppReady_Without_Parameters
+
+### TestCase ID
+LCM_07
+
+### TestCase Objective
+Verify appReady without any parameters
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Verify AppReady no params | Invoke appReady on org.rdk.LifecycleManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.appReady"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_valid_appid_user_exit_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Valid_AppId_USER_EXIT_CloseReason
+
+### TestCase ID
+LCM_08
+
+### TestCase Objective
+Verify closeApp with valid appId and USER_EXIT closeReason
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Launch_Application
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check loaded apps | Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
+| 2 | Launch app valid params | *(Conditional statement executed only if package/app is currently present)*<br>Launch App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "intent": "", "launchArgs": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 3 | Check app launched | *(Conditional statement executed only if package/app is currently present)*<br>Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app valid params | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", closeReason: "USER_EXIT"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "closeReason": "USER_EXIT"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+
+---
+
+<a id="lifecyclemanager_closeapp_valid_appid_error_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Valid_AppId_ERROR_CloseReason
+
+### TestCase ID
+LCM_09
+
+### TestCase Objective
+Verify closeApp with valid appId and ERROR closeReason
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Launch_Application
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check loaded apps | Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
+| 2 | Launch app valid params | *(Conditional statement executed only if package/app is currently present)*<br>Launch App on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "intent": "", "launchArgs": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 3 | Check app launched | *(Conditional statement executed only if package/app is currently present)*<br>Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app ERROR reason | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", closeReason: "ERROR"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "closeReason": "ERROR"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+
+---
+
+<a id="lifecyclemanager_closeapp_validappid_emptyclosereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_ValidAppId_EmptyCloseReason
+
+### TestCase ID
+LCM_10
+
+### TestCase Objective
+Verify closeApp with valid appId and empty closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app ValidAppId EmptyCloseReason | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", closeReason: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "closeReason": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_empty_appid_user_exit_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Empty_AppId_USER_EXIT_CloseReason
+
+### TestCase ID
+LCM_11
+
+### TestCase Objective
+Verify closeApp with empty appId and USER_EXIT closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app empty AppId | Invoke closeApp on org.rdk.LifecycleManager with appId: "", closeReason: "USER_EXIT"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "", "closeReason": "USER_EXIT"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_empty_appid_error_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Empty_AppId_ERROR_CloseReason
+
+### TestCase ID
+LCM_12
+
+### TestCase Objective
+Verify closeApp with empty appId and ERROR closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app empty AppId ERROR | Invoke closeApp on org.rdk.LifecycleManager with appId: "", closeReason: "ERROR"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "", "closeReason": "ERROR"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_empty_appid_kill_and_run_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Empty_AppId_KILL_AND_RUN_CloseReason
+
+### TestCase ID
+LCM_13
+
+### TestCase Objective
+Verify closeApp with empty appId and KILL_AND_RUN closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app empty AppId KILL AND RUN | Invoke closeApp on org.rdk.LifecycleManager with appId: "", closeReason: "KILL_AND_RUN"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "", "closeReason": "KILL_AND_RUN"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_empty_appid_kill_and_activate_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Empty_AppId_KILL_AND_ACTIVATE_CloseReason
+
+### TestCase ID
+LCM_14
+
+### TestCase Objective
+Verify closeApp with empty appId and KILL_AND_ACTIVATE closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app empty AppId KILL AND ACTIVATE | Invoke closeApp on org.rdk.LifecycleManager with appId: "", closeReason: "KILL_AND_ACTIVATE"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "", "closeReason": "KILL_AND_ACTIVATE"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_empty_params"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Empty_Params
+
+### TestCase ID
+LCM_15
+
+### TestCase Objective
+Verify closeApp with empty appId and empty closeReason.
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app empty params | Invoke closeApp on org.rdk.LifecycleManager with appId: "", closeReason: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "", "closeReason": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_without_parameters"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Without_Parameters
+
+### TestCase ID
+LCM_16
+
+### TestCase Objective
+Verify closeApp without any parameters
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app no params | Invoke closeApp on org.rdk.LifecycleManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_invalid_appid_user_exit_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Invalid_AppId_USER_EXIT_CloseReason
+
+### TestCase ID
+LCM_17
+
+### TestCase Objective
+Verify closeApp with invalid appId and USER_EXIT closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app invalid AppId | Invoke closeApp on org.rdk.LifecycleManager with appId: "InvalidAppID", closeReason: "USER_EXIT"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "InvalidAppID", "closeReason": "USER_EXIT"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_invalid_appid_error_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Invalid_AppId_ERROR_CloseReason
+
+### TestCase ID
+LCM_18
+
+### TestCase Objective
+Verify closeApp with invalid appId and ERROR closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app invalid AppId ERROR | Invoke closeApp on org.rdk.LifecycleManager with appId: "InvalidAppID", closeReason: "ERROR"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "InvalidAppID", "closeReason": "ERROR"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_invalid_appid_kill_and_run_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Invalid_AppId_KILL_AND_RUN_CloseReason
+
+### TestCase ID
+LCM_19
+
+### TestCase Objective
+Verify closeApp with invalid appId and KILL_AND_RUN closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app invalid AppId KILL AND RUN | Invoke closeApp on org.rdk.LifecycleManager with appId: "InvalidAppID", closeReason: "KILL_AND_RUN"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "InvalidAppID", "closeReason": "KILL_AND_RUN"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_invalid_appid_kill_and_activate_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Invalid_AppId_KILL_AND_ACTIVATE_CloseReason
+
+### TestCase ID
+LCM_20
+
+### TestCase Objective
+Verify closeApp with invalid appId and KILL_AND_ACTIVATE closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app invalid AppId KILL AND ACTIVATE | Invoke closeApp on org.rdk.LifecycleManager with appId: "InvalidAppID", closeReason: "KILL_AND_ACTIVATE"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "InvalidAppID", "closeReason": "KILL_AND_ACTIVATE"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_numeric_appid_user_exit_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Numeric_AppId_USER_EXIT_CloseReason
+
+### TestCase ID
+LCM_21
+
+### TestCase Objective
+Verify closeApp with numeric value for appId and USER_EXIT closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app numeric AppId | Invoke closeApp on org.rdk.LifecycleManager with closeReason: "USER_EXIT", appId: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": 12345, "closeReason": "USER_EXIT"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_numeric_appid_error_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Numeric_AppId_ERROR_CloseReason
+
+### TestCase ID
+LCM_22
+
+### TestCase Objective
+Verify closeApp with numeric value for appId and ERROR closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app numeric AppId ERROR | Invoke closeApp on org.rdk.LifecycleManager with closeReason: "ERROR", appId: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": 12345, "closeReason": "ERROR"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_numeric_appid_kill_and_run_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Numeric_AppId_KILL_AND_RUN_CloseReason
+
+### TestCase ID
+LCM_23
+
+### TestCase Objective
+Verify closeApp with numeric value for appId and KILL_AND_RUN closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app numeric AppId KILL AND RUN | Invoke closeApp on org.rdk.LifecycleManager with closeReason: "KILL_AND_RUN", appId: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": 12345, "closeReason": "KILL_AND_RUN"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_numeric_appid_kill_and_activate_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Numeric_AppId_KILL_AND_ACTIVATE_CloseReason
+
+### TestCase ID
+LCM_24
+
+### TestCase Objective
+Verify closeApp with numeric value for appId and KILL_AND_ACTIVATE closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app numeric AppId KILL AND ACTIVATE | Invoke closeApp on org.rdk.LifecycleManager with closeReason: "KILL_AND_ACTIVATE", appId: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": 12345, "closeReason": "KILL_AND_ACTIVATE"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_special_char_appid_user_exit_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Special_Char_AppId_USER_EXIT_CloseReason
+
+### TestCase ID
+LCM_25
+
+### TestCase Objective
+Verify closeApp with special character string as appId and USER_EXIT closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app special char AppId | Invoke closeApp on org.rdk.LifecycleManager with appId: "!()*^", closeReason: "USER_EXIT"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "!()*^", "closeReason": "USER_EXIT"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_special_char_appid_error_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Special_Char_AppId_ERROR_CloseReason
+
+### TestCase ID
+LCM_26
+
+### TestCase Objective
+Verify closeApp with special character string as appId and ERROR closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app special char AppId ERROR | Invoke closeApp on org.rdk.LifecycleManager with appId: "!()*^", closeReason: "ERROR"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "!()*^", "closeReason": "ERROR"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_special_char_appid_kill_and_run_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Special_Char_AppId_KILL_AND_RUN_CloseReason
+
+### TestCase ID
+LCM_27
+
+### TestCase Objective
+Verify closeApp with special character string as appId and KILL_AND_RUN closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app special char AppId KILL AND RUN | Invoke closeApp on org.rdk.LifecycleManager with appId: "!()*^", closeReason: "KILL_AND_RUN"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "!()*^", "closeReason": "KILL_AND_RUN"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_special_char_appid_kill_and_activate_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Special_Char_AppId_KILL_AND_ACTIVATE_CloseReason
+
+### TestCase ID
+LCM_28
+
+### TestCase Objective
+Verify closeApp with special character string as appId and KILL_AND_ACTIVATE closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app special char AppId KILL AND ACTIVATE | Invoke closeApp on org.rdk.LifecycleManager with appId: "!()*^", closeReason: "KILL_AND_ACTIVATE"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "!()*^", "closeReason": "KILL_AND_ACTIVATE"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_boolean_appid_user_exit_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Boolean_AppId_USER_EXIT_CloseReason
+
+### TestCase ID
+LCM_29
+
+### TestCase Objective
+Verify closeApp with boolean value for appId and USER_EXIT closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app boolean AppId | Invoke closeApp on org.rdk.LifecycleManager with closeReason: "USER_EXIT"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": true, "closeReason": "USER_EXIT"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_boolean_appid_error_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Boolean_AppId_ERROR_CloseReason
+
+### TestCase ID
+LCM_30
+
+### TestCase Objective
+Verify closeApp with boolean value for appId and ERROR closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app boolean AppId ERROR | Invoke closeApp on org.rdk.LifecycleManager with closeReason: "ERROR"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": true, "closeReason": "ERROR"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_boolean_appid_kill_and_run_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Boolean_AppId_KILL_AND_RUN_CloseReason
+
+### TestCase ID
+LCM_31
+
+### TestCase Objective
+Verify closeApp with boolean value for appId and KILL_AND_RUN closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app boolean AppId KILL AND RUN | Invoke closeApp on org.rdk.LifecycleManager with closeReason: "KILL_AND_RUN"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": true, "closeReason": "KILL_AND_RUN"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_boolean_appid_kill_and_activate_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Boolean_AppId_KILL_AND_ACTIVATE_CloseReason
+
+### TestCase ID
+LCM_32
+
+### TestCase Objective
+Verify closeApp with boolean value for appId and KILL_AND_ACTIVATE closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app boolean AppId KILL AND ACTIVATE | Invoke closeApp on org.rdk.LifecycleManager with closeReason: "KILL_AND_ACTIVATE"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": true, "closeReason": "KILL_AND_ACTIVATE"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_long_string_appid_user_exit_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Long_String_AppId_USER_EXIT_CloseReason
+
+### TestCase ID
+LCM_33
+
+### TestCase Objective
+Verify closeApp with very long string as appId and USER_EXIT closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app long string AppId | Invoke closeApp on org.rdk.LifecycleManager with appId: "VeryLongStringForAppIdTestingPurpose", closeReason: "USER_EXIT"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "VeryLongStringForAppIdTestingPurpose", "closeReason": "USER_EXIT"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_long_string_appid_error_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Long_String_AppId_ERROR_CloseReason
+
+### TestCase ID
+LCM_34
+
+### TestCase Objective
+Verify closeApp with very long string as appId and ERROR closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app long string AppId ERROR | Invoke closeApp on org.rdk.LifecycleManager with appId: "VeryLongStringForAppIdTestingPurpose", closeReason: "ERROR"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "VeryLongStringForAppIdTestingPurpose", "closeReason": "ERROR"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_long_string_appid_kill_and_run_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Long_String_AppId_KILL_AND_RUN_CloseReason
+
+### TestCase ID
+LCM_35
+
+### TestCase Objective
+Verify closeApp with very long string as appId and KILL_AND_RUN closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app long string AppId KILL AND RUN | Invoke closeApp on org.rdk.LifecycleManager with appId: "VeryLongStringForAppIdTestingPurpose", closeReason: "KILL_AND_RUN"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "VeryLongStringForAppIdTestingPurpose", "closeReason": "KILL_AND_RUN"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_long_string_appid_kill_and_activate_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Long_String_AppId_KILL_AND_ACTIVATE_CloseReason
+
+### TestCase ID
+LCM_36
+
+### TestCase Objective
+Verify closeApp with very long string as appId and KILL_AND_ACTIVATE closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app long string AppId KILL AND ACTIVATE | Invoke closeApp on org.rdk.LifecycleManager with appId: "VeryLongStringForAppIdTestingPurpose", closeReason: "KILL_AND_ACTIVATE"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "VeryLongStringForAppIdTestingPurpose", "closeReason": "KILL_AND_ACTIVATE"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_valid_appid_numeric_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Valid_AppId_Numeric_CloseReason
+
+### TestCase ID
+LCM_37
+
+### TestCase Objective
+Verify closeApp with valid appId and numeric value for closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app numeric CloseReason | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", closeReason: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "closeReason": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_valid_appid_special_char_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Valid_AppId_Special_Char_CloseReason
+
+### TestCase ID
+LCM_38
+
+### TestCase Objective
+Verify closeApp with valid appId and special character string as closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app special char CloseReason | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", closeReason: "!()*^"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "closeReason": "!()*^"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_valid_appid_boolean_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Valid_AppId_Boolean_CloseReason
+
+### TestCase ID
+LCM_39
+
+### TestCase Objective
+Verify closeApp with valid appId and boolean value for closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app boolean CloseReason | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "closeReason": true}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="lifecyclemanager_closeapp_valid_appid_long_string_closereason"></a>
+### TestCase Name
+LifecycleManager_CloseApp_Valid_AppId_Long_String_CloseReason
+
+### TestCase ID
+LCM_40
+
+### TestCase Objective
+Verify closeApp with valid appId and very long string as closeReason
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Close app long string CloseReason | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>", closeReason: "VeryLongStringForCloseReasonTestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>", "closeReason": "VeryLongStringForCloseReasonTestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+## Plugin Post-conditions
+
+### Plugin Post-condition 1: Uninstall_Package
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check loaded apps | Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
+| 2 | Terminate app valid param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate app on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 3 | Check package info | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
+| 4 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+
+## Test Attributes
+
+**Supported Models** : Video_Accelerator, RPI-Client
+
+**Estimated duration** : 20 mins
+
+**Priority** : High
+
+**Release Version** : M147
+
+<div align="right"><a href="#testscript-name">Go to Top</a></div>

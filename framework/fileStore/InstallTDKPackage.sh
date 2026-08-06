@@ -49,17 +49,17 @@ if $uninstall; then
     exit
 fi
 
-extract_fncs_package=false
+extract_npvs_package=false
 
-if [[ "$1" == --fncs-package* ]]; then
-    extract_fncs_package=true
+if [[ "$1" == --npvs-package* ]]; then
+    extract_npvs_package=true
 fi
 
-if $extract_fncs_package; then
+if $extract_npvs_package; then
     PLATFORM=$(cat /etc/device.properties | grep ^MODEL_NUM | cut -d '=' -f2)
     system_date=$(date)
     formatted_date=$(echo "$system_date" | awk '{ printf "%02d%02d%04d_%02d%02d%02d\n", $3, (index("JanFebMarAprMayJunJulAugSepOctNovDec", $2)+2)/3, $6, substr($4,1,2), substr($4,4,2), substr($4,7,2) }')
-    TAR_FILE="FNCS_Package_${PLATFORM}_${formatted_date}.tar.gz"
+    TAR_FILE="NPVS_Package_${PLATFORM}_${formatted_date}.tar.gz"
 
     # List of files to include in the tar
     FILES_playback="/usr/bin/tdk_mediapipelinetests* /usr/lib/libjsoncpp* /usr/lib/libtinyxml* /opt/TDK/TDK.env"
@@ -89,10 +89,10 @@ if $extract_fncs_package; then
     fi
 
     # Create the tar archive with relative paths
-    echo -e "Archiving FNCS files from DUT\n"
+    echo -e "Archiving NPVS files from DUT\n"
     tar -cvf "$TAR_FILE" $RELATIVE_FILES
 
-    echo -e "\nFNCS Package created: $TAR_FILE \n"
+    echo -e "\nNPVS Package created: $TAR_FILE \n"
     exit
 fi
 
@@ -168,8 +168,8 @@ if [[ -z "$tdk_package" ]]; then
    echo -e "Processing $tdk_package\n"
 fi
 
-if [[ "$tdk_package" == *FNCS* ]];then
-   echo "Package is a FNCS package"
+if [[ "$tdk_package" == *NPVS* ]];then
+   echo "Package is a NPVS package"
    tar -xvf $tdk_package
    setup_graphics_softlinks
    exit

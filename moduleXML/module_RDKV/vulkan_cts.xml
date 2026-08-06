@@ -24,16 +24,16 @@
             </function>
             <function id="85e568aa-31f3-43f1-96b0-f4f3a72662d9" name="copy_qpa_file_from_dut">
                 <parameters>
-                    <parameter id="bd1213dc-033b-4cab-9df4-604b04c1617f" parameterName="qpa_folder_path" parameterType="STRING" range="a-z"/>
                     <parameter id="976e70fc-a194-43e5-90db-c34cad25583f" parameterName="result_dir" parameterType="STRING" range="a-z"/>
+                    <parameter id="bd1213dc-033b-4cab-9df4-604b04c1617f" parameterName="qpa_folder_path" parameterType="STRING" range="a-z"/>
                     <parameter id="2cad090b-65e8-42b2-bc5e-075b4266b4cd" parameterName="qpa_file_name" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
             <function id="51e17538-088a-4a56-9188-dbdc004c556c" name="copy_file">
                 <parameters>
-                    <parameter id="c704a551-a108-41fc-945f-6f042df8a977" parameterName="qpa_file_name" parameterType="STRING" range="a-z"/>
                     <parameter id="8a06505b-9144-4433-aa6f-c98978396539" parameterName="result_dir" parameterType="STRING" range="a-z"/>
                     <parameter id="6d182e91-3a49-4053-b8dc-1ad1fe29b4cd" parameterName="qpa_folder_path" parameterType="STRING" range="a-z"/>
+                    <parameter id="c704a551-a108-41fc-945f-6f042df8a977" parameterName="qpa_file_name" parameterType="STRING" range="a-z"/>
                 </parameters>
             </function>
             <function id="ebf9d422-4c34-4308-aedf-62882e124fa7" name="run_vulkan_cts_command">

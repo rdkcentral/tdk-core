@@ -63,7 +63,7 @@
           </prerequisite>
         </pluginPreRequisite>
 
-        <testCase testCaseId="PI_01" testCaseName="PlayerInfo_Check_Audio_Codecs"  desc="checks the audio codecs list">
+        <testCase testCaseId="PI_01" testCaseName="PlayerInfo_Get_Audio_Codecs"  desc="checks the audio codecs list">
             <testCaseInfo testCaseType="direct" />
             <testStep testStepId="1" name="Get_Audio_Codecs" method="Get_Audio_Codecs">
               <resultGeneration useMethodTag="playerinfo_check_audio_video_codecs" >
@@ -71,7 +71,7 @@
               </resultGeneration>
             </testStep>
         </testCase>
-        <testCase testCaseId="PI_02" testCaseName="PlayerInfo_Check_Video_Codecs"  desc="checks the video codecs list">
+        <testCase testCaseId="PI_02" testCaseName="PlayerInfo_Get_Video_Codecs"  desc="checks the video codecs list">
             <testCaseInfo testCaseType="direct" />
             <testStep testStepId="1" name="Get_Video_Codecs" method="Get_Video_Codecs">
               <resultGeneration useMethodTag="playerinfo_check_audio_video_codecs" >
@@ -79,25 +79,25 @@
               </resultGeneration>
             </testStep>
         </testCase>
-        <testCase testCaseId="PI_03" testCaseName="PlayerInfo_Check_AudioEquivalence_Enabled"  desc="Checks Loudness Equivalence in platform">
+        <testCase testCaseId="PI_03" testCaseName="PlayerInfo_Get_AudioEquivalence_Enabled"  desc="Checks Loudness Equivalence in platform">
             <testCaseInfo testCaseType="direct" />
             <testStep testStepId="1" name="Is_AudioEquivalence_Enabled" method="Is_AudioEquivalence_Enabled">
               <resultGeneration useMethodTag="playerinfo_validate_boolean_result" />
             </testStep>
         </testCase>
-        <testCase testCaseId="PI_04" testCaseName="PlayerInfo_Check_Dolby_Atmos_MetaData"  desc="Gets the Atmos capabilities of Sink">
+        <testCase testCaseId="PI_04" testCaseName="PlayerInfo_Get_Dolby_Atmos_MetaData"  desc="Gets the Atmos capabilities of Sink">
             <testCaseInfo testCaseType="direct" />
             <testStep testStepId="1" name="Get_Dolby_Atmos_MetaData" method="Get_Dolby_Atmos_MetaData">
               <resultGeneration useMethodTag="playerinfo_validate_boolean_result" />
             </testStep>
         </testCase>
-        <testCase testCaseId="PI_05" testCaseName="PlayerInfo_Check_Dolby_Sound_mode"  desc="Checks the dolby sound mode">
+        <testCase testCaseId="PI_05" testCaseName="PlayerInfo_Get_Dolby_Sound_mode"  desc="Checks the dolby sound mode">
             <testCaseInfo testCaseType="direct" />
             <testStep testStepId="1" name="Get_Dolby_SoundMode" method="Get_Dolby_SoundMode">
               <resultGeneration useMethodTag="playerinfo_check_results" expectedValues="Unknown,Mono,Stereo,Surround,Passthru,SoundmodeAuto"/>
             </testStep>
         </testCase>
-        <testCase testCaseId="PI_06" testCaseName= "Enable_Disable_Audio_Atmos_Output" desc="Check whether audio atmos output is possile to enable and disable">
+        <testCase testCaseId="PI_06" testCaseName= "PlayerInfo_Enable_Disable_Audio_Atmos_Output" desc="Check whether audio atmos output is possible to enable and disable">
             <testCaseInfo testCaseType="loop" />
             <testStep testStepId="1" name="Enable_Disable_Audio_Atmos_Output" testStepType="loop" >
               <subtestStep subtestStepId="1" name="Enable_Disable_Audio_Atmos_Output" method="Set_Atmos_Output" >
@@ -107,7 +107,7 @@
               </subtestStep>
             </testStep>
         </testCase>
-        <testCase testCaseId="PI_07" testCaseName= "SetAndGet_All_Supported_Resolutions" desc="Set and get all the supported resolution by both TV and STB">
+        <testCase testCaseId="PI_07" testCaseName= "PlayerInfo_SetAndGet_All_Supported_Resolutions" desc="Set and get all the supported resolution by both TV and STB">
             <testCaseInfo testCaseType="loop" revert="true" />
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -141,7 +141,7 @@
               </subtestStep>
             </testStep>
         </testCase>
-        <testCase testCaseId="PI_08" testCaseName= "Check_Dolby_AudioMode_Changed_Event"  desc="Checks for the audio mode changed event">
+        <testCase testCaseId="PI_08" testCaseName="PlayerInfo_Dolby_AudioMode_Changed_Event"  desc="Checks for the audio mode changed event">
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="audiomodes"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true" pluginName="DisplaySettings" >
                 <resultGeneration useMethodTag="check_connected_audio_ports" arguments="check_value" >
