@@ -6,61 +6,61 @@ RDKV_CERT_AVS_SystemAudioPlayer
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [SAP_Open_Player_PCM_HTTPSRC_System](#sap_open_player_pcm_httpsrc_system)
-   - [SAP_Open_Player_MP3_HTTPSRC_System](#sap_open_player_mp3_httpsrc_system)
-   - [SAP_Open_Player_WAV_HTTPSRC_System](#sap_open_player_wav_httpsrc_system)
-   - [SAP_Open_Player_PCM_HTTPSRC_App](#sap_open_player_pcm_httpsrc_app)
-   - [SAP_Open_Player_MP3_HTTPSRC_App](#sap_open_player_mp3_httpsrc_app)
-   - [SAP_Open_Player_WAV_HTTPSRC_App](#sap_open_player_wav_httpsrc_app)
-   - [SAP_Config_Player_PCM_Valid_Params_System](#sap_config_player_pcm_valid_params_system)
-   - [SAP_Config_Player_PCM_Valid_Params_App](#sap_config_player_pcm_valid_params_app)
-   - [SAP_Get_Player_Session_Id_WAV_HTTPSRC_System](#sap_get_player_session_id_wav_httpsrc_system)
-   - [SAP_Get_Player_Session_Id_MP3_HTTPSRC_System](#sap_get_player_session_id_mp3_httpsrc_system)
-   - [SAP_Get_Player_Session_Id_WAV_HTTPSRC_App](#sap_get_player_session_id_wav_httpsrc_app)
-   - [SAP_Get_Player_Session_Id_MP3_HTTPSRC_App](#sap_get_player_session_id_mp3_httpsrc_app)
-   - [SAP_Is_Speaking_MP3_HTTPSRC_System](#sap_is_speaking_mp3_httpsrc_system)
-   - [SAP_Is_Speaking_WAV_HTTPSRC_System](#sap_is_speaking_wav_httpsrc_system)
-   - [SAP_Is_Speaking_MP3_HTTPSRC_App](#sap_is_speaking_mp3_httpsrc_app)
-   - [SAP_Is_Speaking_WAV_HTTPSRC_App](#sap_is_speaking_wav_httpsrc_app)
-   - [SAP_Play_Pause_Stop_MP3_HTTPSRC_System](#sap_play_pause_stop_mp3_httpsrc_system)
-   - [SAP_Play_Pause_Stop_WAV_HTTPSRC_System](#sap_play_pause_stop_wav_httpsrc_system)
-   - [SAP_Play_Pause_Stop_MP3_HTTPSRC_App](#sap_play_pause_stop_mp3_httpsrc_app)
-   - [SAP_Play_Pause_Stop_WAV_HTTPSRC_App](#sap_play_pause_stop_wav_httpsrc_app)
-   - [SAP_Play_Pause_Resume_Stop_Audio_MP3_HTTPSRC_System](#sap_play_pause_resume_stop_audio_mp3_httpsrc_system)
-   - [SAP_Play_Pause_Resume_Stop_Audio_WAV_HTTPSRC_System](#sap_play_pause_resume_stop_audio_wav_httpsrc_system)
-   - [SAP_Play_Pause_Resume_Stop_Audio_MP3_HTTPSRC_App](#sap_play_pause_resume_stop_audio_mp3_httpsrc_app)
-   - [SAP_Play_Pause_Resume_Stop_Audio_WAV_HTTPSRC_App](#sap_play_pause_resume_stop_audio_wav_httpsrc_app)
-   - [SAP_Set_Mixer_Levels_MP3_HTTPSRC_System](#sap_set_mixer_levels_mp3_httpsrc_system)
-   - [SAP_Set_Mixer_Levels_WAV_HTTPSRC_System](#sap_set_mixer_levels_wav_httpsrc_system)
-   - [SAP_Set_Mixer_Levels_MP3_HTTPSRC_App](#sap_set_mixer_levels_mp3_httpsrc_app)
-   - [SAP_Set_Mixer_Levels_WAV_HTTPSRC_App](#sap_set_mixer_levels_wav_httpsrc_app)
-   - [SAP_Set_Smart_Volume_Control_PCM_HTTPSRC_System](#sap_set_smart_volume_control_pcm_httpsrc_system)
-   - [SAP_Set_Smart_Volume_Control_MP3_HTTPSRC_System](#sap_set_smart_volume_control_mp3_httpsrc_system)
-   - [SAP_Set_Smart_Volume_Control_WAV_HTTPSRC_System](#sap_set_smart_volume_control_wav_httpsrc_system)
-   - [SAP_Set_Smart_Volume_Control_PCM_HTTPSRC_App](#sap_set_smart_volume_control_pcm_httpsrc_app)
-   - [SAP_Set_Smart_Volume_Control_MP3_HTTPSRC_App](#sap_set_smart_volume_control_mp3_httpsrc_app)
-   - [SAP_Set_Smart_Volume_Control_WAV_HTTPSRC_App](#sap_set_smart_volume_control_wav_httpsrc_app)
-   - [SAP_Open_Player_Empty_Audiotype](#sap_open_player_empty_audiotype)
-   - [SAP_Open_Player_Invalid_Audiotype](#sap_open_player_invalid_audiotype)
-   - [SAP_Open_Player_Invalid_Sourcetype](#sap_open_player_invalid_sourcetype)
-   - [SAP_Open_Player_Invalid_Playmode](#sap_open_player_invalid_playmode)
-   - [SAP_Close_Player_Invalid_Id](#sap_close_player_invalid_id)
-   - [SAP_Play_Audio_Invalid_Player_Id](#sap_play_audio_invalid_player_id)
-   - [SAP_Play_Audio_Empty_URL](#sap_play_audio_empty_url)
-   - [SAP_Pause_Audio_Invalid_Player_Id](#sap_pause_audio_invalid_player_id)
-   - [SAP_Resume_Audio_Invalid_Player_Id](#sap_resume_audio_invalid_player_id)
-   - [SAP_Stop_Audio_Invalid_Player_Id](#sap_stop_audio_invalid_player_id)
-   - [SAP_Set_Mixer_Levels_Primary_Volume_OOR](#sap_set_mixer_levels_primary_volume_oor)
-   - [SAP_Set_Mixer_Levels_Player_Volume_OOR](#sap_set_mixer_levels_player_volume_oor)
-   - [SAP_Get_Player_Session_Id_Empty_URL](#sap_get_player_session_id_empty_url)
-   - [SAP_Config_Player_Invalid_Id](#sap_config_player_invalid_id)
-   - [SAP_Set_Smart_Vol_Threshold_Out_Of_Range](#sap_set_smart_vol_threshold_out_of_range)
-   - [SAP_Smart_Vol_Control_Enable_Play_Disable_Lifecycle](#sap_smart_vol_control_enable_play_disable_lifecycle)
-   - [SAP_Play_On_Closed_Player_Error_State](#sap_play_on_closed_player_error_state)
-   - [SAP_Mixer_Levels_Min_Boundary_Values](#sap_mixer_levels_min_boundary_values)
-   - [SAP_Mixer_Levels_Max_Boundary_Values](#sap_mixer_levels_max_boundary_values)
-   - [SAP_Dual_Player_System_And_App_Mode](#sap_dual_player_system_and_app_mode)
-   - [SAP_Play_Stop_Replay_Scenario](#sap_play_stop_replay_scenario)
+   - [SystemAudioPlayer_Open_Player_PCM_HTTPSRC_System](#systemaudioplayer_open_player_pcm_httpsrc_system)
+   - [SystemAudioPlayer_Open_Player_MP3_HTTPSRC_System](#systemaudioplayer_open_player_mp3_httpsrc_system)
+   - [SystemAudioPlayer_Open_Player_WAV_HTTPSRC_System](#systemaudioplayer_open_player_wav_httpsrc_system)
+   - [SystemAudioPlayer_Open_Player_PCM_HTTPSRC_App](#systemaudioplayer_open_player_pcm_httpsrc_app)
+   - [SystemAudioPlayer_Open_Player_MP3_HTTPSRC_App](#systemaudioplayer_open_player_mp3_httpsrc_app)
+   - [SystemAudioPlayer_Open_Player_WAV_HTTPSRC_App](#systemaudioplayer_open_player_wav_httpsrc_app)
+   - [SystemAudioPlayer_Config_Player_PCM_Valid_Params_System](#systemaudioplayer_config_player_pcm_valid_params_system)
+   - [SystemAudioPlayer_Config_Player_PCM_Valid_Params_App](#systemaudioplayer_config_player_pcm_valid_params_app)
+   - [SystemAudioPlayer_Get_Player_Session_Id_WAV_HTTPSRC_System](#systemaudioplayer_get_player_session_id_wav_httpsrc_system)
+   - [SystemAudioPlayer_Get_Player_Session_Id_MP3_HTTPSRC_System](#systemaudioplayer_get_player_session_id_mp3_httpsrc_system)
+   - [SystemAudioPlayer_Get_Player_Session_Id_WAV_HTTPSRC_App](#systemaudioplayer_get_player_session_id_wav_httpsrc_app)
+   - [SystemAudioPlayer_Get_Player_Session_Id_MP3_HTTPSRC_App](#systemaudioplayer_get_player_session_id_mp3_httpsrc_app)
+   - [SystemAudioPlayer_Is_Speaking_MP3_HTTPSRC_System](#systemaudioplayer_is_speaking_mp3_httpsrc_system)
+   - [SystemAudioPlayer_Is_Speaking_WAV_HTTPSRC_System](#systemaudioplayer_is_speaking_wav_httpsrc_system)
+   - [SystemAudioPlayer_Is_Speaking_MP3_HTTPSRC_App](#systemaudioplayer_is_speaking_mp3_httpsrc_app)
+   - [SystemAudioPlayer_Is_Speaking_WAV_HTTPSRC_App](#systemaudioplayer_is_speaking_wav_httpsrc_app)
+   - [SystemAudioPlayer_Play_Pause_Stop_MP3_HTTPSRC_System](#systemaudioplayer_play_pause_stop_mp3_httpsrc_system)
+   - [SystemAudioPlayer_Play_Pause_Stop_WAV_HTTPSRC_System](#systemaudioplayer_play_pause_stop_wav_httpsrc_system)
+   - [SystemAudioPlayer_Play_Pause_Stop_MP3_HTTPSRC_App](#systemaudioplayer_play_pause_stop_mp3_httpsrc_app)
+   - [SystemAudioPlayer_Play_Pause_Stop_WAV_HTTPSRC_App](#systemaudioplayer_play_pause_stop_wav_httpsrc_app)
+   - [SystemAudioPlayer_Play_Pause_Resume_Stop_Audio_MP3_HTTPSRC_System](#systemaudioplayer_play_pause_resume_stop_audio_mp3_httpsrc_system)
+   - [SystemAudioPlayer_Play_Pause_Resume_Stop_Audio_WAV_HTTPSRC_System](#systemaudioplayer_play_pause_resume_stop_audio_wav_httpsrc_system)
+   - [SystemAudioPlayer_Play_Pause_Resume_Stop_Audio_MP3_HTTPSRC_App](#systemaudioplayer_play_pause_resume_stop_audio_mp3_httpsrc_app)
+   - [SystemAudioPlayer_Play_Pause_Resume_Stop_Audio_WAV_HTTPSRC_App](#systemaudioplayer_play_pause_resume_stop_audio_wav_httpsrc_app)
+   - [SystemAudioPlayer_Set_Mixer_Levels_MP3_HTTPSRC_System](#systemaudioplayer_set_mixer_levels_mp3_httpsrc_system)
+   - [SystemAudioPlayer_Set_Mixer_Levels_WAV_HTTPSRC_System](#systemaudioplayer_set_mixer_levels_wav_httpsrc_system)
+   - [SystemAudioPlayer_Set_Mixer_Levels_MP3_HTTPSRC_App](#systemaudioplayer_set_mixer_levels_mp3_httpsrc_app)
+   - [SystemAudioPlayer_Set_Mixer_Levels_WAV_HTTPSRC_App](#systemaudioplayer_set_mixer_levels_wav_httpsrc_app)
+   - [SystemAudioPlayer_Set_Smart_Volume_Control_PCM_HTTPSRC_System](#systemaudioplayer_set_smart_volume_control_pcm_httpsrc_system)
+   - [SystemAudioPlayer_Set_Smart_Volume_Control_MP3_HTTPSRC_System](#systemaudioplayer_set_smart_volume_control_mp3_httpsrc_system)
+   - [SystemAudioPlayer_Set_Smart_Volume_Control_WAV_HTTPSRC_System](#systemaudioplayer_set_smart_volume_control_wav_httpsrc_system)
+   - [SystemAudioPlayer_Set_Smart_Volume_Control_PCM_HTTPSRC_App](#systemaudioplayer_set_smart_volume_control_pcm_httpsrc_app)
+   - [SystemAudioPlayer_Set_Smart_Volume_Control_MP3_HTTPSRC_App](#systemaudioplayer_set_smart_volume_control_mp3_httpsrc_app)
+   - [SystemAudioPlayer_Set_Smart_Volume_Control_WAV_HTTPSRC_App](#systemaudioplayer_set_smart_volume_control_wav_httpsrc_app)
+   - [SystemAudioPlayer_Open_Player_Empty_Audiotype](#systemaudioplayer_open_player_empty_audiotype)
+   - [SystemAudioPlayer_Open_Player_Invalid_Audiotype](#systemaudioplayer_open_player_invalid_audiotype)
+   - [SystemAudioPlayer_Open_Player_Invalid_Sourcetype](#systemaudioplayer_open_player_invalid_sourcetype)
+   - [SystemAudioPlayer_Open_Player_Invalid_Playmode](#systemaudioplayer_open_player_invalid_playmode)
+   - [SystemAudioPlayer_Close_Player_Invalid_Id](#systemaudioplayer_close_player_invalid_id)
+   - [SystemAudioPlayer_Play_Audio_Invalid_Player_Id](#systemaudioplayer_play_audio_invalid_player_id)
+   - [SystemAudioPlayer_Play_Audio_Empty_URL](#systemaudioplayer_play_audio_empty_url)
+   - [SystemAudioPlayer_Pause_Audio_Invalid_Player_Id](#systemaudioplayer_pause_audio_invalid_player_id)
+   - [SystemAudioPlayer_Resume_Audio_Invalid_Player_Id](#systemaudioplayer_resume_audio_invalid_player_id)
+   - [SystemAudioPlayer_Stop_Audio_Invalid_Player_Id](#systemaudioplayer_stop_audio_invalid_player_id)
+   - [SystemAudioPlayer_Set_Mixer_Levels_Primary_Volume_OOR](#systemaudioplayer_set_mixer_levels_primary_volume_oor)
+   - [SystemAudioPlayer_Set_Mixer_Levels_Player_Volume_OOR](#systemaudioplayer_set_mixer_levels_player_volume_oor)
+   - [SystemAudioPlayer_Get_Player_Session_Id_Empty_URL](#systemaudioplayer_get_player_session_id_empty_url)
+   - [SystemAudioPlayer_Config_Player_Invalid_Id](#systemaudioplayer_config_player_invalid_id)
+   - [SystemAudioPlayer_Set_Smart_Vol_Threshold_Out_Of_Range](#systemaudioplayer_set_smart_vol_threshold_out_of_range)
+   - [SystemAudioPlayer_Smart_Vol_Control_Enable_Play_Disable_Lifecycle](#systemaudioplayer_smart_vol_control_enable_play_disable_lifecycle)
+   - [SystemAudioPlayer_Play_On_Closed_Player_Error_State](#systemaudioplayer_play_on_closed_player_error_state)
+   - [SystemAudioPlayer_Mixer_Levels_Min_Boundary_Values](#systemaudioplayer_mixer_levels_min_boundary_values)
+   - [SystemAudioPlayer_Mixer_Levels_Max_Boundary_Values](#systemaudioplayer_mixer_levels_max_boundary_values)
+   - [SystemAudioPlayer_Dual_Player_System_And_App_Mode](#systemaudioplayer_dual_player_system_and_app_mode)
+   - [SystemAudioPlayer_Play_Stop_Replay_Scenario](#systemaudioplayer_play_stop_replay_scenario)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -94,9 +94,9 @@ accessible via JSON-RPC under the callsign `org.rdk.SystemAudioPlayer` (version 
 
 ## Test Cases
 
-<a id="sap_open_player_pcm_httpsrc_system"></a>
+<a id="systemaudioplayer_open_player_pcm_httpsrc_system"></a>
 ### TestCase Name
-SAP_Open_Player_PCM_HTTPSRC_System
+SystemAudioPlayer_Open_Player_PCM_HTTPSRC_System
 
 ### TestCase ID
 SAP_01
@@ -113,9 +113,9 @@ Opens a player with PCM audio type, HTTP source and system play mode
 
 ---
 
-<a id="sap_open_player_mp3_httpsrc_system"></a>
+<a id="systemaudioplayer_open_player_mp3_httpsrc_system"></a>
 ### TestCase Name
-SAP_Open_Player_MP3_HTTPSRC_System
+SystemAudioPlayer_Open_Player_MP3_HTTPSRC_System
 
 ### TestCase ID
 SAP_02
@@ -132,9 +132,9 @@ Opens a player with MP3 audio type, HTTP source and system play mode
 
 ---
 
-<a id="sap_open_player_wav_httpsrc_system"></a>
+<a id="systemaudioplayer_open_player_wav_httpsrc_system"></a>
 ### TestCase Name
-SAP_Open_Player_WAV_HTTPSRC_System
+SystemAudioPlayer_Open_Player_WAV_HTTPSRC_System
 
 ### TestCase ID
 SAP_03
@@ -151,9 +151,9 @@ Opens a player with WAV audio type, HTTP source and system play mode
 
 ---
 
-<a id="sap_open_player_pcm_httpsrc_app"></a>
+<a id="systemaudioplayer_open_player_pcm_httpsrc_app"></a>
 ### TestCase Name
-SAP_Open_Player_PCM_HTTPSRC_App
+SystemAudioPlayer_Open_Player_PCM_HTTPSRC_App
 
 ### TestCase ID
 SAP_04
@@ -170,9 +170,9 @@ Opens a player with PCM audio type, HTTP source and app play mode
 
 ---
 
-<a id="sap_open_player_mp3_httpsrc_app"></a>
+<a id="systemaudioplayer_open_player_mp3_httpsrc_app"></a>
 ### TestCase Name
-SAP_Open_Player_MP3_HTTPSRC_App
+SystemAudioPlayer_Open_Player_MP3_HTTPSRC_App
 
 ### TestCase ID
 SAP_05
@@ -189,9 +189,9 @@ Opens a player with MP3 audio type, HTTP source and app play mode
 
 ---
 
-<a id="sap_open_player_wav_httpsrc_app"></a>
+<a id="systemaudioplayer_open_player_wav_httpsrc_app"></a>
 ### TestCase Name
-SAP_Open_Player_WAV_HTTPSRC_App
+SystemAudioPlayer_Open_Player_WAV_HTTPSRC_App
 
 ### TestCase ID
 SAP_06
@@ -208,9 +208,9 @@ Opens a player with WAV audio type, HTTP source and app play mode
 
 ---
 
-<a id="sap_config_player_pcm_valid_params_system"></a>
+<a id="systemaudioplayer_config_player_pcm_valid_params_system"></a>
 ### TestCase Name
-SAP_Config_Player_PCM_Valid_Params_System
+SystemAudioPlayer_Config_Player_PCM_Valid_Params_System
 
 ### TestCase ID
 SAP_07
@@ -228,9 +228,9 @@ Configures a PCM player with valid format, rate, channels and layout parameters 
 
 ---
 
-<a id="sap_config_player_pcm_valid_params_app"></a>
+<a id="systemaudioplayer_config_player_pcm_valid_params_app"></a>
 ### TestCase Name
-SAP_Config_Player_PCM_Valid_Params_App
+SystemAudioPlayer_Config_Player_PCM_Valid_Params_App
 
 ### TestCase ID
 SAP_08
@@ -248,9 +248,9 @@ Configures a PCM player with valid format, rate, channels and layout parameters 
 
 ---
 
-<a id="sap_get_player_session_id_wav_httpsrc_system"></a>
+<a id="systemaudioplayer_get_player_session_id_wav_httpsrc_system"></a>
 ### TestCase Name
-SAP_Get_Player_Session_Id_WAV_HTTPSRC_System
+SystemAudioPlayer_Get_Player_Session_Id_WAV_HTTPSRC_System
 
 ### TestCase ID
 SAP_09
@@ -271,9 +271,9 @@ Gets a session ID for WAV audio format with HTTP source in system play mode
 
 ---
 
-<a id="sap_get_player_session_id_mp3_httpsrc_system"></a>
+<a id="systemaudioplayer_get_player_session_id_mp3_httpsrc_system"></a>
 ### TestCase Name
-SAP_Get_Player_Session_Id_MP3_HTTPSRC_System
+SystemAudioPlayer_Get_Player_Session_Id_MP3_HTTPSRC_System
 
 ### TestCase ID
 SAP_10
@@ -294,9 +294,9 @@ Gets a session ID for MP3 audio format with HTTP source in system play mode
 
 ---
 
-<a id="sap_get_player_session_id_wav_httpsrc_app"></a>
+<a id="systemaudioplayer_get_player_session_id_wav_httpsrc_app"></a>
 ### TestCase Name
-SAP_Get_Player_Session_Id_WAV_HTTPSRC_App
+SystemAudioPlayer_Get_Player_Session_Id_WAV_HTTPSRC_App
 
 ### TestCase ID
 SAP_11
@@ -317,9 +317,9 @@ Gets a session ID for WAV audio format with HTTP source in app play mode
 
 ---
 
-<a id="sap_get_player_session_id_mp3_httpsrc_app"></a>
+<a id="systemaudioplayer_get_player_session_id_mp3_httpsrc_app"></a>
 ### TestCase Name
-SAP_Get_Player_Session_Id_MP3_HTTPSRC_App
+SystemAudioPlayer_Get_Player_Session_Id_MP3_HTTPSRC_App
 
 ### TestCase ID
 SAP_12
@@ -340,9 +340,9 @@ Gets a session ID for MP3 audio format with HTTP source in app play mode
 
 ---
 
-<a id="sap_is_speaking_mp3_httpsrc_system"></a>
+<a id="systemaudioplayer_is_speaking_mp3_httpsrc_system"></a>
 ### TestCase Name
-SAP_Is_Speaking_MP3_HTTPSRC_System
+SystemAudioPlayer_Is_Speaking_MP3_HTTPSRC_System
 
 ### TestCase ID
 SAP_13
@@ -365,9 +365,9 @@ Checks whether the player is speaking for MP3 audio format with HTTP source in s
 
 ---
 
-<a id="sap_is_speaking_wav_httpsrc_system"></a>
+<a id="systemaudioplayer_is_speaking_wav_httpsrc_system"></a>
 ### TestCase Name
-SAP_Is_Speaking_WAV_HTTPSRC_System
+SystemAudioPlayer_Is_Speaking_WAV_HTTPSRC_System
 
 ### TestCase ID
 SAP_14
@@ -390,9 +390,9 @@ Checks whether the player is speaking for WAV audio format with HTTP source in s
 
 ---
 
-<a id="sap_is_speaking_mp3_httpsrc_app"></a>
+<a id="systemaudioplayer_is_speaking_mp3_httpsrc_app"></a>
 ### TestCase Name
-SAP_Is_Speaking_MP3_HTTPSRC_App
+SystemAudioPlayer_Is_Speaking_MP3_HTTPSRC_App
 
 ### TestCase ID
 SAP_15
@@ -415,9 +415,9 @@ Checks whether the player is speaking for MP3 audio format with HTTP source in a
 
 ---
 
-<a id="sap_is_speaking_wav_httpsrc_app"></a>
+<a id="systemaudioplayer_is_speaking_wav_httpsrc_app"></a>
 ### TestCase Name
-SAP_Is_Speaking_WAV_HTTPSRC_App
+SystemAudioPlayer_Is_Speaking_WAV_HTTPSRC_App
 
 ### TestCase ID
 SAP_16
@@ -440,9 +440,9 @@ Checks whether the player is speaking for WAV audio format with HTTP source in a
 
 ---
 
-<a id="sap_play_pause_stop_mp3_httpsrc_system"></a>
+<a id="systemaudioplayer_play_pause_stop_mp3_httpsrc_system"></a>
 ### TestCase Name
-SAP_Play_Pause_Stop_MP3_HTTPSRC_System
+SystemAudioPlayer_Play_Pause_Stop_MP3_HTTPSRC_System
 
 ### TestCase ID
 SAP_17
@@ -468,9 +468,9 @@ Tests play, pause and stop operations for MP3 audio type with HTTP source in sys
 
 ---
 
-<a id="sap_play_pause_stop_wav_httpsrc_system"></a>
+<a id="systemaudioplayer_play_pause_stop_wav_httpsrc_system"></a>
 ### TestCase Name
-SAP_Play_Pause_Stop_WAV_HTTPSRC_System
+SystemAudioPlayer_Play_Pause_Stop_WAV_HTTPSRC_System
 
 ### TestCase ID
 SAP_18
@@ -496,9 +496,9 @@ Tests play, pause and stop operations for WAV audio type with HTTP source in sys
 
 ---
 
-<a id="sap_play_pause_stop_mp3_httpsrc_app"></a>
+<a id="systemaudioplayer_play_pause_stop_mp3_httpsrc_app"></a>
 ### TestCase Name
-SAP_Play_Pause_Stop_MP3_HTTPSRC_App
+SystemAudioPlayer_Play_Pause_Stop_MP3_HTTPSRC_App
 
 ### TestCase ID
 SAP_19
@@ -524,9 +524,9 @@ Tests play, pause and stop operations for MP3 audio type with HTTP source in app
 
 ---
 
-<a id="sap_play_pause_stop_wav_httpsrc_app"></a>
+<a id="systemaudioplayer_play_pause_stop_wav_httpsrc_app"></a>
 ### TestCase Name
-SAP_Play_Pause_Stop_WAV_HTTPSRC_App
+SystemAudioPlayer_Play_Pause_Stop_WAV_HTTPSRC_App
 
 ### TestCase ID
 SAP_20
@@ -552,9 +552,9 @@ Tests play, pause and stop operations for WAV audio type with HTTP source in app
 
 ---
 
-<a id="sap_play_pause_resume_stop_audio_mp3_httpsrc_system"></a>
+<a id="systemaudioplayer_play_pause_resume_stop_audio_mp3_httpsrc_system"></a>
 ### TestCase Name
-SAP_Play_Pause_Resume_Stop_Audio_MP3_HTTPSRC_System
+SystemAudioPlayer_Play_Pause_Resume_Stop_Audio_MP3_HTTPSRC_System
 
 ### TestCase ID
 SAP_21
@@ -582,9 +582,9 @@ Tests the play, pause, resume and stop functionality of the audio player with MP
 
 ---
 
-<a id="sap_play_pause_resume_stop_audio_wav_httpsrc_system"></a>
+<a id="systemaudioplayer_play_pause_resume_stop_audio_wav_httpsrc_system"></a>
 ### TestCase Name
-SAP_Play_Pause_Resume_Stop_Audio_WAV_HTTPSRC_System
+SystemAudioPlayer_Play_Pause_Resume_Stop_Audio_WAV_HTTPSRC_System
 
 ### TestCase ID
 SAP_22
@@ -612,9 +612,9 @@ Tests the play, pause, resume and stop functionality of the audio player with WA
 
 ---
 
-<a id="sap_play_pause_resume_stop_audio_mp3_httpsrc_app"></a>
+<a id="systemaudioplayer_play_pause_resume_stop_audio_mp3_httpsrc_app"></a>
 ### TestCase Name
-SAP_Play_Pause_Resume_Stop_Audio_MP3_HTTPSRC_App
+SystemAudioPlayer_Play_Pause_Resume_Stop_Audio_MP3_HTTPSRC_App
 
 ### TestCase ID
 SAP_23
@@ -643,9 +643,9 @@ Tests the play, pause, resume and stop functionality of the audio player with MP
 
 ---
 
-<a id="sap_play_pause_resume_stop_audio_wav_httpsrc_app"></a>
+<a id="systemaudioplayer_play_pause_resume_stop_audio_wav_httpsrc_app"></a>
 ### TestCase Name
-SAP_Play_Pause_Resume_Stop_Audio_WAV_HTTPSRC_App
+SystemAudioPlayer_Play_Pause_Resume_Stop_Audio_WAV_HTTPSRC_App
 
 ### TestCase ID
 SAP_24
@@ -674,9 +674,9 @@ Tests the play, pause, resume and stop functionality of the audio player with WA
 
 ---
 
-<a id="sap_set_mixer_levels_mp3_httpsrc_system"></a>
+<a id="systemaudioplayer_set_mixer_levels_mp3_httpsrc_system"></a>
 ### TestCase Name
-SAP_Set_Mixer_Levels_MP3_HTTPSRC_System
+SystemAudioPlayer_Set_Mixer_Levels_MP3_HTTPSRC_System
 
 ### TestCase ID
 SAP_25
@@ -699,9 +699,9 @@ Tests setting mixer levels for MP3 audio format with HTTP source in system play 
 
 ---
 
-<a id="sap_set_mixer_levels_wav_httpsrc_system"></a>
+<a id="systemaudioplayer_set_mixer_levels_wav_httpsrc_system"></a>
 ### TestCase Name
-SAP_Set_Mixer_Levels_WAV_HTTPSRC_System
+SystemAudioPlayer_Set_Mixer_Levels_WAV_HTTPSRC_System
 
 ### TestCase ID
 SAP_26
@@ -724,9 +724,9 @@ Tests setting mixer levels for WAV audio format with HTTP source in system play 
 
 ---
 
-<a id="sap_set_mixer_levels_mp3_httpsrc_app"></a>
+<a id="systemaudioplayer_set_mixer_levels_mp3_httpsrc_app"></a>
 ### TestCase Name
-SAP_Set_Mixer_Levels_MP3_HTTPSRC_App
+SystemAudioPlayer_Set_Mixer_Levels_MP3_HTTPSRC_App
 
 ### TestCase ID
 SAP_27
@@ -750,9 +750,9 @@ Tests setting mixer levels for MP3 audio format with HTTP source in app play mod
 
 ---
 
-<a id="sap_set_mixer_levels_wav_httpsrc_app"></a>
+<a id="systemaudioplayer_set_mixer_levels_wav_httpsrc_app"></a>
 ### TestCase Name
-SAP_Set_Mixer_Levels_WAV_HTTPSRC_App
+SystemAudioPlayer_Set_Mixer_Levels_WAV_HTTPSRC_App
 
 ### TestCase ID
 SAP_28
@@ -776,9 +776,9 @@ Tests setting mixer levels for WAV audio format with HTTP source in app play mod
 
 ---
 
-<a id="sap_set_smart_volume_control_pcm_httpsrc_system"></a>
+<a id="systemaudioplayer_set_smart_volume_control_pcm_httpsrc_system"></a>
 ### TestCase Name
-SAP_Set_Smart_Volume_Control_PCM_HTTPSRC_System
+SystemAudioPlayer_Set_Smart_Volume_Control_PCM_HTTPSRC_System
 
 ### TestCase ID
 SAP_29
@@ -796,9 +796,9 @@ Tests setting smart volume control for PCM audio format with HTTP source in syst
 
 ---
 
-<a id="sap_set_smart_volume_control_mp3_httpsrc_system"></a>
+<a id="systemaudioplayer_set_smart_volume_control_mp3_httpsrc_system"></a>
 ### TestCase Name
-SAP_Set_Smart_Volume_Control_MP3_HTTPSRC_System
+SystemAudioPlayer_Set_Smart_Volume_Control_MP3_HTTPSRC_System
 
 ### TestCase ID
 SAP_30
@@ -816,9 +816,9 @@ Tests setting smart volume control for MP3 audio format with HTTP source in syst
 
 ---
 
-<a id="sap_set_smart_volume_control_wav_httpsrc_system"></a>
+<a id="systemaudioplayer_set_smart_volume_control_wav_httpsrc_system"></a>
 ### TestCase Name
-SAP_Set_Smart_Volume_Control_WAV_HTTPSRC_System
+SystemAudioPlayer_Set_Smart_Volume_Control_WAV_HTTPSRC_System
 
 ### TestCase ID
 SAP_31
@@ -836,9 +836,9 @@ Tests setting smart volume control for WAV audio format with HTTP source in syst
 
 ---
 
-<a id="sap_set_smart_volume_control_pcm_httpsrc_app"></a>
+<a id="systemaudioplayer_set_smart_volume_control_pcm_httpsrc_app"></a>
 ### TestCase Name
-SAP_Set_Smart_Volume_Control_PCM_HTTPSRC_App
+SystemAudioPlayer_Set_Smart_Volume_Control_PCM_HTTPSRC_App
 
 ### TestCase ID
 SAP_32
@@ -856,9 +856,9 @@ Tests setting smart volume control for PCM audio format with HTTP source in app 
 
 ---
 
-<a id="sap_set_smart_volume_control_mp3_httpsrc_app"></a>
+<a id="systemaudioplayer_set_smart_volume_control_mp3_httpsrc_app"></a>
 ### TestCase Name
-SAP_Set_Smart_Volume_Control_MP3_HTTPSRC_App
+SystemAudioPlayer_Set_Smart_Volume_Control_MP3_HTTPSRC_App
 
 ### TestCase ID
 SAP_33
@@ -876,9 +876,9 @@ Tests setting smart volume control for MP3 audio format with HTTP source in app 
 
 ---
 
-<a id="sap_set_smart_volume_control_wav_httpsrc_app"></a>
+<a id="systemaudioplayer_set_smart_volume_control_wav_httpsrc_app"></a>
 ### TestCase Name
-SAP_Set_Smart_Volume_Control_WAV_HTTPSRC_App
+SystemAudioPlayer_Set_Smart_Volume_Control_WAV_HTTPSRC_App
 
 ### TestCase ID
 SAP_34
@@ -896,9 +896,9 @@ Tests setting smart volume control for WAV audio format with HTTP source in app 
 
 ---
 
-<a id="sap_open_player_empty_audiotype"></a>
+<a id="systemaudioplayer_open_player_empty_audiotype"></a>
 ### TestCase Name
-SAP_Open_Player_Empty_Audiotype
+SystemAudioPlayer_Open_Player_Empty_Audiotype
 
 ### TestCase ID
 SAP_35
@@ -914,9 +914,9 @@ Attempts to open a player with an empty audiotype parameter, expects an error re
 
 ---
 
-<a id="sap_open_player_invalid_audiotype"></a>
+<a id="systemaudioplayer_open_player_invalid_audiotype"></a>
 ### TestCase Name
-SAP_Open_Player_Invalid_Audiotype
+SystemAudioPlayer_Open_Player_Invalid_Audiotype
 
 ### TestCase ID
 SAP_36
@@ -932,9 +932,9 @@ Attempts to open a player with an audiotype value not in the allowed enum (pcm/m
 
 ---
 
-<a id="sap_open_player_invalid_sourcetype"></a>
+<a id="systemaudioplayer_open_player_invalid_sourcetype"></a>
 ### TestCase Name
-SAP_Open_Player_Invalid_Sourcetype
+SystemAudioPlayer_Open_Player_Invalid_Sourcetype
 
 ### TestCase ID
 SAP_37
@@ -950,9 +950,9 @@ Attempts to open a player with a sourcetype value not in the allowed enum (data/
 
 ---
 
-<a id="sap_open_player_invalid_playmode"></a>
+<a id="systemaudioplayer_open_player_invalid_playmode"></a>
 ### TestCase Name
-SAP_Open_Player_Invalid_Playmode
+SystemAudioPlayer_Open_Player_Invalid_Playmode
 
 ### TestCase ID
 SAP_38
@@ -968,9 +968,9 @@ Attempts to open a player with a playmode value not in the allowed enum (system/
 
 ---
 
-<a id="sap_close_player_invalid_id"></a>
+<a id="systemaudioplayer_close_player_invalid_id"></a>
 ### TestCase Name
-SAP_Close_Player_Invalid_Id
+SystemAudioPlayer_Close_Player_Invalid_Id
 
 ### TestCase ID
 SAP_39
@@ -986,9 +986,9 @@ Attempts to close a player with a non-existent session ID, expects an error resp
 
 ---
 
-<a id="sap_play_audio_invalid_player_id"></a>
+<a id="systemaudioplayer_play_audio_invalid_player_id"></a>
 ### TestCase Name
-SAP_Play_Audio_Invalid_Player_Id
+SystemAudioPlayer_Play_Audio_Invalid_Player_Id
 
 ### TestCase ID
 SAP_40
@@ -1004,9 +1004,9 @@ Attempts to play audio with a non-existent player ID, expects an error response
 
 ---
 
-<a id="sap_play_audio_empty_url"></a>
+<a id="systemaudioplayer_play_audio_empty_url"></a>
 ### TestCase Name
-SAP_Play_Audio_Empty_URL
+SystemAudioPlayer_Play_Audio_Empty_URL
 
 ### TestCase ID
 SAP_41
@@ -1024,9 +1024,9 @@ Attempts to play audio with an empty URL parameter, expects an error response
 
 ---
 
-<a id="sap_pause_audio_invalid_player_id"></a>
+<a id="systemaudioplayer_pause_audio_invalid_player_id"></a>
 ### TestCase Name
-SAP_Pause_Audio_Invalid_Player_Id
+SystemAudioPlayer_Pause_Audio_Invalid_Player_Id
 
 ### TestCase ID
 SAP_42
@@ -1042,9 +1042,9 @@ Attempts to pause audio on a non-existent player ID, expects an error response
 
 ---
 
-<a id="sap_resume_audio_invalid_player_id"></a>
+<a id="systemaudioplayer_resume_audio_invalid_player_id"></a>
 ### TestCase Name
-SAP_Resume_Audio_Invalid_Player_Id
+SystemAudioPlayer_Resume_Audio_Invalid_Player_Id
 
 ### TestCase ID
 SAP_43
@@ -1060,9 +1060,9 @@ Attempts to resume audio on a non-existent player ID, expects an error response
 
 ---
 
-<a id="sap_stop_audio_invalid_player_id"></a>
+<a id="systemaudioplayer_stop_audio_invalid_player_id"></a>
 ### TestCase Name
-SAP_Stop_Audio_Invalid_Player_Id
+SystemAudioPlayer_Stop_Audio_Invalid_Player_Id
 
 ### TestCase ID
 SAP_44
@@ -1078,9 +1078,9 @@ Attempts to stop audio on a non-existent player ID, expects an error response
 
 ---
 
-<a id="sap_set_mixer_levels_primary_volume_oor"></a>
+<a id="systemaudioplayer_set_mixer_levels_primary_volume_oor"></a>
 ### TestCase Name
-SAP_Set_Mixer_Levels_Primary_Volume_OOR
+SystemAudioPlayer_Set_Mixer_Levels_Primary_Volume_OOR
 
 ### TestCase ID
 SAP_45
@@ -1098,9 +1098,9 @@ Attempts to set primary volume above maximum (100), expects an error response
 
 ---
 
-<a id="sap_set_mixer_levels_player_volume_oor"></a>
+<a id="systemaudioplayer_set_mixer_levels_player_volume_oor"></a>
 ### TestCase Name
-SAP_Set_Mixer_Levels_Player_Volume_OOR
+SystemAudioPlayer_Set_Mixer_Levels_Player_Volume_OOR
 
 ### TestCase ID
 SAP_46
@@ -1118,9 +1118,9 @@ Attempts to set player volume above maximum (100), expects an error response
 
 ---
 
-<a id="sap_get_player_session_id_empty_url"></a>
+<a id="systemaudioplayer_get_player_session_id_empty_url"></a>
 ### TestCase Name
-SAP_Get_Player_Session_Id_Empty_URL
+SystemAudioPlayer_Get_Player_Session_Id_Empty_URL
 
 ### TestCase ID
 SAP_47
@@ -1136,9 +1136,9 @@ Attempts to get a session ID with an empty URL parameter, expects an error respo
 
 ---
 
-<a id="sap_config_player_invalid_id"></a>
+<a id="systemaudioplayer_config_player_invalid_id"></a>
 ### TestCase Name
-SAP_Config_Player_Invalid_Id
+SystemAudioPlayer_Config_Player_Invalid_Id
 
 ### TestCase ID
 SAP_48
@@ -1154,9 +1154,9 @@ Attempts to configure a player with a non-existent session ID, expects an error 
 
 ---
 
-<a id="sap_set_smart_vol_threshold_out_of_range"></a>
+<a id="systemaudioplayer_set_smart_vol_threshold_out_of_range"></a>
 ### TestCase Name
-SAP_Set_Smart_Vol_Threshold_Out_Of_Range
+SystemAudioPlayer_Set_Smart_Vol_Threshold_Out_Of_Range
 
 ### TestCase ID
 SAP_49
@@ -1174,9 +1174,9 @@ Attempts to set smart volume control with audio level threshold above maximum (1
 
 ---
 
-<a id="sap_smart_vol_control_enable_play_disable_lifecycle"></a>
+<a id="systemaudioplayer_smart_vol_control_enable_play_disable_lifecycle"></a>
 ### TestCase Name
-SAP_Smart_Vol_Control_Enable_Play_Disable_Lifecycle
+SystemAudioPlayer_Smart_Vol_Control_Enable_Play_Disable_Lifecycle
 
 ### TestCase ID
 SAP_50
@@ -1199,9 +1199,9 @@ Tests enabling smart volume control, playing audio and then disabling smart volu
 
 ---
 
-<a id="sap_play_on_closed_player_error_state"></a>
+<a id="systemaudioplayer_play_on_closed_player_error_state"></a>
 ### TestCase Name
-SAP_Play_On_Closed_Player_Error_State
+SystemAudioPlayer_Play_On_Closed_Player_Error_State
 
 ### TestCase ID
 SAP_51
@@ -1219,9 +1219,9 @@ Verifies that attempting to play on an already-closed player ID returns an error
 
 ---
 
-<a id="sap_mixer_levels_min_boundary_values"></a>
+<a id="systemaudioplayer_mixer_levels_min_boundary_values"></a>
 ### TestCase Name
-SAP_Mixer_Levels_Min_Boundary_Values
+SystemAudioPlayer_Mixer_Levels_Min_Boundary_Values
 
 ### TestCase ID
 SAP_52
@@ -1243,9 +1243,9 @@ Tests setting mixer levels at minimum boundary values (0,0) and verifies playbac
 
 ---
 
-<a id="sap_mixer_levels_max_boundary_values"></a>
+<a id="systemaudioplayer_mixer_levels_max_boundary_values"></a>
 ### TestCase Name
-SAP_Mixer_Levels_Max_Boundary_Values
+SystemAudioPlayer_Mixer_Levels_Max_Boundary_Values
 
 ### TestCase ID
 SAP_53
@@ -1267,9 +1267,9 @@ Tests setting mixer levels at maximum boundary values (100,100) and verifies pla
 
 ---
 
-<a id="sap_dual_player_system_and_app_mode"></a>
+<a id="systemaudioplayer_dual_player_system_and_app_mode"></a>
 ### TestCase Name
-SAP_Dual_Player_System_And_App_Mode
+SystemAudioPlayer_Dual_Player_System_And_App_Mode
 
 ### TestCase ID
 SAP_54
@@ -1292,9 +1292,9 @@ Opens two players simultaneously in system and app play modes, plays the system 
 
 ---
 
-<a id="sap_play_stop_replay_scenario"></a>
+<a id="systemaudioplayer_play_stop_replay_scenario"></a>
 ### TestCase Name
-SAP_Play_Stop_Replay_Scenario
+SystemAudioPlayer_Play_Stop_Replay_Scenario
 
 ### TestCase ID
 SAP_55

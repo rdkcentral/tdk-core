@@ -168,7 +168,7 @@
         </testCase>
 
 	<!--- Test case 04 -->
-        <testCase testCaseId="UP_04" testCaseName="UserPreferences_Verify_Get_UI_Language_Error" desc="Verify that the getUiLanguage method returns an error when the plugin is in a deactivated state">
+        <testCase testCaseId="UP_04" testCaseName="UserPreferences_Get_UI_Language_Error" desc="Verify that the getUiLanguage method returns an error when the plugin is in a deactivated state">
             <testCaseInfo testCaseType="direct" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -230,7 +230,7 @@
 	</testCase>
 
 	<!--- Test case 05 -->
-        <testCase testCaseId="UP_05" testCaseName="UserPreferences_Verify_SetUILanguage_without_Params" desc="Verify that the setUILanguage API returns an error when UI language parameter is not provided" >
+        <testCase testCaseId="UP_05" testCaseName="UserPreferences_SetUILanguage_without_Params" desc="Verify that the setUILanguage API returns an error when UI language parameter is not provided" >
            <testCaseInfo testCaseType="direct" />
             <testStep testStepId="1" name="Set_UI_Language" method="Set_UI_Language" >
                 <resultGeneration useMethodTag="system_check_negative_scenario"/>
