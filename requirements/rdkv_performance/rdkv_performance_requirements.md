@@ -4,9 +4,9 @@
 |--------|---------------------------------------|
 | `PVS‑REQ‑001` | SHALL complete initial app launch, launch following a device reboot and  load-to-launch sequence within the defined time-to-launch threshold. |
 | `PVS-REQ-002` | SHALL complete warm relaunch, repeated consecutive launch, and lifecycle-integrated launch within the defined time-to-launch threshold. |
-| `PVS-REQ-003` | SHALL complete app close and graceful terminate operations — including lifecycle-state terminate and terminate from background — within the defined time thresholds. |
-| `PVS-REQ-004` | SHALL complete app force-kill operations — including kill during normal execution and kill within a lifecycle sequence — within the defined time thresholds. |
-| `PVS-REQ-005` | SHALL complete app state transitions — resume from suspended state, set focus, set visible, set hidden, and switch between apps — within the defined time thresholds. |
+| `PVS-REQ-003` | SHALL complete app close and graceful terminate operations including lifecycle-state terminate and terminate from background within the defined time thresholds. |
+| `PVS-REQ-004` | SHALL complete app force-kill operations including kill during normal execution and kill within a lifecycle sequence within the defined time thresholds. |
+| `PVS-REQ-005` | SHALL complete app state transitions resume from suspended state, set focus, set visible, set hidden, and switch between apps within the defined time thresholds. |
 | `PVS-REQ-006` | SHALL complete app bundle download, install, and uninstall operations within the defined time thresholds. |
 | `PVS-REQ-007` | SHALL maintain CPU and memory resource usage within defined bounds during app launch, warm relaunch, and startup-versus-idle comparison. |
 | `PVS-REQ-008` | SHALL maintain CPU and memory resource usage within defined bounds during steady-state runtime and runtime execution. |
@@ -18,9 +18,9 @@
 | `PVS-REQ-014` | SHALL maintain CPU and memory resource usage within defined bounds during H.264 video playback in the MP4 container. |
 | `PVS-REQ-015` | SHALL maintain CPU and memory resource usage within defined bounds during HEVC 4K video playback delivered via DASH streams and HLS streams. |
 | `PVS-REQ-016` | SHALL complete app launch within the defined time-to-launch threshold on both a local network and a WiFi connection. |
-| `PVS-REQ-017` | SHALL complete PlayPause operations within the defined response time threshold across video codecs — H.264 (DASH streams, HLS streams, MP4 container), HEVC, AV1, VP9 (including VP9 HDR) — and audio codecs — EC-3, AC-3, AAC, and Vorbis (WebM container). |
-| `PVS-REQ-018` | SHALL complete PlayPause operations within the defined response time threshold across 4K video codecs — AV1, VP9, and HEVC (DASH streams, HLS streams, MKV container). |
-| `PVS-REQ-019` | SHOULD meet defined performance benchmark scores for JavaScript engine throughput — Octane, Kraken, and Speedometer 2.0 — in the WPEWebkit browser. |
+| `PVS-REQ-017` | SHALL complete PlayPause operations within the defined response time threshold across video codecs H.264 (DASH streams, HLS streams, MP4 container), HEVC, AV1, VP9 (including VP9 HDR) and audio codecs EC-3, AC-3, AAC, and Vorbis (WebM container). |
+| `PVS-REQ-018` | SHALL complete PlayPause operations within the defined response time threshold across 4K video codecs AV1, VP9, and HEVC (DASH streams, HLS streams, MKV container). |
+| `PVS-REQ-019` | SHOULD meet defined performance benchmark scores for JavaScript engine throughput Octane, Kraken, and Speedometer 2.0 in the WPEWebkit browser. |
 | `PVS-REQ-020` | SHOULD meet defined performance benchmark scores for CSS3 animation, rendering throughput (MotionMark), and animation frame rate in the WPEWebkit browser. |
 | `PVS-REQ-021` | SHALL complete platform cold boot, standby-to-on wake, and on-to-standby entry within the defined time thresholds. |
 | `PVS-REQ-022` | SHALL complete channel change within the defined time threshold over both a standard broadband connection and a WiFi connection. |

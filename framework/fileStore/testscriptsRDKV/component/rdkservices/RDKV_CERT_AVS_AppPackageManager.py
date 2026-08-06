@@ -27,7 +27,7 @@ obj = tdklib.TDKScriptingLibrary("rdkservices","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_AVS_PackageManager')
+obj.configureTestCase(ip,port,'RDKV_CERT_AVS_AppPackageManager')
 
 #Get the result of connection with test component and DUT
 result = obj.getLoadModuleResult()
@@ -35,7 +35,7 @@ print("[LIB LOAD STATUS]  :  %s" %result)
 
 #Prmitive test case which associated to this Script
 tdkTestObj = obj.createTestStep('RdkService_Test')
-tdkTestObj.addParameter("xml_name","PackageManager")
+tdkTestObj.addParameter("xml_name","AppPackageManager")
 expectedResult = "SUCCESS"
 
 #Execute the test case in DUT

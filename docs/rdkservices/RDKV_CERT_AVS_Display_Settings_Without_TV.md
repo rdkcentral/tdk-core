@@ -6,15 +6,15 @@ RDKV_CERT_AVS_Display_Settings_Without_TV
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [Read_EDID_Without_TV](#read_edid_without_tv)
-   - [Check_Connected_Video_Displays_Without_TV_Connected](#check_connected_video_displays_without_tv_connected)
-   - [Check_Active_Input_Status_Without_TV_Connected](#check_active_input_status_without_tv_connected)
-   - [Check_Connected_AudioPorts_Without_TV_Connected](#check_connected_audioports_without_tv_connected)
-   - [Check_HDCP_Status_Without_TV_Connected](#check_hdcp_status_without_tv_connected)
-   - [Check_GetCurrentResolution_Status_Without_TV_Connected](#check_getcurrentresolution_status_without_tv_connected)
-   - [Check_SetCurrentResolution_Status_Without_TV_Connected](#check_setcurrentresolution_status_without_tv_connected)
-   - [Check_GetDefaultResolution_Status_Without_TV_Connected](#check_getdefaultresolution_status_without_tv_connected)
-   - [Check_PortName_Status_Without_TV_Connected](#check_portname_status_without_tv_connected)
+   - [DisplaySettingsWithoutTV_Read_EDID_Without_TV](#displaysettingswithouttv_read_edid_without_tv)
+   - [DisplaySettingsWithoutTV_Connected_Video_Displays_Without_TV_Connected](#displaysettingswithouttv_connected_video_displays_without_tv_connected)
+   - [DisplaySettingsWithoutTV_Active_Input_Status_Without_TV_Connected](#displaysettingswithouttv_active_input_status_without_tv_connected)
+   - [DisplaySettingsWithoutTV_Connected_AudioPorts_Without_TV_Connected](#displaysettingswithouttv_connected_audioports_without_tv_connected)
+   - [DisplaySettingsWithoutTV_HDCP_Status_Without_TV_Connected](#displaysettingswithouttv_hdcp_status_without_tv_connected)
+   - [DisplaySettingsWithoutTV_GetCurrentResolution_Status_Without_TV_Connected](#displaysettingswithouttv_getcurrentresolution_status_without_tv_connected)
+   - [DisplaySettingsWithoutTV_SetCurrentResolution_Status_Without_TV_Connected](#displaysettingswithouttv_setcurrentresolution_status_without_tv_connected)
+   - [DisplaySettingsWithoutTV_GetDefaultResolution_Status_Without_TV_Connected](#displaysettingswithouttv_getdefaultresolution_status_without_tv_connected)
+   - [DisplaySettingsWithoutTV_PortName_Status_Without_TV_Connected](#displaysettingswithouttv_portname_status_without_tv_connected)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -42,9 +42,9 @@ RDKV_CERT_AVS_Display_Settings_Without_TV
 
 ## Test Cases
 
-<a id="read_edid_without_tv"></a>
+<a id="displaysettingswithouttv_read_edid_without_tv"></a>
 ### TestCase Name
-Read_EDID_Without_TV
+DisplaySettingsWithoutTV_Read_EDID_Without_TV
 
 ### TestCase ID
 DSWTV_1
@@ -68,9 +68,9 @@ Check the EDID status when TV is disconnected
 
 ---
 
-<a id="check_connected_video_displays_without_tv_connected"></a>
+<a id="displaysettingswithouttv_connected_video_displays_without_tv_connected"></a>
 ### TestCase Name
-Check_Connected_Video_Displays_Without_TV_Connected
+DisplaySettingsWithoutTV_Connected_Video_Displays_Without_TV_Connected
 
 ### TestCase ID
 DSWTV_2
@@ -86,9 +86,9 @@ Checks whether getConnectedVideoDisplays API is returning empty list when TV is 
 
 ---
 
-<a id="check_active_input_status_without_tv_connected"></a>
+<a id="displaysettingswithouttv_active_input_status_without_tv_connected"></a>
 ### TestCase Name
-Check_Active_Input_Status_Without_TV_Connected
+DisplaySettingsWithoutTV_Active_Input_Status_Without_TV_Connected
 
 ### TestCase ID
 DSWTV_3
@@ -113,9 +113,9 @@ Checks active input status with and without passing video port name when TV is n
 
 ---
 
-<a id="check_connected_audioports_without_tv_connected"></a>
+<a id="displaysettingswithouttv_connected_audioports_without_tv_connected"></a>
 ### TestCase Name
-Check_Connected_AudioPorts_Without_TV_Connected
+DisplaySettingsWithoutTV_Connected_AudioPorts_Without_TV_Connected
 
 ### TestCase ID
 DSWTV_4
@@ -132,9 +132,9 @@ Checks whether getConnectedAudioPorts API does not return HDMI0 when TV is not c
 
 ---
 
-<a id="check_hdcp_status_without_tv_connected"></a>
+<a id="displaysettingswithouttv_hdcp_status_without_tv_connected"></a>
 ### TestCase Name
-Check_HDCP_Status_Without_TV_Connected
+DisplaySettingsWithoutTV_HDCP_Status_Without_TV_Connected
 
 ### TestCase ID
 DSWTV_5
@@ -151,9 +151,9 @@ Checks getHDCPStatus API response when TV is not connected
 
 ---
 
-<a id="check_getcurrentresolution_status_without_tv_connected"></a>
+<a id="displaysettingswithouttv_getcurrentresolution_status_without_tv_connected"></a>
 ### TestCase Name
-Check_GetCurrentResolution_Status_Without_TV_Connected
+DisplaySettingsWithoutTV_GetCurrentResolution_Status_Without_TV_Connected
 
 ### TestCase ID
 DSWTV_6
@@ -170,9 +170,9 @@ Checks getCurrentResolution API response when TV is not connected
 
 ---
 
-<a id="check_setcurrentresolution_status_without_tv_connected"></a>
+<a id="displaysettingswithouttv_setcurrentresolution_status_without_tv_connected"></a>
 ### TestCase Name
-Check_SetCurrentResolution_Status_Without_TV_Connected
+DisplaySettingsWithoutTV_SetCurrentResolution_Status_Without_TV_Connected
 
 ### TestCase ID
 DSWTV_7
@@ -189,9 +189,9 @@ Checks setCurrentResolution API response when TV is not connected
 
 ---
 
-<a id="check_getdefaultresolution_status_without_tv_connected"></a>
+<a id="displaysettingswithouttv_getdefaultresolution_status_without_tv_connected"></a>
 ### TestCase Name
-Check_GetDefaultResolution_Status_Without_TV_Connected
+DisplaySettingsWithoutTV_GetDefaultResolution_Status_Without_TV_Connected
 
 ### TestCase ID
 DSWTV_8
@@ -208,9 +208,9 @@ Checks getDefaultResolution API response when TV is not connected
 
 ---
 
-<a id="check_portname_status_without_tv_connected"></a>
+<a id="displaysettingswithouttv_portname_status_without_tv_connected"></a>
 ### TestCase Name
-Check_PortName_Status_Without_TV_Connected
+DisplaySettingsWithoutTV_PortName_Status_Without_TV_Connected
 
 ### TestCase ID
 DSWTV_9
