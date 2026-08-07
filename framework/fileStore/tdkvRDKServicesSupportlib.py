@@ -2593,7 +2593,14 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 else:
                     info["Test_Step_Status"] = "FAILURE"
             elif arg[0] == "check_paired_device_list_empty":
-                if len(result.get("pairedDevices")) == 0:
+                info = checkAndGetAllResultInfo(result,result.get("success"))
+                pairedDevices = result.get("pairedDevices")
+                success = str(result.get("success")).lower() == "true"
+                status = False
+                for pairedDevice in pairedDevices:
+                    if str(pairedDevice.get("name")) not in arg[1]:
+                        status = True
+                if success and status:
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
@@ -2631,10 +2638,18 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 else:
                     info["Test_Step_Status"] = "FAILURE"
             elif arg[0] == "check_connected_device_list_empty":
-                if len(result.get("connectedDevices")) == 0:
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
+                info = checkAndGetAllResultInfo(result,result.get("success"))
+                connectedDevices = result.get("connectedDevices")
+                success = str(result.get("success")).lower() == "true"
+                status = False
+                for connectedDevice in connectedDevices:
+                    if str(connectedDevice.get("name")) in arg[1]:
+                        status = True
+                        break
+                if success and status:
                     info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["Test_Step_Status"] = "SUCCESS"
             elif arg[0] == "get_connected_bt_emu_details":
                 info = checkAndGetAllResultInfo(result,result.get("success"))
                 connectedDevices= result.get("connectedDevices")
