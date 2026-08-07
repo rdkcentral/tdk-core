@@ -100,6 +100,14 @@
 	<method name="Get_Device_Type" api="devicetype" type="property" desc="Provides access to the device type"/>
 	<method name="Get_Device_SocName" api="socname" type="property" desc="Provides access to the SOC Name"/>
 	<method name="Get_Device_Make" api="make" type="property" desc="Provides access to the device manufacturer"/>
+	<method name="Get_Estb_Mac" api="estbmac" type="property" desc="Provides access to the STB MAC addresses"/>
+	<method name="Get_Brand_Name" api="brandname" type="property" desc="Provides access to device brand name"/>
+	<method name="Get_Device_Chipset" api="chipset" type="property" desc="Provides access to the chipset of the device"/>
+	<method name="Get_Distributor_ID" api="distributorid" type="property" desc="Provides access to the partner ID or distributor ID for device"/>
+	<method name="Get_ESTB_IP" api="estbip" type="property" desc="Provides access to the STB IP addresses"/>
+	<method name="Get_Ethernet_MAC" api="ethmac" type="property" desc="Provides access to the Ethernet MAC addresses"/>
+	<method name="Get_Release_Version" api="releaseversion" type="property" desc="Provides access to the ReleaseVersion of the Image"/>
+	<method name="Get_WiFi_MAC" api="wifimac" type="property" desc="Provides access to the WIFI MAC addresses"/>
     </plugin>
 
 
@@ -3544,8 +3552,8 @@
         </method>
     </plugin>
 
-    <!-- PackageManager Plugin Information -->
-    <plugin pluginName="PackageManager" serviceName="org.rdk.PackageManagerRDKEMS" serviceVersion="1">
+    <!-- AppPackageManager Plugin Information -->
+    <plugin pluginName="AppPackageManager" serviceName="org.rdk.AppPackageManager" serviceVersion="1">
         <!-- Method Definitions -->
         <method name="List_Package_Info" api="listPackages" type="method" desc="Retrieves information about packages"/>
         <method name="Install_Package" api="install" type="method" desc="Installs a package">
