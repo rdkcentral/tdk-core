@@ -56,20 +56,24 @@ if expectedResult in result.upper():
     event_listener = None
     app_instance_id = ""
     test_app_id = ""
-    launch_requests_sent = 0
-    launch_responses_received = 0
-    launch_events_received = 0
-    duplicate_instances_detected = 0
-    error_responses = 0
+    
+    # Use dictionary for request tracking to avoid nonlocal scoping issues
+    request_tracking = {
+        'launch_requests_sent': 0,
+        'launch_responses_received': 0,
+        'error_responses': 0,
+        'launch_events_received': 0,
+        'duplicate_instances_detected': 0
+    }
 
     # Required AppManager plugins
-    plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
-    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated", "org.rdk.AppManager":"activated"}
+    plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]
+    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.AppPackageManager":"activated", "org.rdk.AppManager":"activated"}
     conf_file, status = get_configfile_name(obj)
     status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
     
     # Check if essential AppManager plugins are available
-    essential_plugins = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]  
+    essential_plugins = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]  
     missing_plugins = [plugin for plugin in essential_plugins if plugin not in supported_plugins]
     
     if missing_plugins:
@@ -156,7 +160,6 @@ if expectedResult in result.upper():
                     try:
                         tdkTestObj = obj.createTestStep('rdkservice_getValue')
                         tdkTestObj.addParameter("method", "org.rdk.AppManager.1.getRunningApps")
-                        tdkTestObj.addParameter("value", "{}")
                         tdkTestObj.executeTestCase(expectedResult)
                         ai_manager_result = tdkTestObj.getResult()
                         health_status["ai_manager_responsive"] = (ai_manager_result == "SUCCESS")
@@ -181,73 +184,18 @@ if expectedResult in result.upper():
                 # Phase 1: Prepare app for multiple launch test
                 print(f"\n === PHASE 1: Preparing {app_id} for Multiple Launch Test === \n")
                 
-                # Check if app is installed
-                tdkTestObj = obj.createTestStep('rdkservice_getValue')
-                tdkTestObj.addParameter("method", "org.rdk.AppManager.1.getInstalledApps")
-                tdkTestObj.addParameter("value", "{}")
-                tdkTestObj.executeTestCase(expectedResult)
-                installed_apps_result = tdkTestObj.getResult()
-                installed_apps_details = tdkTestObj.getResultDetails()
-                
+                # Use the utility function to handle download/install
                 app_installed = False
-                if installed_apps_result == "SUCCESS":
-                    try:
-                        installed_apps_data = json.loads(installed_apps_details)
-                        if "result" in installed_apps_data and "apps" in installed_apps_data["result"]:
-                            installed_app_ids = [app.get("id", "") for app in installed_apps_data["result"]["apps"]]
-                            app_installed = app_id in installed_app_ids
-                    except json.JSONDecodeError:
-                        print(f"\n Error parsing installed apps response \n")
-
-                # Install app if needed
-                if not app_installed and status == "SUCCESS":
-                    print(f"\n Installing {app_id} for stress test... \n")
-                    
-                    # Download
-                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                    tdkTestObj.addParameter("method", "org.rdk.DownloadManager.1.download")
-                    tdkTestObj.addParameter("value", '{"url": "' + app_download_url + '", "appId": "' + app_id + '"}')
-                    tdkTestObj.executeTestCase(expectedResult)
-                    download_result = tdkTestObj.getResult()
-                    
-                    if download_result == "SUCCESS":
-                        # Wait for download completion
-                        download_timeout = 120
-                        continue_count = 0
-                        download_success = False
-                        
-                        while continue_count < download_timeout and not download_success:
-                            if len(event_listener.getEventsBuffer()) > 0:
-                                event_log = event_listener.getEventsBuffer().pop(0)
-                                if app_id in event_log and "onAppDownloadStatus" in str(event_log):
-                                    event_data = json.loads(event_log.split('$$$')[1])
-                                    if event_data.get("status") == "Downloaded":
-                                        download_success = True
-                            continue_count += 1
-                            time.sleep(1)
-                            
-                        if download_success:
-                            # Install
-                            tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                            tdkTestObj.addParameter("method", "org.rdk.PackageManagerRDKEMS.1.install")
-                            tdkTestObj.addParameter("value", '{"appId": "' + app_id + '"}')
-                            tdkTestObj.executeTestCase(expectedResult)
-                            install_result = tdkTestObj.getResult()
-                            
-                            if install_result == "SUCCESS":
-                                # Wait for installation completion
-                                install_timeout = 120
-                                continue_count = 0
-                                
-                                while continue_count < install_timeout:
-                                    if len(event_listener.getEventsBuffer()) > 0:
-                                        event_log = event_listener.getEventsBuffer().pop(0)
-                                        if app_id in event_log and "onAppInstalled" in str(event_log):
-                                            app_installed = True
-                                            print(f"\n App {app_id} installed successfully \n")
-                                            break
-                                    continue_count += 1
-                                    time.sleep(1)
+                if status == "SUCCESS":
+                    # Get the app bundle name from URL (last part before file extension)
+                    app_bundle = app_id
+                    install_status = rdkservice_install_launch_app(obj, app_bundle, app_id, app_download_url, launch=False)
+                    if install_status == "SUCCESS":
+                        app_installed = True
+                        print(f"\n App {app_id} prepared successfully \n")
+                    else:
+                        print(f"\n Failed to prepare app {app_id}: {install_status} \n")
+                        status = "FAILURE"
 
                 # Phase 2: Terminate any existing instances
                 if app_installed and status == "SUCCESS":
@@ -256,7 +204,6 @@ if expectedResult in result.upper():
                     # Check if app is already running
                     tdkTestObj = obj.createTestStep('rdkservice_getValue')
                     tdkTestObj.addParameter("method", "org.rdk.AppManager.1.getRunningApps")
-                    tdkTestObj.addParameter("value", "{}")
                     tdkTestObj.executeTestCase(expectedResult)
                     running_apps_result = tdkTestObj.getResult()
                     
@@ -289,12 +236,10 @@ if expectedResult in result.upper():
                     instance_ids_seen = set()
                     
                     # Function to send a single launch request
-                    def send_launch_request(request_id):
-                        nonlocal launch_requests_sent, launch_responses_received, error_responses
-                        
+                    def send_launch_request(request_id, tracking):
                         try:
                             print(f"\n [Request {request_id}] Sending launch request for {app_id} \n")
-                            launch_requests_sent += 1
+                            tracking['launch_requests_sent'] += 1
                             
                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
                             tdkTestObj.addParameter("method", "org.rdk.AppManager.1.launchApp")
@@ -304,18 +249,18 @@ if expectedResult in result.upper():
                             
                             tdkTestObj.executeTestCase(expectedResult)
                             launch_result = tdkTestObj.getResult()
-                            launch_responses_received += 1
+                            tracking['launch_responses_received'] += 1
                             
                             if launch_result == "SUCCESS":
                                 launch_results.append({"request_id": request_id, "result": "SUCCESS", "start_time": launch_start_time})
                                 print(f"\n [Request {request_id}] Launch command accepted \n")
                             else:
                                 launch_results.append({"request_id": request_id, "result": "FAILURE", "start_time": launch_start_time})
-                                error_responses += 1
+                                tracking['error_responses'] += 1
                                 print(f"\n [Request {request_id}] Launch command rejected \n")
                                 
                         except Exception as e:
-                            error_responses += 1
+                            tracking['error_responses'] += 1
                             print(f"\n [Request {request_id}] Exception during launch: {e} \n")
                             launch_results.append({"request_id": request_id, "result": "EXCEPTION", "start_time": None})
 
@@ -323,7 +268,7 @@ if expectedResult in result.upper():
                     stress_test_start_time = str(datetime.utcnow()).split()[1]
                     
                     for i in range(int(multiple_launch_count)):
-                        send_launch_request(i + 1)
+                        send_launch_request(i + 1, request_tracking)
                         if i < int(multiple_launch_count) - 1:  # Don't delay after last request
                             time.sleep(int(launch_delay) / 1000.0)  # Convert ms to seconds
 
@@ -342,17 +287,17 @@ if expectedResult in result.upper():
                             event_log = event_listener.getEventsBuffer().pop(0)
                             
                             if app_id in event_log and "onAppLifecycleStateChanged" in str(event_log):
-                                launch_events_received += 1
+                                request_tracking['launch_events_received'] += 1
                                 event_time = event_log.split('$$$')[0]
                                 event_data = json.loads(event_log.split('$$$')[1])
                                 app_state = event_data.get("state", "").lower()
                                 instance_id = event_data.get("instanceId", "")
                                 
-                                print(f"\n [Event {launch_events_received}] App lifecycle: {app_state}, Instance: {instance_id} \n")
+                                print(f"\n [Event {request_tracking['launch_events_received']}] App lifecycle: {app_state}, Instance: {instance_id} \n")
                                 
                                 if instance_id:
                                     if instance_id in instance_ids_seen:
-                                        duplicate_instances_detected += 1
+                                        request_tracking['duplicate_instances_detected'] += 1
                                         print(f"\n WARNING: Duplicate instance ID detected: {instance_id} \n")
                                     else:
                                         instance_ids_seen.add(instance_id)
@@ -374,7 +319,6 @@ if expectedResult in result.upper():
                     # Check current running apps
                     tdkTestObj = obj.createTestStep('rdkservice_getValue')
                     tdkTestObj.addParameter("method", "org.rdk.AppManager.1.getRunningApps")
-                    tdkTestObj.addParameter("value", "{}")
                     tdkTestObj.executeTestCase(expectedResult)
                     final_running_result = tdkTestObj.getResult()
                     
@@ -392,12 +336,12 @@ if expectedResult in result.upper():
 
                     # Analysis and Results
                     print(f"\n === STRESS TEST ANALYSIS === \n")
-                    print(f"\n Launch Requests Sent: {launch_requests_sent}")
-                    print(f"\n Launch Responses Received: {launch_responses_received}") 
-                    print(f"\n Error Responses: {error_responses}")
-                    print(f"\n Lifecycle Events Received: {launch_events_received}")
+                    print(f"\n Launch Requests Sent: {request_tracking['launch_requests_sent']}")
+                    print(f"\n Launch Responses Received: {request_tracking['launch_responses_received']}") 
+                    print(f"\n Error Responses: {request_tracking['error_responses']}")
+                    print(f"\n Lifecycle Events Received: {request_tracking['launch_events_received']}")
                     print(f"\n Unique Instance IDs: {len(instance_ids_seen)}")
-                    print(f"\n Duplicate Instances Detected: {duplicate_instances_detected}")
+                    print(f"\n Duplicate Instances Detected: {request_tracking['duplicate_instances_detected']}")
                     print(f"\n Active App Instances: {active_instances_count}")
                     
                     # Assessment of behavior
@@ -405,11 +349,11 @@ if expectedResult in result.upper():
                     behavioral_analysis_passed = True
                     
                     # Check 1: System should handle multiple launch requests gracefully
-                    if error_responses > (int(multiple_launch_count) * 0.8):  # More than 80% errors is unusual
-                        print(f"\nHigh error rate: {error_responses}/{launch_requests_sent} requests failed \n")
+                    if request_tracking['error_responses'] > (int(multiple_launch_count) * 0.8):  # More than 80% errors is unusual
+                        print(f"\nHigh error rate: {request_tracking['error_responses']}/{request_tracking['launch_requests_sent']} requests failed \n")
                         behavioral_analysis_passed = False
                     else:
-                        print(f"\n Acceptable error handling: {error_responses}/{launch_requests_sent} requests failed \n")
+                        print(f"\n Acceptable error handling: {request_tracking['error_responses']}/{request_tracking['launch_requests_sent']} requests failed \n")
                     
                     # Check 2: System should not create excessive duplicate instances
                     if active_instances_count > 3:  # More than 3 instances might indicate poor resource management
@@ -426,7 +370,7 @@ if expectedResult in result.upper():
                         print(f"\n System remained stable during stress test \n")
                         
                     # Check 4: Events should be reasonable
-                    if launch_events_received == 0 and launch_responses_received > 0:
+                    if request_tracking['launch_events_received'] == 0 and request_tracking['launch_responses_received'] > 0:
                         print(f"\n No lifecycle events received despite successful launch responses \n")
                         behavioral_analysis_passed = False
                     
@@ -435,14 +379,11 @@ if expectedResult in result.upper():
                         print(f"\n === MULTIPLE LAUNCH STRESS TEST: PASSED === \n")
                         print(f"\n System handled {multiple_launch_count} rapid launch requests appropriately \n")
                         print(f"\n App {test_app_id} behavior under multiple launch stress: ACCEPTABLE \n")
-                        tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                        tdkTestObj.setResultStatus("SUCCESS")
+                        status = "SUCCESS"
                     else:
                         print(f"\n === MULTIPLE LAUNCH STRESS TEST: ISSUES DETECTED === \n")
                         print(f"\n System showed problematic behavior during multiple launch requests \n")
                         print(f"\n App {test_app_id} behavior under multiple launch stress: PROBLEMATIC \n")
-                        tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                        tdkTestObj.setResultStatus("FAILURE")
                         status = "FAILURE"
 
                 else:
@@ -456,8 +397,15 @@ if expectedResult in result.upper():
 
         else:
             print("\n AppManager plugins preconditions are not met \n")
-            obj.setLoadModuleStatus("FAILURE")
-                
+            status = "FAILURE"
+
+    # Report final status - CRITICAL: must be called in all paths
+    if status == "SUCCESS":
+        print("\n[SUCCESS] Multiple launch stress test passed")
+    else:
+        print("\n[FAILURE] Multiple launch stress test failed")
+    
+    obj.setLoadModuleStatus(status)
 
     #Revert the values
     if revert == "YES":
