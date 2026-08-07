@@ -95,8 +95,7 @@ if "SUCCESS" in result.upper():
             # Step 3 : Create display
             print("\n")
             method = "org.rdk.RDKWindowManager.1.createDisplay"
-            value = '{"displayParams" : {"client": "'+wayland_display_name+'", "displayName": "'+wayland_display_name+'", "displayWidth": 1920, "displayHeight": 1080, "virtualWidth": 1920, "virtualHeight": 1080} }'
-            #value = '{"displayParams" : {"client": "'+wayland_display_name+'", "displayName": "'+wayland_display_name+'"} }'
+            value = '{"clientId": "'+wayland_display_name+'", "displayName": "'+wayland_display_name+'"}'
             tdkTestObj = obj.createTestStep('appmanagers_setvalue')
             tdkTestObj.addParameter("method",method)
             tdkTestObj.addParameter("value",value)
@@ -177,9 +176,9 @@ if "SUCCESS" in result.upper():
                                             outer = json.loads(json_part)
                                             inner = outer["params"]
                                             #print("\nParsed Event : ", inner)
-                                            client = inner["client"]
-                                            if client == wayland_display_name:
-                                                print("SUCCESS : Received onDisconnected event for the created display : ", client)
+                                            clientId = inner["clientId"]
+                                            if clientId == wayland_display_name:
+                                                print("SUCCESS : Received onDisconnected event for the created display : ", clientId)
                                                 tdkTestObj.setResultStatus("SUCCESS")
                                                 event_status = "TRUE"
                                                 break
@@ -207,7 +206,7 @@ if "SUCCESS" in result.upper():
                                                 print("FAILURE : Failed to get the list of apps or created display")
                                                 tdkTestObj.setResultStatus("FAILURE")
                                         else:
-                                            print("FAILURE : onDisconnected event received but for different display or not received at all : ", client)
+                                            print("FAILURE : onDisconnected event received but for different display or not received at all : ", clientId)
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
                                         tdkTestObj.setResultStatus("FAILURE")
