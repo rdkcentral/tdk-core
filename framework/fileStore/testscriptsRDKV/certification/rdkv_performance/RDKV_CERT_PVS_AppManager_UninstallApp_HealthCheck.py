@@ -56,15 +56,16 @@ if expectedResult in result.upper():
     app_instance_id = ""
     test_app_id = ""
     stability_check_passed = False
+    tdkTestObj = None
 
     # Required AppManager plugins
-    plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager", "org.rdk.SystemServices"]
-    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated", "org.rdk.AppManager":"activated", "org.rdk.SystemServices":"activated"}
+    plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager", "org.rdk.SystemServices"]
+    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.AppPackageManager":"activated", "org.rdk.AppManager":"activated", "org.rdk.SystemServices":"activated"}
     conf_file, status = get_configfile_name(obj)
     status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
     
     # Check if essential AppManager plugins are available
-    essential_plugins = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]  
+    essential_plugins = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]  
     missing_plugins = [plugin for plugin in essential_plugins if plugin not in supported_plugins]
     
     if missing_plugins:
@@ -141,7 +142,6 @@ if expectedResult in result.upper():
                     # Check if WPEFramework is still running
                     tdkTestObj = obj.createTestStep('rdkservice_getValue')
                     tdkTestObj.addParameter("method", "org.rdk.SystemServices.1.getSystemVersions")
-                    tdkTestObj.addParameter("value", "{}")
                     tdkTestObj.executeTestCase(expectedResult)
                     system_result = tdkTestObj.getResult()
                     
@@ -152,14 +152,13 @@ if expectedResult in result.upper():
                         print("\n ✗ WPEFramework is not responsive \n")
                     
                     # Check if essential plugins are still responsive
-                    essential_check_plugins = ["org.rdk.AppManager", "org.rdk.PackageManagerRDKEMS"]
+                    essential_check_plugins = ["org.rdk.AppManager", "org.rdk.AppPackageManager"]
                     responsive_count = 0
                     
                     for plugin in essential_check_plugins:
                         if plugin in supported_plugins:
                             tdkTestObj = obj.createTestStep('rdkservice_getValue')
                             tdkTestObj.addParameter("method", f"{plugin}.1.getPluginStatus")
-                            tdkTestObj.addParameter("value", "{}")
                             tdkTestObj.executeTestCase(expectedResult)
                             plugin_result = tdkTestObj.getResult()
                             
@@ -175,7 +174,6 @@ if expectedResult in result.upper():
                     # Check system memory (basic check via getInstalledApps - if it works, memory is likely stable)
                     tdkTestObj = obj.createTestStep('rdkservice_getValue')
                     tdkTestObj.addParameter("method", "org.rdk.AppManager.1.getInstalledApps")
-                    tdkTestObj.addParameter("value", "{}")
                     tdkTestObj.executeTestCase(expectedResult)
                     memory_result = tdkTestObj.getResult()
                     
@@ -216,7 +214,6 @@ if expectedResult in result.upper():
                     print(f"\n Checking if app {app_id} is installed... \n")
                     tdkTestObj = obj.createTestStep('rdkservice_getValue')
                     tdkTestObj.addParameter("method", "org.rdk.AppManager.1.getInstalledApps")
-                    tdkTestObj.addParameter("value", "{}")
                     tdkTestObj.executeTestCase(expectedResult)
                     installed_apps_result = tdkTestObj.getResult()
                     installed_apps_details = tdkTestObj.getResultDetails()
@@ -263,7 +260,7 @@ if expectedResult in result.upper():
                             if download_success:
                                 # Install the app
                                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                                tdkTestObj.addParameter("method", "org.rdk.PackageManagerRDKEMS.1.install")
+                                tdkTestObj.addParameter("method", "org.rdk.AppPackageManager.1.install")
                                 tdkTestObj.addParameter("value", '{"appId": "' + app_id + '"}')
                                 tdkTestObj.executeTestCase(expectedResult)
                                 install_result = tdkTestObj.getResult()
@@ -325,7 +322,7 @@ if expectedResult in result.upper():
                                 print(f"\n === STABILITY TEST: Uninstalling loaded app {app_id} === \n")
                                 
                                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                                tdkTestObj.addParameter("method", "org.rdk.PackageManagerRDKEMS.1.uninstall")
+                                tdkTestObj.addParameter("method", "org.rdk.AppPackageManager.1.uninstall")
                                 tdkTestObj.addParameter("value", '{"appId": "' + app_id + '"}')
                                 uninstall_start_time = str(datetime.utcnow()).split()[1]
                                 tdkTestObj.executeTestCase(expectedResult)
@@ -375,12 +372,12 @@ if expectedResult in result.upper():
                                             status = "SUCCESS"
                                         else:
                                             print("\n System stability compromised after uninstalling loaded app \n")
+                                            status = "FAILURE"
                                             
                                             # Log specific stability failures
                                             for check, result in post_uninstall_stability.items():
                                                 if not result:
-                                            
-                                            status = "FAILURE"
+                                                    print(f"[FAILURE] {check}: {result}")
                                         
                                         # Additional verification - try to perform basic operations
                                         print("\n === Performing additional system verification === \n")
@@ -388,7 +385,6 @@ if expectedResult in result.upper():
                                         # Test 1: Can still list apps
                                         tdkTestObj = obj.createTestStep('rdkservice_getValue')
                                         tdkTestObj.addParameter("method", "org.rdk.AppManager.1.getInstalledApps")
-                                        tdkTestObj.addParameter("value", "{}")
                                         tdkTestObj.executeTestCase(expectedResult)
                                         list_apps_result = tdkTestObj.getResult()
                                         
@@ -414,18 +410,6 @@ if expectedResult in result.upper():
                                             status = "FAILURE"
                                         
                                         test_app_id = app_id
-                                        
-                                        # Final stability assessment
-                                        if status == "SUCCESS":
-                                            print(f"\n === STABILITY TEST PASSED === \n")
-                                            print(f"\n Successfully uninstalled loaded app {test_app_id} without system instability \n")
-                                            tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                                            tdkTestObj.setResultStatus("SUCCESS")
-                                        else:
-                                            print(f"\n === STABILITY TEST FAILED === \n")
-                                            print(f"\n System instability detected after uninstalling loaded app {test_app_id} \n")
-                                            tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                                            tdkTestObj.setResultStatus("FAILURE")
                                     else:
                                         print(f"\n Failed: App uninstall did not complete within timeout \n")
                                         status = "FAILURE"
@@ -438,19 +422,20 @@ if expectedResult in result.upper():
                         else:
                             print(f"\n Failed to launch app {app_id} \n")
                             status = "FAILURE"
-                    else:
-                        print(f"\n Failed: App {app_id} is not installed \n")
-                        status = "FAILURE"
+        
+        # Disconnect event listener
+        if event_listener:
+            print("\n Disconnecting event listener \n")
+            event_listener.disconnect()
 
-            # Disconnect event listener
-            if event_listener:
-                print("\n Disconnecting event listener \n")
-                event_listener.disconnect()
+    # Set final test result status
+    if status == "SUCCESS":
+        print("\n[SUCCESS] Stability check completed successfully\n")
+    else:
+        print("\n[FAILURE] Stability check failed\n")
 
-        else:
-            print("\n AppManager plugins preconditions are not met \n")
-            obj.setLoadModuleStatus("FAILURE")
-                
+    # Report final status
+    obj.setLoadModuleStatus(status)
 
     #Revert the values
     if revert == "YES":
