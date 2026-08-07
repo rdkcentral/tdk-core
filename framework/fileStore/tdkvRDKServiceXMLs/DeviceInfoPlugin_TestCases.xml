@@ -474,4 +474,60 @@
                 <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
             </testStep>
         </testCase>
+
+       <!-- Test case 26 -->
+       <testCase testCaseId="DI_26" testCaseName="DeviceInfo_Get_Brand_Name" desc="Checks the brand name of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Brand_Name" method="Get_Brand_Name">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 27 -->
+       <testCase testCaseId="DI_27" testCaseName="DeviceInfo_Get_Chipset_Info" desc="Checks the chipset of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Device_Chipset" method="Get_Device_Chipset">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 28 -->
+       <testCase testCaseId="DI_28" testCaseName="DeviceInfo_Get_Distributor_ID" desc="Checks the distributor ID of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Distributor_ID" method="Get_Distributor_ID">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 29 -->
+       <testCase testCaseId="DI_29" testCaseName="DeviceInfo_Get_ESTB_IP_Address" desc="Checks the STB IP address of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_ESTB_IP" method="Get_ESTB_IP">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 30 -->
+       <testCase testCaseId="DI_30" testCaseName="DeviceInfo_Get_Ethernet_MAC_Address" desc="Checks the Ethernet MAC address of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Ethernet_MAC" method="Get_Ethernet_MAC">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 31 -->
+       <testCase testCaseId="DI_31" testCaseName="DeviceInfo_Get_Release_Version" desc="Checks the release version of the device image">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Release_Version" method="Get_Release_Version">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 32 -->
+       <testCase testCaseId="DI_32" testCaseName="DeviceInfo_Get_WiFi_MAC_Address" desc="Checks the WiFi MAC address of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_WiFi_MAC" method="Get_WiFi_MAC">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
 </testPlugin>

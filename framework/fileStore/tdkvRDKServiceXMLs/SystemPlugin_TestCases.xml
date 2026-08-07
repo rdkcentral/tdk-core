@@ -632,11 +632,15 @@
         <arguments value="system_check_firmware_configuration,new_rule,updates/firmwares" usePreviousResult="true" Id="3" useMethodTag="system_get_device_details"/>
       </resultGeneration>
     </testStep>
-    <testStep testStepId="8" name="Get_ESTB_MAC" method="Get_Device_Info" saveResult="true">
+    <!-- getDeviceInfo API from the System Plugin has been deprecated therefore this test step has been commented out -->
+    <!--testStep testStepId="8" name="Get_ESTB_MAC" method="Get_Device_Info" saveResult="true">
       <params>
         <param tag="params" useConfigFile="true" key="SYSTEM_DEVICE_PARAMS" />
       </params>
       <resultGeneration useMethodTag="system_get_api_info"/>
+    </testStep-->
+    <testStep testStepId="8" name="Get_Estb_Mac_Address" method="Get_Estb_Mac" pluginName="DeviceInfo" saveResult="true">
+      <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
     </testStep>
     <testStep testStepId="9" name="Check_Existing_Firmware_Rule" action="externalFnCall" saveResult="true">
       <resultGeneration useMethodTag="system_check_and_create_configuration_rule">
