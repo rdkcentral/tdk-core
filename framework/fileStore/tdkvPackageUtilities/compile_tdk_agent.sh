@@ -1450,14 +1450,6 @@ compile_vkmark()
 }
 
 ############################################
-# Apply Realtek vulkan-headers patches
-# Fetches vulkan-headers patches from the Realtek
-# OSS vendor layer (meta-vendor-rdke-realtek-oss)
-# and applies them to the vulkan-headers source.
-# Must be called from within the vulkan_source dir.
-# Only runs for the REALTEK platform.
-############################################
-############################################
 # Apply Realtek OSS patches for a given recipe
 # Fetches patches for the requested recipe (e.g.
 # vulkan-headers, vulkan-tools) from the Realtek
@@ -1581,6 +1573,7 @@ install_vulkan_headers() {
 	      ;;
 	"1.4.341")
 	      vulkan_header_srcrev="b5c8f996196ba4aa6d8f97e52b5d3b6e70f7e4e2"
+	      VULKAN_VOLK_REQUIRED="true"
 	      ;;
         "1.3.247")
               vulkan_header_srcrev="95a13d7b7118d3824f0ef236bb0438d9d51f3634"
@@ -1633,7 +1626,9 @@ clone_vulkan_tools() {
     git clone https://github.com/KhronosGroup/Vulkan-Tools.git vulkan_tools_source_$PLATFORM >> "$LOG_FILE" 2>&1
     cd vulkan_tools_source_$PLATFORM
     VULKAN_TOOLS_DIR=$(pwd)
-    echo "VULKAN TOOLS VERSION OBTAINED as $VULKAN_VERSION"
+    VAR_VULKAN_TOOLS_VERSION=${PLATFORM}_VULKAN_TOOLS_VERSION
+    VULKAN_TOOLS_VERSION="${!VAR_VULKAN_TOOLS_VERSION}"
+    echo "VULKAN TOOLS VERSION OBTAINED as $VULKAN_TOOLS_VERSION"
     case "$VULKAN_VERSION" in
 	"1.4.303")
               vulkan_tools_srcrev="4f965e1de79ba354fff816f1108cc25066847be0"
