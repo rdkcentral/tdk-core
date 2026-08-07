@@ -1,10 +1,9 @@
 #!/bin/bash
-
 ##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2023 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +17,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
-
 
 source device.conf
 source generic_functions.sh
@@ -731,7 +729,7 @@ memcr_app_homekey_close() {
    local app_name="$2"
    local playbackPosition_func="$3"
    if (( "$playbackPosition_func" == 1 )); then
-      getCurrentPlaybackPosition
+      getCurrentPlaybackPosition "$app_name"
    else      
       printf "\n_________________________________________________________________________________________________________________________________________________________\n\n"
       printf "\nStep %s\t\t: Press Home button and check the behavior of %s\n\n\n" "$step_num" "$app_name"
@@ -1235,7 +1233,7 @@ tc_MEMCR_MANUAL_testsuite() {
 
 
       if [[ "$TestcaseID" == "TC_MEMCR_MANUAL_10" ]]; then
-         memcr_applaunch_common_teststep "$testcase_prefix" "Amazon" "$app_available_flag3"
+         memcr_applaunch_common_teststep "$testcase_prefix" "Amazon" "$app_available_flag2"
     
 
 #Step 2 code block for TC_MEMCR_MANUAL_10

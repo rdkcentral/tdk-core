@@ -1,10 +1,9 @@
 #!/bin/bash
-
 ##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2023 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,19 +18,12 @@
 # limitations under the License.
 ##########################################################################
 
-
 source device.conf
 source generic_functions.sh
 
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-
-
-
 #Function Definition to check the Pre-Condition before executing TC_SYSTEM_MANUAL TestSuite
-
-
 
 preCon_SYSTEM() {
 
@@ -56,14 +48,11 @@ preCon_SYSTEM() {
 
 }
 
-
-
 #Function Definition to check the build details of the device 
-
-
 
 build_details_check() {
 
+    local step="$1"
     printf "\n_________________________________________________________________________________________________________________________________________________________\n\n"
     printf "\nStep %s\t\t: Execute Command to check the Build version of device\n\n\n" "$step"
     printf "\n\ngrep -i \"imagename\" /version.txt | cut -d: -f2- | xargs\n\n\n" 
@@ -80,10 +69,7 @@ build_details_check() {
 }
     
 
-
 #Function Definition to check the ssh dropbear service status
-
-
 
 ssh_dropbear_check() {
     
@@ -100,11 +86,7 @@ ssh_dropbear_check() {
 
 }
 
-
-
 #Function defnition for testcase TC_SYSTEM_MANUAL_01
-
-
 
 TC_SYSTEM_MANUAL_01() {
 
@@ -137,18 +119,14 @@ TC_SYSTEM_MANUAL_01() {
 
 }
 
-
-
 #Function defnition for testcase TC_SYSTEM_MANUAL_02
-
-
 
 TC_SYSTEM_MANUAL_02() {
 
     local step="$1"
     printf "\n_________________________________________________________________________________________________________________________________________________________\n\n"
     printf "\nStep %s\t\t: Execute Command to verify the running status of Wpe framework processes\n\n\n" "$step"
-    printf '\n\npgrep -l '^WPE'\n\n\n'  
+    printf "\n\npgrep -l '^WPE'\n\n\n"  
     sleep 1        
     if pgrep -l '^WPE' >/dev/null; then
         printf "\n\nWPE framework Processes found :\n\n\n"
@@ -162,11 +140,7 @@ TC_SYSTEM_MANUAL_02() {
 
 }
 
-
-
 #Function defnition for testcase TC_SYSTEM_MANUAL_03
-
-
 
 TC_SYSTEM_MANUAL_03() {
 
@@ -212,16 +186,7 @@ TC_SYSTEM_MANUAL_03() {
 
 }
 
-
-
-
-
-
-
-
 #Function Definition for TestCase : tc_SYSTEM_MANUAL_testsuite
-
-
 
 tc_SYSTEM_MANUAL_testsuite() {
 
@@ -239,7 +204,6 @@ tc_SYSTEM_MANUAL_testsuite() {
         sleep 1
         printf "\n\nPre-condition check success. Starting Testcase execution!\n\n\n"
 
-
     #Step 1 code block for TC_SYSTEM_MANUAL_01
 
         if [[ "$TestcaseID" == "TC_SYSTEM_MANUAL_01" ]]; then
@@ -253,7 +217,6 @@ tc_SYSTEM_MANUAL_testsuite() {
             dynamic_current_step_finder "$testcase_prefix" "TC_SYSTEM_MANUAL"
         fi
 
-
     #Step 1 code block for TC_SYSTEM_MANUAL_02
 
         if [[ "$TestcaseID" == "TC_SYSTEM_MANUAL_02" ]]; then
@@ -261,7 +224,6 @@ tc_SYSTEM_MANUAL_testsuite() {
             sleep 1
             dynamic_current_step_finder "$testcase_prefix" "TC_SYSTEM_MANUAL"
         fi
-
 
     #Step 1 code block for TC_SYSTEM_MANUAL_03
 
@@ -286,15 +248,7 @@ tc_SYSTEM_MANUAL_testsuite() {
 
 }
 
-
-
-
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-
-
-
-
 
 while true; do
 
@@ -306,9 +260,8 @@ while true; do
   printf '02. Run TestCase : TC_SYSTEM_MANUAL_02        :\t[ Verify the running status of Wpe framework processes ] \n\n'
   printf '03. Run TestCase : TC_SYSTEM_MANUAL_03        :\t[ Verify the log rollover RDK functionality ] \n\n'
   printf '04. Show TestCase Execution Results\n\n'
-  printf '05. Exit [ POWER MANAGEMENT Automated Test ]\n\n'
+  printf '05. Exit [ SYSTEM Automated Test ]\n\n'
   printf "\n=============================================================================================================================================================\n\n\n";
-
 
   # ----- Main Testcaes Execution Menu -----
 

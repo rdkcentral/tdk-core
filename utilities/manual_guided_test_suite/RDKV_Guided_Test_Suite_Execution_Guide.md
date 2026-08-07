@@ -1,4 +1,4 @@
-﻿# RDKV Guided Test Suite — Execution Guide
+# RDKV Guided Test Suite — Execution Guide
 
 > **Version**: 1.0 | **Platform**: RDK-V (Video Accelerator, RPI-Client) | **Execution Environment**: DUT Serial/SSH Console | **Execution Model**: Guided (Partially Automated)
 

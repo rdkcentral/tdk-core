@@ -1,10 +1,9 @@
 #!/bin/bash
-
 ##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2023 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,19 +18,12 @@
 # limitations under the License.
 ##########################################################################
 
-
 source device.conf
 source generic_functions.sh
 
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-
-
-
 #Function defnition for ipv6_valid_check to check the IPV6 address obtained is valid or not.
-
-
 
 ipv6_valid_check() {
 
@@ -43,11 +35,7 @@ ipv6_valid_check() {
 
 }
 
-
-
 #Function Definition to check the Pre-Condition before executing TC_IPv6_MANUAL TestSuite
-
-
 
 preCon_IPv6() {
 
@@ -101,7 +89,7 @@ preCon_IPv6() {
                 printf "\n\nSSID name : %s\n\n" "$ipv6_ssid"
                 printf "\n\nstatus : %s\n\n" "$ipv6_success"
                 printf "\n\nCONFIG_SSID : %s\n\n" "$conf_SSID"
-                if ipv6_valid_check "$extracted_ipv6_addr" &&[ "$ipv6_ssid" = "$conf_SSID" ] && [ -z "$extracted_ipv4_addr" ] && [ "$ipv6_success" = "true" ]; then
+                if ipv6_valid_check "$extracted_ipv6_addr" && [ "$ipv6_ssid" = "$conf_SSID" ] && [ -z "$extracted_ipv4_addr" ] && [ "$ipv6_success" = "true" ]; then
                     printf "\n\nConnected IPv6 SSID name returns [ %s ] and IPv6 address is [ %s ]\n\nEthernet is disConnected IPv4 address returns empty [ %s ]\n\n\n" "$ipv6_ssid" "$extracted_ipv6_addr" "$extracted_ipv4_addr"
                     return 0
                 elif [ "$ipv6_success" != "true" ]; then 
@@ -120,12 +108,7 @@ preCon_IPv6() {
 
 }
 
-
-
-
 #Function defnition for ipv6_extract_API_key_values to extract key values
-
-
 
 ipv6_extract_API_key_values() {
 
@@ -151,11 +134,7 @@ ipv6_extract_API_key_values() {
 
 }
 
-
-
 #Function defnition for IsConnectedToInternet_key_Extract keys status checking in multiple test steps
-
-
 
 isConnectedToInternet_key_Extract() {
 
@@ -191,11 +170,7 @@ isConnectedToInternet_key_Extract() {
 
 }
 
-
-
 #Function defnition for GetPublicIP_key_Extract keys status checking in multiple test steps
-
-
 
 getPublicIP_key_Extract() {
 
@@ -225,7 +200,7 @@ getPublicIP_key_Extract() {
             printf "\n\norg.rdk.NetworkManager.1.GetPublicIP API return value : %s\n\n\n" "$ipv6_success"
             return 101
         elif [ "$ipv6_interface" != "$expected_interface" ]; then
-            printf "\n\nIPv6 Interface returns : %s different value\n\n\n" "$ipv6_connected" "$ipv6_status"
+            printf "\n\nIPv6 Interface returns : %s but expected : %s\n\n\n" "$ipv6_interface" "$expected_interface"
             return 1
         else
             printf "\n\nExtracted IPv6 address is invalid : %s\n\n\n" "$ipv6_ipaddress"
@@ -235,12 +210,7 @@ getPublicIP_key_Extract() {
 
 }
 
-
-
-
 #Function defnition for ping_key_Extract keys status checking in multiple test steps
-
-
 
 ping_key_Extract() {
 
@@ -264,7 +234,7 @@ ping_key_Extract() {
             printf "\n\norg.rdk.NetworkManager.1.Ping API return value : %s\n\n\n" "$ipv6_success"
             return 1
         elif [ "$ipv6_packetsReceived" -eq 0 ] || [ "$ipv6_packetsTransmitted" -eq 0 ]; then 
-            printf "\n\nPacketsRecieved\t:\t%s\n\nPacketsTransmitted\t:\t%s\n\nInvalid packet transmittion\n\n\n" 
+            printf "\n\nPacketsRecieved\t:\t%s\n\nPacketsTransmitted\t:\t%s\n\nInvalid packet transmittion\n\n\n" "$ipv6_packetsReceived" "$ipv6_packetsTransmitted"
             return 1   
         else 
             printf "\n\nPacketLoss : %s value is grater than 0\n\n\n" "$ipv6_packetLoss"
@@ -274,11 +244,7 @@ ping_key_Extract() {
 
 }
 
-
-
 #Function defnition for trace_key_Extract keys status checking in multiple test steps
-
-
 
 trace_key_Extract() {
 
@@ -315,11 +281,7 @@ trace_key_Extract() {
 
 }
 
-
-
 #Function defnition for testcase TC_IPv6_MANUAL_01
-
-
 
 TC_IPv6_MANUAL_01() {
 
@@ -337,11 +299,7 @@ TC_IPv6_MANUAL_01() {
 
 }
 
-
-
 #Function defnition for testcase TC_IPv6_MANUAL_02
-
-
 
 TC_IPv6_MANUAL_02() {
 
@@ -365,11 +323,7 @@ TC_IPv6_MANUAL_02() {
 
 }
 
-
-
 #Function defnition for testcase TC_IPv6_MANUAL_03
-
-
 
 TC_IPv6_MANUAL_03() {
     
@@ -387,11 +341,7 @@ TC_IPv6_MANUAL_03() {
 
 }
 
-
-
 #Function defnition for testcase TC_IPv6_MANUAL_04
-
-
 
 TC_IPv6_MANUAL_04() {
 
@@ -429,11 +379,7 @@ TC_IPv6_MANUAL_04() {
 
 }
 
-
-
 #Function defnition for testcase TC_IPv6_MANUAL_06
-
-
 
 TC_IPv6_MANUAL_06() {
 
@@ -449,10 +395,7 @@ TC_IPv6_MANUAL_06() {
 
 }
 
-
 #Function defnition for testcase TC_IPv6_MANUAL_07
-
-
 
 TC_IPv6_MANUAL_07() {
 
@@ -468,12 +411,7 @@ TC_IPv6_MANUAL_07() {
 
 }
 
-
-
-
 #Function Definition for TestCase : tc_IPv6_MANUAL_testsuite
-
-
 
 tc_IPv6_MANUAL_testsuite() {
 
@@ -498,7 +436,6 @@ tc_IPv6_MANUAL_testsuite() {
 
     #Step 1 code block for TC_IPv6_MANUAL_01 
 
-
         if [[ "$TestcaseID" == "TC_IPv6_MANUAL_01" ]]; then
             execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_IPv6_MANUAL_01"
             sleep 1
@@ -507,7 +444,6 @@ tc_IPv6_MANUAL_testsuite() {
             
 
     #Step 1 code block for TC_IPv6_MANUAL_02 
-
 
         if [[ "$TestcaseID" == "TC_IPv6_MANUAL_02" ]]; then
             execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_IPv6_MANUAL_02"
@@ -518,7 +454,6 @@ tc_IPv6_MANUAL_testsuite() {
 
     #Step 1 code block for TC_IPv6_MANUAL_03 
 
-
         if [[ "$TestcaseID" == "TC_IPv6_MANUAL_03" ]]; then
             execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_IPv6_MANUAL_03"
             sleep 1
@@ -528,14 +463,12 @@ tc_IPv6_MANUAL_testsuite() {
 
     #Step 1 code block for TC_IPv6_MANUAL_04 
 
-
         if [[ "$TestcaseID" == "TC_IPv6_MANUAL_04" ]]; then
             execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_IPv6_MANUAL_04" "YouTube"
             sleep 1
             
 
     #Step 2 code block for TC_IPv6_MANUAL_04         
-
 
             execute_stepStatusUpdate_steps "2" "$testcase_prefix" "TC_IPv6_MANUAL_04" "YouTube"
             sleep 1
@@ -545,7 +478,6 @@ tc_IPv6_MANUAL_testsuite() {
 
     #Step 1 code block for TC_IPv6_MANUAL_05 
 
-
         if [[ "$TestcaseID" == "TC_IPv6_MANUAL_05" ]]; then
             eth0_wlan0_flag=1
             execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_IPv6_MANUAL_04" "YouTube"
@@ -554,7 +486,6 @@ tc_IPv6_MANUAL_testsuite() {
 
     #Step 2 code block for TC_IPv6_MANUAL_05         
 
-
             execute_stepStatusUpdate_steps "2" "$testcase_prefix" "TC_IPv6_MANUAL_04" "YouTube"
             sleep 1
             dynamic_current_step_finder "$testcase_prefix" "TC_IPv6_MANUAL" 
@@ -562,7 +493,6 @@ tc_IPv6_MANUAL_testsuite() {
                  
 
     #Step 1 code block for TC_IPv6_MANUAL_07 
-
 
         if [[ "$TestcaseID" == "TC_IPv6_MANUAL_07" ]]; then
             execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_IPv6_MANUAL_07"
@@ -573,7 +503,6 @@ tc_IPv6_MANUAL_testsuite() {
 
     #Step 1 code block for TC_IPv6_MANUAL_06 
 
-
         if [[ "$TestcaseID" == "TC_IPv6_MANUAL_06" ]]; then
             execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_IPv6_MANUAL_06"
             sleep 1
@@ -581,7 +510,6 @@ tc_IPv6_MANUAL_testsuite() {
         fi
 
     #Step 1 code block for TC_IPV6_MANUAL_08
-
 
          if [[ "$TestcaseID" == "TC_IPv6_MANUAL_08" ]]; then
             interface_flag=1
@@ -618,10 +546,7 @@ tc_IPv6_MANUAL_testsuite() {
 
      
 
-
 #Function Definition for postCondition checking of IPv6
-
-
 
 postCondition_Execution_IPv6() {
 
@@ -653,14 +578,7 @@ postCondition_Execution_IPv6() {
 
 }
 
-
-
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-
-
-
-
 
 while true; do
   printf "\n"
@@ -678,7 +596,6 @@ while true; do
   printf '09. Show TestCase Execution Results\n\n'
   printf '10. Exit [ IPv6 Automated Test ]\n\n'
   printf "\n=============================================================================================================================================================\n\n\n";
-
 
   # ----- Main Testcaes Execution Menu -----
 

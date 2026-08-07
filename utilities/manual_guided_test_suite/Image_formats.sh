@@ -1,10 +1,9 @@
 #!/bin/bash
-
 ##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2023 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,19 +18,12 @@
 # limitations under the License.
 ##########################################################################
 
-
 source device.conf
 source generic_functions.sh
 
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-
-
-
 #Function to check the Pre-Condition before executing TC_IMAGEFORMATS_MANUAL TestSuite
-
-
 
 preCon_IMAGEFORMATS() {
 
@@ -50,12 +42,7 @@ preCon_IMAGEFORMATS() {
 
 }
 
-
-
-
 #Function to check the image formats in TC_IMAGEFORMATS_MANUAL TestSuite
-
-
 
 TC_IMAGEFORMATS_MANUAL_test() {
 
@@ -92,12 +79,7 @@ TC_IMAGEFORMATS_MANUAL_test() {
 
 }
 
-
-
-
 #Function Definition for TestCase : tc_IMAGEFORMATS_MANUAL_testsuite
-
-
 
 tc_IMAGEFORMATS_MANUAL_testsuite() {
 
@@ -107,7 +89,7 @@ tc_IMAGEFORMATS_MANUAL_testsuite() {
 
   #Precondition Check code block
 
-  printf "\n\nPre-Conditon check\t\t: Check whether Browser_test App installeded or not. If not install the App\n\n\n"
+  printf "\n\nPre-Conditon check\t\t: Check whether Browser_test App installed or not. If not install the App\n\n\n"
   preCon_IMAGEFORMATS
   local preCon_IMAGEFORMATS_fun_exit=$?
   
@@ -115,17 +97,14 @@ tc_IMAGEFORMATS_MANUAL_testsuite() {
     printf '\n\nPre-condition check success. Starting Testcase execution!\n\n\n'
     
 
-#Step 1 code block for TC_IMAGEFORMATS_MANUAL_test 1 [ .jpg image format ]
-
+#Step 1 code block for TC_IMAGEFORMATS_MANUAL_test 1 [ .png image format ]
 
     if [[ "$TestcaseID" == "TC_IMAGEFORMATS_MANUAL_01" ]]; then
       execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_IMAGEFORMATS_MANUAL_test" "Browser_test" "" "" "" "png"
       dynamic_current_step_finder "$testcase_prefix" "TC_IMAGEFORMATS_MANUAL" 
     fi  
 
-
-#Step 1 code block for TC_IMAGEFORMATS_MANUAL_test 2 [ .png image format ]    
-
+#Step 1 code block for TC_IMAGEFORMATS_MANUAL_test 2 [ .jpg image format ]    
 
     if [[ "$TestcaseID" == "TC_IMAGEFORMATS_MANUAL_02" ]]; then
       execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_IMAGEFORMATS_MANUAL_test" "Browser_test" "" "" "" "jpg"
@@ -135,15 +114,12 @@ tc_IMAGEFORMATS_MANUAL_testsuite() {
    
 #Step 1 code block for TC_IMAGEFORMATS_MANUAL_test 3 [ .svg image format ]
 
-
     if [[ "$TestcaseID" == "TC_IMAGEFORMATS_MANUAL_03" ]]; then
       execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_IMAGEFORMATS_MANUAL_test" "Browser_test" "" "" "" "svg"
       dynamic_current_step_finder "$testcase_prefix" "TC_IMAGEFORMATS_MANUAL" 
     fi  
 
-
 #Step 1 code block for TC_IMAGEFORMATS_MANUAL_test 4 [ .webp image format ]    
-
 
     if [[ "$TestcaseID" == "TC_IMAGEFORMATS_MANUAL_04" ]]; then
       execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_IMAGEFORMATS_MANUAL_test" "Browser_test" "" "" "" "webp"
@@ -173,11 +149,7 @@ tc_IMAGEFORMATS_MANUAL_testsuite() {
 
 }
 
-
-
-
 #Function Definition for postcondition image formats postCondition_Execution_IMAGEFORMATS
-
 
 postCondition_Execution_IMAGEFORMATS() {
 
@@ -206,14 +178,7 @@ postCondition_Execution_IMAGEFORMATS() {
 
 }
 
-
-
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-
-
-
-
 
 while true; do
   printf "\n"
@@ -227,7 +192,6 @@ while true; do
   printf '05. Show TestCase Execution Results\n\n'
   printf '06. Exit [ Image Format Automated Test ]\n\n'
   printf "\n=============================================================================================================================================================\n\n\n";
-
 
   # ----- Main Testcaes Execution Menu -----
 
@@ -263,9 +227,5 @@ while true; do
         ;;      
   esac
 done  
-
-
-
-
 
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________

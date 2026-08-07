@@ -1,10 +1,8 @@
-########################################## Generic Functions Used for All TestCases Executions ####################################################
-
 ##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2023 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,18 +17,11 @@
 # limitations under the License.
 ##########################################################################
 
-
-
 source device.conf
 
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-
-
-
 #Function to perfom the generate key operation for RDK UI navigation
-
-
 
 _generateKey_RDKUI_navigation() {
 
@@ -59,11 +50,7 @@ _generateKey_RDKUI_navigation() {
 
 }
 
-
-
 #Function to perfom the app launch using generate key on RDK UI
-
-
 
 generateKey_inApp_navigation(){
   
@@ -137,11 +124,7 @@ generateKey_inApp_navigation(){
 
 }
 
-
-
 #Function to handle the pre-condition description of different test cases
-
-
 
 pre_condition_description() {
 
@@ -168,13 +151,6 @@ pre_condition_description() {
             $'\n\n\nTestcaseID : TC_IMAGEFORMATS_MANUAL_02\n\n\nTestcase description : Check png image Format Support via WebkitBrowser\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. RDK UI Home page should be visisble on DUT prior to test\n\t\t  3. Testing [.png] image formats should be available in the configured server and make sure its accessible via the URL in browser\n\t\t  4. TV should be connected with the HDMI port and source should be selected\n\n\n'
             $'\n\n\nTestcaseID : TC_IMAGEFORMATS_MANUAL_03\n\n\nTestcase description : Check svg image Format Support via WebkitBrowser\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. RDK UI Home page should be visisble on DUT prior to test\n\t\t  3. Testing [.svg] image formats should be available in the configured server and make sure its accessible via the URL in browser\n\t\t  4. TV should be connected with the HDMI port and source should be selected\n\n\n'
             $'\n\n\nTestcaseID : TC_IMAGEFORMATS_MANUAL_04\n\n\nTestcase description : Check webp image Format Support via WebkitBrowser\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. RDK UI Home page should be visisble on DUT prior to test\n\t\t  3. Testing [.webp] image formats should be available in the configured server and make sure its accessible via the URL in browser\n\t\t  4. TV should be connected with the HDMI port and source should be selected\n\n\n'
-            $'\n\n\nTestcaseID : TC_RDKSHELL_MANUAL_01\n\n\nTestcase description : Verify webkitbrowser can be launched with RDKShell and load the preset urls\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. RDK UI Home page should be visisble on DUT prior to test\n\t\t  3. Testing preset URLs should be available in the configured server and make sure its accessible via the URL in browser\n\t\t  4. TV should be connected with the HDMI port and source should be selected\n\n\n'
-            $'\n\n\nTestcaseID : TC_RDKSHELL_MANUAL_02\n\n\nTestcase description : Verify HtmlApp launch with RDKShell and Load Url multiple times\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. RDK UI Home page should be visisble on DUT prior to test\n\t\t  3. Testing preset URLs should be available in the configured server and make sure its accessible via the URL in browser\n\t\t  4. TV should be connected with the HDMI port and source should be selected\n\n\n'
-            $'\n\n\nTestcaseID : TC_RDKSHELL_MANUAL_03\n\n\nTestcase description : Verify the Opacity behavior in WebKitBrowser\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. RDK UI Home page should be visible on DUT prior to test\n\t\t  3. TV should be connected with the HDMI port and source should be selected\n\n\n'
-            $'\n\n\nTestcaseID : TC_RDKSHELL_MANUAL_04\n\n\nTestcase description : Verify the Scale behavior in WebKitBrowser\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. RDK UI Home page should be visible on DUT prior to test\n\t\t  3. TV should be connected with the HDMI port and source should be selected\n\n\n'
-            $'\n\n\nTestcaseID : TC_RDKSHELL_MANUAL_05\n\n\nTestcase description : Verify the Bounds behavior in WebKitBrowser\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. RDK UI Home page should be visible on DUT prior to test\n\t\t  3. TV should be connected with the HDMI port and source should be selected\n\n\n'
-            $'\n\n\nTestcaseID : TC_RDKSHELL_MANUAL_06\n\n\nTestcase description : Verify the Animation behavior in WebKitBrowser\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. RDK UI Home page should be visible on DUT prior to test\n\t\t  3. TV should be connected with the HDMI port and source should be selected\n\n\n'
-            $'\n\n\nTestcaseID : TC_RDKSHELL_MANUAL_07\n\n\nTestcase description : Verify the setScreenResolution behaviour in RDKShell plugin using curl command\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. RDK UI Home page should be visible on DUT prior to test\n\t\t  3. TV should be connected with the HDMI port and source should be selected\n\n\n'
             $'\n\n\nTestcaseID : TC_HDCPCOMPLIANCE_MANUAL_01\n\n\nTestcase description : Verify whether the HDMI cable has connected or disconnected from the DUT\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. Initially HDMI should be connected with DUT and source should be selected on TV\n\t\t  3. RDK UI Home page should be visible on DUT prior to test\n\n\n'
             $'\n\n\nTestcaseID : TC_HDCPCOMPLIANCE_MANUAL_02\n\n\nTestcase description : Verify whether the HDCP authentication has been initiated or not\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. No Audio video playback should happen on DUT during the test \n\t\t  3. TV should be connected with the HDMI port and source should be selected\n\t\t  4. RDK UI Home page should be visible on DUT prior to test\n\n\n'
             $'\n\n\nTestcaseID : TC_HDCPCOMPLIANCE_MANUAL_03\n\n\nTestcase description : Verify whether HDCP authentication has initiated and it has authenticated\n\n[TEST STEPS]\n\nPre-condition   : 1. DUT should be rebooted prior to the testcase execution\n\t\t  2. TV should be connected with the HDMI port and source should be selected\n\t\t  3. RDK UI Home page should be visible on DUT prior to test\n\n\n'
@@ -221,44 +197,33 @@ pre_condition_description() {
    "TC_IMAGEFORMATS_MANUAL_02")  printf "%s" "${pre_description_arr[18]}" ;;
    "TC_IMAGEFORMATS_MANUAL_03")  printf "%s" "${pre_description_arr[19]}" ;;
    "TC_IMAGEFORMATS_MANUAL_04")  printf "%s" "${pre_description_arr[20]}" ;;
-   "TC_RDKSHELL_MANUAL_01")      printf "%s" "${pre_description_arr[21]}" ;;
-   "TC_RDKSHELL_MANUAL_02")      printf "%s" "${pre_description_arr[22]}" ;;
-   "TC_RDKSHELL_MANUAL_03")      printf "%s" "${pre_description_arr[23]}" ;;
-   "TC_RDKSHELL_MANUAL_04")      printf "%s" "${pre_description_arr[24]}" ;;
-   "TC_RDKSHELL_MANUAL_05")      printf "%s" "${pre_description_arr[25]}" ;;
-   "TC_RDKSHELL_MANUAL_06")      printf "%s" "${pre_description_arr[26]}" ;;
-   "TC_RDKSHELL_MANUAL_07")      printf "%s" "${pre_description_arr[27]}" ;;
-   "TC_HDCPCOMPLIANCE_MANUAL_01")      printf "%s" "${pre_description_arr[28]}" ;;
-   "TC_HDCPCOMPLIANCE_MANUAL_02")      printf "%s" "${pre_description_arr[29]}" ;;
-   "TC_HDCPCOMPLIANCE_MANUAL_03")      printf "%s" "${pre_description_arr[30]}" ;;
-   "TC_HDCPCOMPLIANCE_MANUAL_04")      printf "%s" "${pre_description_arr[31]}" ;;
-   "TC_HDCPCOMPLIANCE_MANUAL_05")      printf "%s" "${pre_description_arr[32]}" ;;
-   "TC_HDCPCOMPLIANCE_MANUAL_06")      printf "%s" "${pre_description_arr[33]}" ;;
-   "TC_HDCPCOMPLIANCE_MANUAL_07")      printf "%s" "${pre_description_arr[34]}" ;;
-   "TC_IPv6_MANUAL_01")          printf "%s" "${pre_description_arr[35]}" ;;
-   "TC_IPv6_MANUAL_02")          printf "%s" "${pre_description_arr[36]}" ;;
-   "TC_IPv6_MANUAL_03")          printf "%s" "${pre_description_arr[37]}" ;;
-   "TC_IPv6_MANUAL_04")          printf "%s" "${pre_description_arr[38]}" ;;
-   "TC_IPv6_MANUAL_05")          printf "%s" "${pre_description_arr[39]}" ;;
-   "TC_IPv6_MANUAL_06")          printf "%s" "${pre_description_arr[40]}" ;;
-   "TC_IPv6_MANUAL_07")          printf "%s" "${pre_description_arr[41]}" ;;
-   "TC_IPv6_MANUAL_08")          printf "%s" "${pre_description_arr[42]}" ;;
-   "TC_POWER_MANUAL_01")         printf "%s" "${pre_description_arr[43]}" ;;
-   "TC_SYSTEM_MANUAL_01")        printf "%s" "${pre_description_arr[44]}" ;;
-   "TC_SYSTEM_MANUAL_02")        printf "%s" "${pre_description_arr[45]}" ;; 
-   "TC_SYSTEM_MANUAL_03")        printf "%s" "${pre_description_arr[46]}" ;;
-   TC_WEBAUDIO_MANUAL_0[1-9]|TC_WEBAUDIO_MANUAL_1[0-5]) printf "%s" "${pre_description_arr[47]//__TC_ID__/$testcase_id}" ;;
-   "TC_XCONF_MANUAL_01")         printf "%s" "${pre_description_arr[48]}" ;;
+   "TC_HDCPCOMPLIANCE_MANUAL_01")      printf "%s" "${pre_description_arr[21]}" ;;
+   "TC_HDCPCOMPLIANCE_MANUAL_02")      printf "%s" "${pre_description_arr[22]}" ;;
+   "TC_HDCPCOMPLIANCE_MANUAL_03")      printf "%s" "${pre_description_arr[23]}" ;;
+   "TC_HDCPCOMPLIANCE_MANUAL_04")      printf "%s" "${pre_description_arr[24]}" ;;
+   "TC_HDCPCOMPLIANCE_MANUAL_05")      printf "%s" "${pre_description_arr[25]}" ;;
+   "TC_HDCPCOMPLIANCE_MANUAL_06")      printf "%s" "${pre_description_arr[26]}" ;;
+   "TC_HDCPCOMPLIANCE_MANUAL_07")      printf "%s" "${pre_description_arr[27]}" ;;
+   "TC_IPv6_MANUAL_01")          printf "%s" "${pre_description_arr[28]}" ;;
+   "TC_IPv6_MANUAL_02")          printf "%s" "${pre_description_arr[29]}" ;;
+   "TC_IPv6_MANUAL_03")          printf "%s" "${pre_description_arr[30]}" ;;
+   "TC_IPv6_MANUAL_04")          printf "%s" "${pre_description_arr[31]}" ;;
+   "TC_IPv6_MANUAL_05")          printf "%s" "${pre_description_arr[32]}" ;;
+   "TC_IPv6_MANUAL_06")          printf "%s" "${pre_description_arr[33]}" ;;
+   "TC_IPv6_MANUAL_07")          printf "%s" "${pre_description_arr[34]}" ;;
+   "TC_IPv6_MANUAL_08")          printf "%s" "${pre_description_arr[35]}" ;;
+   "TC_POWER_MANUAL_01")         printf "%s" "${pre_description_arr[36]}" ;;
+   "TC_SYSTEM_MANUAL_01")        printf "%s" "${pre_description_arr[37]}" ;;
+   "TC_SYSTEM_MANUAL_02")        printf "%s" "${pre_description_arr[38]}" ;; 
+   "TC_SYSTEM_MANUAL_03")        printf "%s" "${pre_description_arr[39]}" ;;
+   TC_WEBAUDIO_MANUAL_0[1-9]|TC_WEBAUDIO_MANUAL_1[0-5]) printf "%s" "${pre_description_arr[40]//__TC_ID__/$testcase_id}" ;;
+   "TC_XCONF_MANUAL_01")         printf "%s" "${pre_description_arr[41]}" ;;
    *) printf "\nInvalid Testcase ID !!\n" ;;
    esac
 
 }
 
-
-
 #Function to handle the nt_pass updation on precondition and step 2 failure case for TC_EXTERNALAUDIO_MANUAL testcase
-
-
 
 dynamic_nt_pass_updator(){
 
@@ -275,11 +240,7 @@ dynamic_nt_pass_updator(){
    done
 }
 
-
-
 #Function to find the current_step number based on the testcase
-
-
 
 dynamic_current_step_finder(){
 
@@ -304,14 +265,6 @@ dynamic_current_step_finder(){
    elif [[ "$testcase_name" == "TC_IMAGEFORMATS_MANUAL" ]]; then
       case "$tc_prifix" in
       "tc1_step"|"tc2_step"|"tc3_step"|"tc4_step") current_step_num=1 ;;
-      *) printf "\nInvalid testCase step number. Unable to detect current step number!!!\n\n\n" ;;
-      esac
-   elif [[ "$testcase_name" == "TC_RDKSHELL_MANUAL" ]]; then
-      case "$tc_prifix" in
-      "tc1_step"|"tc7_step") current_step_num=6 ;;
-      "tc2_step") current_step_num=4 ;;
-      "tc3_step") current_step_num=5 ;;
-      "tc4_step"|"tc5_step"|"tc6_step") current_step_num=3 ;;
       *) printf "\nInvalid testCase step number. Unable to detect current step number!!!\n\n\n" ;;
       esac
    elif [[ "$testcase_name" == "TC_HDCPCOMPLIANCE_MANUAL" ]]; then   
@@ -353,12 +306,7 @@ dynamic_current_step_finder(){
    fi
 }
 
-
-
-
 #Function definition for any_app_installer to perfom the App installation on precondition prior to test if its not already installed
-
-
 
 any_app_installer() {
 
@@ -432,12 +380,7 @@ any_app_installer() {
 
 }
 
-
-
-
 #Function Definition to check whether app is installed or not using isAppInstalled function
-
-
 
 isAppInstalled(){
 
@@ -482,11 +425,7 @@ isAppInstalled(){
   
 }
 
-
-
 #Function Definition for get_appInstance_id function which will get the appInstanceId of the launched App using the appId
-
-
 
 get_instance_id_by_appid() {
    [ $# -eq 1 ] || return 2
@@ -511,11 +450,7 @@ get_instance_id_by_appid() {
    '
 }
 
-
-
 #Function Definition for setfocus_on_App function which will setFocus on active App using AppinstanceID
-
-
 
 setfocus_on_App() {
    
@@ -545,11 +480,7 @@ setfocus_on_App() {
 
 } 
 
-
-
 #Function Definition for start_av_playback function which will select random video from the launched App's homepage and start the AV playback 
-
-
 
 start_av_playback() {
 
@@ -574,11 +505,7 @@ start_av_playback() {
 
 }
 
-
-
 #Function Definition for dynamic_imageformat_loader function which will navigate through the browser_test App and load required image formats. 
-
-
 
 dynamic_inApp_loader() {
 
@@ -609,10 +536,7 @@ dynamic_inApp_loader() {
 
 }
 
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_01 STEP-10 AV_playback_mode sub Function for Youtube deeplink launch 
-
-
 
 sub_AV_playback_yt_deeplink() {
 
@@ -641,11 +565,7 @@ sub_AV_playback_yt_deeplink() {
 
 }
 
-
-
 #Function Definition for Staring AV playback using AV_playback_mode function
-
-
 
 AV_playback_handle() {
 
@@ -695,105 +615,7 @@ AV_playback_handle() {
 
 }
 
-
-
-
-AV_playback_mode() {
-
-   local app_name="$1"
-   local JSON_RESPONSE_10=$(curl -# -d '{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@YouTube"}' http://127.0.0.1:9998/jsonrpc)
-   local SEARCH_KEY="\"state\":"
-
-    if echo "$JSON_RESPONSE_10" | grep -qE "$SEARCH_KEY" || [[ "$app_name" == "YouTube" ]]; then
-        av_check_flag=1
-        local extracted_state_value=$(echo "$JSON_RESPONSE_10" | sed -n -E 's/.*"state":"([^"]*)".*/\1/p')
-        case "$extracted_state_value" in
-            'resumed'|'activated')
-               printf "\n%s App in Active state and starting AV playback with deeplink\n\n" "$app_name"
-               sub_AV_playback_yt_deeplink "$app_name"             
-               ;;
-            'deactivated')
-               printf "\nYoutube is in %s state..Activating Youtube with method \"Controller.1.activate\" \n\n" "$extracted_state_value"
-               local JSON_RESPONSE_10_2=$(curl -# -d '{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate", "params": {"callsign": "YouTube"}}' http://127.0.0.1:9998/jsonrpc)
-               sleep 2
-               preApp_status_check "$app_name"
-                
-               preApp_status_check_exit=$?
-
-               if [ "$preApp_status_check_exit" -eq 0 ]; then
-                  sub_AV_playback_yt_deeplink "$app_name"
-               else
-                  echo -e "\nUnable to Activate Youtube with method \"Controller.1.activate\" \n\n"
-                  yt_playback=false
-               fi
-               ;;
-            'hibernated')
-               printf "\n\n%s App in %s state and starting AV playback using deeplink on a new instance\n\n" "$app_name" "$extracted_state_value"
-               destroy_app "$app_name"
-               local destroy_app_exit=$?
-      
-               if [ "$destroy_app_exit" -eq 0 ]; then
-                  local JSON_RESPONSE_10_2=$(curl -# -d '{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate", "params": {"callsign": "YouTube"}}' http://127.0.0.1:9998/jsonrpc)
-                  sleep 2
-                  preApp_status_check "$app_name"
-                  
-                  preApp_status_check_exit=$?
-
-                  if [ "$preApp_status_check_exit" -eq 0 ]; then
-                     sub_AV_playback_yt_deeplink "$app_name"
-                  else
-                     printf "\nUnable to Activate Youtube with method \"Controller.1.activate\" \n\n"
-                     yt_playback=false
-                  fi
-               else
-                  printf "\n\n\nDEBUG : destroy_app function failed with error code : %s\n\n" "$destroy_app_exit"
-                  yt_playback=false     
-               fi
-               ;;
-            *)
-               yt_playback=false 
-               ;;
-        esac
-    else
-        av_check_flag=2
-        printf "\nUnable to Start AV playback via Youtube...! Starting AV playback via XUMO\n\n"
-        local json_data_10_3=$(printf '{"jsonrpc": "2.0", "id": 1234567890, "method":"org.rdk.RDKShell.1.launch", "params":{"callsign": "HtmlApp", "type":"", "uri":"%s"}}' "$htmlApp_launch_URL")
-        local JSON_RESPONSE_10_3=$(curl -# --data-binary \
-        "$json_data_10_3" \
-        -H 'content-type:text/plain;' \
-        http://127.0.0.1:9998/jsonrpc)
-        sleep 10
-        extracted_value_10_3=$(echo "$JSON_RESPONSE_10_3" | grep -o '"success":[^,}]*' | cut -d: -f2 | tr -d '[:space:]')
-        if [[ "$extracted_value_10_3" == 'true' ]]; then
-            sleep 2
-            xumo_status_check
-            
-            local xumo_status_check_exit=$?
-
-            if [ "$xumo_status_check_exit" -eq 0 ]; then
-                echo -e "\nXUMO App launched and starting AV playback\n\n"
-                xumo_playback=true
-            else
-                echo -e "\nUnable to launch XUMO App and start AV playback\n\n" 
-                xumo_playback=false
-            fi   
-        else
-            echo -e "\nXUMO App launch curl execution failed. Returned Value is : $extracted_value_10_3\n\n" 
-            xumo_playback=false
-        fi
-    fi 
-    if [[ "$av_check_flag" == 1 && "$yt_playback" == "true" || "$av_check_flag" == 2 && "$xumo_playback" == "true" ]]; then
-       return 0
-    else
-       return 1
-    fi                    
-}
-
-
-
 #Function Definition for deeplink_URL_selector function to select the correct the deeplink URL for the selected App
-
-
 
 deeplink_URL_selector() {
 
@@ -810,11 +632,7 @@ deeplink_URL_selector() {
 
 }
 
-
-
 #Function Definition for anyApp_deeplink_launch function to launch any supported app with deeplink  
-
-
 
 anyApp_deeplink_launch() {
 
@@ -838,10 +656,7 @@ anyApp_deeplink_launch() {
 
 }
 
-
-
 #Function Definition for anyApp_launch function to launch any installed app 
-
 
 anyApp_launch() {
 
@@ -879,10 +694,7 @@ anyApp_launch() {
 
 }
 
-
-
 #Function Definition for youtube_deeplink_launch function to launch YouTube with deeplink  
-
 
 #need to remove this function 
 youtube_deeplink_launch() {
@@ -900,11 +712,7 @@ youtube_deeplink_launch() {
 
 }
 
-
-
 #Function Definition for amazon_deeplink_launch function to launch Amazon prime with deeplink  
-
-
 
 amazon_deeplink_launch() {
 
@@ -921,11 +729,7 @@ amazon_deeplink_launch() {
 
 }
 
-
-
 # Function Definition for TC_EXTERNALAUDIO_MANUAL_01 STEP-10.2 Youtube Status check operation
-
-
 
 preApp_status_check() {
 
@@ -942,11 +746,7 @@ preApp_status_check() {
 
 }
 
-
-
 #Function to check the status of Apps used for TC_MEMCR_MANUAL TestSuite
-
-
 
 memcr_app_status() {
     
@@ -964,11 +764,7 @@ memcr_app_status() {
 
 }
 
-
-
 #Function to check the status of Apps used for TC_MEMCR_MANUAL TestSuite
-
-
 
 apphibernate_status() {
 
@@ -983,90 +779,7 @@ apphibernate_status() {
 
 }
 
-
-
-# Function Definition for premium_app Launch using RDKshell and Starting playback using deeplink
-
-
-
-premium_app_Launch_and_check() {
-   
-   local appname="$1"
-   app_launch_flag=0
-   memcr_app_status "$appname"
-   local memcr_app_status_exit=$? 
-   sleep 2
-
-   if [ "$memcr_app_status_exit" -eq 0 ]; then
-      local launch_json=$(printf '{"jsonrpc":"2.0", "id":3, "method":"org.rdk.RDKShell.1.launch", "params":{ "callsign": "%s", "type": "","uri": ""}}' "$appname")
-      local json_res_1=$(curl -s -# -H "Content-Type: application/json" -X POST -d "$launch_json" http://127.0.0.1:9998/jsonrpc)
-      local launch_extracted_value=$(echo "$json_res_1" | grep -o '"success":[^,}]*' | cut -d: -f2 | tr -d '[:space:]')
-      sleep 3
-
-      if [[ "$launch_extracted_value" == 'true' ]]; then
-         if [[ "$appname" == "YouTube" ]]; then
-            sleep 3
-            youtube_deeplink_launch
-            local youtube_deeplink_exit=$?
-            
-            if [ "$youtube_deeplink_exit" -eq 0 ]; then            
-               sleep 8
-               generateKey_RDKUI_navigation "13"
-               generate_key_exit_1=$?
-               sleep 3
-               if [ "$generate_key_exit_1" -eq 0 ]; then  
-                  return 0
-               else
-                  printf "\n\n\nDEBUG : generateKey_RDKUI_navigation function failed with error code : %s\n\n" "$generate_key_exit_1"
-                  return $generate_key_exit_1
-               fi
-            else
-               printf "\n\n\Unable to launch %s and start AV playback with deeplink\n\n\n" "$appname" 
-               printf "\n\n\nDEBUG : youtube_deeplink_launch function failed with error code : %s\n\n" "$youtube_deeplink_exit"     
-               return 1
-            fi         
-         elif [[ "$appname" == "Amazon" ]]; then 
-            sleep 3
-            amazon_deeplink_launch
-            local amazon_deeplink_exit=$?
-            
-            if [ "$amazon_deeplink_exit" -eq 0 ]; then  
-               generateKey_RDKUI_navigation "13"
-               local generate_key_exit_3=$?
-               sleep 7
-               generateKey_RDKUI_navigation "13"
-               if [ "$generate_key_exit_3" -eq 0 ]; then  
-                  return 0
-               else
-                  printf "\n\n\nDEBUG : generateKey_RDKUI_navigation function failed with error code : %s\n\n" "$generate_key_exit_3"
-                  return $generate_key_exit_3
-               fi
-            else
-               printf "\n\n\Unable to launch %s and start AV playback with deeplink\n\n\n" "$appname" 
-               printf "\n\n\nDEBUG : amazon_deeplink_launch function failed with error code : %s\n\n" "$amazon_deeplink_exit"     
-               return 1
-            fi         
-         else
-            return 0
-         fi      
-      else
-         printf '\n\nUnable to launch %s with org.rdk.RDKShell.1.launch API\n\n\n' "$appname"
-         app_launch_flag=1           
-         return 1
-      fi
-   else
-      printf '\n\n%s App not available in device\n\n\n' "$appname"
-      printf "\n\n\nDEBUG : memcr_app_status function failed with error code : %s\n\n" "$memcr_app_status_exit"
-      return 1   
-   fi
-
-}
-
-
-
 # Function Definition for HtmlApp_XUMO status check in Post Condition for TC_EXTERNALAUDIO_MANUAL
-
-
 
 xumo_status_check() {
 
@@ -1081,11 +794,7 @@ xumo_status_check() {
 
 }
 
-
-
 # Function Definition for User's experience and choice input
-
-
 
 user_confirmation() {
 
@@ -1112,11 +821,7 @@ user_confirmation() {
 
 }
 
-
-
 #Function Definition for Dynamic Testcase step execution status updation
-
-
 
 update_test_status() {
 
@@ -1126,11 +831,7 @@ update_test_status() {
 
 }
 
-
-
 #Function Definition for Test Case Execution result check
-
-
 
 testcase_result_checker() {
 
@@ -1210,11 +911,7 @@ testcase_result_checker() {
 
 }
 
-
-
 #Function to display the Test result of user selected TestCases
-
-
 
 display_execution_reports_and_wait() {
    
@@ -1242,11 +939,7 @@ display_execution_reports_and_wait() {
 
 }
 
-
-
 #Function to cleanUp and delete TestExecution report history
-
-
 
 cleanup_testExecution_reports() {
    
@@ -1279,11 +972,7 @@ cleanup_testExecution_reports() {
 
 }
 
-
-
 #Function to display the Overall TestSuite Execution Status
-
-
 
 overall_testsuite_execution_status() {
 
@@ -1363,11 +1052,7 @@ overall_testsuite_execution_status() {
 
 }
 
-
-
 #Function to handle the dynamic steps result updator
-
-
 
 dynamic_test_result_update(){
 
@@ -1390,11 +1075,7 @@ dynamic_test_result_update(){
 
 }
 
-
-
 #Function to handle the Testcase execution from Execution Result menu
-
-
 
 trigger_from_Execution_Result_menu() {
 
@@ -1425,24 +1106,20 @@ trigger_from_Execution_Result_menu() {
    fi  
 }
 
-
-
 #Function Definition for getting the current state of App for memecr
-
-
 
 get_Premium_App_state() {
 
   sleep 2
   hibernated_app_state=0
   local app_name="$1"
-  local JSON_RESPONSE=$(curl -# --data-binary '{"jsonrpc":"2.0", "id":3, "method":"org.rdk.RDKShell.1.getState", "params":{}}' -H 'content-type:text/plain;' http://127.0.0.1:9998/jsonrpc) 
-  app_state=$(echo "$JSON_RESPONSE" | grep -o "\"callsign\":\"$app_name\",\"state\":\"[^\"]*\"" | awk -F':"' '{print $3}' | tr -d '",')
+  local JSON_RESPONSE=$(curl -# --data-binary "{\"jsonrpc\":\"2.0\", \"id\":3, \"method\":\"Controller.1.status@$app_name\"}" -H 'content-type:text/plain;' http://127.0.0.1:9998/jsonrpc)
+  app_state=$(echo "$JSON_RESPONSE" | sed -n -E 's/.*"state":"([^"]*)".*/\1/p' | tr -d '[:space:]')
 
    if [[ "$app_state" == "resumed" || "$app_state" == "activated" ]]; then
       return 0
    elif [[ -z "$app_state" ]]; then
-      printf '\n\norg.rdk.RDKShell.1.getState API returns empty value for %s state\n\n\n' "$app_name"
+      printf '\n\nController.1.status API returns empty value for %s state\n\n\n' "$app_name"
       return 1               
    else
       if [[ "$app_state" == "hibernated" ]]; then
@@ -1453,11 +1130,7 @@ get_Premium_App_state() {
 
 }
 
-
-
 #Function defenition for active_anyApp_instance_kill to kill any App's active instance before testcase execution
-
-
 
 active_anyApp_instance_kill() {
 
@@ -1479,11 +1152,7 @@ active_anyApp_instance_kill() {
       
 }
 
-
-
 #Function defenition to kill the App instance by actually killing the app
-
-
 
 kill_app() {
 
@@ -1504,11 +1173,7 @@ kill_app() {
 
 }
 
-
-
 #Function defenition to close the App instance by terminating the app
-
-
 
 terminate_app() {
 
@@ -1529,10 +1194,7 @@ terminate_app() {
 
 }
 
-
 #Function Definition for Identifying Device model or type
-
-
 
 platform_type_finder() {
 
@@ -1563,11 +1225,7 @@ platform_type_finder() {
 
 }
 
-
-
 #Function Definition for inApp_navigation_keycount_finder to dynamically selecting Keycode and key count for inApp naviagtion and selections
-
-
 
 inApp_navigation_keycount_finder() {
 
@@ -1673,11 +1331,7 @@ inApp_navigation_keycount_finder() {
 
 }         
 
-
-
 #Function Definition for dynamically selecting Keycode and key count for individual platforms
-
-
 
 platform_keycode_count_finder() {
 
@@ -1758,79 +1412,26 @@ platform_keycode_count_finder() {
 
 }
 
-
-
-
 #Function Definition for YT Apps launch via RDK_service_API or generativeKey 
-
-
 
 app_launch_type_handle(){
 
    local func_rdk_ui_app_launch="$1"
    local ytapp="$2"
-   if [[ "$app_launch_type" == "RDK_service_API" ]]; then
-      if [[ "$ytapp" == "YouTubeTV" ]]; then
-         printf "\nLaunching %s app and loading Homepage\n\n\n" "$ytapp"
-      else
-         printf "\nLaunching %s app and Starting AV playback\n\n\n" "$ytapp"
-      fi   
-      premium_app_Launch_and_check "$ytapp"
-      premium_app_Launch_exit=$?
-      preApp_status_check "$ytapp"
-      preApp_status_check_exit=$? 
-      if [[ "$ytapp" != "YouTube" ]]; then
-         local Query=$(printf "\n\n\nIs %s App launched and Homepage is loaded? [yes/no]: " "$ytapp" )
-      else
-         local Query=$(printf "\n\n\nIs %s App launched and AV playback started? [yes/no]: " "$ytapp" )
-      fi   
-      user_confirmation "user_choice" "$Query"
-      local user_confirmation_fun_exit=$?
+   printf '\n\nLaunching %s app from RDK UI via generateKeys method\n\n\n' "$ytapp"
+   "$func_rdk_ui_app_launch" "$ytapp"
+   func_rdk_ui_app_exit=$?
 
-      if [ "$premium_app_Launch_exit" -eq 0 ] && [ "$preApp_status_check_exit" -eq 0 ] && [ "$user_confirmation_fun_exit" -eq 0 ]; then 
-         sleep 4  
-         return 0
-      else
-         sleep 2
-         if [[ "$app_launch_flag" == 1 ]]; then
-            printf '\n\nTrying to launch %s from RDK UI via generateKeys method\n\n\n' "$ytapp"
-            "$func_rdk_ui_app_launch" "$ytapp"
-            local func_rdk_ui_app_exit=$?
-
-            if [ "$func_rdk_ui_app_exit" -eq 0 ]; then
-               return 0
-            else
-               printf '\n\nDEBUG : %s function failed with error code %s\n\n\n' "$func_rdk_ui_app_launch" "$func_rdk_ui_app_exit"
-               return $func_rdk_ui_app_exit
-            fi      
-         else           
-            for var in premium_app_Launch_exit preApp_status_check_exit user_confirmation_fun_exit; do
-               if [ "${!var}" -ne 0 ]; then
-                  return ${!var}
-               fi
-            done
-         fi
-      fi
+   if [ "$func_rdk_ui_app_exit" -ne 0 ]; then
+      printf '\n\nDEBUG : %s function failed with error code %s\n\n\n' "$func_rdk_ui_app_launch" "$func_rdk_ui_app_exit"
+      return $func_rdk_ui_app_exit
    else
-      printf '\n\nLaunching %s app from RDK UI via generateKeys method\n\n\n' "$ytapp"
-      "$func_rdk_ui_app_launch" "$ytapp"
-      func_rdk_ui_app_exit=$?
-
-      if [ "$func_rdk_ui_app_exit" -ne 0 ]; then
-         printf '\n\nDEBUG : %s function failed with error code %s\n\n\n' "$func_rdk_ui_app_launch" "$func_rdk_ui_app_exit"
-         return $func_rdk_ui_app_exit
-      else
-         return 0
-      fi   
-   fi
+      return 0
+   fi   
 
 }
 
-
-
 #Function Definition for Launching Premium Apps from RDK UI platform based logic
-
-
 
 platform_launch_sub_handle() {
 
@@ -1875,10 +1476,7 @@ platform_launch_sub_handle() {
 
 }
 
-
-
 #Function definition for Execution start syntax and Main Function call
-
 
 exec_start() {
 
@@ -1889,11 +1487,7 @@ exec_start() {
 
 }
 
-
-
 #Function Definition for the pid extraction of premium Apps
-
-
 
 premiumApp_PID_extract() {
 
@@ -1912,11 +1506,7 @@ premiumApp_PID_extract() {
 
 }
 
-
-
 #Function Definition for detecting the memory usage of premium Apps
-
-
 
 memcr_apps_memoryUsage() {
 
@@ -1936,11 +1526,7 @@ memcr_apps_memoryUsage() {
 
 }
 
-
-
 #Function Definition for Launching Premium Apps from RDK UI platform based logic
-
-
 
 launch_premium_apps() {
 
@@ -2000,11 +1586,7 @@ launch_premium_apps() {
       
 }
 
-
-
 #Function Definition for execute_stepStatusUpdate_steps function used in all Automated Testcases 
-
-
 
 execute_stepStatusUpdate_steps() {
   
@@ -2042,22 +1624,6 @@ execute_stepStatusUpdate_steps() {
             ;;
          "TC_IMAGEFORMATS_MANUAL_test")
             "$step_func_name" "${!tc_dynamic_var_name}" "$img_format" "$test_app" "$testcase_prefix"       
-            ;;
-         "TC_RDKSHELL_MANUAL_01")
-            #Here WebkitBrowser_preset_urls passed as parameter to function from device config file
-            "$step_func_name" "${!tc_dynamic_var_name}" "${WebkitBrowser_preset_urls[$((step_no-1))]}"
-            ;; 
-         "TC_RDKSHELL_MANUAL_02")
-            #Here HtmlApp_preset_urls passed as parameter to function from device config file
-            "$step_func_name" "${!tc_dynamic_var_name}" "${HtmlApp_preset_urls[$((step_no-1))]}"
-            ;;
-         "TC_RDKSHELL_MANUAL_03")
-            #Here WebkitBrowser_default_url and opacity_values passed as parameter to function from device config file
-            "$step_func_name" "${!tc_dynamic_var_name}" "${opacity_values[$((step_no-1))]}" "$WebkitBrowser_default_url"
-            ;;
-         "TC_RDKSHELL_MANUAL_04"|"TC_RDKSHELL_MANUAL_05"|"TC_RDKSHELL_MANUAL_06"|"TC_RDKSHELL_MANUAL_07")
-            #Here WebkitBrowser_default_url passed as parameter to function from device config file
-            "$step_func_name" "${!tc_dynamic_var_name}" "$WebkitBrowser_default_url"
             ;;
          "TC_WEBAUDIO_MANUAL_test")
             "$step_func_name" "${!tc_dynamic_var_name}" "$test_app" "$testcase_prefix" 
@@ -2100,11 +1666,7 @@ execute_stepStatusUpdate_steps() {
 
 }
 
-
-
 #Function Definition for checking the file availabililty in the configured Server
-
-
 
 check_file_on_serve() {
 
@@ -2186,40 +1748,7 @@ check_file_on_serve() {
 
 }
 
-
-
-#Function Definition for launching different URL's via HtmlApp | WebkiBrowser etc
-
-
-
-rdkshell_URL_launch() {
-
-   local launch_url="$1"
-   local callsign="$2"
-   local json_payload_rdkshell=$(printf '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.RDKShell.1.launch", "params": {"callsign": "%s", "type":"%s","uri":"%s", "x":0, "y":0, "w":1920, "h":1080}}' "$callsign" "$callsign" "$launch_url")
-   local json_Response_rdkshell=$(curl -# --data-binary "$json_payload_rdkshell" -H "Content-Type: application/json" http://127.0.0.1:9998/jsonrpc)
-   local rdkshell_launch_status=$(echo "$json_Response_rdkshell" | grep -o '"success":[^,}]*' | cut -d: -f2 | tr -d '[:space:]')
-   sleep 1
-
-   webkitInstance_statusCheck "$callsign"
-   local webkitInstance_statusCheck_exit=$?
-
-   if [ "$rdkshell_launch_status" = "true" ] && [ "$webkitInstance_statusCheck_exit" -eq 0 ]; then
-      return 0
-   else
-      #227 error code return specific for HtmlApp or WebkitBrowser URL launch via rdkshell.1.launch API's
-      printf "\n\nDEBUG : rdkshell_URL_launch function failed with error code - %s and status %s\n\n" "$webkitInstance_statusCheck_exit" "$rdkshell_launch_status"
-      return 227 
-   fi
-
-}
-
-
-
-
 # Function Definition for WebkitInstance  like WebKitBrowser | htmlApp | ResidentApp status check 
-
-
 
 webkitInstance_statusCheck() {
 
@@ -2231,78 +1760,13 @@ webkitInstance_statusCheck() {
    if [ "$extracted_value" = "resumed" ] || [ "$extracted_value" = "activated" ]; then
       return 0
    else
-      #226 error code return specific for WebkitBrowser URL launch via rdkshell.1.launch API's
+      #226 error code return specific for WebkitBrowser URL launch API
       return 226
    fi 
 
 }
 
-
-
-
-#Function Definition for getScreenResolution via org.rdk.RDKShell plugin
-
-
-
-rdkshell_getScreenResolution() {
-
-   local json_payload_getScreenRes=$(printf '{"jsonrpc": "2.0", "id": 2, "method": "org.rdk.RDKShell.1.getScreenResolution"}')
-   local json_Res_getScreenRes=$(curl -# --data-binary "$json_payload_getScreenRes" -H "Content-Type:text/plain;" http://127.0.0.1:9998/jsonrpc)
-   local getScreenRes_status=$(echo "$json_Res_getScreenRes" | sed -n 's/.*"success":[[:space:]]*\([^,}]*\).*/\1/p')
-   #Extract the value of 'w' (width)
-   getScreenRes_width=$(echo "$json_Res_getScreenRes" | grep -o '"w":[0-9]*' | sed 's/"w"://')
-   #Extract the value of 'h' (height)
-   getScreenRes_height=$(echo "$json_Res_getScreenRes" | grep -o '"h":[0-9]*' | sed 's/"h"://')
-   sleep 1
-
-   if [ "$getScreenRes_status" = "true" ] && [ -n "$getScreenRes_width" ] && [ -n "$getScreenRes_height" ]; then
-      printf "\n\nCurrent ScreenResolution width : %s\n\nCurrent ScreenResolution height : %s\n\n\n" "$getScreenRes_width" "$getScreenRes_height"
-      return 0
-   else
-      if [ "$getScreenRes_status" != "true" ]; then
-         #237 error code return specific for opacity value setting error
-         printf "\n\nDEBUG : org.rdk.RDKShell.1.getScreenResolution return false value\n\n\n"
-         return 237
-      else
-         printf "\n\nWidth : [ %s ] and Height : [ %s ] return empty value from org.rdk.RDKShell.1.getScreenResolution\n\n\n" "$getScreenRes_width" "$getScreenRes_height"
-         return 1
-      fi
-   fi
-
-}
-
-
-
-
-#Function Definition for setScreenResolution via org.rdk.RDKShell plugin
-
-
-
-rdkshell_setScreenResolution() {
-   
-   local w="$1"
-   local h="$2"
-   local json_payload_setScreenRes=$(printf '{"jsonrpc":"2.0", "id":3, "method":"org.rdk.RDKShell.1.setScreenResolution", "params":{ "w": %s, "h": %s }}' "$w" "$h")
-   local json_Res_setScreenRes=$(curl -# --data-binary "$json_payload_setScreenRes" -H "Content-Type:text/plain;" http://127.0.0.1:9998/jsonrpc)
-   local setScreenRes_status=$(echo "$json_Res_setScreenRes" | sed -n 's/.*"success":[[:space:]]*\([^,}]*\).*/\1/p')
-   sleep 1
-
-   if [ "$setScreenRes_status" = "true" ]; then
-      return 0
-   else
-      #238 error code return specific for opacity value setting error
-      printf "\n\nDEBUG : org.rdk.RDKShell.1.setScreenResolution return false value\n\n\n"
-      return 238
-   fi
-       
-}
-
-
-
-
 #Function defnition for sub function to handle immediate playback start on Ipv6 testcase and HDCP testcases
-
-
 
 immediate_playback_start() {
 
@@ -2318,7 +1782,6 @@ immediate_playback_start() {
    AV_playback_handle "$app" "normal"
    local AV_playback_handle_exit=$?
 
-
    if [ "$AV_playback_handle_exit" -eq 0 ]; then
       return 0
    else
@@ -2327,11 +1790,7 @@ immediate_playback_start() {
 
 }
 
-
-
 #Function Definition for check_log_for_string to string match in given logs  
-
-
 
 check_log_for_string() {
    
@@ -2360,8 +1819,6 @@ check_log_for_string() {
 
 }
 
-
-
 #Function Definition for checking server connectivity from DUT using HTTP HEAD request
 #Usage : check_server_connectivity "<server_url>"
 #        e.g. check_server_connectivity "https://xconf.rdkcentral.com"
@@ -2369,8 +1826,6 @@ check_log_for_string() {
 #Return : 0   - Server is reachable (HTTP 2xx or 3xx)
 #         231 - curl/network level failure (unreachable, DNS failure, timeout)
 #         232 - Server responded with unexpected HTTP status (4xx / 5xx)
-
-
 
 check_server_connectivity() {
 
@@ -2405,10 +1860,7 @@ check_server_connectivity() {
 
 }
 
-
 #Function Definition for opt logs tar core function
-
-
 
 opt_logs_tar_fun() {
 
@@ -2427,11 +1879,7 @@ opt_logs_tar_fun() {
 
 } 
 
-
-
 #Function Definition for opt_failure_log_generate to tar opt logs and moved to testresults folder under Opt_logs directory
-
-
 
 opt_failure_log_generate() {
 
@@ -2474,10 +1922,7 @@ opt_failure_log_generate() {
    
 }
 
-
 #Function Definition for upload_logs_to_server uploading log_files to https server
-
-
 
 upload_logs_to_server() {
 
@@ -2512,11 +1957,7 @@ upload_logs_to_server() {
 
 }
 
-
-
 #Function Definition for server_file_size_compare to compare the filesize in server and device
-
-
 
 server_filesize_compare() {
 
@@ -2546,11 +1987,7 @@ server_filesize_compare() {
 
 }
 
-
-
 #Function Definition for log_generate_operations to perform Opt_logs_creation and server upload for failure test cases
-
-
 
 log_generate_operations() {
 
@@ -2586,11 +2023,7 @@ log_generate_operations() {
 
 }    
 
-
-
 #Function Definition for get_JSON_KEY_values to extract key values from JsonRpc response  
-
-
 
 get_JSON_KEY_values() {
    local key="$1"
@@ -2608,11 +2041,7 @@ get_JSON_KEY_values() {
    
 }
 
-
-
 #Function definition for get_XCONF_key_values to extract key values from XCONF json response
-
-
 
 get_XCONF_key_values() {
    local key="$1"
@@ -2636,11 +2065,7 @@ get_XCONF_key_values() {
 
 }
 
-
-
 #Function defnition for animated print message
-
-
 
 blink_Query() {
 
@@ -2658,9 +2083,6 @@ blink_Query() {
     fi       
 
 }
-
-
-
 
 #Function to extract specific network interface information
 #
@@ -2683,8 +2105,6 @@ blink_Query() {
 #          3  - Interface not found in /sys/class/net/
 #          4  - Unsupported field requested
 #          5  - Field not assigned / not present for the given interface
-
-
 
 get_iface_info() {
 
@@ -2806,10 +2226,7 @@ get_iface_info() {
 
 }
 
-
-
 #Function Definition for post_cond_UI_focus_set to set Focus back on RDK UI
-
 
 post_cond_UI_focus_set() {
 
@@ -2832,44 +2249,7 @@ post_cond_UI_focus_set() {
 
 }
 
-
-#Function Definition for postcondition image formats postCondition_Execution_WebKitInst
-
-
-
-postCondition_Execution_WebKitInst() {
- 
-  local testcaseID="$1"
-  local rdkshell_suspend_exit rdkshell_launch_exit
-  if [[ "$testcaseID" == "TC_RDKSHELL_MANUAL_02" ]]; then
-    rdkshell_suspend_operation "HtmlApp"
-    rdkshell_suspend_exit=$?
-
-    rdkshell_launch_operation "ResidentApp"
-    rdkshell_launch_exit=$?
-  else    
-    rdkshell_suspend_operation "WebKitBrowser"
-    rdkshell_suspend_exit=$?
-
-    rdkshell_launch_operation "ResidentApp"
-    rdkshell_launch_exit=$?
-  fi  
-  if [ "$rdkshell_suspend_exit" -eq 0 ] && [ "$rdkshell_launch_exit" -eq 0 ]; then
-    printf "\n\nWebkitBrowser instance suspended and RDK UI loaded on TV\n\n\n"
-    return 0
-  else
-    printf "\n\nFailed to suspended WebkitBrowser instance and load RDK UI on TV\n\n\n"
-    return 1
-  fi    
-
-}
-
-
-
-
 #Function to handle the submenu for Testcases execution result
-
-
 
 testcase_result_display_menu() {
 
@@ -3044,62 +2424,6 @@ testcase_result_display_menu() {
                   ;;      
             esac
             ;;
-         "TC_RDKSHELL_MANUAL")  
-            printf "\n"
-            printf '\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n'
-            printf "                                                   ******* TestCase Execution Results Menu :  %s *******                                                                    " "$testCase_ID"
-            printf '\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n'
-            printf '01. Test Execution Result : TC_RDKSHELL_MANUAL_01        :\t[ Verify the HTML preset Url launch via WebkitBrowser with RDKShell ] \n\n'
-            printf '02. Test Execution Result : TC_RDKSHELL_MANUAL_02        :\t[ Verify HtmlApp launch with RDKShell and Load Url multiple times ] \n\n'
-            printf '03. Test Execution Result : TC_RDKSHELL_MANUAL_03        :\t[ Verify the Opacity behavior in WebKitBrowser ] \n\n'
-            printf '04. Test Execution Result : TC_RDKSHELL_MANUAL_04        :\t[ Verify the Scale behavior in WebKitBrowser ] \n\n'
-            printf '05. Test Execution Result : TC_RDKSHELL_MANUAL_05        :\t[ Verify the Bounds behavior in WebKitBrowser ] \n\n'
-            printf '06. Test Execution Result : TC_RDKSHELL_MANUAL_06        :\t[ Verify the Animation behavior in WebKitBrowser ] \n\n'
-            printf '07. Test Execution Result : TC_RDKSHELL_MANUAL_07        :\t[ Verify the setScreenResolution behaviour in RDKShell plugin using curl command ] \n\n'
-            printf '08. Overall TestSuite Execution Status\n\n'
-            printf '09. Delete all Test Execution reports\n\n'
-            printf '10. Return to the Main Menu\n\n'
-            printf "\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n\n";
-
-            read -p "Enter an Option to proceed : " menu_choice_1_1
-            printf '\n\n'
-            case "$menu_choice_1_1" in 
-               1)
-                  trigger_from_Execution_Result_menu "TC_RDKSHELL_MANUAL_01" "tc1_step" "tc_RDKSHELL_MANUAL_testsuite"
-                  ;;
-               2)
-                  trigger_from_Execution_Result_menu "TC_RDKSHELL_MANUAL_02" "tc2_step" "tc_RDKSHELL_MANUAL_testsuite"
-                  ;;
-               3)
-                  trigger_from_Execution_Result_menu "TC_RDKSHELL_MANUAL_03" "tc3_step" "tc_RDKSHELL_MANUAL_testsuite"
-                  ;;
-               4)
-                  trigger_from_Execution_Result_menu "TC_RDKSHELL_MANUAL_04" "tc4_step" "tc_RDKSHELL_MANUAL_testsuite"
-                  ;;
-               5)
-                  trigger_from_Execution_Result_menu "TC_RDKSHELL_MANUAL_05" "tc5_step" "tc_RDKSHELL_MANUAL_testsuite"
-                  ;;
-               6)
-                  trigger_from_Execution_Result_menu "TC_RDKSHELL_MANUAL_06" "tc6_step" "tc_RDKSHELL_MANUAL_testsuite"
-                  ;;
-               7)
-                  trigger_from_Execution_Result_menu "TC_RDKSHELL_MANUAL_07" "tc7_step" "tc_RDKSHELL_MANUAL_testsuite"
-                  ;;         
-               8)
-                  overall_testsuite_execution_status "TC_RDKSHELL_MANUAL_"
-                  ;;
-               9)
-                  cleanup_testExecution_reports "TC_RDKSHELL_MANUAL_"
-                  ;;    
-               10)
-                  printf '\n\nExiting TestCase Execution Results Menu.....\n\n\n' 
-                  break
-                  ;;  
-               *)
-                  printf '\nInvalid option selected. Please Try Again !!!\n\n\n'
-                  ;;      
-            esac
-            ;; 
          "TC_HDCPCOMPLIANCE_MANUAL")
             printf "\n"
             printf '\n-------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n'
@@ -3417,17 +2741,5 @@ testcase_result_display_menu() {
 
 }
 
-
-
-
-
-
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-
-
-
-
-
-
 

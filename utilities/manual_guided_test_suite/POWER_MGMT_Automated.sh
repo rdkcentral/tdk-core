@@ -1,10 +1,9 @@
 #!/bin/bash
-
 ##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2023 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,17 +18,12 @@
 # limitations under the License.
 ##########################################################################
 
-
 source device.conf
 source generic_functions.sh
 
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-
 #Function defnition for ipv6_extract_API_key_values to extract key values
-
-
 
 power_extract_API_key_values() {
 
@@ -55,11 +49,7 @@ power_extract_API_key_values() {
 
 }
 
-
-
 #Function Definition to check the Pre-Condition before executing TC_POWER_MANUAL TestSuite
-
-
 
 preCon_POWER() {
 
@@ -83,7 +73,7 @@ preCon_POWER() {
         printf "\n\nRDK UI Homepage is not visible on TV\n\n\n"
         return 1 
     elif [ "$set_and_get_powerState_exit" -eq 90 ]; then  
-        printf "\n\nPower state is not ON returns value : %s setting the powerstate to ON\n\n\n" "$power_powerstate"
+        printf "\n\nPower state is not ON returns value : %s setting the powerstate to ON\n\n\n" "$power_powerState"
         set_and_get_powerState "1" "ON"
         local set_and_get_powerState_exit_1=$?
 
@@ -97,6 +87,7 @@ preCon_POWER() {
             return 1
         else
             printf "\n\nUnable to set the DUT powerstate to ON\n\n\n" 
+            return 1
         fi         
     else
         return 1      
@@ -104,11 +95,7 @@ preCon_POWER() {
 
 }
 
-
-
 #Function Definition for set_and_get_powerStates to set powerstates
-
-
 
 set_and_get_powerState() {
 
@@ -155,11 +142,7 @@ set_and_get_powerState() {
 
 }
 
-
-
 #Function defnition for subfunction to Verify RDK UI powerstate settings
-
-
 
 powerstate_RDKUI() {
 
@@ -183,11 +166,7 @@ powerstate_RDKUI() {
 
 }
 
-
-
 #Function defnition for subfunction to get the powerstate
-
-
 
 get_Set_Powerstate_subFun() {
 
@@ -232,17 +211,14 @@ get_Set_Powerstate_subFun() {
 
 }
 
-
-
 #Function defnition for testcase TC_POWER_MANUAL_01
-
-
 
 TC_POWER_MANUAL_01() {
 
     local step_num="$1"
     local user_choice="user_choice"
     local query_power=$(printf "\n\nIs RDK UI Homepage visible on TV [yes/no]: ")
+    local query_lightsleep=$(printf "\n\nHas RDK UI disappeared from TV confirming DUT has entered Light Sleep? [yes/no]: ")
     if [ "$step_num" = "1" ]; then
        powerstate_RDKUI "$step_num"
        local powerstate_RDKUI_exit=$?
@@ -265,10 +241,10 @@ TC_POWER_MANUAL_01() {
         get_Set_Powerstate_subFun "$step_num" "0"
         local get_Set_Powerstate_subFun_exit=$?
 
-        user_confirmation "$user_choice" "$query_power"
+        user_confirmation "$user_choice" "$query_lightsleep"
         local user_confirmation_fun_exit=$?
 
-        if [ "$get_Set_Powerstate_subFun_exit" -eq 0 ] && [ "$user_confirmation_fun_exit" -eq 1 ]; then
+        if [ "$get_Set_Powerstate_subFun_exit" -eq 0 ] && [ "$user_confirmation_fun_exit" -eq 0 ]; then
             return 0
         else
             return 1
@@ -307,11 +283,7 @@ TC_POWER_MANUAL_01() {
 
 }
 
-
-
 #Function Definition for TestCase : tc_POWER_MANUAL_testsuite
-
-
 
 tc_POWER_MANUAL_testsuite() {
 
@@ -330,7 +302,6 @@ tc_POWER_MANUAL_testsuite() {
     if [ "$preCon_POWER_fun_exit" -eq 0 ]; then
         sleep 1
         printf "\n\nPre-condition check success. Starting Testcase execution!\n\n\n"
-
 
     #Step 1 code block for TC_POWER_MANUAL_01
 
@@ -389,10 +360,7 @@ tc_POWER_MANUAL_testsuite() {
 }
      
 
-
 #Function Definition for postCondition checking of POWERMANAGEMENT test
-
-
 
 postCondition_Execution_POWER() {
 
@@ -410,16 +378,7 @@ postCondition_Execution_POWER() {
 
 }
 
-
-
-
-
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-
-
-
-
 
 while true; do
 
@@ -431,7 +390,6 @@ while true; do
   printf '02. Show TestCase Execution Results\n\n'
   printf '03. Exit [ POWER MANAGEMENT Automated Test ]\n\n'
   printf "\n=============================================================================================================================================================\n\n\n";
-
 
   # ----- Main Testcaes Execution Menu -----
 

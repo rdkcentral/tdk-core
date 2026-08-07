@@ -1,10 +1,9 @@
 #!/bin/bash
-
 ##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2023 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,19 +18,12 @@
 # limitations under the License.
 ##########################################################################
 
-
 source device.conf
 source generic_functions.sh
 
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-
-
-
 #Function to check the Pre-Condition before executing TC_WEBAUDIO_MANUAL TestSuite
-
-
 
 preCon_Webaudio() {
 
@@ -50,12 +42,7 @@ preCon_Webaudio() {
 
 }
 
-
-
-
-#Function definition for webaudio_step_des_selector to select step discription of each webAudio testcases 
-
-
+#Function definition for webaudio_step_des_selector to select step description of each webAudio testcases 
 
 webaudio_step_des_selector() {
 
@@ -143,11 +130,7 @@ webaudio_step_des_selector() {
 
 }
 
-
-
 #Function to check the WebAudio testcases in tc_WEBAUDIO_MANUAL TestSuite
-
-
 
 TC_WEBAUDIO_MANUAL_test() {
 
@@ -263,11 +246,7 @@ TC_WEBAUDIO_MANUAL_test() {
 
 }
 
-
-
 #Function definition for webaudio_inner_step_execute_1 for steps execute in inner functions
-
-
 
 webaudio_inner_step_execute_1() {
 
@@ -299,11 +278,7 @@ webaudio_inner_step_execute_1() {
 
 }
 
-
-
 #Function definition for webaudio_inner_step_execute_2 for steps execute in inner functions
-
-
 
 webaudio_inner_step_execute_2() {
 
@@ -330,11 +305,7 @@ webaudio_inner_step_execute_2() {
 
 }
 
-
-
 #Function Definition for TestCase : tc_WEBAUDIO_MANUAL_testsuite
-
-
 
 tc_WEBAUDIO_MANUAL_testsuite() {
 
@@ -383,11 +354,7 @@ tc_WEBAUDIO_MANUAL_testsuite() {
 
 }
 
-
-
-
 #Function Definition for postcondition image formats postCondition_Execution_webaudio
-
 
 postCondition_Execution_webaudio() {
 
@@ -416,18 +383,7 @@ postCondition_Execution_webaudio() {
 
 }
 
-
-
-
-
-
-
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-
-
-
-
 
 while true; do
   printf "\n"
@@ -452,7 +408,6 @@ while true; do
   printf '16. Show TestCase Execution Results\n\n'
   printf '17. Exit [ WebAudio Automated Test ]\n\n'
   printf "\n=============================================================================================================================================================\n\n\n";
-
 
   # ----- Main Testcaes Execution Menu -----
 
@@ -532,9 +487,5 @@ while true; do
         ;;      
   esac
 done  
-
-
-
-
 
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________

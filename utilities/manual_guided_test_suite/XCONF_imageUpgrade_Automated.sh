@@ -1,10 +1,9 @@
 #!/bin/bash
-
 ##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2023 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,17 +18,12 @@
 # limitations under the License.
 ##########################################################################
 
-
 source device.conf
 source generic_functions.sh
 
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-
-
-
 #Function Definition get_xconf_id_by_description for extracting firmware config ID by name
-
 
 get_xconf_id_by_description() {
     local target_desc="$1"
@@ -48,21 +42,15 @@ get_xconf_id_by_description() {
     '
 }
 
-
-
-
-
 #Function Definition to check the Pre-Condition before executing TC_XCONF_MANUAL TestSuite
-
 
 preCon_XCONF() {
     
     local preCon_XCONF_status=0
     local server_url="$1"
     local xconf_applicable="true"
-    local build_prefix=""
-    local build_suffix=""
-
+    build_prefix=""
+    build_suffix=""
 
     #Check for connectivity to xconf server from DUT
     check_server_connectivity "$server_url"
@@ -128,30 +116,21 @@ preCon_XCONF() {
 
 }
 
-
-
 #Function Definition for firmwareconfig_rule_check_core to check for firmware config rules from DUT based on MAC address
-
-
 
 firmwareconfig_rule_check_core() {
 
     local final_url="$1"
     local response=$(curl --silent --location --connect-timeout 10 "$final_url")
 
-    firmware_Filename=$(get_XCONF_key_values "$response" "firmwareFilename")
-    firmware_Location=$(get_XCONF_key_values "$response" "firmwareLocation")
-    firmware_Version=$(get_XCONF_key_values "$response" "firmwareVersion")
+    firmware_Filename=$(get_XCONF_key_values "firmwareFilename" "$response")
+    firmware_Location=$(get_XCONF_key_values "firmwareLocation" "$response")
+    firmware_Version=$(get_XCONF_key_values "firmwareVersion" "$response")
 
 }
    
 
-
-
-
 #Function Definition for check_XCONF_rules_config to check whether DUT have a valid XCONF rules/Configuration from xconf server
-
-
 
 check_XCONF_rules_config() {
 
@@ -195,12 +174,7 @@ check_XCONF_rules_config() {
 
 }
 
-
-
-
 #Function Definition for update_XCONF_firmware_config to update the XCONF firmware configuration for the DUT.
-
-
 
 update_XCONF_firmware_config() {
 
@@ -285,12 +259,7 @@ update_XCONF_firmware_config() {
 
 }
 
-
-
-
 #Function Definition for xconf_verify_rules_response — Step 1: curl XCONF server with DUT MAC and verify firmware update response
-
-
 
 xconf_verify_rules_response() {
     local step="$1"
@@ -323,12 +292,7 @@ xconf_verify_rules_response() {
     fi
 }
 
-
-
-
 #Function Definition for xconf_activate_system_plugin — Step 2: Activate org.rdk.System plugin via Controller.1.activate
-
-
 
 xconf_activate_system_plugin() {
     local step="$1"
@@ -349,12 +313,7 @@ xconf_activate_system_plugin() {
     fi
 }
 
-
-
-
 #Function Definition for xconf_trigger_updateFirmware — Step 3: Trigger XCONF firmware upgrade via org.rdk.System.1.updateFirmware
-
-
 
 xconf_trigger_updateFirmware() {
     local step="$1"
@@ -376,12 +335,7 @@ xconf_trigger_updateFirmware() {
     fi
 }
 
-
-
-
 #Function Definition for xconf_monitor_swupdate_log — Step 4: Monitor swupdate.log for firmware upgrade completion
-
-
 
 xconf_monitor_swupdate_log() {
     local step="$1"
@@ -411,12 +365,7 @@ xconf_monitor_swupdate_log() {
     return 1
 }
 
-
-
-
 #Function defnition for testcase TC_XCONF_MANUAL_01
-
-
 
 TC_XCONF_MANUAL_01() {
 
@@ -448,18 +397,19 @@ TC_XCONF_MANUAL_01() {
 
 }
 
-
-
-
 #Function Definition for TestCase : tc_XCONF_MANUAL_testsuite
-
-
 
 tc_XCONF_MANUAL_testsuite() {
 
   local TestcaseID="$2"
   local testcase_prefix="$1"
   test_step_status="PASS"
+
+  # Guard: only TC_XCONF_MANUAL_01 has a step implementation in this version
+  if [[ "$TestcaseID" != "TC_XCONF_MANUAL_01" ]]; then
+      printf "\n\n[ERROR] %s is not implemented in this version.\n\n\n" "$TestcaseID"
+      return 1
+  fi
 
   #Precondition Check code block here xconf_server_url is passed to preCon_XCONF function from device.conf
 
@@ -469,7 +419,6 @@ tc_XCONF_MANUAL_testsuite() {
   
   if [ "$preCon_XCONF_fun_exit" -eq 0 ]; then
     printf '\n\nPre-condition check success. Starting Testcase execution!\n\n\n'
-
 
     #Step 1 code block for TC_XCONF_MANUAL_01
 
@@ -507,25 +456,7 @@ tc_XCONF_MANUAL_testsuite() {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-
-
-
-
 
 while true; do
   printf "\n"
@@ -540,7 +471,6 @@ while true; do
   printf '06. Show TestCase Execution Results\n\n'
   printf '07. Exit [ XCONF Firmware Upgrade Automated Test ]\n\n'
   printf "\n=============================================================================================================================================================\n\n\n";
-
 
   # ----- Main Testcaes Execution Menu -----
 

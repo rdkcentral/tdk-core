@@ -1,10 +1,9 @@
 #!/bin/bash
-
 ##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2023 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,8 +17,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
-
-
 
 # set -x
 
@@ -36,143 +33,119 @@ paired_list_heading="PAIRED DEVICES DETAILS"
 
 connected_list_heading="CONNECTED DEVICES DETAILS"
 
-
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-
-
-
 
 #Function to check the Pre-Condition before test TC_EXTERNALAUDIO_MANUAL_01
 
-
-
 pre_Check_PairandConnect(){
 
-pre_bt_activate=$(curl -# --header "Content-Type: application/json" --request POST --data '{"jsonrpc": "2.0", "id": 2, "method":"Controller.1.activate", "params":{"callsign": "org.rdk.Bluetooth"}}' http://127.0.0.1:9998/jsonrpc)
-sleep 2
-JSON_RESPONSE_0_connect=$(curl -# --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.getConnectedDevices"}' http://127.0.0.1:9998/jsonrpc)
-sleep 1
-JSON_RESPONSE_0_pair=$(curl -# --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.getPairedDevices"}' http://127.0.0.1:9998/jsonrpc)
-SEARCH_PATTERN_0="\"name\":\"${EXT_BT_devices}\""
-
-pre_paired_Devices_list=$(echo "$JSON_RESPONSE_0_pair" | sed -n 's/.*"pairedDevices":\(\[.*\]\).*/\1/p')
-
-pre_found_device_id=$(echo "$JSON_RESPONSE_0_pair" | grep -o '"deviceID":"[0-9]*"' | cut -d: -f2 | tr -d '"')
-
-
-if echo "$JSON_RESPONSE_0_pair" | grep -Eq "$SEARCH_PATTERN_0" && echo "$JSON_RESPONSE_0_connect" | grep -Eq "$SEARCH_PATTERN_0"; then
-
-   local json_data=$(printf '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.setAudioStream", "params": {"deviceID": "%s", "audioStreamName": "PRIMARY"}}' "$pre_found_device_id")  
-   pre_audio_stream=$(curl -# --header "Content-Type: application/json" --request POST \
-   --data "$json_data" \
-   http://127.0.0.1:9998/jsonrpc)
+   pre_bt_activate=$(curl -# --header "Content-Type: application/json" --request POST --data '{"jsonrpc": "2.0", "id": 2, "method":"Controller.1.activate", "params":{"callsign": "org.rdk.Bluetooth"}}' http://127.0.0.1:9998/jsonrpc)
+   sleep 2
+   JSON_RESPONSE_0_connect=$(curl -# --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.getConnectedDevices"}' http://127.0.0.1:9998/jsonrpc)
    sleep 1
-   return 0
-else
-   if [ -z "$pre_found_device_id" ]; then 
-      return 1
-   else  
-      local json_data=$(printf '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.unpair", "params": {"deviceID": "%s"}}' "$pre_found_device_id")
-      local JSON_RESPONSE_pre=$(curl -# --header "Content-Type: application/json" \
-                              --request POST \
-                              --data "$json_data" \
-                              http://127.0.0.1:9998/jsonrpc)
-      return 1
-   fi   
-fi
+   JSON_RESPONSE_0_pair=$(curl -# --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.getPairedDevices"}' http://127.0.0.1:9998/jsonrpc)
+   SEARCH_PATTERN_0="\"name\":\"${EXT_BT_devices}\""
+
+   pre_paired_Devices_list=$(echo "$JSON_RESPONSE_0_pair" | sed -n 's/.*"pairedDevices":\(\[.*\]\).*/\1/p')
+
+   pre_found_device_id=$(echo "$JSON_RESPONSE_0_pair" | grep -o '"deviceID":"[0-9]*"' | cut -d: -f2 | tr -d '"')
+
+   if echo "$JSON_RESPONSE_0_pair" | grep -Eq "$SEARCH_PATTERN_0" && echo "$JSON_RESPONSE_0_connect" | grep -Eq "$SEARCH_PATTERN_0"; then
+
+      local json_data=$(printf '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.setAudioStream", "params": {"deviceID": "%s", "audioStreamName": "PRIMARY"}}' "$pre_found_device_id")  
+      pre_audio_stream=$(curl -# --header "Content-Type: application/json" --request POST \
+      --data "$json_data" \
+      http://127.0.0.1:9998/jsonrpc)
+      sleep 1
+      return 0
+   else
+      if [ -z "$pre_found_device_id" ]; then 
+         return 1
+      else  
+         local json_data=$(printf '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.unpair", "params": {"deviceID": "%s"}}' "$pre_found_device_id")
+         local JSON_RESPONSE_pre=$(curl -# --header "Content-Type: application/json" \
+                                 --request POST \
+                                 --data "$json_data" \
+                                 http://127.0.0.1:9998/jsonrpc)
+         return 1
+      fi   
+   fi
 
 }
-
-
 
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_01 STEP-4 performScan Operation
 
-
-
 perform_scan() {
 
-JSON_RESPONSE_4=$(curl -# --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.startScan", "params": {"timeout": "120", "profile": "DEFAULT"}}' http://127.0.0.1:9998/jsonrpc)
-sleep 3
+   JSON_RESPONSE_4=$(curl -# --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.startScan", "params": {"timeout": "120", "profile": "DEFAULT"}}' http://127.0.0.1:9998/jsonrpc)
+   sleep 3
 
-RESULT_VALUE_4=$(echo "$JSON_RESPONSE_4" | sed -n 's/.*"success":\s*\(true\|false\).*/\1/p')
+   RESULT_VALUE_4=$(echo "$JSON_RESPONSE_4" | sed -n 's/.*"success":\s*\(true\|false\).*/\1/p')
 
- if [[ "$RESULT_VALUE_4" == 'true' ]]; then 
-   return 0
- else
-   return 1
- fi
+   if [[ "$RESULT_VALUE_4" == 'true' ]]; then 
+      return 0
+   else
+      return 1
+   fi
 }
-
-
 
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_01 STEP-2 check_Bluetooth_status operation
 
-
-
 check_Bluetooth_status() {
 
-JSON_RESPONSE_2=$(curl -# --header "Content-Type: application/json" --request POST --data '{"jsonrpc": "2.0", "id": 2, "method": "Controller.1.status@org.rdk.Bluetooth"}' http://127.0.0.1:9998/jsonrpc)
-sleep 2
+   JSON_RESPONSE_2=$(curl -# --header "Content-Type: application/json" --request POST --data '{"jsonrpc": "2.0", "id": 2, "method": "Controller.1.status@org.rdk.Bluetooth"}' http://127.0.0.1:9998/jsonrpc)
+   sleep 2
 
- if echo "$JSON_RESPONSE_2" | grep -q '"state":"activated"'; then
-     return 0
- else
-     return 1
- fi    
+   if echo "$JSON_RESPONSE_2" | grep -q '"state":"activated"'; then
+      return 0
+   else
+      return 1
+   fi    
 }
-
-
 
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_01 STEP-5 perform_scan_and_get_target_devices Operation
 
-
-
 perform_scan_and_get_target_devices() {
 
-found_device_id=""
+   found_device_id=""
 
-JSON_RESPONSE_5=$(curl -# --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.getDiscoveredDevices"}' http://127.0.0.1:9998/jsonrpc)
-sleep 5
+   JSON_RESPONSE_5=$(curl -# --header "Content-Type: application/json" --request POST --data '{"jsonrpc":"2.0", "id":"3", "method":"org.rdk.Bluetooth.1.getDiscoveredDevices"}' http://127.0.0.1:9998/jsonrpc)
+   sleep 5
 
-while [ "$discovered_devices_scan" -lt "$max_scan_discovered_devices" ]; do
-   discovered_devices_scan=$((discovered_devices_scan + 1))
-   discovered_devices=$(echo "$JSON_RESPONSE_5" | sed -n 's/.*"discoveredDevices":\(\[.*\]\),"success":true}}.*/\1/p')
-   if [ -z "$discovered_devices" ]; then
-      printf "\n\ndiscoveredDevices is empty. Checking again in 5 seconds...\n\n"
-      sleep 5
+   while [ "$discovered_devices_scan" -lt "$max_scan_discovered_devices" ]; do
+      discovered_devices_scan=$((discovered_devices_scan + 1))
+      discovered_devices=$(echo "$JSON_RESPONSE_5" | sed -n 's/.*"discoveredDevices":\(\[.*\]\),"success":true}}.*/\1/p')
+      if [ -z "$discovered_devices" ]; then
+         printf "\n\ndiscoveredDevices is empty. Checking again in 5 seconds...\n\n"
+         sleep 5
+      else
+         sleep 1
+         printf "\n\nDiscoveredDevices list is not empty. Proceeding to pair External Bluetooth Speaker\n\n"
+         printf "..................................................................| DiscoveredDevices LIST |.................................................................\n\n"
+         printf "%s" "$discovered_devices"
+         printf "\n.............................................................................................................................................................\n\n"
+         break
+      fi
+   done
+
+   target_device_name="$EXT_BT_devices"
+   echo -e "\nChecking for "$EXT_BT_devices" in DiscoveredDevices LIST....\n\n"
+   local first_match_target_device=$(echo "$discovered_devices" | \
+      sed 's/},{/}\n{/g' | \
+      grep -E -m 1 "\"name\":\"$target_device_name\"" | \
+      sed -E 's/.*"deviceID":"([^"]+)".*"name":"([^"]+)".*/\1 \2/')
+   if [ -n "$first_match_target_device" ]; then
+      read -r found_device_id found_device_name <<< "$first_match_target_device"
+      echo -e "External Bluetooth Device $found_device_name found\n\n"
+      echo -e "External Bluetooth Device   :\t$found_device_name\nExternal Bluetooth DeviceID :\t$found_device_id\n\n"
+      return 0
    else
-      sleep 1
-      printf "\n\nDiscoveredDevices list is not empty. Proceeding to pair External Bluetooth Speaker\n\n"
-      printf "..................................................................| DiscoveredDevices LIST |.................................................................\n\n"
-      printf "%s" "$discovered_devices"
-      printf "\n.............................................................................................................................................................\n\n"
-      break
+      return 1
    fi
-done
-
-target_device_name="$EXT_BT_devices"
-echo -e "\nChecking for "$EXT_BT_devices" in DiscoveredDevices LIST....\n\n"
-local first_match_target_device=$(echo "$discovered_devices" | \
-   sed 's/},{/}\n{/g' | \
-   grep -E -m 1 "\"name\":\"$target_device_name\"" | \
-   sed -E 's/.*"deviceID":"([^"]+)".*"name":"([^"]+)".*/\1 \2/')
-if [ -n "$first_match_target_device" ]; then
-   read -r found_device_id found_device_name <<< "$first_match_target_device"
-   echo -e "External Bluetooth Device $found_device_name found\n\n"
-   echo -e "External Bluetooth Device   :\t$found_device_name\nExternal Bluetooth DeviceID :\t$found_device_id\n\n"
-   return 0
-else
-   return 1
-fi
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_testsuite STEP-6 pair_target_device Operation
-
-
 
 pair_target_device() {
 
@@ -193,11 +166,7 @@ pair_target_device() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_testsuite STEP-14 unpair_target_device Operation
-
-
 
 unpair_target_device() {
 
@@ -217,11 +186,7 @@ unpair_target_device() {
    fi                        
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_01 STEP-7 get_paired_target_device Operation
-
-
 
 get_paired_target_device() {
 
@@ -238,11 +203,7 @@ get_paired_target_device() {
    fi 
 }
 
-
-
 #Function Definition for Listing Paired device details of TC_EXTERNALAUDIO_MANUAL_01
-
-
 
 display_paired_connected_Devices() {
      
@@ -255,11 +216,7 @@ display_paired_connected_Devices() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_suite STEP-8 connect_paired_device Operation
-
-
 
 connect_paired_target_device() {
 
@@ -280,11 +237,7 @@ connect_paired_target_device() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_suite STEP-12 disconnect_paired_device Operation
-
-
 
 disconnect_paired_target_device() {
 
@@ -305,11 +258,7 @@ disconnect_paired_target_device() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_01 STEP-9 get_connected_target_device Operation
-
-
 
 get_connected_target_device() {
 
@@ -327,11 +276,7 @@ get_connected_target_device() {
    fi 
 }
 
-
-
 #Function Definition for get_DeviceVolume_and_Mute_Info operation used in TC_EXTERNALAUDIO_MANUAL_05
-
-
 
 get_DeviceVolume_and_Mute_Info() {
 
@@ -360,11 +305,7 @@ get_DeviceVolume_and_Mute_Info() {
 
 }
 
-
-
 #Function Definition for set_DeviceVolume_and_Mute_status operation used in TC_EXTERNALAUDIO_MANUAL_05 
-
-
 
 set_DeviceVolume_and_Mute_status() {
 
@@ -437,10 +378,7 @@ set_DeviceVolume_and_Mute_status() {
    
 }
 
-
-
 #Function Definition for getDeviceInfo operation used in TC_EXTERNALAUDIO_MANUAL_05 
-
 
 extract_getDeviceInfo() {
  
@@ -511,11 +449,7 @@ extract_getDeviceInfo() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_suite STEP_10 
-
-
 
 TC_EXTERNALAUDIO_MANUAL_01_STEP_10() {
 
@@ -544,11 +478,7 @@ TC_EXTERNALAUDIO_MANUAL_01_STEP_10() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_suite STEP_11 
-
-
 
 TC_EXTERNALAUDIO_MANUAL_01_STEP_11() {
 
@@ -575,11 +505,7 @@ TC_EXTERNALAUDIO_MANUAL_01_STEP_11() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_suite STEP_12 
-
-
 
 TC_EXTERNALAUDIO_MANUAL_01_STEP_12() {
 
@@ -607,11 +533,7 @@ TC_EXTERNALAUDIO_MANUAL_01_STEP_12() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_suite STEP_13
-
-
 
 TC_EXTERNALAUDIO_MANUAL_01_STEP_13() {
 
@@ -639,11 +561,7 @@ TC_EXTERNALAUDIO_MANUAL_01_STEP_13() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_suite STEP_14
-
-
 
 TC_EXTERNALAUDIO_MANUAL_01_STEP_14() {
 
@@ -671,11 +589,7 @@ TC_EXTERNALAUDIO_MANUAL_01_STEP_14() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_suite STEP_15
-
-
 
 TC_EXTERNALAUDIO_MANUAL_01_STEP_15() {
 
@@ -703,11 +617,7 @@ TC_EXTERNALAUDIO_MANUAL_01_STEP_15() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_04  STEP_12 
-
-
 
 TC_EXTERNALAUDIO_MANUAL_04_STEP_12() {
 
@@ -742,11 +652,7 @@ TC_EXTERNALAUDIO_MANUAL_04_STEP_12() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_04  STEP_13 
-
-
 
 TC_EXTERNALAUDIO_MANUAL_04_STEP_13() {
 
@@ -787,11 +693,7 @@ TC_EXTERNALAUDIO_MANUAL_04_STEP_13() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_05  STEP_12 
-
-
 
 TC_EXTERNALAUDIO_MANUAL_05_STEP_12() {
 
@@ -844,11 +746,7 @@ TC_EXTERNALAUDIO_MANUAL_05_STEP_12() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_05  STEP_13 
-
-
 
 TC_EXTERNALAUDIO_MANUAL_05_STEP_13() {
 
@@ -873,11 +771,7 @@ TC_EXTERNALAUDIO_MANUAL_05_STEP_13() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_05  STEP_14 
-
-
 
 TC_EXTERNALAUDIO_MANUAL_05_STEP_14() {
 
@@ -930,11 +824,7 @@ TC_EXTERNALAUDIO_MANUAL_05_STEP_14() {
 
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_06  STEP_12 
-
-
 
 TC_EXTERNALAUDIO_MANUAL_06_STEP_12() {
 
@@ -976,11 +866,7 @@ TC_EXTERNALAUDIO_MANUAL_06_STEP_12() {
    
 }
 
-
-
 #Function Definition for TC_EXTERNALAUDIO_MANUAL_07 STEPS
-
-
 
 TC_EXTERNALAUDIO_MANUAL_07_STEPS() {
 
@@ -1026,11 +912,7 @@ TC_EXTERNALAUDIO_MANUAL_07_STEPS() {
    
 }
 
-
-
 #Function definition for Post-conditions TC_EXTERNALAUDIO_MANUAL
-
-
 
 postCondition_Execution_BT_audio() {
 
@@ -1073,7 +955,6 @@ postCondition_Execution_BT_audio() {
       fi   
    fi    
 
-
    if [[ "$test_case_id" == "TC_EXTERNALAUDIO_MANUAL_05" ]]; then
       test_step_status="PASS"
       local choice_postCon="set_mute_status"
@@ -1090,7 +971,6 @@ postCondition_Execution_BT_audio() {
       fi
       sleep 2
    fi   
-
 
    if [[ "$test_case_id" == "TC_EXTERNALAUDIO_MANUAL_02" || "$test_case_id" == "TC_EXTERNALAUDIO_MANUAL_03" || "$test_case_id" == "TC_EXTERNALAUDIO_MANUAL_04" || "$test_case_id" == "TC_EXTERNALAUDIO_MANUAL_05" || "$test_case_id" == "TC_EXTERNALAUDIO_MANUAL_06" ]]; then      
       sleep 2
@@ -1116,11 +996,7 @@ postCondition_Execution_BT_audio() {
 
 }
 
-
-
 #Function Definition for TestCase : TC_EXTERNALAUDIO_MANUAL_testsuite
-
-
 
 tc_EXTERNALAUDIO_MANUAL_testsuite() {
 
@@ -1604,9 +1480,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
 
       dynamic_test_result_update "$current_step_num" "$TestcaseID" "${testcase_prefix}"
 
-
 #Postcondition code block
-
 
       printf '\nExecuting Post-condition Steps for Testcase : %s\n\n\n' "$TestcaseID"
       sleep 3
@@ -1632,7 +1506,6 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
 
          RESULT_VALUE_1=$(echo "$JSON_RESPONSE_1" | sed -n 's/.*"result":\([^,}]*\).*/\1/p')
          sleep 2
-
 
          if [[ "$RESULT_VALUE_1" == "null" ]]; then
             echo " "
@@ -1669,9 +1542,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
             echo -e "Step 2 status\t:  PASS\n\n\n" 
             update_test_status "${testcase_prefix}2" "PASSED"
 
-
    #Step 3 code block
-
 
             if [[ "$test_step_status" != "FAIL" ]]; then
                printf "\n_________________________________________________________________________________________________________________________________________________________\n"
@@ -1702,7 +1573,6 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                echo -e "\nSkipping Step 3, as the previous step failed\n\n"
                update_test_status "${testcase_prefix}3" "NT"
             fi   
-
 
    #Step 4 code block
 
@@ -1792,7 +1662,6 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                update_test_status "${testcase_prefix}5" "NT"
             fi      
 
-
    #Step 6 code block
          
 
@@ -1824,9 +1693,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                update_test_status "${testcase_prefix}6" "NT"
             fi
 
-
    #Step 7 code block
-
 
             if [[ "$test_step_status" != "FAIL" ]]; then
                printf "\n_________________________________________________________________________________________________________________________________________________________\n"
@@ -1890,7 +1757,6 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                update_test_status "${testcase_prefix}7" "NT"
             fi  
 
-
    #Step 8 code block
 
             
@@ -1922,7 +1788,6 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                echo -e "\nSkipping Step 8, as the previous step failed\n\n"
                update_test_status "${testcase_prefix}8" "NT"
             fi
-
 
    #Step 9 code block
 
@@ -2014,7 +1879,6 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   update_test_status "${testcase_prefix}10" "NT"
                fi 
 
-
    # Step 11 code block
 
             
@@ -2040,9 +1904,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                dynamic_current_step_finder "$testcase_prefix" "TC_EXTERNALAUDIO_MANUAL"
             fi
 
-
    # Step 12 code block
-
 
             if [[ "$TestcaseID" == "TC_EXTERNALAUDIO_MANUAL_03" ]]; then
                if [[ "$test_step_status" != "FAIL" ]]; then
@@ -2063,7 +1925,6 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   echo -e "\nSkipping Step 12, as the previous step failed\n\n"
                   update_test_status "${testcase_prefix}12" "NT"
                fi
-
 
    # Step 13 code block           
          
@@ -2088,9 +1949,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   update_test_status "${testcase_prefix}13" "NT"
                fi
 
-
    # Step 14 code block   
-
 
                if [[ "$test_step_status" != "FAIL" ]]; then
                   declare "${testcase_prefix}_num_14=14"
@@ -2111,9 +1970,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   update_test_status "${testcase_prefix}14" "NT"
                fi 
 
-
    # Step 15 code block 
-
 
                if [[ "$test_step_status" != "FAIL" ]]; then
                   declare "${testcase_prefix}_num_15=15"
@@ -2136,7 +1993,6 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                fi           
                dynamic_current_step_finder "$testcase_prefix" "TC_EXTERNALAUDIO_MANUAL"
             fi
-
 
    # Step 12 code block for TC_EXTERNALAUDIO_MANUAL_04
             
@@ -2162,9 +2018,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   update_test_status "${testcase_prefix}12" "NT"
                fi
 
-
    # Step 13 code block for TC_EXTERNALAUDIO_MANUAL_04 
-
 
                if [[ "$test_step_status" != "FAIL" ]]; then
                   declare "${testcase_prefix}_num_13=13"
@@ -2188,9 +2042,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                dynamic_current_step_finder "$testcase_prefix" "TC_EXTERNALAUDIO_MANUAL"         
             fi                        
 
-
    # Step 12 code block for TC_EXTERNALAUDIO_MANUAL_05
-
 
             if [[ "$TestcaseID" == "TC_EXTERNALAUDIO_MANUAL_05" ]]; then
                if [[ "$test_step_status" != "FAIL" ]]; then
@@ -2213,9 +2065,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   update_test_status "${testcase_prefix}12" "NT"
                fi 
 
-
    # Step 13 code block for TC_EXTERNALAUDIO_MANUAL_05           
-
 
                if [[ "$test_step_status" != "FAIL" ]]; then
                   declare "${testcase_prefix}_num_13=13"
@@ -2237,9 +2087,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   update_test_status "${testcase_prefix}13" "NT"
                fi
 
-
    # Step 14 code block for TC_EXTERNALAUDIO_MANUAL_05   
-
 
                if [[ "$test_step_status" != "FAIL" ]]; then
                   declare "${testcase_prefix}_num_14=14"
@@ -2261,9 +2109,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   update_test_status "${testcase_prefix}14" "NT"
                fi        
 
-
    # Step 15 code block for TC_EXTERNALAUDIO_MANUAL_05
-
 
                if [[ "$test_step_status" != "FAIL" ]]; then
                   declare "${testcase_prefix}_num_15=15"
@@ -2287,9 +2133,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                dynamic_current_step_finder "$testcase_prefix" "TC_EXTERNALAUDIO_MANUAL"
             fi  
 
-
    # Step 12 code block for TC_EXTERNALAUDIO_MANUAL_06
-
 
             if [[ "$TestcaseID" == "TC_EXTERNALAUDIO_MANUAL_06" ]]; then
                volume_type_param="increase"
@@ -2313,9 +2157,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   update_test_status "${testcase_prefix}12" "NT"
                fi
 
-
    # Step 13 code block for TC_EXTERNALAUDIO_MANUAL_06
-
 
                if [[ "$test_step_status" != "FAIL" ]]; then
                   volume_type_param="decrease"
@@ -2343,7 +2185,6 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
 
    # Step 10 code block for TC_EXTERNALAUDIO_MANUAL_07
 
-
             if [[ "$TestcaseID" == "TC_EXTERNALAUDIO_MANUAL_07" ]]; then
                if [[ "$test_step_status" != "FAIL" ]]; then
                   step_choice_1=1
@@ -2352,7 +2193,6 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   declare "${testcase_prefix}_num_10=10"
                   dynamic_var_name_17="${testcase_prefix}_num_10"
                   TC_EXTERNALAUDIO_MANUAL_07_STEPS "${!dynamic_var_name_17}" "$found_device_id" "$step_choice_1" "$device_info_type_1" "$device_info_type_ID_1" 
-
 
                   fun_exit_status45=$?   
 
@@ -2369,9 +2209,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   update_test_status "${testcase_prefix}10" "NT"
                fi
 
-
    # Step 11 code block for TC_EXTERNALAUDIO_MANUAL_07
-
 
                if [[ "$test_step_status" != "FAIL" ]]; then
                   step_choice_2=2
@@ -2396,9 +2234,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   update_test_status "${testcase_prefix}11" "NT"
                fi
 
-
    # Step 12 code block for TC_EXTERNALAUDIO_MANUAL_07
-
 
                if [[ "$test_step_status" != "FAIL" ]]; then
                   step_choice_3=3
@@ -2423,9 +2259,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   update_test_status "${testcase_prefix}12" "NT"
                fi
 
-
    # Step 13 code block for TC_EXTERNALAUDIO_MANUAL_07
-
 
                if [[ "$test_step_status" != "FAIL" ]]; then
                   step_choice_4=4
@@ -2450,9 +2284,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                   update_test_status "${testcase_prefix}13" "NT"
                fi
 
-
    # Step 14 code block for TC_EXTERNALAUDIO_MANUAL_07
-
 
                if [[ "$test_step_status" != "FAIL" ]]; then
                   step_choice_5=5
@@ -2478,7 +2310,6 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
                fi
                dynamic_current_step_finder "$testcase_prefix" "TC_EXTERNALAUDIO_MANUAL"
             fi
-
 
          else
             echo " "
@@ -2517,14 +2348,7 @@ tc_EXTERNALAUDIO_MANUAL_testsuite() {
 
 }
 
-
-
-
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-
-
-
 
 while true; do
 
@@ -2542,7 +2366,6 @@ while true; do
    printf '8. Show TestCase Execution Results\n\n'
    printf '9. Exit\n\n'
    printf "\n=============================================================================================================================================================\n\n\n";
-
 
    # ----- Main Testcaes Execution Menu -----
 
@@ -2590,11 +2413,4 @@ while true; do
          ;;      
    esac
 done
-
-
-
-
-
-
-
 

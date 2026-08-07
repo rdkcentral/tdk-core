@@ -1,10 +1,9 @@
 #!/bin/bash
-
 ##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2023 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,18 +18,12 @@
 # limitations under the License.
 ##########################################################################
 
-
 source device.conf
 source generic_functions.sh
 
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-
-
-
 #Function Definition to check the Pre-Condition before executing TC_HDCPCOMPLIANCE_MANUAL TestSuite
-
-
 
 preCon_HDCPCOMPLIANCE() {
 
@@ -53,12 +46,7 @@ preCon_HDCPCOMPLIANCE() {
 
 }
 
-
-
-
 #Function defnition for expected_HDCP_logsCheck for getting expected logs/prints from log files
-
-
 
 expected_HDCP_logsCheck() {
 
@@ -96,12 +84,7 @@ expected_HDCP_logsCheck() {
 
 }
 
-
-
-
 #Function defnition for getHDCPStatus_key_values for getting values of each keys in jsonRpc
-
-
 
 getHDCPStatus_key_values() {
   
@@ -134,11 +117,7 @@ getHDCPStatus_key_values() {
 
 }
 
-
-
 #Function defnition for sub function  to handle HDMI Hotplug Operation
-
-
 
 hdmi_HotPlug_subFunc() {
 
@@ -162,11 +141,7 @@ hdmi_HotPlug_subFunc() {
 
 }
 
-
-
 #Function defnition for sub function  to handle getHDCPStatus Operation
-
-
 
 getHDCPStatus_subFunc() {
      
@@ -186,11 +161,7 @@ getHDCPStatus_subFunc() {
 
 }
 
-
-
 #Function defnition for sub function to extract required key values from getHDCPStatus
-
-
 
 getHDCPStatus_keyval_subfun() {
 
@@ -213,11 +184,7 @@ getHDCPStatus_keyval_subfun() {
 
 }
 
-
-
 #Function defnition to extract required key values from getSettopHDCPSupport
-
-
 
 getSettopHDCPSupport_extract() {
 
@@ -239,11 +206,7 @@ getSettopHDCPSupport_extract() {
 
 }
 
-
-
 #Function defnition for sub function to extract required key values from getSettopHDCPSupport
-
-
 
 getSettopHDCPSupport_keyval() {
     
@@ -265,11 +228,7 @@ getSettopHDCPSupport_keyval() {
 
 }
 
-
-
 #Function defnition for testcase TC_HDCPCOMPLIANCE_MANUAL_01 
-
-
 
 TC_HDCPCOMPLIANCE_MANUAL_01() {
 
@@ -328,11 +287,7 @@ TC_HDCPCOMPLIANCE_MANUAL_01() {
 
 }
 
-
-
 #Function defnition for testcase TC_HDCPCOMPLIANCE_MANUAL_02 
-
-
 
 TC_HDCPCOMPLIANCE_MANUAL_02() {
 
@@ -378,11 +333,7 @@ TC_HDCPCOMPLIANCE_MANUAL_02() {
 
 }
 
-
-
 #Function defnition for testcase TC_HDCPCOMPLIANCE_MANUAL_03 
-
-
 
 TC_HDCPCOMPLIANCE_MANUAL_03() {
 
@@ -437,11 +388,7 @@ TC_HDCPCOMPLIANCE_MANUAL_03() {
     fi    
 }
 
-
-
 #Function defnition for testcase TC_HDCPCOMPLIANCE_MANUAL_04 
-
-
 
 TC_HDCPCOMPLIANCE_MANUAL_04() {
 
@@ -477,11 +424,7 @@ TC_HDCPCOMPLIANCE_MANUAL_04() {
     fi
 }
 
-
-
 #Function defnition for testcase TC_HDCPCOMPLIANCE_MANUAL_05 
-
-
 
 TC_HDCPCOMPLIANCE_MANUAL_05() {
 
@@ -517,11 +460,7 @@ TC_HDCPCOMPLIANCE_MANUAL_05() {
     fi
 }
 
-
-
 #Function defnition for testcase TC_HDCPCOMPLIANCE_MANUAL_06 
-
-
 
 TC_HDCPCOMPLIANCE_MANUAL_06() {
 
@@ -564,11 +503,7 @@ TC_HDCPCOMPLIANCE_MANUAL_06() {
     fi
 }
 
-
-
 #Function defnition for testcase TC_HDCPCOMPLIANCE_MANUAL_07 
-
-
 
 TC_HDCPCOMPLIANCE_MANUAL_07() {
 
@@ -619,12 +554,7 @@ TC_HDCPCOMPLIANCE_MANUAL_07() {
 
 }
 
-
-
-
-#Function Definition for TestCase : tc_RDKSHELL_MANUAL_testsuite
-
-
+#Function Definition for TestCase : tc_HDCPCOMPLIANCE_MANUAL_testsuite
 
 tc_HDCPCOMPLIANCE_MANUAL_testsuite() {
 
@@ -649,21 +579,17 @@ tc_HDCPCOMPLIANCE_MANUAL_testsuite() {
 
 #Step 1 code block for TC_HDCPCOMPLIANCE_MANUAL_01 
 
-
     if [[ "$TestcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_01" ]]; then
         execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_01"
         sleep 1
 
-
 #Step 2 code block for TC_HDCPCOMPLIANCE_MANUAL_01         
-
 
         execute_stepStatusUpdate_steps "2" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_01"
         sleep 1
       
 
 #Step 3 code block for TC_HDCPCOMPLIANCE_MANUAL_01         
-
 
         execute_stepStatusUpdate_steps "3" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_01"
         sleep 1
@@ -673,21 +599,17 @@ tc_HDCPCOMPLIANCE_MANUAL_testsuite() {
 
 #Step 1 code block for TC_HDCPCOMPLIANCE_MANUAL_02 
 
-
     if [[ "$TestcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_02" ]]; then
         execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_02"
         sleep 1
 
-
 #Step 2 code block for TC_HDCPCOMPLIANCE_MANUAL_02         
-
 
         execute_stepStatusUpdate_steps "2" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_02"
         sleep 1
       
 
 #Step 3 code block for TC_HDCPCOMPLIANCE_MANUAL_02        
-
 
         execute_stepStatusUpdate_steps "3" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_02"
         sleep 1
@@ -697,14 +619,11 @@ tc_HDCPCOMPLIANCE_MANUAL_testsuite() {
 
 #Step 1 code block for TC_HDCPCOMPLIANCE_MANUAL_03
 
-
     if [[ "$TestcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_03" ]]; then
         execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_03"
         sleep 1
 
-
 #Step 2 code block for TC_HDCPCOMPLIANCE_MANUAL_03         
-
 
         execute_stepStatusUpdate_steps "2" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_03"
         sleep 1
@@ -712,13 +631,11 @@ tc_HDCPCOMPLIANCE_MANUAL_testsuite() {
 
 #Step 3 code block for TC_HDCPCOMPLIANCE_MANUAL_03        
 
-
         execute_stepStatusUpdate_steps "3" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_03"
         sleep 1
            
 
 #Step 4 code block for TC_HDCPCOMPLIANCE_MANUAL_03        
-
 
         execute_stepStatusUpdate_steps "4" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_03"
         sleep 1  
@@ -728,21 +645,17 @@ tc_HDCPCOMPLIANCE_MANUAL_testsuite() {
 
 #Step 1 code block for TC_HDCPCOMPLIANCE_MANUAL_04 
 
-
     if [[ "$TestcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_04" ]]; then
         execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_04"
         sleep 1
 
-
 #Step 2 code block for TC_HDCPCOMPLIANCE_MANUAL_04         
-
 
         execute_stepStatusUpdate_steps "2" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_04"
         sleep 1
       
 
 #Step 3 code block for TC_HDCPCOMPLIANCE_MANUAL_04         
-
 
         execute_stepStatusUpdate_steps "3" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_04"
         sleep 1
@@ -752,21 +665,17 @@ tc_HDCPCOMPLIANCE_MANUAL_testsuite() {
 
 #Step 1 code block for TC_HDCPCOMPLIANCE_MANUAL_05 
 
-
     if [[ "$TestcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_05" ]]; then
         execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_05"
         sleep 1
 
-
 #Step 2 code block for TC_HDCPCOMPLIANCE_MANUAL_05         
-
 
         execute_stepStatusUpdate_steps "2" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_05"
         sleep 1
       
 
 #Step 3 code block for TC_HDCPCOMPLIANCE_MANUAL_05         
-
 
         execute_stepStatusUpdate_steps "3" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_05"
         sleep 1
@@ -776,21 +685,17 @@ tc_HDCPCOMPLIANCE_MANUAL_testsuite() {
 
 #Step 1 code block for TC_HDCPCOMPLIANCE_MANUAL_06 
 
-
     if [[ "$TestcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_06" ]]; then
         execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_06"
         sleep 1
 
-
 #Step 2 code block for TC_HDCPCOMPLIANCE_MANUAL_06         
-
 
         execute_stepStatusUpdate_steps "2" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_06"
         sleep 1
       
 
 #Step 3 code block for TC_HDCPCOMPLIANCE_MANUAL_06         
-
 
         execute_stepStatusUpdate_steps "3" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_06"
         sleep 1
@@ -800,14 +705,11 @@ tc_HDCPCOMPLIANCE_MANUAL_testsuite() {
 
 #Step 1 code block for TC_HDCPCOMPLIANCE_MANUAL_07 
 
-
     if [[ "$TestcaseID" == "TC_HDCPCOMPLIANCE_MANUAL_07" ]]; then
         execute_stepStatusUpdate_steps "1" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_07"
         sleep 1
 
-
 #Step 2 code block for TC_HDCPCOMPLIANCE_MANUAL_07         
-
 
         execute_stepStatusUpdate_steps "2" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_07"
         sleep 1
@@ -815,13 +717,11 @@ tc_HDCPCOMPLIANCE_MANUAL_testsuite() {
 
 #Step 3 code block for TC_HDCPCOMPLIANCE_MANUAL_07         
 
-
         execute_stepStatusUpdate_steps "3" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_07"
         sleep 1
              
 
 #Step 4 code block for TC_HDCPCOMPLIANCE_MANUAL_07         
-
 
         execute_stepStatusUpdate_steps "4" "$testcase_prefix" "TC_HDCPCOMPLIANCE_MANUAL_07"
         sleep 1
@@ -853,10 +753,7 @@ tc_HDCPCOMPLIANCE_MANUAL_testsuite() {
 
 }
 
-
-
 #Function Definition for postCondition checking of HDCP COMPLIANCE
-
 
 postCondition_Execution_HDCP() {
 
@@ -902,16 +799,7 @@ postCondition_Execution_HDCP() {
 
 }
 
-
-
-
-
-
 #______________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-
-
-
-
 
 while true; do
   printf "\n"
@@ -928,7 +816,6 @@ while true; do
   printf '08. Show TestCase Execution Results\n\n'
   printf '09. Exit [ HDCP COMPLIANCE Automated Test ]\n\n'
   printf "\n=============================================================================================================================================================\n\n\n";
-
 
   # ----- Main Testcaes Execution Menu -----
 
