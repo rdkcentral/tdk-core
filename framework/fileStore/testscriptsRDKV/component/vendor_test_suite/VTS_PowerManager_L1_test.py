@@ -132,7 +132,7 @@ if "SUCCESS" in result.upper():
             print("####################################################################################")
 
             binaryPath = "cd " + basePath + " ; ./" + binaryName 
-            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList, PowerManager_L1_SkipTestCaseList)
+            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList, PowerManager_L1_SkipTestCaseList, binaryConfig)
     
             executePostRequisites()
 
