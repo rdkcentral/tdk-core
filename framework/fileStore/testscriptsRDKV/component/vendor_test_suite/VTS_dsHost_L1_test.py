@@ -112,7 +112,7 @@ if "SUCCESS" in result.upper():
     #Set binary name
     binaryName = DeviceSettings_binaryName
     #Set TestCase Config
-    binaryConfig = Host_binaryConfig
+    binaryConfig = Host_SOURCE_binaryConfig if "SOURCE" in DEVICE_TYPE.upper() else Host_SINK_binaryConfig
     #Set basepath of test
     basePath = VTS_Binary_basePath + DeviceSettings_basePath
     #SkipTestCaseList
@@ -139,7 +139,7 @@ if "SUCCESS" in result.upper():
                 print("####################################################################################")
 
                 binaryPath = "cd " + basePath + " ; ./" + binaryName + " -p " + binaryConfig
-                executionSummary = runTest(binaryPath, module, testCaseID, testList, testCaseList, SkipTestCaseList)
+                executionSummary = runTest(binaryPath, module, testCaseID, testList, testCaseList, SkipTestCaseList, binaryConfig)
     
                 executePostRequisites()
    

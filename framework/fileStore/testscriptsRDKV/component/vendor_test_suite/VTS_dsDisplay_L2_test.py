@@ -112,11 +112,16 @@ if "SUCCESS" in result.upper():
     #Set binary name
     binaryName = DeviceSettings_binaryName
     #Set TestCase Config
-    binaryConfig = Display_binaryConfig
+    binaryConfig = Display_SOURCE_binaryConfig if "SOURCE" in DEVICE_TYPE.upper() else Display_SINK_binaryConfig
     #Set Custom List of TestCases
     testCaseList = Display_L2_List
     #Set basepath of test
     basePath = VTS_Binary_basePath + DeviceSettings_basePath
+    #SkipTestCaseList
+    SkipTestCaseList = Display_L2_SkipTestCaseList
+    boxtype = obj.getDeviceBoxType();
+    if ("RPI-Client" in boxtype):
+        SkipTestCaseList = Display_L2_SkipTestCaseList_RPI
 
     #Configuring plugin name
     words = module.split()
@@ -133,7 +138,7 @@ if "SUCCESS" in result.upper():
             print("####################################################################################")
 
             binaryPath = "cd " + basePath + " ; ./" + binaryName + " -p " + binaryConfig
-            executionSummary = runTest(binaryPath, module, testcaseID, testList, testCaseList)
+            executionSummary = runTest(binaryPath, module, testcaseID, testList, testCaseList, SkipTestCaseList, binaryConfig=binaryConfig)
     
             executePostRequisites()
 

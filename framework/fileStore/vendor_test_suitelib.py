@@ -26,9 +26,83 @@ import SSHUtility
 import configparser
 import json
 import sys
+import vts_failure_analyzer
+import urllib.request
+import socket
+
+# Cache for HPK RELEASE.md content keyed by HPK version tag.
+_hpk_release_cache = {}
+
+def _urlopen_github(url, timeout=10):
+    """urllib.request.urlopen for github.com / raw.githubusercontent.com.
+    Any credentials required for private repos are expected to be provided
+    via the user's ~/.netrc file.
+    """
+    return urllib.request.urlopen(urllib.request.Request(url), timeout=timeout)
+
+def _urlretrieve_github(url, dest_path):
+    """Download url to dest_path.
+    Any credentials required for private repos are expected to be provided
+    via the user's ~/.netrc file.
+    """
+    with urllib.request.urlopen(urllib.request.Request(url), timeout=30) as resp, open(dest_path, "wb") as f:
+        f.write(resp.read())
+
+def _resolve_hal_test_version_from_hpk(hpk_version, component):
+    """Fetch RELEASE.md from rdk-hpk-documentation at hpk_version and extract
+    the HAL Testing version for *component* (e.g. 'Device Settings').
+    Mirrors the logic of get_hal_test_version() in vts_compile.sh.
+    Returns the version string, or None on any failure.
+    """
+    global _hpk_release_cache
+    if hpk_version not in _hpk_release_cache:
+        url = "https://raw.githubusercontent.com/rdkcentral/rdk-hpk-documentation/{}/RELEASE.md".format(hpk_version)
+        try:
+            with _urlopen_github(url, timeout=10) as resp:
+                _hpk_release_cache[hpk_version] = resp.read().decode("utf-8", errors="replace")
+            print("[HPK] Fetched RELEASE.md for " + hpk_version)
+        except Exception as e:
+            print("WARNING: Could not fetch HPK RELEASE.md from " + url + " : " + str(e))
+            _hpk_release_cache[hpk_version] = ""
+    release_md = _hpk_release_cache[hpk_version]
+    if not release_md:
+        return None
+    # Find the row containing [<component>] (case-insensitive)
+    row = None
+    for line in release_md.splitlines():
+        if "[" + component + "]" in line or "[" + component.lower() + "]" in line.lower():
+            row = line
+            break
+    if not row:
+        return None
+    # Column 7 in a pipe-delimited Markdown table (1-indexed, leading | counts as field 1).
+    cols = row.split("|")
+    if len(cols) < 7:
+        return None
+    cell = cols[6]  # 0-indexed: field 7 = index 6
+    # Extract first backtick-quoted token
+    m = re.search(r"`([^`]+)`", cell)
+    if m and m.group(1).strip() and m.group(1).strip() != "No change":
+        return m.group(1).strip()
+    # Fallback: extract version from tree/blob URL on the same row
+    m2 = re.search(r"rdk[a-z-]*-halif-test-[^/]+/(?:tree|blob)/([^)\s]+)", row)
+    if m2:
+        return m2.group(1).strip()
+    return None
 
 #Global variables
 failed_testCases = []
+configYAMLData = ""
+total_yaml_fetch_time = 0.0
+total_analysis_time = 0.0
+sshPort = 22
+sshParams = []
+deviceIP = ""
+
+# Directory containing HAL test source files (used by failure analyzer).
+# by default points at the VTS_Source tree produced by vts_compile.sh.
+VTS_SOURCE_DIR = ""
+
 #----------------------------------------------------------------------------------------------------------------
 # "longWait" can be set to True for certain Test Suites where API has high response time
 #  This high response time causes test to run for a longer duration than expected time
@@ -250,10 +324,9 @@ def startSession(hostname, username, password, port):
     try:
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        print("Calling client.connect with ssh port", port)
         client.connect(hostname, username=username, password=password, port=port)
         session = client.invoke_shell()
-        print("\nCreated ssh session")
+        print("Created ssh session")
         return client,session
     except Exception as e:
         print("Login to device failed")
@@ -273,11 +346,40 @@ def startSession(hostname, username, password, port):
 #-------------------------------------------------------------------
 def stopSession(client,session):
     if session == None:
-        print("\nNo session to close");
+        print("No session to close");
     else:
-        print("\nClosing session")
+        print("Closing session")
         session.close()
         client.close()
+
+#-------------------------------------------------------------------
+# Function:    executeSingleCommand
+# Description: Opens an SSH session, executes a single command on
+#              the DUT, captures the output, and closes the session.
+# Parameters:
+#              - hostname: IP of the device.
+#              - username: SSH username.
+#              - password: SSH password.
+#              - command: The command to execute on the DUT.
+#              - port: SSH port (default: 22).
+# Return:
+#              - str: Output of the executed command, or None on failure.
+#-------------------------------------------------------------------
+def executeSingleCommand(hostname, username, password, command, port=22):
+    try:
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect(hostname, username=username, password=password, port=int(port))
+        print("Created ssh session")
+        _stdin, stdout, _stderr = client.exec_command(command, timeout=15)
+        output = stdout.read().decode('utf-8', errors='ignore')
+        print("Executed command")
+        client.close()
+        print("Closing session")
+        return output
+    except Exception as e:
+        print("Exception occurred while executing command : ", e)
+        return None
 
 #-------------------------------------------------------------------
 # Function:    executeCommands
@@ -291,13 +393,14 @@ def stopSession(client,session):
 #              - str: The output of the last executed command.
 #-------------------------------------------------------------------
 def executeCommands(session, commands, runTime=0):
-    maxCommandRunTime = 10
+    try:
+        from VTSTestVariables import DEFAULT_TESTCASE_TIMEOUT as defaultRunTime
+    except Exception:
+        defaultRunTime = 30
+    maxCommandRunTime = defaultRunTime
     global longWait
     if longWait:
-        defaultRunTime=30
-    else:
-        defaultRunTime=10
-    maxCommandRunTime = defaultRunTime
+       maxCommandRunTime = 50
     if runTime:
        maxCommandRunTime = runTime
        print("Running time changed to ",runTime)
@@ -306,7 +409,6 @@ def executeCommands(session, commands, runTime=0):
         print("\nERROR: No SSH session to execute commands found")
         return "No SSH session"
     commandIterator = 1
-    last_data_time = time.time()
     for command in commands:
         if "hal" in command:
             print("Executing command : ",command)
@@ -315,6 +417,7 @@ def executeCommands(session, commands, runTime=0):
             session.send(command + "\n")
             time.sleep(1)  # Initial wait for the command to start executing
             output = ""
+            last_data_time = time.time()
             while time.time() - commandStartTime < maxCommandRunTime:
                 # Wait for command to finish by checking if the channel is closed
                 if longWait:
@@ -329,16 +432,21 @@ def executeCommands(session, commands, runTime=0):
                         time.sleep(0.1)
                 else:
                     if session.recv_ready():
-                        output += session.recv(1024).decode('utf-8',errors='ignore')
+                        data = session.recv(1024).decode('utf-8',errors='ignore')
+                        output += data
+                        last_data_time = time.time()
+                    else:
+                        # For intermediate commands, break early after 3s idle
+                        # For the last command, wait the full maxCommandRunTime
+                        if commandIterator < numberOfCommands and time.time() - last_data_time > 3:
+                            break
+                        time.sleep(0.1)
                 if "Enter command:" in output:  # Check if command has completed
                     break
                 if session.exit_status_ready() and maxCommandRunTime == defaultRunTime:
                     break
                 if ("Segmentation fault" in output) or ("symbol lookup error" in output) or ("core dumped" in output):
-                    break;
-            if maxCommandRunTime != defaultRunTime:
-                maxCommandRunTime = defaultRunTime
-                print("Running time reverted to ",defaultRunTime)
+                    break
             if commandIterator == numberOfCommands:
                 return output
             commandIterator += 1
@@ -432,19 +540,25 @@ def startBinary(session, binaryPath, module):
 #              - testList: Dictionary of available test cases.
 #              - TestCaseList: (Optional) List of specific test cases to run.
 #              - SkipTestCaseList: (Optional) Dictionary of test cases to be skipped.
+#              - binaryConfig: (Optional) Config file passed to the binary with -p flag.
 # Return:
 #              - dict: Execution summary of test cases.
 #--------------------------------------------------------------------------------------
-def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestCaseList={}):
+def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestCaseList={}, binaryConfig=""):
     global session
+    global client
     global failed_testCases
     global skipped_testCases
+    global sshPort
+    global sshParams
+    global deviceIP
     testIterator=1
     executionSummary={}
     errorObserved = False
     TestToBeExecuted = []
     skipped_testCases=[]
     runTime=0
+    binaryPathWithConfig = binaryPath + " -p " + binaryConfig if binaryConfig else binaryPath
     if TestCaseList:
         for test in testList.keys():
             for testFromList in TestCaseList:
@@ -456,16 +570,25 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
         skipped = False
         skipped_reason = ""
         if errorObserved:
-            startBinary(session, binaryPath, module)
+            try:
+                sshParams = getDeviceConfigValues("SSHParams").split()
+                sshPort = getDeviceConfigValues("SSH_PORT")
+                print("Attempting to re-establish SSH session...")
+                client, session = startSession(deviceIP, sshParams[0].strip(), sshParams[1].strip(), sshPort)
+            except Exception as reconnect_e:
+                print("Failed to re-establish session:", reconnect_e)
+            if session:
+                startBinary(session, binaryPathWithConfig, module)
             errorObserved = False
+        testname = test
         print("\n#==============================================================================#")
-        print("TEST CASE NAME   : %s"%(test.split(".")[1].strip()))
-        print("TEST CASE ID  : %s-%s"%(testCaseID,test.split(".")[0].strip()))
+        print("TEST CASE NAME   : %s"%(testname.split(".")[1].strip()))
+        print("TEST CASE ID  : %s-%s"%(testCaseID,testname.split(".")[0].strip()))
         print("#==============================================================================#\n")
         if SkipTestCaseList:
             for skipTestCase in list(SkipTestCaseList.keys()):
                 if skipTestCase in test:
-                   print("SKIPPING TESTCASE: ",test)
+                   print("SKIPPING TESTCASE: ",testname)
                    print("REASON : ", SkipTestCaseList[test.split(".")[1].strip()])
                    skipped_reason = SkipTestCaseList[test.split(".")[1].strip()]
                    output = "TESTCASE SKIPPED"
@@ -477,16 +600,34 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
             testIterator=test.split('.')[0].strip()
             print("Test Iterator = ",testIterator)
             commands = [ "S", str(testIterator) ];
-            if "PLAT_DS_SetDeepSleep_L1" in test or "L2_SetDeepSleepAndVerifyWakeUp10s" in test:
-                print("Test Framework doesn't handle deepsleep scenario")
-                print("Marking test as FAILURE , please execute manually and update result")
-                output = "TESTCASE FAILURE"
-            else:
-                if "test_l2_rmfAudioCapture_primary_d" in test:
-                    runTime=100
-                if "dsGetDisplay_L1" in test or "dsGetDisplayAspectRatio_L1" in test or "dsGetDisplayAspectRatio_L1_" in test:
-                    runTime=30
-                output = executeCommands(session,commands,runTime);
+            if "l2_rmf_primary_data_check" in test or "PLAT_SetDeepSleep_pos" in test or "SetDsAndVerifyWakeup" in test:
+                runTime=100
+            if "dsGetDisplay_L1" in test or "dsGetDisplayAspectRatio_L1" in test or "dsGetDisplayAspectRatio_L1_" in test:
+                runTime=30
+            output = executeCommands(session,commands,runTime);
+            if output is None:
+                print("ERROR: Command execution failed (socket may be closed). Attempting to re-establish SSH session...")
+                stopSession(client, session)
+                time.sleep(3)
+                try:
+                    client, session = startSession(deviceIP, sshParams[0].strip(), sshParams[1].strip(), sshPort)
+                except Exception as reconnect_e:
+                    print("Failed to re-establish session:", reconnect_e)
+                    session = None
+                if session:
+                    startBinary(session, binaryPathWithConfig, module)
+                    print("Re-running test case : ", test)
+                    output = executeCommands(session, commands, runTime)
+                    if output is None:
+                        print("ERROR: Command execution failed again after re-establishing session. Marking test as FAILURE.")
+                        output = "TESTCASE FAILURE"
+                        errorObserved = True
+                    else:
+                        print("Re-run successful")
+                else:
+                    print("ERROR: Failed to re-establish SSH session. Marking test as FAILURE.")
+                    output = "TESTCASE FAILURE"
+                    errorObserved = True
         def escape_ansi(line):
             if isinstance(line, bytes):
                 try:
@@ -512,10 +653,22 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
                 try:
                     testResult = parseAsserts(output)
                     if testResult == {}:
-                       raise KeyError
-                    print("\n%s -> %s"%(test,testResult))
+                        print("Unable to parse result — restarting SSH session...")
+                        stopSession(client, session)
+                        time.sleep(3)
+                        try:
+                            client, session = startSession(deviceIP, sshParams[0].strip(), sshParams[1].strip(), sshPort)
+                            if session:
+                                startBinary(session, binaryPathWithConfig, module)
+                                print("SSH session restarted successfully")
+                        except Exception as reconnect_e:
+                            print("Failed to re-establish session:", reconnect_e)
+                            session = None
+                        setFailure = True
+                    else:
+                        print("\n%s -> %s"%(test,testResult))
                 except Exception as e:
-                    print ("ERROR : Unable to parse Result\nMarking test as Failure")
+                    print ("Device not accessible or unknown failure occurred")
                     setFailure = True
             if setFailure:
                 testResult["total"] = 1
@@ -528,11 +681,212 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
             executionSummary[test] = testResultValues;
             print("#" * 80)
             status="FAILURE"
+            global configYAMLData
+            global total_yaml_fetch_time
+            global total_analysis_time
+            try:
+                from VTSTestVariables import FAILURE_ANALYSIS
+                failure_analysis_enabled = str(FAILURE_ANALYSIS).strip().lower() == "yes"
+            except Exception:
+                failure_analysis_enabled = True
             if testResult["failed"] != 0:
-                print("FAILURE : Observed Failure in ",test)
+                print("FAILURE : Observed Failure in ",testname.split(".")[1].strip())
+                if not configYAMLData and binaryConfig and failure_analysis_enabled:
+                    try:
+                        configBasePath = binaryPath.split(';')[0].replace('cd', '').strip().rstrip('/') + "/"
+                        configFilePath = configBasePath + binaryConfig
+                        yaml_fetch_start = time.time()
+                        configYAMLData = executeSingleCommand(deviceIP, sshParams[0].strip(), sshParams[1].strip(), "cat " + configFilePath, sshPort) or ""
+                        elapsed_yaml = time.time() - yaml_fetch_start
+                        total_yaml_fetch_time += elapsed_yaml
+                        print("Config YAML fetch time : %.2f seconds" % elapsed_yaml)
+                    except Exception as e:
+                        print("WARNING: Unable to fetch config YAML for failure analysis:", e)
+                        configYAMLData = ""
+                if failure_analysis_enabled:
+                    try:
+                        ansi_re = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
+                        clean_output = ansi_re.sub('', output) if isinstance(output, str) else output
+
+                        # Detect segfault / core dump / symbol error early — no CUnit assertion will
+                        # be present in the log so the analyzer cannot run.
+                        _crash_cause = None
+                        if "Segmentation fault" in clean_output:
+                            _crash_cause = "Segmentation fault"
+                        elif "core dumped" in clean_output:
+                            _crash_cause = "Core dumped"
+                        elif "symbol lookup error" in clean_output:
+                            _crash_cause = "Symbol lookup error"
+                        if _crash_cause:
+                            remarks_line = "#==============================[REMARKS]=======================================#"
+                            print(remarks_line)
+                            if _crash_cause == "Symbol lookup error":
+                                # Extract the exact undefined symbol name from the error line.
+                                _sym_m = re.search(r'undefined symbol:\s*(\S+)', clean_output)
+                                if _sym_m:
+                                    print(_sym_m.group(1) + " - Symbol lookup error")
+                                else:
+                                    _fn_m = re.search(r'\bIn\s+(\w+)\s*\[', clean_output)
+                                    _fn_name = _fn_m.group(1) if _fn_m else "the test function"
+                                    print("Symbol lookup error occurred while invoking " + _fn_name)
+                            else:
+                                _fn_m = re.search(r'\bIn\s+(\w+)\s*\[', clean_output)
+                                _fn_name = _fn_m.group(1) if _fn_m else "the test function"
+                                print(_crash_cause + " occurred while invoking " + _fn_name)
+                            print(remarks_line)
+                            raise RuntimeError(_crash_cause + " detected — skipping analyzer")
+
+                        clean_configYAMLData = ansi_re.sub('', configYAMLData) if isinstance(configYAMLData, str) else configYAMLData
+                        # Strip SSH shell prompt lines (e.g. "root@host:~# cat ...") from YAML
+                        clean_configYAMLData = "\n".join(
+                            line for line in clean_configYAMLData.splitlines()
+                            if not re.match(r'^\s*\w+@[\w\-]+[:#]', line)
+                        )
+                        analysis_start = time.time()
+                        global VTS_SOURCE_DIR
+                        global libObj
+                        # Extract the failing C source filename from the log.
+                        try:
+                            source_file, *_ = vts_failure_analyzer.parse_log(clean_output)
+                        except BaseException:
+                            source_file = None
+                        if source_file:
+                            # Resolve required repo + version first (needed for cache validation).
+                            sf_lower = source_file.lower()
+                            try:
+                                from VTSTestVariables import HPK_VERSION as _hpk_ver
+                            except Exception:
+                                _hpk_ver = ""
+                            def _ver(override, component):
+                                if override:
+                                    return override
+                                if _hpk_ver:
+                                    derived = _resolve_hal_test_version_from_hpk(_hpk_ver, component)
+                                    if derived:
+                                        print("[HPK] Resolved {} test version: {}".format(component, derived))
+                                        return derived
+                                return "main"
+                            if "deepsleep" in sf_lower:
+                                haltest_repo = "rdk-halif-test-deepsleep_manager"
+                                try:
+                                    from VTSTestVariables import DEEPSLEEP_HAL_TEST_VERSION_OVERRIDE as _ov
+                                except Exception:
+                                    _ov = ""
+                                haltest_version = _ver(_ov, "Deep Sleep Manager")
+                            elif "plat_power" in sf_lower or "power" in sf_lower:
+                                haltest_repo = "rdk-halif-test-power_manager"
+                                try:
+                                    from VTSTestVariables import POWER_HAL_TEST_VERSION_OVERRIDE as _ov
+                                except Exception:
+                                    _ov = ""
+                                haltest_version = _ver(_ov, "Power Manager")
+                            elif "hdmi_cec" in sf_lower or "rcechal" in sf_lower or "cec" in sf_lower:
+                                haltest_repo = "rdk-halif-test-hdmi_cec"
+                                try:
+                                    from VTSTestVariables import HDMICEC_HAL_TEST_VERSION_OVERRIDE as _ov
+                                except Exception:
+                                    _ov = ""
+                                haltest_version = _ver(_ov, "HDMI CEC")
+                            elif "rmf" in sf_lower:
+                                haltest_repo = "rdk-halif-test-rmf_audio_capture"
+                                try:
+                                    from VTSTestVariables import RMF_AUDIO_CAPTURE_HAL_TEST_VERSION_OVERRIDE as _ov
+                                except Exception:
+                                    _ov = ""
+                                haltest_version = _ver(_ov, "RMF Audio Capture")
+                            else:
+                                haltest_repo = "rdk-halif-test-device_settings"
+                                try:
+                                    from VTSTestVariables import DS_HAL_TEST_VERSION_OVERRIDE as _ov
+                                except Exception:
+                                    _ov = ""
+                                haltest_version = _ver(_ov, "Device Settings")
+
+                            local_cache_dir = libObj.realpath + "fileStore/VTSFailureAnalysisSource/"
+                            os.makedirs(local_cache_dir, exist_ok=True)
+                            manifest_path = os.path.join(local_cache_dir, "source_versions.json")
+
+                            # Load existing version manifest.
+                            try:
+                                import json as _json
+                                with open(manifest_path, "r") as _mf:
+                                    _version_manifest = _json.load(_mf)
+                            except Exception:
+                                _version_manifest = {}
+
+                            dest_path = os.path.join(local_cache_dir, source_file)
+                            cached_version = _version_manifest.get(source_file, "")
+                            need_download = (
+                                not os.path.isfile(dest_path) or
+                                cached_version != haltest_version
+                            )
+                            source_ready = False
+                            if not need_download:
+                                print("[Cache] Using cached {} (version {})".format(source_file, cached_version))
+                                source_ready = True
+                            else:
+                                if os.path.isfile(dest_path) and cached_version != haltest_version:
+                                    print("[Cache] Version mismatch for {} (cached: {}, required: {}) — re-downloading".format(
+                                        source_file, cached_version, haltest_version))
+                                source_url = "https://raw.githubusercontent.com/rdkcentral/{}/{}/src/{}".format(
+                                    haltest_repo, haltest_version, source_file
+                                )
+                                try:
+                                    print("Downloading source for analysis: " + source_url)
+                                    _urlretrieve_github(source_url, dest_path)
+                                    print("Downloaded " + source_file + " (version {}) to local cache".format(haltest_version))
+                                    _version_manifest[source_file] = haltest_version
+                                    with open(manifest_path, "w") as _mf:
+                                        import json as _json
+                                        _json.dump(_version_manifest, _mf, indent=2)
+                                    source_ready = True
+                                except Exception as dl_e:
+                                    print("WARNING: Could not download source for analysis — skipping failure analysis:", dl_e)
+                                    if haltest_version == "main":
+                                        print("HINT: Version resolution fell back to 'main' because HPK_VERSION tag '{}' was not found".format(_hpk_ver or "(not set)"))
+                                        print("      Set DS_HAL_TEST_VERSION_OVERRIDE (or the relevant module override) in VTSTestVariables.py to a valid tag, e.g. '6.0.1'")
+
+                            if not source_ready:
+                                raise RuntimeError("Source file unavailable for failure analysis")
+
+                            # Also check VTS_SOURCE_DIR (compile-time tree) before overriding.
+                            if VTS_SOURCE_DIR:
+                                for _root, _dirs, _fnames in os.walk(VTS_SOURCE_DIR):
+                                    if source_file in _fnames:
+                                        break  # use existing VTS_SOURCE_DIR as-is
+                                else:
+                                    VTS_SOURCE_DIR = local_cache_dir
+                            else:
+                                VTS_SOURCE_DIR = local_cache_dir
+
+                        # Guard: if the log contains no ASSERT/FAIL line (e.g. the
+                        # device entered deep sleep and never returned CUnit output),
+                        # skip the analyzer and print a specific diagnostic instead.
+                        _failure_re = re.compile(
+                            r",\s*(ASSERT|FAIL)\s*,\s*[\w./\\-]+\.c\s*,\s*\d+\s*:",
+                            re.IGNORECASE,
+                        )
+                        if not _failure_re.search(clean_output):
+                            remarks_line = "#==============================[REMARKS]=======================================#"
+                            print(remarks_line)
+                            print("Device not accessible or unknown failure occurred")
+                            print(remarks_line)
+                            raise RuntimeError("No ASSERT/FAIL line in output — skipping analyzer")
+
+                        failure_flow, full_failurelog = vts_failure_analyzer.analyze_failure(VTS_SOURCE_DIR, clean_output, clean_configYAMLData)
+                        elapsed_analysis = time.time() - analysis_start
+                        total_analysis_time += elapsed_analysis
+                        print("Failure analysis time  : %.2f seconds" % elapsed_analysis)
+                        if failure_flow:
+                            remarks_line = "#==============================[REMARKS]=======================================#"
+                            print(remarks_line)
+                            print(failure_flow)
+                            print(remarks_line)
+                    except BaseException as e:
+                        print("WARNING: Failure analysis could not be completed:", e)
                 failed_testCases.append(test.split(".")[1].strip())
             else:
-                print("SUCCESS : %s executed successfully without any failures"%(test))
+                print("SUCCESS : %s executed successfully without any failures"%(testname.split(".")[1].strip()))
                 status="SUCCESS"
             print("TEST STEP STATUS :  ",status)
             print("#" * 80)
@@ -565,11 +919,13 @@ def SetupPreRequisites(host, username, password, basePath, binaryName, binaryCon
     global session
     try:
         configuredPath = getDeviceConfigValues("VTS_BASE_PATH")
-        print("configuredPath : " ,configuredPath)
         if configuredPath:
+            print("configuredPath : ", configuredPath)
             moduleName = os.path.basename(os.path.normpath(basePath)) + "/"
             basePath = configuredPath + moduleName
             print("basePath : ", basePath)
+        else:
+            print("Using default basePath :  ", basePath)
     except:
         print("Using default basePath :  ", basePath)
 
@@ -629,6 +985,12 @@ def setVTSResult(failed_testCases):
         print("\n[TEST EXECUTION RESULT] : FAILURE\n")
         return "FAILURE"
     global skipped_testCases
+    global total_yaml_fetch_time
+    global total_analysis_time
+    if total_yaml_fetch_time > 0.0 or total_analysis_time > 0.0:
+        print("\n[FAILURE ANALYSIS TIMING SUMMARY]")
+        print("  Total config YAML fetch time : %.2f seconds" % total_yaml_fetch_time)
+        print("  Total failure analysis time  : %.2f seconds" % total_analysis_time)
     if skipped_testCases:
         print("\nSKIPPED TESTCASES : ",skipped_testCases)
     if not failed_testCases:
