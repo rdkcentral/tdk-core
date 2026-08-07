@@ -17,30 +17,157 @@
         <crashFileNames>[]</crashFileNames>
         <!-- Total functions corresponding modules -->
         <functions>
-            <function id="66bbbb1e-e252-40ac-a324-22cb8d98ba7c" name="rdkv_basic_sanity_rebootexecution">
+            <function id="e318a23b-14de-4aba-86bd-04ea10cbc464" name="rdkv_basic_sanity_runVulkaninfo">
                 <parameters>
-                    <parameter id="29346132-6e41-450a-8d5d-33275adc0f68" parameterName="sshMethod" parameterType="STRING" range="a-z"/>
-                    <parameter id="4dbec4fe-70de-4b0b-a815-375b60d8e5c5" parameterName="command" parameterType="STRING" range="a-z"/>
-                    <parameter id="1a2d1a2f-f927-4621-9369-2d7ce0b9d525" parameterName="credentials" parameterType="STRING" range="a-z"/>
+                    <parameter id="725a2a5e-8046-4c94-a78c-9500ec9ef75c" parameterName="sshPort" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b9e52a0d-5468-4fbf-a7bf-05ac056898ec" parameterName="credentials" parameterType="STRING" range="A-Z"/>
+                    <parameter id="b009060e-26d1-49b1-82a2-560c2f928c73" parameterName="sshMethod" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
-            <function id="a0643756-10ac-44de-974d-75a204104f27" name="rdkv_basic_sanity_getDeviceConfig">
+            <function id="353f5b55-b704-47a7-9613-70f0d9edf89e" name="rdkv_basic_sanity_verifyEOS">
                 <parameters>
-                    <parameter id="d0451141-8d06-442b-9ed9-273bb51ca880" parameterName="configKey" parameterType="STRING" range="a-z"/>
-                    <parameter id="afc29e6d-2868-4c0c-a103-c7147d167f26" parameterName="basePath" parameterType="STRING" range="a-z"/>
+                    <parameter id="f69a2b3f-0fba-4452-ad97-35fa1ea3d087" parameterName="gst_output" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="ddddb2d8-ca9e-4ca6-a42e-fade3821c377" name="rdkv_basic_sanity_wifiVerifyConnectedSSID">
+                <parameters>
+                    <parameter id="187f0fc4-7e60-4df4-83cc-9ac27317a5aa" parameterName="expectedSSID" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a88658a4-ed78-4d99-8ac8-d6497b0aff94" name="rdkv_basic_sanity_getSystemUptime">
+                <parameters/>
+            </function>
+            <function id="322d9a90-4ba2-4d78-b793-a9d229e3985c" name="rdkv_basic_sanity_deviceStatus">
+                <parameters>
+                    <parameter id="0813c46e-625e-48c9-bdba-505f9ef7616b" parameterName="expectedStatus" parameterType="STRING" range="A-Z"/>
+                    <parameter id="3d47c41c-73c1-4c40-8117-7e89ffed3287" parameterName="sshPort" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
             <function id="e4fc9db2-768c-4fdd-896f-a09ca494b2f8" name="rdkv_basic_sanity_executeInDUT">
                 <parameters>
                     <parameter id="0b070a27-a165-4d97-9f03-5dfa2e99f0fe" parameterName="sshMethod" parameterType="STRING" range="a-z"/>
-                    <parameter id="5a1530a6-57ea-412d-af69-65d9f10b902e" parameterName="command" parameterType="STRING" range="a-z"/>
+                    <parameter id="6505a873-4d14-4dd3-8522-02e1f6ba90f1" parameterName="sshPort" parameterType="INTEGER" range="0-10"/>
                     <parameter id="cf385cb8-c5e1-4654-8f20-60b47a157903" parameterName="fetch_SSH_params" parameterType="INTEGER" range="a-z"/>
+                    <parameter id="5a1530a6-57ea-412d-af69-65d9f10b902e" parameterName="command" parameterType="STRING" range="a-z"/>
                     <parameter id="f81b6354-d696-45bf-97ab-b2099e23bd4a" parameterName="credentials" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="1fd6e78a-325c-43db-9a3d-88c47972e783" name="rdkv_basic_sanity_launchPlayback">
+                <parameters>
+                    <parameter id="3f8f1f1e-fb98-415d-b7e9-11cd9455da3b" parameterName="gst_play_flags" parameterType="STRING" range="A-Z"/>
+                    <parameter id="c93374aa-d947-49da-9d32-827a4a87346d" parameterName="DISPLAY_NAME" parameterType="STRING" range="A-Z"/>
+                    <parameter id="58758054-bde1-4611-829d-14b214b29f7c" parameterName="sshPort" parameterType="STRING" range="A-Z"/>
+                    <parameter id="671513a8-df4b-421f-bad2-ccdd496b421a" parameterName="credentials" parameterType="STRING" range="A-Z"/>
+                    <parameter id="21fffa5c-7eab-4301-822f-58a0faf2a2d2" parameterName="sshMethod" parameterType="STRING" range="A-Z"/>
+                    <parameter id="03ec2f3d-80a9-4c36-af42-0fb7f7899157" parameterName="playback_stream" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="badeae8a-0ac9-4a53-a8a8-7a2cc386c289" name="rdkv_basic_sanity_hdmiConnectionCheck">
+                <parameters/>
+            </function>
+            <function id="5f3b3ce8-347b-415c-8364-b64c3931b524" name="rdkv_basic_sanity_verifyVulkanProperties">
+                <parameters>
+                    <parameter id="5fed0b9e-6580-453f-afe6-3acaaec30060" parameterName="vulkan_output" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="9b1d9bbf-7050-4048-b550-ec231290adb7" name="rdkv_basic_sanity_rebootDevice">
+                <parameters/>
+            </function>
+            <function id="66bbbb1e-e252-40ac-a324-22cb8d98ba7c" name="rdkv_basic_sanity_rebootexecution">
+                <parameters>
+                    <parameter id="29346132-6e41-450a-8d5d-33275adc0f68" parameterName="sshMethod" parameterType="STRING" range="a-z"/>
+                    <parameter id="1a2d1a2f-f927-4621-9369-2d7ce0b9d525" parameterName="credentials" parameterType="STRING" range="a-z"/>
+                    <parameter id="4dbec4fe-70de-4b0b-a815-375b60d8e5c5" parameterName="command" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="5bb79ecc-7e49-420e-a17b-7c53b04f5a03" name="rdkv_basic_sanity_wifiDisconnect">
+                <parameters/>
+            </function>
+            <function id="e9098ce6-8b05-4d68-8580-12678a4f8a73" name="rdkv_basic_sanity_checkPlaybackProgress">
+                <parameters>
+                    <parameter id="5979630c-23bc-4646-8ef6-45267623a8c7" parameterName="gst_output" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="fe1c1b2a-3284-4dbc-a9d1-0267e6f40e05" name="rdkv_basic_sanity_verifyVulkanVersion">
+                <parameters>
+                    <parameter id="7f6078ee-e5c0-4879-982d-57e21f689bc0" parameterName="vulkan_output" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="88cab881-b63d-4535-84b5-67bc1e41be9d" name="rdkv_basic_sanity_wifiStartScanAndVerify">
+                <parameters>
+                    <parameter id="b6dea580-6cb6-4468-a6f7-a1e0f9fb94c0" parameterName="targetSSID" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="a0643756-10ac-44de-974d-75a204104f27" name="rdkv_basic_sanity_getDeviceConfig">
+                <parameters>
+                    <parameter id="afc29e6d-2868-4c0c-a103-c7147d167f26" parameterName="basePath" parameterType="STRING" range="a-z"/>
+                    <parameter id="d0451141-8d06-442b-9ed9-273bb51ca880" parameterName="configKey" parameterType="STRING" range="a-z"/>
+                </parameters>
+            </function>
+            <function id="c4bf23ea-1422-4977-a4d8-532f45e85681" name="rdkv_basic_sanity_createAndVerifyDisplay">
+                <parameters>
+                    <parameter id="07d8308a-e0ea-4a2e-be8a-50d1370caabb" parameterName="DISPLAY_NAME" parameterType="STRING" range="A-Z"/>
+                </parameters>
+            </function>
+            <function id="d97f79ef-6cd8-4286-b983-e2030ed8fd6e" name="rdkv_basic_sanity_wifiConnect">
+                <parameters>
+                    <parameter id="f88bfd0e-8d1e-484e-b25e-2188bd4bbf26" parameterName="passphrase" parameterType="STRING" range="A-Z"/>
+                    <parameter id="3cba401c-106c-49bb-8ce1-2a57bc77fb3c" parameterName="ssid" parameterType="STRING" range="A-Z"/>
+                    <parameter id="ef52192f-a43d-4551-8f91-7a20b44aec6e" parameterName="security" parameterType="STRING" range="A-Z"/>
                 </parameters>
             </function>
         </functions>
         <!-- Primitive tests associated with this module -->
         <primitivetests>
+            <primitivetest>
+                <id>08f8064b-eb88-4224-ab6c-546aab2866d9</id>
+                <name>rdkv_basic_sanity_launchPlayback</name>
+                <funName>rdkv_basic_sanity_launchPlayback</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>1fd5055d-19d3-418d-89a6-881fb6192e29</id>
+                        <parameterName>sshPort</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>66202331-4177-443a-8d2d-20d5e28c00c5</id>
+                        <parameterName>sshMethod</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>71339b3d-0287-4b8e-9bd7-7cbc86564bb2</id>
+                        <parameterName>gst_play_flags</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>76289816-aa3c-438d-b2eb-9f6e62d69afe</id>
+                        <parameterName>DISPLAY_NAME</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>99c89892-6917-4c8c-82ee-24f12cdd1408</id>
+                        <parameterName>playback_stream</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>a7e8be9c-cabd-4f0a-81f9-90ca41cc9415</id>
+                        <parameterName>credentials</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
             <primitivetest>
                 <id>334d5cfb-f658-4801-8f13-485ca5f55dc2</id>
                 <name>rdkv_basic_sanity_rebootexecution</name>
@@ -89,10 +216,59 @@
                         <value/>
                     </primitiveTestParameter>
                     <primitiveTestParameter>
+                        <id>7af65155-476e-40a3-85b3-050fb7e24635</id>
+                        <parameterName>sshPort</parameterName>
+                        <parameterType>INTEGER</parameterType>
+                        <range>0-10</range>
+                        <value>22</value>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
                         <id>f9492c91-7363-440b-afcc-24be43bb2b16</id>
                         <parameterName>sshMethod</parameterName>
                         <parameterType>STRING</parameterType>
                         <range>a-z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>3dfd9b8a-c567-42db-9e8e-8fe3a4cad971</id>
+                <name>rdkv_basic_sanity_verifyVulkanProperties</name>
+                <funName>rdkv_basic_sanity_verifyVulkanProperties</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>c88f62a8-ce8a-4bbd-a3d7-e0665e45c029</id>
+                        <parameterName>vulkan_output</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>5428bf98-49aa-4ea8-8b90-92d6a8072b30</id>
+                <name>rdkv_basic_sanity_wifiStartScanAndVerify</name>
+                <funName>rdkv_basic_sanity_wifiStartScanAndVerify</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>7d45da00-7c3a-4be1-b74e-b62a54f9188a</id>
+                        <parameterName>targetSSID</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>78c1c3ba-cbbb-4a41-a143-a459668f9034</id>
+                <name>rdkv_basic_sanity_verifyVulkanVersion</name>
+                <funName>rdkv_basic_sanity_verifyVulkanVersion</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>48ca9aba-beac-4a73-bf92-aa3c7fa3f1de</id>
+                        <parameterName>vulkan_output</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
                         <value/>
                     </primitiveTestParameter>
                 </primitivetestparameters>
@@ -117,6 +293,163 @@
                         <value/>
                     </primitiveTestParameter>
                 </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>84ee4a28-1a8e-49e7-ad83-21fcb258fc3e</id>
+                <name>rdkv_basic_sanity_createAndVerifyDisplay</name>
+                <funName>rdkv_basic_sanity_createAndVerifyDisplay</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5d981b7f-cb6b-469b-b5db-6aeb53d2a273</id>
+                        <parameterName>DISPLAY_NAME</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value>testDisplay</value>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>89fb84a7-31ef-492b-b158-0eb02eb2d10f</id>
+                <name>rdkv_basic_sanity_checkPlaybackProgress</name>
+                <funName>rdkv_basic_sanity_checkPlaybackProgress</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>b76f16ee-c954-4e6f-a605-5823c226ad9b</id>
+                        <parameterName>gst_output</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>9ed96477-8b10-4fbf-a045-6d61b2b11b5e</id>
+                <name>rdkv_basic_sanity_wifiVerifyConnectedSSID</name>
+                <funName>rdkv_basic_sanity_wifiVerifyConnectedSSID</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>6a29fabf-02e7-4b8b-8a1c-e4aef1a42754</id>
+                        <parameterName>expectedSSID</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>a7c4c552-7183-4fd0-88f2-a1519ea529c1</id>
+                <name>rdkv_basic_sanity_verifyEOS</name>
+                <funName>rdkv_basic_sanity_verifyEOS</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>19815abf-f9e3-465b-ae11-eedbf2c40d95</id>
+                        <parameterName>gst_output</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>b848b773-9a52-43ba-a214-01b07ba40fb4</id>
+                <name>rdkv_basic_sanity_getSystemUptime</name>
+                <funName>rdkv_basic_sanity_getSystemUptime</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>ce06df1a-f24c-46ba-a1ca-ca05c0467569</id>
+                <name>rdkv_basic_sanity_wifiDisconnect</name>
+                <funName>rdkv_basic_sanity_wifiDisconnect</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>d3a7fcaf-b259-4468-bee1-8dd278363a6d</id>
+                <name>rdkv_basic_sanity_deviceStatus</name>
+                <funName>rdkv_basic_sanity_deviceStatus</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>07820768-a031-4f41-bc01-d114fed59b67</id>
+                        <parameterName>expectedStatus</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>374d8f1d-3964-4b43-a814-d7e3396f8a4f</id>
+                        <parameterName>sshPort</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e683d8fd-b272-4635-925f-2f40bf6fd43e</id>
+                <name>rdkv_basic_sanity_wifiConnect</name>
+                <funName>rdkv_basic_sanity_wifiConnect</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>5a89ff7c-4057-4b71-a4d1-63f5ebe2e08e</id>
+                        <parameterName>ssid</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>b83764d3-9913-4b15-9f3d-13e8c826fe40</id>
+                        <parameterName>security</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>f4f50570-85cc-4abf-9e5a-a3e2575d83a8</id>
+                        <parameterName>passphrase</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>e745a441-80ef-4f3b-9501-a6c2f6fdfde9</id>
+                <name>rdkv_basic_sanity_runVulkaninfo</name>
+                <funName>rdkv_basic_sanity_runVulkaninfo</funName>
+                <primitivetestparameters>
+                    <primitiveTestParameter>
+                        <id>66a9b362-7875-43c3-b90f-5be801f7c345</id>
+                        <parameterName>sshMethod</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>941eeaca-7329-4cc0-a437-34d5f11cbb00</id>
+                        <parameterName>credentials</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                    <primitiveTestParameter>
+                        <id>da9f81a5-bb57-4296-8755-ddf64d35be89</id>
+                        <parameterName>sshPort</parameterName>
+                        <parameterType>STRING</parameterType>
+                        <range>A-Z</range>
+                        <value/>
+                    </primitiveTestParameter>
+                </primitivetestparameters>
+            </primitivetest>
+            <primitivetest>
+                <id>fbe482ca-96ea-466f-9d48-f84a39bf7955</id>
+                <name>rdkv_basic_sanity_hdmiConnectionCheck</name>
+                <funName>rdkv_basic_sanity_hdmiConnectionCheck</funName>
+                <primitivetestparameters/>
+            </primitivetest>
+            <primitivetest>
+                <id>fc231ee4-55ad-40e7-be38-3d62f83ae6b3</id>
+                <name>rdkv_basic_sanity_rebootDevice</name>
+                <funName>rdkv_basic_sanity_rebootDevice</funName>
+                <primitivetestparameters/>
             </primitivetest>
         </primitivetests>
     </module>
