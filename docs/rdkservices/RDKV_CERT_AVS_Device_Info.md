@@ -31,6 +31,13 @@ RDKV_CERT_AVS_Device_Info
    - [DeviceInfo_SystemInfo_API_Date_Matches_DUT_Date](#deviceinfo_systeminfo_api_date_matches_dut_date)
    - [DeviceInfo_Get_Device_SocName](#deviceinfo_get_device_socname)
    - [DeviceInfo_Get_Device_Manufacturer](#deviceinfo_get_device_manufacturer)
+   - [DeviceInfo_Get_Brand_Name](#deviceinfo_get_brand_name)
+   - [DeviceInfo_Get_Chipset_Info](#deviceinfo_get_chipset_info)
+   - [DeviceInfo_Get_Distributor_ID](#deviceinfo_get_distributor_id)
+   - [DeviceInfo_Get_ESTB_IP_Address](#deviceinfo_get_estb_ip_address)
+   - [DeviceInfo_Get_Ethernet_MAC_Address](#deviceinfo_get_ethernet_mac_address)
+   - [DeviceInfo_Get_Release_Version](#deviceinfo_get_release_version)
+   - [DeviceInfo_Get_WiFi_MAC_Address](#deviceinfo_get_wifi_mac_address)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -575,6 +582,132 @@ Checks the device manufacturer
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get device manufacturer | Invoke make on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.make"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the make API is not empty  |
+
+---
+
+<a id="deviceinfo_get_brand_name"></a>
+### TestCase Name
+DeviceInfo_Get_Brand_Name
+
+### TestCase ID
+DI_26
+
+### TestCase Objective
+Checks the brand name of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get brand name | Invoke brandname on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.brandname"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the brandname API is not empty |
+
+---
+
+<a id="deviceinfo_get_chipset_info"></a>
+### TestCase Name
+DeviceInfo_Get_Chipset_Info
+
+### TestCase ID
+DI_27
+
+### TestCase Objective
+Checks the chipset of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get device chipset | Invoke chipset on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.chipset"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the chipset API is not empty |
+
+---
+
+<a id="deviceinfo_get_distributor_id"></a>
+### TestCase Name
+DeviceInfo_Get_Distributor_ID
+
+### TestCase ID
+DI_28
+
+### TestCase Objective
+Checks the distributor ID of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get distributor ID | Invoke distributorid on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.distributorid"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the distributorid API is not empty |
+
+---
+
+<a id="deviceinfo_get_estb_ip_address"></a>
+### TestCase Name
+DeviceInfo_Get_ESTB_IP_Address
+
+### TestCase ID
+DI_29
+
+### TestCase Objective
+Checks the STB IP address of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get ESTB IP | Invoke estbip on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.estbip"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the estbip API is not empty |
+
+---
+
+<a id="deviceinfo_get_ethernet_mac_address"></a>
+### TestCase Name
+DeviceInfo_Get_Ethernet_MAC_Address
+
+### TestCase ID
+DI_30
+
+### TestCase Objective
+Checks the Ethernet MAC address of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get Ethernet MAC | Invoke ethmac on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.ethmac"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the ethmac API is not empty |
+
+---
+
+<a id="deviceinfo_get_release_version"></a>
+### TestCase Name
+DeviceInfo_Get_Release_Version
+
+### TestCase ID
+DI_31
+
+### TestCase Objective
+Checks the release version of the device image
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get release version | Invoke releaseversion on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.releaseversion"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the releaseversion API is not empty |
+
+---
+
+<a id="deviceinfo_get_wifi_mac_address"></a>
+### TestCase Name
+DeviceInfo_Get_WiFi_MAC_Address
+
+### TestCase ID
+DI_32
+
+### TestCase Objective
+Checks the WiFi MAC address of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get WiFi MAC | Invoke wifimac on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.wifimac"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the wifimac API is not empty |
 
 ## Plugin Post-conditions
 
