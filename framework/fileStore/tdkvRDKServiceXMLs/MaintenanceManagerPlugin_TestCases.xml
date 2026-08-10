@@ -191,7 +191,7 @@
     </testCase>
 
     <!-- Test case 07 -->
-    <testCase testCaseId="MM_07" testCaseName="MaintenanceManager_Get_MaintenanceActivity_Status" desc="Check the status of maintenance activity after initiating the start maintenance API">
+    <testCase testCaseId="MM_07" testCaseName="MaintenanceManager_Get_MaintenanceActivity_Status_After_Start" desc="Check the status of maintenance activity after initiating the start maintenance API">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
         <prerequisite requisiteId="1" requisiteName="Stop_Maintenance_If_Started">

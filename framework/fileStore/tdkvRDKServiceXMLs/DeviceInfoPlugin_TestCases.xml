@@ -530,4 +530,12 @@
                 <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
             </testStep>
        </testCase>
+
+       <!--Test case 33 -->
+       <testCase testCaseId="DI_33" testCaseName="DeviceInfo_Get_ESTB_MAC_Address" desc="Checks the ESTB MAC address of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Estb_Mac_Address" method="Get_Estb_Mac">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
 </testPlugin>

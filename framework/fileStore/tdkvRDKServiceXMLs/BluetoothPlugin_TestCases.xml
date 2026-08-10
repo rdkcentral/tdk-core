@@ -1342,7 +1342,9 @@
                     </testStep>
                     <testStep testStepId="3" name="Get_Paired_Devices" method="Get_Paired_Devices" delay="3" >
                         <conditionalExecution enable="true" Id="1" useMethodTag="bluetooth_check_device_pair_status"/>
-                        <resultGeneration useMethodTag="bluetooth_get_paired_devices" arguments="check_paired_device_list_empty" />
+                        <resultGeneration useMethodTag="bluetooth_get_paired_devices">
+                            <arguments value="check_paired_device_list_empty" useConfigFile="true" key="BT_EMU_DEVICE_NAME"/>
+                        </resultGeneration>
                     </testStep>
                 </postrequisite>
             </testCasePostRequisite>
@@ -1423,7 +1425,9 @@
                 <resultGeneration useMethodTag="bluetooth_check_status_changed_event"  expectedValues="CONNECTION_CHANGE"/>
             </testStep>
 	    <testStep testStepId="15" name="Get_Connected_Devices" method="Get_Connected_Devices" delay="2" >
-                <resultGeneration useMethodTag="bluetooth_get_connected_devices" arguments="check_connected_device_list_empty" />
+                <resultGeneration useMethodTag="bluetooth_get_connected_devices">
+                    <arguments value="check_connected_device_list_empty" useConfigFile="true" key="BT_EMU_DEVICE_NAME"/>
+                </resultGeneration>
 	    </testStep>
 	    <testStep testStepId="16" name="Unpair" method="Unpair" delay="3">
                 <params>
@@ -1455,7 +1459,9 @@
             	    </testStep>
 		    <testStep testStepId="3" name="Get_Connected_Devices" method="Get_Connected_Devices" delay="2" >
 			<conditionalExecution enable="true" Id="1" useMethodTag="bluetooth_check_device_pair_status"/>    
-			<resultGeneration useMethodTag="bluetooth_get_connected_devices" arguments="check_connected_device_list_empty" />
+			<resultGeneration useMethodTag="bluetooth_get_connected_devices">
+			    <arguments value="check_connected_device_list_empty" useConfigFile="true" key="BT_EMU_DEVICE_NAME"/>
+			</resultGeneration>
             	    </testStep>
 		    <testStep testStepId="4" name="Get_Paired_Devices" method="Get_Paired_Devices" delay="5" saveResult="true">
                         <resultGeneration useMethodTag="bluetooth_get_paired_devices" arguments="check_bt_emu_connected">
@@ -1471,7 +1477,9 @@
                     </testStep>
                     <testStep testStepId="6" name="Get_Paired_Devices" method="Get_Paired_Devices" delay="3" >
                         <conditionalExecution enable="true" Id="4" useMethodTag="bluetooth_check_device_pair_status"/>
-                        <resultGeneration useMethodTag="bluetooth_get_paired_devices" arguments="check_paired_device_list_empty" />
+                        <resultGeneration useMethodTag="bluetooth_get_paired_devices">
+                            <arguments value="check_paired_device_list_empty" useConfigFile="true" key="BT_EMU_DEVICE_NAME"/>
+                        </resultGeneration>
                     </testStep>
                 </postrequisite>
             </testCasePostRequisite>
