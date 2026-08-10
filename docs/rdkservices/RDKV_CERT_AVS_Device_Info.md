@@ -38,6 +38,7 @@ RDKV_CERT_AVS_Device_Info
    - [DeviceInfo_Get_Ethernet_MAC_Address](#deviceinfo_get_ethernet_mac_address)
    - [DeviceInfo_Get_Release_Version](#deviceinfo_get_release_version)
    - [DeviceInfo_Get_WiFi_MAC_Address](#deviceinfo_get_wifi_mac_address)
+   - [DeviceInfo_Get_ESTB_MAC_Address](#deviceinfo_get_estb_mac_address)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -708,6 +709,24 @@ Checks the WiFi MAC address of the device
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get WiFi MAC | Invoke wifimac on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.wifimac"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the wifimac API is not empty |
+
+---
+
+<a id="deviceinfo_get_estb_mac_address"></a>
+### TestCase Name
+DeviceInfo_Get_ESTB_MAC_Address
+
+### TestCase ID
+DI_33
+
+### TestCase Objective
+Checks the ESTB MAC address of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get ESTB MAC | Invoke estbmac on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.estbmac"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the estbmac API is not empty |
 
 ## Plugin Post-conditions
 
