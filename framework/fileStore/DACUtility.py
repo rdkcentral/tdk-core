@@ -514,3 +514,56 @@ def verify_directory_contents(obj, dir_path, expected_items):
 
     return tdkTestObj, actualresult, details.strip()
 ########## End of function ##########
+
+# update_iperf3_server_ip
+# Syntax      : update_iperf3_server_ip(obj, config_path, server_ip)
+# Description : Function to update the iperf3 server IP in the bundle config.json.
+#               Replaces the value of the argument following '-c' in process.args.
+# Parameters  : obj - module object
+#               config_path - full path to the config.json file
+#               server_ip - iperf3 server IP to set
+# Return Value: tdkTestObj - test object
+#               actualresult - SUCCESS/FAILURE
+#               details - updated value read back from config.json
+def update_iperf3_server_ip(obj, config_path, server_ip):
+    # Step 1: Verify config.json exists at the given path
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult_check, details_check = isFilePresent(tdkTestObj, config_path)
+    if not (actualresult_check == "SUCCESS" and "config.json" in details_check):
+        # File not found at given path; derive bundle name and locate via find
+        parts = config_path.replace('\\', '/').split('/')
+        bundle_name = parts[-2] if len(parts) >= 2 else parts[0]
+        find_command = f"find / -name 'config.json' -path '*{bundle_name}*' -maxdepth 10 2>/dev/null | head -1"
+        tdkTestObj = obj.createTestStep('ExecuteCmd')
+        actualresult_find, found_path = doSysutilExecuteCommand(tdkTestObj, find_command)
+        found_path = found_path.strip()
+        if actualresult_find == "SUCCESS" and found_path:
+            config_path = found_path
+            print("config.json located at: %s" % config_path)
+        else:
+            return tdkTestObj, "FAILURE", "config.json not found at '%s' and could not be located via find" % config_path
+
+    # Step 2: Detect JSON format (inline vs multi-line) and apply appropriate sed substitution
+    command = (
+        f"if grep -q '\"-c\",[[:space:]]*\"' {config_path}; then "
+        f"sed -i 's/\"-c\", *\"[^\"]*\"/\"-c\", \"{server_ip}\"/' {config_path}; "
+        f"else "
+        f"sed -i '/-c\"/{{n; s/\"[^\"]*\"/\"{server_ip}\"/;}}' {config_path}; "
+        f"fi"
+    )
+    print("Command : %s" % command)
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    actualresult, details = doSysutilExecuteCommand(tdkTestObj, command)
+
+    # Step 3: Verify the update by checking if server_ip is present in the file
+    verify_command = f"grep -c {server_ip} {config_path}"
+    actualresult_verify, count_str = doSysutilExecuteCommand(tdkTestObj, verify_command)
+    count_str = count_str.strip()
+    if count_str.isdigit() and int(count_str) > 0:
+        actualresult = "SUCCESS"
+        details = server_ip
+    else:
+        actualresult = "FAILURE"
+        details = count_str
+    return tdkTestObj, actualresult, details
+########## End of function ##########

@@ -16,7 +16,7 @@ To validate that the time taken for channel change in the channel change applica
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
@@ -28,7 +28,7 @@ To validate that the time taken for channel change in the channel change applica
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Install and launch the channel change application | Download, install, and launch the channel change application bundle (com.rdkcentral.channelchange). <br>Download: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<app_download_url>/<channelchange_bundle>"}}` <br><br>Install: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.PackageManagerRDKEMS.install", "params": {"packageId": "com.rdkcentral.channelchange", "version": "0.1.0", "additionalMetadata": [{"name": "type", "value": "native/dac-app"}], "fileLocator": "<PACKAGEMANAGER_FILE_LOCATOR>/package<download_id>"}}` <br><br>Launch: `{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.launchApp", "params": {"appId": "com.rdkcentral.channelchange", "intent": "", "launchArgs": ""}}` | The channel change application should be installed and launched successfully. |
 | 2 | Wait for channel tuning to begin | Allow 60 seconds for the application to initialize and begin channel tuning. Verify tuning activity by checking device logs via SSH: <br>`cat /opt/logs/dacapp.log \| grep -nr "Tuning to channel" \| tail -1` | The tuning log entry should be present in dacapp.log confirming the channel change app is actively tuning. |
@@ -40,7 +40,7 @@ To validate that the time taken for channel change in the channel change applica
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 10 mins
 

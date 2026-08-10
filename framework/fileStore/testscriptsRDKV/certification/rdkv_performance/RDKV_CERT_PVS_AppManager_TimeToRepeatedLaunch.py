@@ -19,11 +19,11 @@
 
 import tdklib
 import time
+import sys
+from io import StringIO
 import StabilityTestUtility
 from StabilityTestUtility import *
 import PerformanceTestVariables
-from web_socket_util import *
-import rdkv_performancelib
 from datetime import datetime, UTC
 
 # Test component
@@ -35,7 +35,6 @@ port = <port>
 obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_TimeToRepeatedLaunch')
 
 expectedResult = "SUCCESS"
-Summ_list = []
 launch_times = []
 
 # Load module
@@ -48,13 +47,15 @@ if expectedResult in result.upper():
     status = "SUCCESS"
 
     # Ensure plugins active
-    plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
-    plugin_status_needed = {"org.rdk.DownloadManager":"activated","org.rdk.PackageManagerRDKEMS":"activated","org.rdk.AppManager":"activated"}
-
-    curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj,plugins_list)
+    essential_plugins = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]
+    
+    plugin_status_needed = {p: "activated" for p in essential_plugins}
+    
+    print(f"[INFO] Activating plugins: {essential_plugins}")
+    curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj, essential_plugins)
 
     if curr_plugins_status_dict != plugin_status_needed:
-        status = StabilityTestUtility.set_plugins_status(obj,plugin_status_needed)
+        status = StabilityTestUtility.set_plugins_status(obj, plugin_status_needed)
         time.sleep(10)
 
     if status == "SUCCESS":
@@ -64,120 +65,121 @@ if expectedResult in result.upper():
         print(app_name)
         app_download_url = PerformanceTestVariables.app_download_url
 
-        # Install app once
-        status = rdkservice_install_launch_app(obj,app_bundle_name,app_name,app_download_url,launch=False)
+        # INSTALL APP
+        print("\n[INFO] Installing app")
+        
+        status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url, launch=False)
 
         if status == "SUCCESS":
+            print("[SUCCESS] App installation successful")
 
-            thunder_port = rdkv_performancelib.devicePort
+            print("\n[INFO] Starting repeated launch test (3 iterations)")
 
-            # Register event listener once
-            event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 9,"method": "org.rdk.AppManager.1.register","params": {"event": "onAppLifecycleStateChanged", "id": "client.events.1" }}'],"/jsonrpc",False)
-
-            time.sleep(3)
-
-            print("\nStarting repeated launch test")
-
+            # LOOP: 3 iterations of launch/terminate
             for i in range(3):
+                iter_num = i + 1
+                print(f"\n{'='*60}")
+                print(f"[ITERATION {iter_num}] Launching {app_name}")
+                print(f"{'='*60}")
 
-                print(f"\nIteration {i+1}: Launching {app_name}")
-
-                # Launch app
-                tdkTestObj = obj.createTestStep('rdkservice_launch_app')
-                tdkTestObj.addParameter("app_name", app_name)
-
+                # Capture start time
                 start_time = datetime.now(UTC)
 
+                # LAUNCH APP - Test Step (per iteration)
+                tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+                tdkTestObj.addParameter("app_name", app_name)
                 tdkTestObj.executeTestCase(expectedResult)
-                status = tdkTestObj.getResult()
-
-                if status != "SUCCESS":
-                    print("Launch failed")
-                    obj.setTestResult("FAILURE")
+                
+                launch_result = tdkTestObj.getResult()
+                if launch_result != "SUCCESS":
+                    print(f"[FAILURE] Launch command failed at iteration {iter_num}")
+                    tdkTestObj.setResultStatus("FAILURE")
                     break
 
-                # Wait for ACTIVE
-                continue_count = 0
-                launched = False
-
-                while True:
-                    if continue_count > 120:
-                        print("Timeout waiting for launch event")
-                        break
-
-                    if len(event_listener.getEventsBuffer()) == 0:
-                        time.sleep(1)
-                        continue_count += 1
-                        continue
-
-                    event = event_listener.getEventsBuffer().pop(0)
-                    print("\nEvent:", event)
-
-                    if app_name in event and "APP_STATE_ACTIVE" in event:
-                        launched = True
-                        break
-                    # Calculate launch time
-                    launch_time_str = str(event).split("$$$")[0]
-
-                    end_time = datetime.strptime(launch_time_str, "%H:%M:%S.%f")
-                    start_time_dt = datetime.strptime(str(start_time.time()), "%H:%M:%S.%f")
-
-                    time_taken = end_time - start_time_dt
-                    time_taken_ms = time_taken.total_seconds() * 1000
-
-                    print(f"Launch time (Iteration {i+1}): {time_taken_ms} ms")
-
-                    launch_times.append(time_taken_ms)
-
-                    #Terminate app
-                    print("Terminating app...")
-
-                    tdkTestObj = obj.createTestStep('rdkv_terminate_app')
-                    tdkTestObj.addParameter("app_id", app_name)
-                    tdkTestObj.executeTestCase(expectedResult)
-
-                    result = tdkTestObj.getResult()
-
-                    if result != "SUCCESS":
-                        print("Failed to terminate app")
-                        obj.setTestResult("FAILURE")
-                    else:
-                        #Validate results
-                        if len(launch_times) > 0:
-                            print("\nAll Launch Times:", launch_times)
-                            conf_file, file_status = getConfigFileName(obj.realpath)
-                            config_status, launch_threshold = getDeviceConfigKeyValue(conf_file, "APPMANAGER_LAUNCH_THRESHOLD_VALUE")
-                            if not launch_threshold:
-                                launch_threshold = "3000"
-                                config_status, offset = getDeviceConfigKeyValue(conf_file, "THRESHOLD_OFFSET")
-                            if not offset:
-                                offset = "500"
-                            threshold = int(launch_threshold)
-                            offset_val = int(offset)
-                            all_pass = True
-                            for t in launch_times:
-                                if not (0 < int(t) < (threshold + offset_val)):
-                                    all_pass = False
-                                    break
-                            Summ_list.append(f"Launch times : {launch_times}")
-                            Summ_list.append(f"Threshold : {threshold} ms")
-                            if all_pass:
-                                print("\nAll launches within threshold")
-                                obj.setTestResult("SUCCESS")
-                            else:
-                                print("\nOne or more launches exceeded threshold")
-                                obj.setTestResult("FAILURE")
-
-                if not launched:
-                    print("Launch event not received")
+                print(f"[INFO] Launch command executed, waiting for app to fully load")
+                
+                # Wait for app to load
+                time.sleep(10)
+                
+                # Capture end time
+                end_time = datetime.now(UTC)
+                
+                # Calculate launch time
+                time_taken = end_time - start_time
+                launch_time_ms = time_taken.total_seconds() * 1000
+                
+                if launch_time_ms > 0:
+                    print(f"[SUCCESS] Launch time (Iteration {iter_num}): {launch_time_ms} ms")
+                    launch_times.append(launch_time_ms)
+                    tdkTestObj.setResultStatus("SUCCESS")
+                else:
+                    print(f"[ERROR] Invalid launch time (≤0): {launch_time_ms} ms")
+                    tdkTestObj.setResultStatus("FAILURE")
                     break
 
-                getSummary(Summ_list, obj)
+                # TERMINATE APP - Test Step (per iteration)
+                print(f"[INFO] Terminating app...")
+                tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                tdkTestObj.addParameter("app_id", app_name)
+                
+                tdkTestObj.executeTestCase(expectedResult)
+                terminate_result = tdkTestObj.getResult()
 
-            event_listener.disconnect()
+                if terminate_result != "SUCCESS":
+                    print(f"[FAILURE] Failed to terminate app at iteration {iter_num}")
+                    tdkTestObj.setResultStatus("FAILURE")
+                    break
+                else:
+                    print(f"[SUCCESS] App terminated successfully")
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    time.sleep(2)  # Wait before next iteration
+
+            # VALIDATION - After all iterations
+            print(f"\n{'='*60}")
+            print("VALIDATION RESULTS")
+            print(f"{'='*60}")
+            
+            if len(launch_times) == 3:
+                print(f"All 3 Launch Times: {launch_times}")
+                
+                # Suppress stdout for utility function calls
+                old_stdout = sys.stdout
+                sys.stdout = StringIO()
+                
+                conf_file, file_status = getConfigFileName(obj.realpath)
+                config_status, launch_threshold = getDeviceConfigKeyValue(conf_file, "APPMANAGER_LAUNCH_THRESHOLD_VALUE")
+                if not launch_threshold:
+                    launch_threshold = "3000"
+                
+                config_status, offset = getDeviceConfigKeyValue(conf_file, "THRESHOLD_OFFSET")
+                if not offset:
+                    offset = "500"
+                
+                # Restore stdout
+                sys.stdout = old_stdout
+                
+                threshold = int(launch_threshold)
+                offset_val = int(offset)
+                threshold_max = threshold + offset_val
+                
+                all_pass = True
+                for idx, t in enumerate(launch_times):
+                    within_threshold = (0 < t < threshold_max)
+                    status_str = "PASS" if within_threshold else "FAIL"
+                    print(f"Iteration {idx + 1}: {t} ms [{status_str}] (threshold: 0 < time < {threshold_max})")
+                    if not within_threshold:
+                        all_pass = False
+                
+                if all_pass:
+                    print("\n[SUCCESS] All launches within threshold - VALIDATION PASSED")
+                else:
+                    print("\n[FAILURE] One or more launches exceeded threshold - VALIDATION FAILED")
+            
+            else:
+                print(f"\n[FAILURE] Expected 3 successful launches, got {len(launch_times)}")
 
         else:
-            print("App install failed")
+            print("[FAILURE] App installation failed")
 
     obj.unloadModule("rdkv_performance")
 

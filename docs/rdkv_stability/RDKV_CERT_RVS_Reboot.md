@@ -16,7 +16,7 @@ To validate device stability by rebooting the device a configured number of time
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure repeatCount in StabilityTestVariables | `repeatCount` must be set to the desired number of reboot iterations in StabilityTestVariables (default: 1000). | The repeatCount variable should be configured with a valid integer value. |
@@ -28,7 +28,7 @@ To validate device stability by rebooting the device a configured number of time
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Reboot device as pre-requisite | Reboot the device once before starting the stress test loop. The device is rebooted by invoking the Thunder Controller harakiri method and the script waits for `rebootwaitTime` (150 seconds) for the device to come back online. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.harakiri"}` | Device should come back online successfully after the pre-requisite reboot. |
 | 2 | Retrieve baseline plugin count | Retrieve the total count of plugins registered in WPEFramework before any reboot iteration begins. This count is stored as the baseline for per-iteration comparison. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status"}` | Plugin count should be greater than zero and stored as baseline. |
@@ -46,7 +46,7 @@ To validate device stability by rebooting the device a configured number of time
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 4000 mins
 

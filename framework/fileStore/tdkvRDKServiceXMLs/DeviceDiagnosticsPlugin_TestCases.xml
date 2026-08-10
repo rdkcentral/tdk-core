@@ -78,7 +78,7 @@
         </testCase>
 
         <!-- TestCases 03 -->
-        <testCase testCaseId="DD_03" testCaseName="DeviceDiagnostics_Check_AVDecoder_Idle_Active_State" desc="Checks the AV decoder status in idle and active state on launching and terminating an app">
+        <testCase testCaseId="DD_03" testCaseName="DeviceDiagnostics_Get_AVDecoder_Idle_Active_State" desc="Checks the AV decoder status in idle and active state on launching and terminating an app">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
               <prerequisite requisiteId="1" requisiteName="Activate_Dependent_Plugins">
@@ -115,17 +115,17 @@
               </prerequisite>
 
               <prerequisite requisiteId="2" requisiteName="Check_Existing_Package_Before_Install">
-                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
-                  <resultGeneration useMethodTag="packagemanager_list_packages">
+                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="AppPackageManager" saveResult="true">
+                  <resultGeneration useMethodTag="app_packagemanager_list_packages">
                     <arguments value="exceptional_cases" useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                   </resultGeneration>
                 </testStep>
-                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" pluginName="PackageManager" delay="10">
-                  <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" pluginName="AppPackageManager" delay="10">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="app_packagemanager_check_app_status"/>
                   <params>
                     <param tag="packageId" useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                   </params>
-                  <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                  <resultGeneration useMethodTag="app_packagemanager_null_result_validation" arguments="empty_result_validation"/>
                 </testStep>
                 <testStep testStepId="3" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
                   <params>
@@ -144,7 +144,7 @@
                     <expectedValues useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_MD5SUM_VALUE"/>
                   </resultGeneration>
                 </testStep>
-                <testStep testStepId="6" name="Install" method="Install_Package" pluginName="PackageManager" delay="3">
+                <testStep testStepId="6" name="Install" method="Install_Package" pluginName="AppPackageManager" delay="3">
                   <params>
                     <param tag="packageId" useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                     <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
@@ -152,10 +152,10 @@
                     <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
                     <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
                   </params>
-                  <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                  <resultGeneration useMethodTag="app_packagemanager_null_result_validation"/>
                 </testStep>
-                <testStep testStepId="7" name="Verify_Installed_Package" method="List_Package_Info" pluginName="PackageManager" delay="5">
-                  <resultGeneration useMethodTag="packagemanager_check_install_package">
+                <testStep testStepId="7" name="Verify_Installed_Package" method="List_Package_Info" pluginName="AppPackageManager" delay="5">
+                  <resultGeneration useMethodTag="app_packagemanager_check_install_package">
                     <expectedValues useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                   </resultGeneration>
                 </testStep>
@@ -217,30 +217,30 @@
                     </resultGeneration>
                 </testStep>
                 <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" pluginName="AppManager" delay="3">
-                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <conditionalExecution enable="true" Id="1" useMethodTag="app_packagemanager_check_app_status"/>
                     <params>
                         <param tag="appId" useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                     </params>
                     <resultGeneration useMethodTag="appmanager_null_result_validation"/>
                 </testStep>
-                <testStep testStepId="3" name="Check_Package_Info" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
-                    <resultGeneration useMethodTag="packagemanager_list_packages">
+                <testStep testStepId="3" name="Check_Package_Info" method="List_Package_Info" pluginName="AppPackageManager" saveResult="true">
+                    <resultGeneration useMethodTag="app_packagemanager_list_packages">
                         <arguments value="exceptional_cases" useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                     </resultGeneration>
                 </testStep>
-                <testStep testStepId="4" name="Uninstall_Package" method="Uninstall_Package" pluginName="PackageManager" delay="3">
-                    <conditionalExecution enable="true" Id="3" useMethodTag="packagemanager_check_app_status"/>
+                <testStep testStepId="4" name="Uninstall_Package" method="Uninstall_Package" pluginName="AppPackageManager" delay="3">
+                    <conditionalExecution enable="true" Id="3" useMethodTag="app_packagemanager_check_app_status"/>
                     <params>
                         <param tag="packageId" useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                     </params>
-                    <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                    <resultGeneration useMethodTag="app_packagemanager_null_result_validation" arguments="empty_result_validation"/>
                 </testStep>
               </postrequisite>
             </testCasePostRequisite>
       </testCase>
        
       <!-- TestCases 04 -->
-      <testCase testCaseId="DD_04" testCaseName="DeviceDiagnostics_Check_AVDecoder_StateChange_Event_Idle_Active" desc="Checks the AV decoder status changed event in idle and active state">
+      <testCase testCaseId="DD_04" testCaseName="DeviceDiagnostics_Get_AVDecoder_StateChange_Event_Idle_Active" desc="Checks the AV decoder status changed event in idle and active state">
           <testCaseInfo testCaseType="direct"/>
           <testCasePreRequisite>
              <prerequisite requisiteId="1" requisiteName="Activate_Dependent_Plugins">
@@ -277,17 +277,17 @@
               </prerequisite>
 
               <prerequisite requisiteId="2" requisiteName="Check_Existing_Package_Before_Install">
-                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
-                  <resultGeneration useMethodTag="packagemanager_list_packages">
+                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="AppPackageManager" saveResult="true">
+                  <resultGeneration useMethodTag="app_packagemanager_list_packages">
                     <arguments value="exceptional_cases" useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                   </resultGeneration>
                 </testStep>
-                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" pluginName="PackageManager" delay="10">
-                  <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" pluginName="AppPackageManager" delay="10">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="app_packagemanager_check_app_status"/>
                   <params>
                     <param tag="packageId" useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                   </params>
-                  <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                  <resultGeneration useMethodTag="app_packagemanager_null_result_validation" arguments="empty_result_validation"/>
                 </testStep>
                 <testStep testStepId="3" name="Download_ValidParameters" method="Download_Package" pluginName="DownloadManager" saveResult="true" delay="5">
                   <params>
@@ -306,7 +306,7 @@
                     <expectedValues useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_MD5SUM_VALUE"/>
                   </resultGeneration>
                 </testStep>
-                <testStep testStepId="6" name="Install" method="Install_Package" pluginName="PackageManager" delay="3">
+                <testStep testStepId="6" name="Install" method="Install_Package" pluginName="AppPackageManager" delay="3">
                   <params>
                     <param tag="packageId" useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                     <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
@@ -314,10 +314,10 @@
                     <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
                     <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
                   </params>
-                  <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                  <resultGeneration useMethodTag="app_packagemanager_null_result_validation"/>
                 </testStep>
-                <testStep testStepId="7" name="Verify_Installed_Package" method="List_Package_Info" pluginName="PackageManager" delay="5">
-                  <resultGeneration useMethodTag="packagemanager_check_install_package">
+                <testStep testStepId="7" name="Verify_Installed_Package" method="List_Package_Info" pluginName="AppPackageManager" delay="5">
+                  <resultGeneration useMethodTag="app_packagemanager_check_install_package">
                     <expectedValues useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                   </resultGeneration>
                 </testStep>
@@ -379,23 +379,23 @@
                     </resultGeneration>
                 </testStep>
                 <testStep testStepId="2" name="Terminate_App_Valid_Param" method="Terminate_App" pluginName="AppManager" delay="3">
-                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                    <conditionalExecution enable="true" Id="1" useMethodTag="app_packagemanager_check_app_status"/>
                     <params>
                         <param tag="appId" useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                     </params>
                     <resultGeneration useMethodTag="appmanager_null_result_validation"/>
                 </testStep>
-                <testStep testStepId="3" name="Check_Package_Info" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
-                    <resultGeneration useMethodTag="packagemanager_list_packages">
+                <testStep testStepId="3" name="Check_Package_Info" method="List_Package_Info" pluginName="AppPackageManager" saveResult="true">
+                    <resultGeneration useMethodTag="app_packagemanager_list_packages">
                         <arguments value="exceptional_cases" useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                     </resultGeneration>
                 </testStep>
-                <testStep testStepId="4" name="Uninstall_Package" method="Uninstall_Package" pluginName="PackageManager" delay="3">
-                    <conditionalExecution enable="true" Id="3" useMethodTag="packagemanager_check_app_status"/>
+                <testStep testStepId="4" name="Uninstall_Package" method="Uninstall_Package" pluginName="AppPackageManager" delay="3">
+                    <conditionalExecution enable="true" Id="3" useMethodTag="app_packagemanager_check_app_status"/>
                     <params>
                         <param tag="packageId" useConfigFile="true" key="DEVICE_DIAGNOSTICS_UNIFIED_PLAYER_APP_NAME"/>
                     </params>
-                    <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                    <resultGeneration useMethodTag="app_packagemanager_null_result_validation" arguments="empty_result_validation"/>
                 </testStep>
             </postrequisite>
           </testCasePostRequisite>

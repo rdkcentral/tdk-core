@@ -16,7 +16,7 @@ To validate that the system resource usage (CPU and memory) during application s
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured, providing a clean system state for idle measurement. |
@@ -26,7 +26,7 @@ To validate that the system resource usage (CPU and memory) during application s
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Allow system to reach idle state | After device boot or configuration, allow 10 seconds for the system to reach an idle state with no applications running before taking the baseline resource measurement. | The system should reach a stable idle state before measurement begins. |
 | 2 | Measure idle resource usage (baseline) | Measure and record the system CPU and memory usage in the idle state, before any application is launched. This serves as the baseline for comparison. Invoke the DeviceInfo systeminfo API to retrieve current system metrics: <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "DeviceInfo.1.systeminfo"}` <br>Extract CPU load from the `cpuload` field and calculate memory usage using the formula `(totalram - freeram) / totalram × 100`. | The idle resource usage should be captured successfully and represent the system's baseline CPU and memory consumption. |
@@ -41,7 +41,7 @@ To validate that the system resource usage (CPU and memory) during application s
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 10 mins
 
