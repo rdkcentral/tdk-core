@@ -12,7 +12,7 @@ RDKV_CERT_AVS_MaintenanceManager
    - [MaintenanceManager_On_Maintenance_StatusChange_Event](#maintenancemanager_on_maintenance_statuschange_event)
    - [MaintenanceManager_Start_Maintenance_Twice](#maintenancemanager_start_maintenance_twice)
    - [MaintenanceManager_Activate_Deactivate_Event_Test](#maintenancemanager_activate_deactivate_event_test)
-   - [MaintenanceManager_Get_MaintenanceActivity_Status](#maintenancemanager_get_maintenanceactivity_status)
+   - [MaintenanceManager_Get_MaintenanceActivity_Status_After_Start](#maintenancemanager_get_maintenanceactivity_status_after_start)
    - [MaintenanceManager_Set_MaintenanceMode_With_Invalid_Parameters](#maintenancemanager_set_maintenancemode_with_invalid_parameters)
    - [MaintenanceManager_Set_MaintenanceMode_With_Empty_Parameters](#maintenancemanager_set_maintenancemode_with_empty_parameters)
    - [MaintenanceManager_Set_Invalid_Optout](#maintenancemanager_set_invalid_optout)
@@ -221,9 +221,9 @@ Validates statechange event on Activating and deactivating the plugin
 
 ---
 
-<a id="maintenancemanager_get_maintenanceactivity_status"></a>
+<a id="maintenancemanager_get_maintenanceactivity_status_after_start"></a>
 ### TestCase Name
-MaintenanceManager_Get_MaintenanceActivity_Status
+MaintenanceManager_Get_MaintenanceActivity_Status_After_Start
 
 ### TestCase ID
 MM_07
