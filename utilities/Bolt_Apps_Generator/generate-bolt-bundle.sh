@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
@@ -16,7 +18,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
-#!/bin/bash
 
 # Bolt Apps Bundle Generator
 # Reads all app definitions from bundle-config.conf and generates signed bolt bundles.
