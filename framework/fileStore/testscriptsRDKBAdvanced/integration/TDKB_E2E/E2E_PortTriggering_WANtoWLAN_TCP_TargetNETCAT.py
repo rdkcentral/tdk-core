@@ -51,6 +51,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
     status = parseDeviceConfig(obj)
 
     if expectedresult in status:
+        obj.setLoadModuleStatus("SUCCESS")
         print("Parsed the device configuration file successfully")
 
         #Check if Port Triggering is enabled, else enable the feature
@@ -101,6 +102,9 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                         print("ACTUAL RESULT %d: Details: %s" %(step, details))
                         print("[TEST EXECUTION RESULT] : SUCCESS")
 
+                        #Wait for the changes to reflect in client device
+                        time.sleep(60)
+
                         #Retrieve the values after set and compare
                         step = step + 1
                         print("\nTEST STEP %d: Get the current ssid, keypassphrase, radio enable" %step)
@@ -112,8 +116,6 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                             print("ACTUAL RESULT %d: GET values:  %s" %(step, newValues))
                             print("[TEST EXECUTION RESULT] : SUCCESS")
 
-                            #Wait for the changes to reflect in client device
-                            time.sleep(60)
                             status = "SUCCESS"
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
@@ -125,7 +127,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                         print("[TEST EXECUTION RESULT] : FAILURE")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print("ACTUAL RESULT %d: Values not retrieved successfully" %step)
+                    print("ACTUAL RESULT %d: Values not retrieved" %step)
                     print("[TEST EXECUTION RESULT] : FAILURE")
 
                 # Assign SSID, password and interface
@@ -167,7 +169,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                     tdkTestObj,status,curIPAddress = getParameterValue(obj,param)
                     print("WLAN IP Address: %s" %curIPAddress)
 
-                    if expectedresult in status and curIPAddress:
+                    if expectedresult in status and curIPAddress != "":
                         tdkTestObj.setResultStatus("SUCCESS")
                         status = checkIpRange(curIPAddress,wlanIP)
 
@@ -243,7 +245,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                                 print("[TEST EXECUTION RESULT] : FAILURE")
                                         else:
                                             tdkTestObj.setResultStatus("FAILURE")
-                                            print("ACTUAL RESULT %d: Port not triggered successfully" %step)
+                                            print("ACTUAL RESULT %d: Port not triggered" %step)
                                             print("[TEST EXECUTION RESULT] : FAILURE")
 
                                         #Kill the server-client processes running
@@ -262,7 +264,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                             print("[TEST EXECUTION RESULT] : FAILURE")
                                     else:
                                         tdkTestObj.setResultStatus("FAILURE")
-                                        print("ACTUAL RESULT %d: NETCAT server not started successfully" %step)
+                                        print("ACTUAL RESULT %d: NETCAT server not started" %step)
                                         print("[TEST EXECUTION RESULT] : FAILURE")
 
                                     #Delete the newly added route in WLAN client
@@ -277,11 +279,11 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                         print("[TEST EXECUTION RESULT] : SUCCESS")
                                     else:
                                         tdkTestObj.setResultStatus("FAILURE")
-                                        print("ACTUAL RESULT %d: Added route is not deleted successfully" %step)
+                                        print("ACTUAL RESULT %d: Added route is not deleted" %step)
                                         print("[TEST EXECUTION RESULT] : FAILURE")
                                 else:
                                     tdkTestObj.setResultStatus("FAILURE")
-                                    print("ACTUAL RESULT %d: Static route not added successfully" %step)
+                                    print("ACTUAL RESULT %d: Static route not added" %step)
                                     print("[TEST EXECUTION RESULT] : FAILURE")
 
                                 #Delete the added PT rule
