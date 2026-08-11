@@ -16,7 +16,7 @@ To validate that the disk usage of the configured partition on the device under 
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm device is accessible via SSH | The device under test must be accessible via SSH with valid credentials configured. | SSH connection to the device should be established successfully. |
 | 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
@@ -25,7 +25,7 @@ To validate that the disk usage of the configured partition on the device under 
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Establish SSH connection and read partition config | Obtain SSH connection parameters and retrieve the `DISK_PARTITION` value from the device-specific config file. | SSH parameters and the partition name should be retrieved successfully. |
 | 2 | Query disk usage of the configured partition | SSH into the device and execute the disk usage command to obtain the usage percentage for the configured partition: <br>`df -h \| grep "<DISK_PARTITION>" \| awk '{print $5}'` | The disk usage percentage for the configured partition should be returned successfully without an exception. |
@@ -34,7 +34,7 @@ To validate that the disk usage of the configured partition on the device under 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 5 mins
 

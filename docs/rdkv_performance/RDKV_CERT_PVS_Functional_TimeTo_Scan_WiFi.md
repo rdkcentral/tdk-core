@@ -16,7 +16,7 @@ To validate that the time taken to scan and discover the configured WiFi SSID is
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
@@ -25,7 +25,7 @@ To validate that the time taken to scan and discover the configured WiFi SSID is
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Verify and activate the NetworkManager plugin | Query the NetworkManager plugin status and activate it if not already active. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.NetworkManager"}` <br><br>Activate if needed: `{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.NetworkManager"}}` | The org.rdk.NetworkManager plugin should be in the activated state. |
 | 2 | Subscribe to available SSIDs event | Register an event listener for the onAvailableSSIDs event to capture the time when the SSID list becomes available. <br>`{"jsonrpc": "2.0", "id": 6, "method": "org.rdk.NetworkManager.1.register", "params": {"event": "onAvailableSSIDs", "id": "client.events.1"}}` | The event registration should succeed and the listener should be active. |
@@ -35,7 +35,7 @@ To validate that the time taken to scan and discover the configured WiFi SSID is
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 5 mins
 

@@ -16,7 +16,7 @@ To validate that the WiFi connection persists after a device reboot — confirmi
 
 <a name="head.Precondition"></a>
 ## Preconditions
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Confirm WPEFramework is running | WPEFramework process must be active and responsive on the device under test. | WPEFramework should be up and running on the device. |
 | 2 | Configure device reboot preference | The user should configure `PRE_REQ_REBOOT_PVS` as `Yes` to reboot the device before test execution, or as `No` to skip reboot before test execution. | The device should reboot or skip reboot as configured before test execution begins. |
@@ -25,7 +25,7 @@ To validate that the WiFi connection persists after a device reboot — confirmi
 <a name="head.TestSteps"></a>
 ## Test Steps
 
-|#|StepName | Step Description| Expected Result|
+|#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Verify and activate the NetworkManager plugin | Query the NetworkManager plugin status and activate it if not already active. <br>`{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.status@org.rdk.NetworkManager"}` <br><br>Activate if needed: `{"jsonrpc": "2.0", "id": 1234567890, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.NetworkManager"}}` | The org.rdk.NetworkManager plugin should be in the activated state. |
 | 2 | Establish WiFi connection | Connect the DUT to the WiFi interface (wlan0). If the device is not already on WiFi, connect to the configured SSID. | The DUT should be successfully connected to the WiFi network. |
@@ -36,7 +36,7 @@ To validate that the WiFi connection persists after a device reboot — confirmi
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 15 mins
 
