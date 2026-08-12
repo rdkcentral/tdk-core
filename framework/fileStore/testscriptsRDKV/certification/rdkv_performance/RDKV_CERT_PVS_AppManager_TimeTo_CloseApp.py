@@ -134,12 +134,14 @@ if expectedResult in result.upper():
                         print(f"\n[SUCCESS] Close time is within expected range")
                     else:
                         print(f"\n[FAILURE] Close time exceeds threshold")
+                        tdkTestObj.setResultStatus("FAILURE")
                 else:
                     print(f"[ERROR] Invalid close time: {close_time_ms} ms")
                     tdkTestObj.setResultStatus("FAILURE")
                     status = "FAILURE"
         else:
             print("[FAILURE] Install/Launch failed")
+            tdkTestObj.setResultStatus("FAILURE")
 
     obj.unloadModule("rdkv_performance")
 
