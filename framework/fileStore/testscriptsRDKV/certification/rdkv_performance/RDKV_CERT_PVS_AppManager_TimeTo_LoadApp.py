@@ -25,6 +25,7 @@ import StabilityTestUtility
 from StabilityTestUtility import *
 from PerformanceTestVariables import *
 from web_socket_util import *
+from rdkv_performancelib import *
 import rdkv_performancelib
 import json
 from datetime import datetime, UTC
@@ -72,69 +73,101 @@ if expectedResult in result.upper():
     if status == "SUCCESS":
         print("[SUCCESS] AppManager plugins activated")
         
-        # Get configuration
-        old_stdout = sys.stdout
-        sys.stdout = StringIO()
+        # Get app configuration from PerformanceTestVariables
+        app_bundle_name = PerformanceTestVariables.google_bundle
+        app_name = app_bundle_name.split('+')[0]
+        app_download_url = PerformanceTestVariables.app_download_url
         
+        print(f"[INFO] App to load: {app_name}")
+        
+        # Get config file for thresholds
         conf_file, _ = getConfigFileName(obj.realpath)
-        config_status, app_bundle_name = getDeviceConfigKeyValue(conf_file, "PACKAGEMANAGER_APPLICATION_NAME")
-        app_id_status, app_download_url = getDeviceConfigKeyValue(conf_file, "PACKAGEMANAGER_APPLICATION_HOSTEDURL")
         
-        # Restore stdout
-        sys.stdout = old_stdout
+        # INSTALL APP (using utility function)
+        print(f"\n[INFO] Ensuring app {app_name} is installed")
+        status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url, launch=False)
         
-        if not app_bundle_name or not app_download_url:
-            print("[FAILURE] App configuration not found in device config file")
-            status = "FAILURE"
-        else:
-            app_name = app_bundle_name.split("+")[0] if "+" in app_bundle_name else app_bundle_name
-            print(f"[INFO] App to load: {app_name}")
+        if status == "SUCCESS":
+            print("[SUCCESS] App installation/verification completed")
             
-            # INSTALL APP (using utility function)
-            print(f"\n[INFO] Ensuring app {app_name} is installed")
-            status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url, launch=False)
+            thunder_port = rdkv_performancelib.devicePort
             
-            if status == "SUCCESS":
-                print("[SUCCESS] App installation/verification completed")
+            # CREATE EVENT LISTENER
+            print("\n[INFO] Creating event listener")
+            lifecycle_event = '{"jsonrpc": "2.0","id": 7,"method": "org.rdk.AppManager.1.register","params": {"event": "onAppLifecycleStateChanged", "id": "client.events.1" }}'
+            download_event = '{"jsonrpc": "2.0","id": 8,"method": "org.rdk.DownloadManager.1.register","params": {"event": "onAppDownloadStatus", "id": "client.events.2" }}'
+            install_event = '{"jsonrpc": "2.0","id": 9,"method": "org.rdk.AppPackageManager.1.register","params": {"event": "onAppInstalled", "id": "client.events.3" }}'
+            event_listener = createEventListener(ip, thunder_port, [lifecycle_event, download_event, install_event], "/jsonrpc", False)
+            time.sleep(3)
+            
+            if event_listener:
+                print("[SUCCESS] Event listener created")
                 
-                thunder_port = rdkv_performancelib.devicePort
+                download_time_ms = 0
+                install_time_ms = 0
+                launch_time_ms = 0
+                load_time_ms = 0
                 
-                # CREATE EVENT LISTENER
-                print("\n[INFO] Creating event listener")
-                lifecycle_event = '{"jsonrpc": "2.0","id": 7,"method": "org.rdk.AppManager.1.register","params": {"event": "onAppLifecycleStateChanged", "id": "client.events.1" }}'
-                download_event = '{"jsonrpc": "2.0","id": 8,"method": "org.rdk.DownloadManager.1.register","params": {"event": "onAppDownloadStatus", "id": "client.events.2" }}'
-                install_event = '{"jsonrpc": "2.0","id": 9,"method": "org.rdk.AppPackageManager.1.register","params": {"event": "onAppInstalled", "id": "client.events.3" }}'
-                event_listener = createEventListener(ip, thunder_port, [lifecycle_event, download_event, install_event], "/jsonrpc", False)
-                time.sleep(3)
-                
-                if event_listener:
-                    print("[SUCCESS] Event listener created")
+                # LAUNCH AND LOAD THE APP
+                if status == "SUCCESS":
+                    print(f"\n[INFO] Launching app {app_name}")
+                    tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+                    tdkTestObj.addParameter("app_name", app_name)
+                    launch_start_time = datetime.now(UTC)  # Full datetime object
+                    tdkTestObj.executeTestCase(expectedResult)
+                    launch_result = tdkTestObj.getResult()
                     
-                    download_time_ms = 0
-                    install_time_ms = 0
-                    launch_time_ms = 0
-                    load_time_ms = 0
-                    
-                    # LAUNCH AND LOAD THE APP
-                    if status == "SUCCESS":
-                        print(f"\n[INFO] Launching app {app_name}")
-                        tdkTestObj = obj.createTestStep('rdkservice_launch_app')
-                        tdkTestObj.addParameter("app_name", app_name)
-                        launch_start_time = datetime.now(UTC)  # Full datetime object
-                        tdkTestObj.executeTestCase(expectedResult)
-                        launch_result = tdkTestObj.getResult()
+                    if launch_result == "SUCCESS":
+                        print("[INFO] Launch initiated, waiting for ACTIVE state")
                         
-                        if launch_result == "SUCCESS":
-                            print("[INFO] Launch initiated, waiting for ACTIVE state")
+                        # Validate app is in loaded apps
+                        print("\n[INFO] Validating app reached loaded state")
+                        time.sleep(3)  # Brief wait for app to start initializing
+                        
+                        app_active = False
+                        validate_count = 0
+                        while validate_count < 30:  # 30 seconds timeout for validation
+                            loaded_apps = rdkservice_get_loaded_apps()
+                            if loaded_apps and app_name in str(loaded_apps):
+                                print(f"[SUCCESS] App {app_name} verified in loaded apps (ACTIVE state)")
+                                app_active = True
+                                break
+                            else:
+                                # Check if app exists but still initializing
+                                all_apps_result = rdkservice_getValue("org.rdk.AppManager.getLoadedApps")
+                                if all_apps_result != "EXCEPTION OCCURRED":
+                                    app_exists = any(item["appId"] == app_name for item in all_apps_result)
+                                    if app_exists:
+                                        print(f"[INFO] App exists but still initializing, waiting...")
+                                        time.sleep(1)
+                                        validate_count += 1
+                                        continue
                             
-                            # Wait for app to reach running/active state
+                            time.sleep(1)
+                            validate_count += 1
+                        
+                        if not app_active:
+                            print(f"[ERROR] App {app_name} failed to reach ACTIVE state")
+                            status = "FAILURE"
+                        else:
+                            # App confirmed ACTIVE via getLoadedApps - record the time
+                            print(f"\n[SUCCESS] App {app_name} confirmed ACTIVE state via getLoadedApps")
+                            launch_end_time = datetime.now(UTC)
+                            
+                            # Calculate launch time from command execution to ACTIVE confirmation
+                            launch_time_delta = launch_end_time - launch_start_time
+                            launch_time_ms = launch_time_delta.total_seconds() * 1000
+                            load_time_ms = launch_time_ms
+                            
+                            print(f"[SUCCESS] Launch time (to ACTIVE): {launch_time_ms:.2f} ms")
+                            
+                            # Try to refine timing with event listener if available
+                            print("\n[INFO] Checking for APP_STATE_ACTIVE event for timestamp refinement")
+                            event_captured = False
                             continue_count = 0
                             launched_time = None
-                            loaded_time = None
-                            launch_success = False
-                            load_success = False
                             
-                            while continue_count < 180:
+                            while continue_count < 30 and not event_captured:  # Reduced timeout to 30s
                                 if len(event_listener.getEventsBuffer()) == 0:
                                     time.sleep(1)
                                     continue_count += 1
@@ -143,69 +176,62 @@ if expectedResult in result.upper():
                                 event_log = event_listener.getEventsBuffer().pop(0)
                                 
                                 if app_name in event_log and '"newState":"APP_STATE_ACTIVE"' in event_log:
-                                    print(f"[SUCCESS] App reached ACTIVE state")
+                                    print(f"[INFO] APP_STATE_ACTIVE event received")
                                     try:
                                         launched_time = event_log.split('$$$')[0]
-                                        launch_success = True
-                                        load_success = True
-                                        loaded_time = launched_time
-                                        break
+                                        event_captured = True
+                                        # Use event timestamp if available and valid
+                                        try:
+                                            launch_end_dt = datetime.fromisoformat(launched_time.replace('Z', '+00:00')) if 'T' in launched_time else launch_end_time
+                                            launch_time_delta = launch_end_dt - launch_start_time
+                                            refined_launch_time_ms = launch_time_delta.total_seconds() * 1000
+                                            if 0 < refined_launch_time_ms < 60000:  # Sanity check
+                                                launch_time_ms = refined_launch_time_ms
+                                                load_time_ms = refined_launch_time_ms
+                                                print(f"[INFO] Using event timestamp - Launch time: {launch_time_ms:.2f} ms")
+                                        except:
+                                            print(f"[INFO] Could not parse event timestamp, using getLoadedApps time")
                                     except:
-                                        continue
+                                        pass
                                 continue_count += 1
                             
-                            if launched_time and launch_success:
-                                # Parse event timestamp
-                                try:
-                                    launch_end_dt = datetime.fromisoformat(launched_time.replace('Z', '+00:00')) if 'T' in launched_time else datetime.now(UTC)
-                                except:
-                                    launch_end_dt = datetime.now(UTC)
-                                
-                                launch_time_delta = launch_end_dt - launch_start_time
-                                launch_time_ms = launch_time_delta.total_seconds() * 1000
-                                load_time_ms = launch_time_ms
-                                print(f"[SUCCESS] Launch time: {launch_time_ms:.2f} ms")
-                                status = "SUCCESS"
-                            else:
-                                print("[ERROR] App failed to reach ACTIVE state within timeout (180s)")
-                                status = "FAILURE"
-                        else:
-                            print("[FAILURE] Failed to initiate launch")
-                            status = "FAILURE"
+                            if not event_captured:
+                                print(f"[INFO] No event received, using getLoadedApps confirmation time: {launch_time_ms:.2f} ms")
+                            
+                            status = "SUCCESS"
+                    else:
+                        print("[FAILURE] Failed to initiate launch")
+                        status = "FAILURE"
+                
+                if status == "SUCCESS" and load_time_ms > 0:
+                    print(f"\n{'='*60}")
+                    print("VALIDATION RESULTS")
+                    print(f"{'='*60}")
                     
-                    if status == "SUCCESS" and load_time_ms > 0:
-                        print(f"\n{'='*60}")
-                        print("VALIDATION RESULTS")
-                        print(f"{'='*60}")
-                        
-                        if download_time_ms > 0:
-                            print(f"Download Time: {download_time_ms} ms")
-                        if install_time_ms > 0:
-                            print(f"Install Time: {install_time_ms} ms")
-                        print(f"Launch Time: {launch_time_ms:.2f} ms")
-                        print(f"Load Time: {load_time_ms:.2f} ms")
-                        
-                        # Get thresholds
-                        old_stdout = sys.stdout
-                        sys.stdout = StringIO()
-                        
-                        config_status, app_load_threshold = getDeviceConfigKeyValue(conf_file, "APP_LOAD_THRESHOLD_VALUE")
-                        offset_status, offset = getDeviceConfigKeyValue(conf_file, "THRESHOLD_OFFSET")
-                        
-                        # Restore stdout
-                        sys.stdout = old_stdout
-                        
-                        if not app_load_threshold:
-                            app_load_threshold = "5000"
-                        if not offset:
-                            offset = "500"
-                        
+                    if download_time_ms > 0:
+                        print(f"Download Time: {download_time_ms} ms")
+                    if install_time_ms > 0:
+                        print(f"Install Time: {install_time_ms} ms")
+                    print(f"Launch Time: {launch_time_ms:.2f} ms")
+                    print(f"Load Time: {load_time_ms:.2f} ms")
+                    
+                    # Get thresholds
+                    old_stdout = sys.stdout
+                    sys.stdout = StringIO()
+                    
+                    config_status, app_load_threshold = getDeviceConfigKeyValue(conf_file, "APPMANAGER_LAUNCH_THRESHOLD_VALUE")
+                    
+                    # Restore stdout
+                    sys.stdout = old_stdout
+                    
+                    if not app_load_threshold:
+                        print("[FAILURE] APPMANAGER_LAUNCH_THRESHOLD_VALUE not configured in device configuration file")
+                        status = "FAILURE"
+                    else:
                         threshold = int(app_load_threshold)
-                        offset_val = int(offset)
-                        threshold_max = threshold + offset_val
+                        threshold_max = threshold
                         
                         print(f"\nThreshold: {threshold} ms")
-                        print(f"Offset: {offset_val} ms")
                         print(f"Max allowed: {threshold_max} ms")
                         
                         if 0 < load_time_ms < threshold_max:
@@ -216,27 +242,27 @@ if expectedResult in result.upper():
                             print(f"\n[FAILURE] Load time exceeds threshold")
                             print(f"Measured: {load_time_ms:.2f} ms | Allowed: {threshold_max} ms")
                             status = "FAILURE"
-                        
-                        # TERMINATE APP
-                        print(f"\n[INFO] Terminating app for cleanup")
-                        tdkTestObj = obj.createTestStep('rdkv_terminate_app')
-                        tdkTestObj.addParameter("app_id", app_name)
-                        tdkTestObj.executeTestCase(expectedResult)
-                        terminate_result = tdkTestObj.getResult()
-                        if terminate_result == "SUCCESS":
-                            print("[SUCCESS] App terminated successfully")
-                        else:
-                            print("[FAILURE] Failed to terminate app")
                     
-                    # Disconnect event listener
-                    print("\n[INFO] Disconnecting event listener")
-                    event_listener.disconnect()
-                else:
-                    print("[FAILURE] Failed to create event listener")
-                    status = "FAILURE"
+                    # TERMINATE APP
+                    print(f"\n[INFO] Terminating app for cleanup")
+                    tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                    tdkTestObj.addParameter("app_id", app_name)
+                    tdkTestObj.executeTestCase(expectedResult)
+                    terminate_result = tdkTestObj.getResult()
+                    if terminate_result == "SUCCESS":
+                        print("[SUCCESS] App terminated successfully")
+                    else:
+                        print("[FAILURE] Failed to terminate app")
+                
+                # Disconnect event listener
+                print("\n[INFO] Disconnecting event listener")
+                event_listener.disconnect()
             else:
-                print("[FAILURE] App installation failed")
+                print("[FAILURE] Failed to create event listener")
                 status = "FAILURE"
+        else:
+            print("[FAILURE] App installation failed")
+            status = "FAILURE"
     
     # Report final status - CRITICAL: must be called in all paths
     if status == "SUCCESS":

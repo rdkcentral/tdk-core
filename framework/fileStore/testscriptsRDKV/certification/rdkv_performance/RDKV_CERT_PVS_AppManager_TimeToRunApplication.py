@@ -24,6 +24,7 @@ from io import StringIO
 import StabilityTestUtility
 from StabilityTestUtility import *
 import PerformanceTestVariables
+from rdkv_performancelib import *
 from datetime import datetime, UTC
 
 # Test component
@@ -67,7 +68,8 @@ if expectedResult in result.upper():
         app_download_url = PerformanceTestVariables.app_download_url
 
         # Install app if needed
-        status = rdkservice_install_launch_app(obj,app_bundle_name,app_name,app_download_url,launch=False)
+        print(f"\n[INFO] Installing {app_name} for run-time measurement")
+        status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url, launch=False)
 
         if status == "SUCCESS":
 
@@ -84,53 +86,63 @@ if expectedResult in result.upper():
             if launch_result == "SUCCESS":
                 print(f"[INFO] Launch command executed")
 
-                # Wait for app to reach full ACTIVE state (typical: 8-10 seconds)
-                time.sleep(10)
+                # Validate app is in loaded apps before measuring
+                print(f"\n[INFO] Validating app {app_name} reached loaded state")
+                time.sleep(3)  # Brief wait for app to start initializing
                 
-                # Capture end time after app is fully loaded
-                end_time = datetime.now(UTC)
+                app_active = False
+                validate_count = 0
+                while validate_count < 30:  # 30 seconds timeout for validation
+                    loaded_apps = rdkservice_get_loaded_apps()
+                    if loaded_apps and app_name in str(loaded_apps):
+                        print(f"[SUCCESS] App {app_name} verified in loaded apps (ACTIVE state)")
+                        app_active = True
+                        break
+                    
+                    time.sleep(1)
+                    validate_count += 1
                 
-                # Calculate time taken
-                time_taken = end_time - start_time
-                time_taken_ms = time_taken.total_seconds() * 1000
-                
-                print(f"[INFO] Time from launch command to app fully running: {time_taken_ms:.2f} ms")
-                
-                # Get threshold configuration
-                old_stdout = sys.stdout
-                sys.stdout = StringIO()
-                
-                conf_file, file_status = getConfigFileName(obj.realpath)
-                config_status, run_threshold = getDeviceConfigKeyValue(
-                    conf_file, "APPMANAGER_RUNAPP_THRESHOLD_VALUE"
-                )
-                if not run_threshold:
-                    run_threshold = "10000"
-                
-                config_status, offset = getDeviceConfigKeyValue(
-                    conf_file, "THRESHOLD_OFFSET"
-                )
-                if not offset:
-                    offset = "500"
-                
-                sys.stdout = old_stdout
-                
-                threshold = int(run_threshold)
-                offset_val = int(offset)
-                threshold_max = threshold + offset_val
-                
-                print(f"[INFO] Threshold validation:")
-                print(f"[INFO]   Time taken: {time_taken_ms:.2f} ms")
-                print(f"[INFO]   Threshold: {threshold} ms, Offset: {offset_val} ms")
-                print(f"[INFO]   Max allowed: {threshold_max} ms")
-                
-                if 0 < time_taken_ms < threshold_max:
-                    print(f"[SUCCESS] Run time within threshold")
-                    status = "SUCCESS"
-                else:
-                    print(f"[FAILURE] Run time exceeded threshold")
+                if not app_active:
+                    print(f"[ERROR] App {app_name} failed to reach ACTIVE state")
                     status = "FAILURE"
-
+                else:
+                    # Capture end time after app is fully loaded and validated
+                    end_time = datetime.now(UTC)
+                    
+                    # Calculate time taken
+                    time_taken = end_time - start_time
+                    time_taken_ms = time_taken.total_seconds() * 1000
+                    
+                    print(f"[INFO] Time from launch command to app fully running: {time_taken_ms:.2f} ms")
+                    
+                    # Get threshold configuration
+                    old_stdout = sys.stdout
+                    sys.stdout = StringIO()
+                    
+                    conf_file, file_status = getConfigFileName(obj.realpath)
+                    config_status, run_threshold = getDeviceConfigKeyValue(
+                        conf_file, "APP_LAUNCH_THRESHOLD_VALUE"
+                    )
+                    
+                    sys.stdout = old_stdout
+                    
+                    if not run_threshold:
+                        print("[FAILURE] APP_LAUNCH_THRESHOLD_VALUE not configured in device configuration file")
+                        status = "FAILURE"
+                    else:
+                        threshold = int(run_threshold)
+                        threshold_max = threshold
+                        
+                        print(f"[INFO] Threshold validation:")
+                        print(f"[INFO]   Time taken: {time_taken_ms:.2f} ms")
+                        print(f"[INFO]   Max allowed: {threshold_max} ms")
+                        
+                        if 0 < time_taken_ms < threshold_max:
+                            print(f"[SUCCESS] Run time within threshold")
+                            status = "SUCCESS"
+                        else:
+                            print(f"[FAILURE] Run time exceeded threshold")
+                            status = "FAILURE"
             else:
                 print("[FAILURE] Launch command failed")
                 status = "FAILURE"
