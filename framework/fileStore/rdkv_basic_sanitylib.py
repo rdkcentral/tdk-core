@@ -523,7 +523,7 @@ def rdkv_basic_sanity_setValue(method,value):
 #-------------------------------------------------------------------
 # GET THE LIST OF INSTALLED PACKAGES USING PACKAGE MANAGER
 # Description  : Retrieves the list of packages with state "INSTALLED" from
-#                the device via the org.rdk.PackageManagerRDKEMS Thunder plugin.
+#                the device via the org.rdk.AppPackageManager Thunder plugin.
 # Parameters   : None
 # Return Value : Tuple (status, package_ids) where status is "SUCCESS" or
 #                "FAILURE" and package_ids is a list of installed package ID
@@ -533,7 +533,7 @@ def rdkv_get_InstalledPackages():
     try:
         print(f"\nGetting the list of installed packages")
 
-        result = rdkv_basic_sanity_getValue("org.rdk.PackageManagerRDKEMS.1.listPackages")
+        result = rdkv_basic_sanity_getValue("org.rdk.AppPackageManager.1.listPackages")
         if result != "EXCEPTION OCCURRED":
             package_ids = [item["packageId"] for item in result if item["state"] == "INSTALLED"]
             print(f"\nList of packages installed in device: {package_ids}")

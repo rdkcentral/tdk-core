@@ -232,9 +232,11 @@ if expectedResult in result.upper():
                             else:
                                 print("[ERROR] Invalid time measurement")
                                 status = "FAILURE"
+                                tdkTestObj.setResultStatus("FAILURE")
                         else:
                             print("[ERROR] App resume failed - ACTIVE state not received (timeout after 30s)")
                             status = "FAILURE"
+                            tdkTestObj.setResultStatus("FAILURE")
 
         # Cleanup
         if status == "SUCCESS":
@@ -250,6 +252,7 @@ if expectedResult in result.upper():
                 else:
                     print(f"[ERROR] Unable to terminate app {app}")
                     status = "FAILURE"
+                    tdkTestObj.setResultStatus("FAILURE")
 
         if event_listener:
             event_listener.disconnect()
@@ -259,6 +262,7 @@ if expectedResult in result.upper():
             print("\n[SUCCESS] Resume time test passed")
         else:
             print("\n[FAILURE] Resume time test failed")
+            tdkTestObj.setResultStatus("FAILURE")
         
         obj.setLoadModuleStatus(status)
         

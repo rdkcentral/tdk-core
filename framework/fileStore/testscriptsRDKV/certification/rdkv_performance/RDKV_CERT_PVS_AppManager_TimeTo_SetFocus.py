@@ -45,8 +45,8 @@ Summ_list=[]
 if expectedResult in result.upper():
     status ="SUCCESS"
     print("\nCheck the status of AppManagers in the device")
-    plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager", "org.rdk.RDKWindowManager"]
-    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated","org.rdk.AppManager":"activated", "org.rdk.RDKWindowManager":"activated"}
+    plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager", "org.rdk.RDKWindowManager"]
+    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.AppPackageManager":"activated","org.rdk.AppManager":"activated", "org.rdk.RDKWindowManager":"activated"}
     curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj,plugins_list)
     if curr_plugins_status_dict != plugin_status_needed:
         status = StabilityTestUtility.set_plugins_status(obj,plugin_status_needed)
