@@ -327,7 +327,7 @@ getValuePS();
                 fpsInterval = null;
             }
 
-            fpsList = [];
+            if (initFlag === 0) fpsList = [];
             try {
                 const quality = videoEl.getVideoPlaybackQuality();
                 prevFrameCount = typeof quality.totalVideoFrames === "number" ? quality.totalVideoFrames : 0;
