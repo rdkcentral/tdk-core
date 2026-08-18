@@ -99,7 +99,7 @@ def get_webinspect_port():
         
         # Execute command on DUT to get inspector port from dacapp log
         cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
-        log_path = rdkv_performancelib.rdkservice_getRequiredLog(ssh_param_dict["ssh_method"], ssh_param_dict["credentials"], cmd)
+        log_path = rdkservice_getRequiredLog(ssh_param_dict["ssh_method"], ssh_param_dict["credentials"], cmd)
         log_path = log_path.split("\n")[1].strip()
         log_file = log_path +"/" + app_name + "/"+ app_name+".log"
         cmd = "cat " + log_file + "  | grep 'inspector port set to'"

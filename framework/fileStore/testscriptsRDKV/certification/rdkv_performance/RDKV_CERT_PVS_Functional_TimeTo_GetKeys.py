@@ -89,6 +89,7 @@ import tdklib;
 from StabilityTestUtility import *
 from web_socket_util import *
 from rdkv_performancelib import *
+import rdkv_performancelib
 import ast
 import PerformanceTestVariables
 #Test component to be tested

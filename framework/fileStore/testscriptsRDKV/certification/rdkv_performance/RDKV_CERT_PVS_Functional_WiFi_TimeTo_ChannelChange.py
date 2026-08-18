@@ -103,6 +103,7 @@ from ip_change_detection_utility import *
 from web_socket_util import *
 from rdkv_performancelib import *
 import MediaValidationVariables
+import rdkv_performancelib
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True);
 #IP and Port of box, No need to change,

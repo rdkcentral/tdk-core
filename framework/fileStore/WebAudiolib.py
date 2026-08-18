@@ -30,6 +30,7 @@ import ast
 import WebAudioVariables
 import web_socket_util
 from web_socket_util import *
+import rdkv_performancelib
 
 deviceIP=""
 devicePort=""
