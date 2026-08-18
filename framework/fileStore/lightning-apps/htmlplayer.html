@@ -253,7 +253,6 @@ getValuePS();
         let expectedFPSProvided = false;
         let droppedFramesTotal = 0;
         let prevDroppedCount = 0;
-        let logSendQueue = Promise.resolve();
 
         inputs.forEach(item => {
             if (item.split("=")[0] == "drmconfigs") {
@@ -1314,14 +1313,12 @@ getValuePS();
             const devID = GetURLParameter('execDevId');
             const resID = GetURLParameter('resultId');
 
-            // Preserve log order in TM by sending one request at a time.
-            logSendQueue = logSendQueue
-                .then(() => fetch(restURL + new URLSearchParams({
-                    execId: execID,
-                    execDevId: devID,
-                    resultId: resID,
-                    test: msg
-                })))
+            fetch(restURL + new URLSearchParams({
+                execId: execID,
+                execDevId: devID,
+                resultId: resID,
+                test: msg
+            }))
                 .then(response => {
                     console.log('Response from Test Manager: ' + JSON.stringify(response));
                 })
