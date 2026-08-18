@@ -139,6 +139,7 @@ VideoPort_SINK_binaryConfig = "Sink_4K_VideoPort.yaml"
 VideoPort_L1_List = []
 VideoPort_L1_SkipTestCaseList = {}
 VideoPort_L1_SkipTestCaseList_RPI = {}
+VideoPort_L1_SkipTestCaseList_RPI["dsEnableHDCP_pos"] = "RPI doesn't support HDCP enabling https://forums.raspberrypi.com/viewtopic.php?t=278193"
 VideoPort_L1_SkipTestCaseList_RPI["dsGetHDCPProtocol_pos"] = "RPI doesn't support dsGetHDCPProtocol REFPLTV-2542"
 VideoPort_L1_SkipTestCaseList_RPI["GetHDCPReceiverProtocol_pos"] = "RPI doesn't support dsGetHDCPReceiverProtocol REFPLTV-2542"
 VideoPort_L1_SkipTestCaseList_RPI["GetHDCPCurrentProtocol_pos"] = "RPI doesn't support dsGetHDCPCurrentProtocol REFPLTV-2542"
