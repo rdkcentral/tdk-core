@@ -53,7 +53,7 @@
         }
 
         .disp>div {
-            flex: 1 1 30%;
+            flex: 1 1 22%;
             text-align: center;
             margin: 0.25rem 0;
         }
@@ -72,6 +72,12 @@
         .disp #vidTime {
             color: #7CFC00;
             /* default green for time */
+            font-size: 0.95rem;
+        }
+
+        /* ---------- FPS Display ---------- */
+        .disp #fpsDisplay {
+            color: #00BFFF;
             font-size: 0.95rem;
         }
 
@@ -165,6 +171,7 @@ getValuePS();
             </div>
             <div id="eventStatus"></div>
             <div id="vidTime"></div>
+            <div id="fpsDisplay">FPS: 0.00</div>
         </div>
 
         <!-- Video Player -->
@@ -191,6 +198,7 @@ getValuePS();
         const videoEl = document.getElementById('vid');
         const eventStatus = document.getElementById('eventStatus');
         const vidTime = document.getElementById('vidTime');
+        const fpsDisplay = document.getElementById('fpsDisplay'); /* FPS */
 
         let message = "";
         let message1 = "";
@@ -233,6 +241,20 @@ getValuePS();
         let checkInterval = 3000;
         const validationState = { initialPosCheckDone: false };
 
+        /* ------------------------
+           FPS state
+           ------------------------ */
+        let fpsList = [];
+        let prevFrameCount = 0;
+        let prevTimeStamp = 0;
+        let fpsInterval = null;
+        let enable_fps_flag = 1;
+        let expectedFPS = DEFAULT_EXPECTED_FPS;
+        let expectedFPSProvided = false;
+        let droppedFramesTotal = 0;
+        let prevDroppedCount = 0;
+        let logSendQueue = Promise.resolve();
+
         inputs.forEach(item => {
             if (item.split("=")[0] == "drmconfigs") {
                 var drm_configs = GetURLParameter("drmconfigs")
@@ -262,6 +284,13 @@ getValuePS();
                 if (hlslib == "yes" || hlslib == "YES")
                     usehlslib = true;
             }
+            else if (item.includes("collectfps")) {
+                enable_fps_flag = 1;
+            }
+            else if (item.includes("expectedfps")) {
+                expectedFPS = parseInt(item.split('(')[1].split(')')[0]);
+                expectedFPSProvided = true;
+            }
         });
 
         // To display Events & Video position in UI
@@ -273,12 +302,110 @@ getValuePS();
         }
 
         /* ------------------------
+           FPS Monitoring
+           ------------------------ */
+        function resetFPSMonitoring() {
+            prevFrameCount = 0;
+            prevTimeStamp = 0;
+            prevDroppedCount = 0;
+            droppedFramesTotal = 0;
+            fpsList = [];
+            if (fpsDisplay) {
+                fpsDisplay.textContent = "FPS: 0.00";
+            }
+        }
+
+        function startFPSMonitoring() {
+            if (typeof videoEl.getVideoPlaybackQuality !== "function") {
+                if (fpsDisplay) fpsDisplay.textContent = "FPS: N/A";
+                logMsg("FPS API not supported: getVideoPlaybackQuality()");
+                return;
+            }
+
+            if (fpsInterval) {
+                clearInterval(fpsInterval);
+                fpsInterval = null;
+            }
+
+            fpsList = [];
+            try {
+                const quality = videoEl.getVideoPlaybackQuality();
+                prevFrameCount = typeof quality.totalVideoFrames === "number" ? quality.totalVideoFrames : 0;
+                prevDroppedCount = typeof quality.droppedVideoFrames === "number" ? quality.droppedVideoFrames : 0;
+                prevTimeStamp = performance.now();
+            } catch (e) {
+                prevFrameCount = 0;
+                prevDroppedCount = 0;
+                prevTimeStamp = performance.now();
+                logMsg("FPS baseline init error: " + e);
+            }
+
+            fpsInterval = setInterval(() => {
+                try {
+                    if (videoEl.paused || videoEl.ended) return;
+
+                    const quality = videoEl.getVideoPlaybackQuality();
+                    const now = performance.now();
+                    const totalFrames = typeof quality.totalVideoFrames === "number" ? quality.totalVideoFrames : 0;
+                    const droppedFrames = typeof quality.droppedVideoFrames === "number" ? quality.droppedVideoFrames : 0;
+
+                    // Accumulate dropped frames across all playback states
+                    const deltaDropped = droppedFrames - prevDroppedCount;
+                    if (deltaDropped > 0) droppedFramesTotal += deltaDropped;
+                    prevDroppedCount = droppedFrames;
+
+                    // Skip FPS sample and reset baseline during seek or non-1x playback
+                    if (videoEl.seeking || videoEl.playbackRate !== 1) {
+                        prevFrameCount = totalFrames;
+                        prevTimeStamp = now;
+                        if (fpsDisplay) fpsDisplay.textContent = "FPS: --";
+                        return;
+                    }
+
+                    const deltaFrames = totalFrames - prevFrameCount;
+                    const deltaTimeSec = (now - prevTimeStamp) / 1000;
+
+                    let fps = 0;
+                    if (deltaTimeSec > 0) {
+                        fps = deltaFrames / deltaTimeSec;
+                    }
+
+                    prevFrameCount = totalFrames;
+                    prevTimeStamp = now;
+
+                    if (fps < 0) {
+                        logMsg("Ignoring negative FPS value: " + fps.toFixed(2));
+                        return;
+                    }
+                    fpsList.push(fps);
+
+                    const fpsText = "FPS: " + fps.toFixed(2);
+                    if (fpsDisplay) {
+                        fpsDisplay.textContent = fpsText;
+                    }
+
+                    logMsg("Current FPS: " + fps.toFixed(2) +
+                        ", Dropped Frames: " + droppedFrames);
+                } catch (e) {
+                    logMsg("FPS calculation error: " + e);
+                }
+            }, 1000);
+        }
+
+        function stopFPSMonitoring() {
+            if (fpsInterval) {
+                clearInterval(fpsInterval);
+                fpsInterval = null;
+            }
+        }
+
+        /* ------------------------
            LOGGING
            ------------------------ */
         function logMsg(msg) {
             const logging = GetURLParameter("logging");
             const inputs1 = window.location.search.substring(1).split("&");
-            const player = GetURLParameter("player");
+            const player = GetURLParameter("player") || "HTML";
             const options1 = [];
             inputs1.forEach(item => {
                 if (item.split("=")[0] === "options") {
@@ -608,6 +735,7 @@ getValuePS();
             const info = "[Event]: Video Player Playing";
             dispUIMessage(info);
             logMsg(info);
+            startFPSMonitoring();
             if (initFlag === 0) {
                 logMsg("******************* VIDEO STARTED PLAYING !!! *******************");
                 logMsg("VIDEO LOOP: " + videoEl.loop)
@@ -626,6 +754,7 @@ getValuePS();
             const info = "[Event]: Video Player Paused";
             dispUIMessage(info);
             checkAndLogEvents("pause", info);
+            stopFPSMonitoring();
             // Enable video progress pos validation with pos diff 0
             if (pos_zero_index_flag) {
                 pos_zero_index_flag = 0
@@ -638,6 +767,7 @@ getValuePS();
             const info = "[Event]: Video Player Ended";
             dispUIMessage(info);
             logMsg(info);
+            stopFPSMonitoring();
         });
 
         videoEl.addEventListener('seeking', (e) => {
@@ -688,6 +818,7 @@ getValuePS();
         /* error */
         videoEl.addEventListener('error', (e) => {
             errorFlag = 1;
+            stopFPSMonitoring();
             const err = videoEl.error;
             let errorMsg = "[ERROR]: ";
             if (!err) errorMsg += "Unknown error";
@@ -1021,6 +1152,7 @@ getValuePS();
                         updatePrevPosValidationResult()
                         logMsg("**************** Going to close ****************")
                         clearInterval(progressLogger);
+                        stopFPSMonitoring();
                         closePlayer()
                     }, actionInterval);
                 }
@@ -1089,6 +1221,7 @@ getValuePS();
                     updatePrevPosValidationResult()
                     logMsg("**************** Going to close ****************")
                     clearInterval(progressLogger);
+                    stopFPSMonitoring();
                     closePlayer()
                 }, (actionInterval + 10000));
             }
@@ -1116,11 +1249,34 @@ getValuePS();
 
         function dispTestResult() {
             clearInterval(progressLogger);
+            stopFPSMonitoring();
             logMsg("**************** TEST STATUS ****************");
-            logMsg("OVERALL VIDEO PLAYBACK ERROR EVENT STATUS : " + (errorFlag ? "TRUE" : "FALSE"));
+            let fpsCheckStatus = "SUCCESS";
+            if (fpsList.length > 0) {
+                const roundedFPS = Math.round(fpsList.reduce((a, b) => a + b, 0) / fpsList.length);
+                // If expectedfps(...) is passed in URL options, treat it as the final minimum FPS.
+                const minFPS = expectedFPSProvided ? expectedFPS : (expectedFPS - FPS_THRESHOLD);
+                const fpsComparison = roundedFPS >= minFPS ? ">=" : "<";
+                logMsg("AVERAGE FPS OBTAINED : " + roundedFPS + " " + fpsComparison + " " + minFPS);
+                if (roundedFPS < minFPS) {
+                    fpsCheckStatus = "FAILURE";
+                }
+            } else {
+                fpsCheckStatus = "FAILURE";
+                logMsg("Failure Reason: No FPS data collected");
+            }
+            const droppedFramesStatus = droppedFramesTotal <= DROPPED_FRAMES_THRESHOLD ? "SUCCESS" : "FAILURE";
+            logMsg("TOTAL DROPPED FRAMES : " + droppedFramesTotal);
+            if (droppedFramesStatus === "FAILURE") {
+                fpsCheckStatus = "FAILURE";
+                logMsg("Failure Reason: Dropped frames count (" + droppedFramesTotal + ") exceeded the threshold of " + DROPPED_FRAMES_THRESHOLD);
+            }
+            logMsg("OVERALL FPS VALIDATION STATUS : " + fpsCheckStatus);
+            logMsg("OVERALL DROPPED FRAMES VALIDATION STATUS : " + droppedFramesStatus);
+            logMsg("OVERALL VIDEO PLAYBACK ERROR EVENT STATUS : " + (errorFlag ? "FAILURE" : "SUCCESS"));
             logMsg("OVERALL VIDEO PROGRESS POSITION VALIDATION STATUS : " + (pos_val_result.includes("FAILURE") ? "FAILURE" : "SUCCESS"));
             logMsg("OVERALL VIDEO OPERATIONS EVENTS VALIDATION STATUS : " + (eventFlowFlag ? "SUCCESS" : "FAILURE"));
-            if (eventFlowFlag === 1 && errorFlag === 0 && !pos_val_result.includes("FAILURE")) {
+            if (eventFlowFlag === 1 && errorFlag === 0 && !pos_val_result.includes("FAILURE") && fpsCheckStatus === "SUCCESS") {
                 logMsg("TEST RESULT: SUCCESS");
             } else {
                 logMsg("TEST RESULT: FAILURE");
@@ -1158,12 +1314,14 @@ getValuePS();
             const devID = GetURLParameter('execDevId');
             const resID = GetURLParameter('resultId');
 
-            fetch(restURL + new URLSearchParams({
-                execId: execID,
-                execDevId: devID,
-                resultId: resID,
-                test: msg
-            }))
+            // Preserve log order in TM by sending one request at a time.
+            logSendQueue = logSendQueue
+                .then(() => fetch(restURL + new URLSearchParams({
+                    execId: execID,
+                    execDevId: devID,
+                    resultId: resID,
+                    test: msg
+                })))
                 .then(response => {
                     console.log('Response from Test Manager: ' + JSON.stringify(response));
                 })
@@ -1179,7 +1337,8 @@ getValuePS();
             load(true);
             window.HTMLPlayer = {
                 load, play, pause, seek, seekfwd, seekbwd, setPlaybackRate, getRate, setVolume, getVolume, mute, unmute,
-                getPosition, getDuration, dispTestResult, updatePrevPosValidationResult
+                getPosition, getDuration, dispTestResult, updatePrevPosValidationResult,
+                startFPSMonitoring, stopFPSMonitoring
             };
             logMsg("HTML player ready. API object: window.HTMLPlayer");
         });
