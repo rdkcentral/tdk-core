@@ -97,8 +97,12 @@ def get_webinspect_port():
         if not ssh_method or not credentials:
             raise Exception("SSH method or credentials not found in configuration")
         
-        # Execute command on DUT to get inspector port from dacapp.log
-        cmd = "cat /opt/logs/dacapp.log | grep 'inspector port set to'"
+        # Execute command on DUT to get inspector port from dacapp log
+        cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
+        log_path = rdkv_performancelib.rdkservice_getRequiredLog(ssh_param_dict["ssh_method"], ssh_param_dict["credentials"], cmd)
+        log_path = log_path.split("\n")[1].strip()
+        log_file = log_path +"/" + app_name + "/"+ app_name+".log"
+        cmd = "cat " + log_file + "  | grep 'inspector port set to'"
         output = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
         
         if output == "EXCEPTION" or output == "":
@@ -111,10 +115,10 @@ def get_webinspect_port():
                 return match.group(1)
         
         # If no port found in output
-        raise Exception("Inspector port not found in dacapp.log output")
+        raise Exception("Inspector port not found in dacapp log output")
                 
     except Exception as e:
-        print("Unable to get webinspect port from dacapp.log:", e)
+        print("Unable to get webinspect port from dacapp log:", e)
         raise
 
 

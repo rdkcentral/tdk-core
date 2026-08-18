@@ -535,7 +535,11 @@ def webaudio_getLogs_fromDevicelogs(obj,app_name,grep_line,keys=[]):
        if expectedResult in result:
            time.sleep(10)
            print ("\n Check for the logs in wpeframework logs")
-           command = "cat /opt/logs/dacapp.log | grep -inr 'TDK_LOGS'| grep " + grep_line
+           cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
+           log_path = rdkv_performancelib.rdkservice_getRequiredLog(ssh_param_dict["ssh_method"], ssh_param_dict["credentials"], cmd)
+           log_path = log_path.split("\n")[1].strip()
+           log_file = log_path +"/" + app_name + "/"+ app_name+".log"
+           command = "cat " + log_file + " | grep -inr 'TDK_LOGS'| grep " + grep_line
            tdkTestObj = obj.createTestStep('webaudio_getRequiredLog')
            tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
            tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])

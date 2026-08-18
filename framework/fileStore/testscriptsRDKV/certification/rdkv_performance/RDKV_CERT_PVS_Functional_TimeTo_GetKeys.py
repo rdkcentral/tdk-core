@@ -149,7 +149,11 @@ if expectedResult in result.upper():
                         tdkTestObj.setResultStatus("SUCCESS")
                         time.sleep(10)
                         print("checking for Keycode log")
-                        command = 'cat /opt/logs/dacapp.log | grep -inr KeyCode | tail -1'
+                        cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
+                        log_path = rdkv_performancelib.rdkservice_getRequiredLog(ssh_param_dict["ssh_method"], ssh_param_dict["credentials"], cmd)
+                        log_path = log_path.split("\n")[1].strip()
+                        log_file = log_path +"/" + app_name + "/"+ app_name+".log"
+                        command = 'cat ' + log_file + ' | grep -inr KeyCode | tail -1'
                         print("COMMAND : %s" %(command))
                         #Primitive test case which associated to this Script
                         tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
