@@ -68,7 +68,7 @@
         </pluginPreRequisite>
 
         <!-- Test case 01 -->
-        <testCase testCaseId="DISP_01" testCaseName= "DisplayInfo_GET_audiopassthrough" desc="Read isaudioPassthrough property on HDMI.">
+        <testCase testCaseId="DISP_01" testCaseName= "DisplayInfo_Get_audiopassthrough" desc="Read isaudioPassthrough property on HDMI.">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -84,7 +84,7 @@
 
 
         <!-- Test case 02 -->
-        <testCase testCaseId="DISP_02" testCaseName= "DisplayInfo_GET_HDMI_Connected" desc="Is HDMI connected.">
+        <testCase testCaseId="DISP_02" testCaseName= "DisplayInfo_Get_HDMI_Connected" desc="Is HDMI connected.">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="IsHDMIConnected" method="DisplayInfo_Isconnected">
                 <resultGeneration useMethodTag="displayinfo_validate_boolean_result" />
@@ -93,7 +93,7 @@
 
 
         <!-- Test case 03 -->
-        <testCase testCaseId="DISP_03" testCaseName= "DisplayInfo_GET_resolution_width" desc="Get width of the current resolution.">
+        <testCase testCaseId="DISP_03" testCaseName= "DisplayInfo_Get_resolution_width" desc="Get width of the current resolution.">
             <testCaseInfo testCaseType="direct"/>
 
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
@@ -117,7 +117,7 @@
 
 
         <!-- Test case 04 -->
-        <testCase testCaseId="DISP_04" testCaseName= "DisplayInfo_GET_resolution_height" desc="Get height of the current resolution.">
+        <testCase testCaseId="DISP_04" testCaseName= "DisplayInfo_Get_resolution_height" desc="Get height of the current resolution.">
         <testCaseInfo testCaseType="direct"/>
 
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
@@ -141,7 +141,7 @@
 
 
         <!-- Test case 05 -->
-        <testCase testCaseId="DISP_05" testCaseName= "DisplayInfo_GET_vertical_frequency" desc="Get Vertical frequency.">
+        <testCase testCaseId="DISP_05" testCaseName= "DisplayInfo_Get_vertical_frequency" desc="Get Vertical frequency.">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -157,7 +157,7 @@
 
 
         <!-- Test case 06 -->
-        <testCase testCaseId="DISP_06" testCaseName= "DisplayInfo_GET_HDCP_protocol_version" desc="Get HDCP version.">
+        <testCase testCaseId="DISP_06" testCaseName= "DisplayInfo_Get_HDCP_protocol_version" desc="Get HDCP version.">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -173,7 +173,7 @@
 
 
         <!-- Test case 07 -->
-        <testCase testCaseId="DISP_07" testCaseName= "DisplayInfo_GET_portname" desc="Get portname used for TV connection.">
+        <testCase testCaseId="DISP_07" testCaseName= "DisplayInfo_Get_portname" desc="Get portname used for TV connection.">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -273,7 +273,7 @@
         </testCasePostRequisite>
         </testCase>
        <!-- Test case 10 -->
-        <testCase testCaseId="DISP_10" testCaseName= "DisplayInfo_GET_HDR_Formats_TV" desc="Gets the HDR formats supported by TV">
+        <testCase testCaseId="DISP_10" testCaseName= "DisplayInfo_Get_HDR_Formats_TV" desc="Gets the HDR formats supported by TV">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -287,7 +287,7 @@
             </testStep>
         </testCase>
      <!-- Test case 11 -->
-        <testCase testCaseId="DISP_11" testCaseName= "DisplayInfo_GET_HDR_Formats_STB" desc="Gets the HDR formats supported by STB">
+        <testCase testCaseId="DISP_11" testCaseName= "DisplayInfo_Get_HDR_Formats_STB" desc="Gets the HDR formats supported by STB">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -301,7 +301,7 @@
             </testStep>
         </testCase>
      <!-- Test case 12 -->
-        <testCase testCaseId="DISP_12" testCaseName= "DisplayInfo_GET_HDR_Format_In_Use" desc="Gets the HDR formats in use">
+        <testCase testCaseId="DISP_12" testCaseName= "DisplayInfo_Get_HDR_Format_In_Use" desc="Gets the HDR formats in use">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -371,7 +371,7 @@
             </testStep>
         </testCase>
      <!-- Test case 17 -->
-        <testCase testCaseId="DISP_17" testCaseName= "DisplayInfo_Check_Resolution_PostChange_Event" desc="Checks for the Resolution Post Change event">
+        <testCase testCaseId="DISP_17" testCaseName= "DisplayInfo_Resolution_PostChange_Event" desc="Checks for the Resolution Post Change event">
             <testCaseInfo testCaseType="loop" revert="true"/>
 	    <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -418,7 +418,7 @@
             </testStep>
         </testCase>
      <!-- Test case 18 -->
-        <testCase testCaseId="DISP_18" testCaseName="DisplayInfo_Check_HDMI_Connection_Status_Without_TV" desc="Checks the HDMI connection status when TV is not connected" >
+        <testCase testCaseId="DISP_18" testCaseName="DisplayInfo_Get_HDMI_Connection_Status_Without_TV" desc="Checks the HDMI connection status when TV is not connected" >
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -432,7 +432,7 @@
             </testStep>
         </testCase>
      <!-- Test case 19 -->
-        <testCase testCaseId="DISP_19" testCaseName= "DisplayInfo_GET_Color_Space" desc="Gets the display color space">
+        <testCase testCaseId="DISP_19" testCaseName= "DisplayInfo_Get_Color_Space" desc="Gets the display color space">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DISPLAYINFO_NA_TESTS" useMethodTag="displayinfo_na_tests" arguments="colorspace"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -559,7 +559,7 @@
             </testStep>
         </testCase>
         <!-- Test case 25 -->
-        <testCase testCaseId="DISP_25" testCaseName= "DisplayInfo_Check_Resolution_PreChange_Event" desc="Checks for the Resolution Pre Change event">
+        <testCase testCaseId="DISP_25" testCaseName= "DisplayInfo_Resolution_PreChange_Event" desc="Checks for the Resolution Pre Change event">
             <testCaseInfo testCaseType="loop" revert="true"  />
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
                 <resultGeneration useMethodTag="display_connected_status"/>

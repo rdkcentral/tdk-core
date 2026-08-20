@@ -97,8 +97,12 @@ def get_webinspect_port():
         if not ssh_method or not credentials:
             raise Exception("SSH method or credentials not found in configuration")
         
-        # Execute command on DUT to get inspector port from dacapp.log
-        cmd = "cat /opt/logs/dacapp.log | grep 'inspector port set to'"
+        # Execute command on DUT to get inspector port from dacapp log
+        cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
+        log_path = rdkservice_getRequiredLog(ssh_param_dict["ssh_method"], ssh_param_dict["credentials"], cmd)
+        log_path = log_path.split("\n")[1].strip()
+        log_file = log_path +"/" + app_name + "/"+ app_name+".log"
+        cmd = "cat " + log_file + "  | grep 'inspector port set to'"
         output = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
         
         if output == "EXCEPTION" or output == "":
@@ -111,10 +115,10 @@ def get_webinspect_port():
                 return match.group(1)
         
         # If no port found in output
-        raise Exception("Inspector port not found in dacapp.log output")
+        raise Exception("Inspector port not found in dacapp log output")
                 
     except Exception as e:
-        print("Unable to get webinspect port from dacapp.log:", e)
+        print("Unable to get webinspect port from dacapp log:", e)
         raise
 
 
@@ -1901,7 +1905,7 @@ def rdkv_install_app(event_listener, app_id, install_timeout=120):
         install_start_time = str(datetime.utcnow()).split()[1]
 
         install_params = '{"appId":"' + app_id + '"}'
-        result = rdkservice_setValue("org.rdk.PackageManagerRDKEMS.1.install", install_params)
+        result = rdkservice_setValue("org.rdk.AppPackageManager.1.install", install_params)
 
         if result == "EXCEPTION OCCURRED":
             print(f"\n Error while initiating app installation for {app_id} \n")
@@ -2071,7 +2075,7 @@ def rdkv_getInstalledPackages():
     try:
         print(f"\nGetting the list of installed packages")
 
-        result = rdkservice_getValue("org.rdk.PackageManagerRDKEMS.1.listPackages")
+        result = rdkservice_getValue("org.rdk.AppPackageManager.1.listPackages")
         if result != "EXCEPTION OCCURRED":
             package_ids = [item["packageId"] for item in result if item["state"] == "INSTALLED"]
             print(f"\nList of packages installed in device: {package_ids}")
@@ -2103,7 +2107,7 @@ def rdkservice_download_app_bundle(download_url):
 def rdkservice_install_app(fileLocator, app_id):
     params = '{ "packageId": "' +app_id+ '", "version": "0.1.0", "additionalMetadata": [ {"name": "type", "value": "native/dac-app"} ], "fileLocator":"' + fileLocator +'" }'
     print(params)
-    result = rdkservice_setValue("org.rdk.PackageManagerRDKEMS.install",params)
+    result = rdkservice_setValue("org.rdk.AppPackageManager.install",params)
     return result
 #---------------------------------------------------------------
 #UNINSTALL APP
@@ -2111,7 +2115,7 @@ def rdkservice_install_app(fileLocator, app_id):
 def rdkservice_uninstall_app(app_id):
     params = '{ "packageId": "' +app_id+ '" }'
     print(params)
-    result = rdkservice_setValue("org.rdk.PackageManagerRDKEMS.uninstall",params)
+    result = rdkservice_setValue("org.rdk.AppPackageManager.uninstall",params)
     return result
 #---------------------------------------------------------------
 #CLOSE APP
@@ -2163,8 +2167,8 @@ def rdkservice_install_launch_app(obj,app_bundle_name, app_name, app_download_ur
         print("\nApp is not installed in the device")
         status = "SUCCESS"
         print("\nCheck the status of AppManagers in the device")
-        plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
-        plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated", "org.rdk.AppManager":"activated"}
+        plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]
+        plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.AppPackageManager":"activated", "org.rdk.AppManager":"activated"}
         curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj,plugins_list)
         if curr_plugins_status_dict != plugin_status_needed:
             revert = "YES"
