@@ -6,17 +6,17 @@ RDKV_CERT_AVS_AppManager
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [AppManager_Check_Response_Get_Installed_Apps](#appmanager_check_response_get_installed_apps)
-   - [AppManager_Verify_IsInstalled_Valid_AppId](#appmanager_verify_isinstalled_valid_appid)
-   - [AppManager_Verify_IsInstalled_With_Invalid_AppId](#appmanager_verify_isinstalled_with_invalid_appid)
-   - [AppManager_Verify_IsInstalled_Empty_AppId](#appmanager_verify_isinstalled_empty_appid)
-   - [AppManager_Verify_IsInstalled_NonExistent_AppId](#appmanager_verify_isinstalled_nonexistent_appid)
-   - [AppManager_Verify_IsInstalled_Numeric_AppId](#appmanager_verify_isinstalled_numeric_appid)
-   - [AppManager_Verify_IsInstalled_SpecialChar_AppId](#appmanager_verify_isinstalled_specialchar_appid)
-   - [AppManager_Verify_IsInstalled_Long_AppId](#appmanager_verify_isinstalled_long_appid)
-   - [AppManager_Verify_IsInstalled_With_Whitespace_AppId](#appmanager_verify_isinstalled_with_whitespace_appid)
-   - [AppManager_Verify_IsInstalled_Mixed_Alphanumeric_SpecialChars](#appmanager_verify_isinstalled_mixed_alphanumeric_specialchars)
-   - [AppManager_Check_Response_Get_Loaded_Apps](#appmanager_check_response_get_loaded_apps)
+   - [AppManager_Get_Installed_Apps](#appmanager_get_installed_apps)
+   - [AppManager_IsInstalled_Valid_AppId](#appmanager_isinstalled_valid_appid)
+   - [AppManager_IsInstalled_With_Invalid_AppId](#appmanager_isinstalled_with_invalid_appid)
+   - [AppManager_IsInstalled_Empty_AppId](#appmanager_isinstalled_empty_appid)
+   - [AppManager_IsInstalled_NonExistent_AppId](#appmanager_isinstalled_nonexistent_appid)
+   - [AppManager_IsInstalled_Numeric_AppId](#appmanager_isinstalled_numeric_appid)
+   - [AppManager_IsInstalled_SpecialChar_AppId](#appmanager_isinstalled_specialchar_appid)
+   - [AppManager_IsInstalled_Long_AppId](#appmanager_isinstalled_long_appid)
+   - [AppManager_IsInstalled_With_Whitespace_AppId](#appmanager_isinstalled_with_whitespace_appid)
+   - [AppManager_IsInstalled_Mixed_Alphanumeric_SpecialChars](#appmanager_isinstalled_mixed_alphanumeric_specialchars)
+   - [AppManager_Get_Loaded_Apps](#appmanager_get_loaded_apps)
    - [AppManager_LaunchApp_Valid_Param](#appmanager_launchapp_valid_param)
    - [AppManager_LaunchApp_Invalid_AppId](#appmanager_launchapp_invalid_appid)
    - [AppManager_LaunchApp_Invalid_Intent](#appmanager_launchapp_invalid_intent)
@@ -27,15 +27,15 @@ RDKV_CERT_AVS_AppManager
    - [AppManager_LaunchApp_Fail_Gracefully_Empty_LaunchArgs](#appmanager_launchapp_fail_gracefully_empty_launchargs)
    - [AppManager_LaunchApp_Fail_Gracefully_Without_Params](#appmanager_launchapp_fail_gracefully_without_params)
    - [AppManager_LaunchApp_EdgeCase_LongStrings](#appmanager_launchapp_edgecase_longstrings)
-   - [AppManager_Verify_PreloadApp_Valid_Param](#appmanager_verify_preloadapp_valid_param)
+   - [AppManager_PreloadApp_Valid_Param](#appmanager_preloadapp_valid_param)
    - [AppManager_PreloadApp_Empty_AppId](#appmanager_preloadapp_empty_appid)
    - [AppManager_PreloadApp_Empty_LaunchArgs](#appmanager_preloadapp_empty_launchargs)
    - [AppManager_PreloadApp_Special_Char_AppId](#appmanager_preloadapp_special_char_appid)
    - [AppManager_PreloadApp_Special_Char_LaunchArgs](#appmanager_preloadapp_special_char_launchargs)
-   - [AppManager_Verify_PreloadApp_with_Numeric_AppId](#appmanager_verify_preloadapp_with_numeric_appid)
+   - [AppManager_PreloadApp_with_Numeric_AppId](#appmanager_preloadapp_with_numeric_appid)
    - [AppManager_PreloadApp_Numeric_LaunchArgs](#appmanager_preloadapp_numeric_launchargs)
-   - [AppManager_Verify_PreloadApp_with_Alphanumeric_AppId](#appmanager_verify_preloadapp_with_alphanumeric_appid)
-   - [AppManager_Verify_PreloadApp_with_Alphanumeric_LaunchArgs](#appmanager_verify_preloadapp_with_alphanumeric_launchargs)
+   - [AppManager_PreloadApp_with_Alphanumeric_AppId](#appmanager_preloadapp_with_alphanumeric_appid)
+   - [AppManager_PreloadApp_with_Alphanumeric_LaunchArgs](#appmanager_preloadapp_with_alphanumeric_launchargs)
    - [AppManager_PreloadApp_Valid_AppId_Already_Preloaded](#appmanager_preloadapp_valid_appid_already_preloaded)
    - [AppManager_CloseApp_Valid_AppId](#appmanager_closeapp_valid_appid)
    - [AppManager_CloseApp_Invalid_AppId](#appmanager_closeapp_invalid_appid)
@@ -74,10 +74,10 @@ RDKV_CERT_AVS_AppManager
    - [AppManager_ClearAppData_Empty_AppId](#appmanager_clearappdata_empty_appid)
    - [AppManager_ClearAppData_SpecialCharacters](#appmanager_clearappdata_specialcharacters)
    - [AppManager_ClearAppData_Long_AppId](#appmanager_clearappdata_long_appid)
-   - [ClearAppData_Numeric_AppId](#clearappdata_numeric_appid)
+   - [AppManager_ClearAppData_Numeric_AppId](#appmanager_clearappdata_numeric_appid)
    - [AppManager_ClearAppData_Alphanumeric_AppId](#appmanager_clearappdata_alphanumeric_appid)
    - [AppManager_Clear_All_App_Data](#appmanager_clear_all_app_data)
-   - [AppManager_SetAppProperty_ValidAppId_Delay_10](#appmanager_setappproperty_validappid_delay_10)
+   - [AppManager_SetAppProperty_ValidAppId_With_Delay](#appmanager_setappproperty_validappid_with_delay)
    - [AppManager_SetAppProperty_Empty_AppId_Key_Value](#appmanager_setappproperty_empty_appid_key_value)
    - [AppManager_SetAppProperty_Numeric_AppId_Key_Value](#appmanager_setappproperty_numeric_appid_key_value)
    - [AppManager_SetAppProperty_SpecialChars_All_Params](#appmanager_setappproperty_specialchars_all_params)
@@ -119,14 +119,14 @@ RDKV_CERT_AVS_AppManager
    - [AppManager_App_Launch_Terminate_Lock_Unlock_Operations](#appmanager_app_launch_terminate_lock_unlock_operations)
    - [AppManager_App_Launch_Kill_Lock_Unlock_Operations](#appmanager_app_launch_kill_lock_unlock_operations)
    - [AppManager_App_Launch_Close_Lock_Unlock_Operations](#appmanager_app_launch_close_lock_unlock_operations)
-   - [AppManager_Check_On_AppLifecycleStateChanged_Event_After_Close](#appmanager_check_on_applifecyclestatechanged_event_after_close)
-   - [AppManager_Check_On_AppLifecycleStateChanged_Event_After_Kill](#appmanager_check_on_applifecyclestatechanged_event_after_kill)
-   - [AppManager_Check_On_AppLifecycleStateChanged_Event_After_Terminate](#appmanager_check_on_applifecyclestatechanged_event_after_terminate)
+   - [AppManager_On_AppLifecycleStateChanged_Event_After_Close](#appmanager_on_applifecyclestatechanged_event_after_close)
+   - [AppManager_On_AppLifecycleStateChanged_Event_After_Kill](#appmanager_on_applifecyclestatechanged_event_after_kill)
+   - [AppManager_On_AppLifecycleStateChanged_Event_After_Terminate](#appmanager_on_applifecyclestatechanged_event_after_terminate)
    - [AppManager_App_Launch_Twice](#appmanager_app_launch_twice)
-   - [AppManager_Check_Get_Loaded_Apps_After_Launch](#appmanager_check_get_loaded_apps_after_launch)
-   - [AppManager_Check_Get_Loaded_Apps_After_Close](#appmanager_check_get_loaded_apps_after_close)
-   - [AppManager_Check_Get_Loaded_Apps_After_Kill](#appmanager_check_get_loaded_apps_after_kill)
-   - [AppManager_Check_Get_Loaded_Apps_After_Terminate](#appmanager_check_get_loaded_apps_after_terminate)
+   - [AppManager_Get_Loaded_Apps_After_Launch](#appmanager_get_loaded_apps_after_launch)
+   - [AppManager_Get_Loaded_Apps_After_Close](#appmanager_get_loaded_apps_after_close)
+   - [AppManager_Get_Loaded_Apps_After_Kill](#appmanager_get_loaded_apps_after_kill)
+   - [AppManager_Get_Loaded_Apps_After_Terminate](#appmanager_get_loaded_apps_after_terminate)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -153,13 +153,13 @@ accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
 | 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DownloadManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DownloadManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
 | 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of DownloadManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
-### Plugin Pre-condition 3: Activate_PackageManagerRDKEMS_Plugin
+### Plugin Pre-condition 3: Activate_AppPackageManager_Plugin
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of PackageManagerRDKEMS plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate PackageManagerRDKEMS plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.PackageManagerRDKEMS"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of PackageManagerRDKEMS plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check plugin active status | Check active status of AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppPackageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppPackageManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppPackageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 4: Activate_AppManager_Plugin
 
@@ -173,11 +173,11 @@ accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check existing package | Get packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
-| 2 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 1 | Check existing package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
+| 2 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Download valid parameters | Download on DownloadManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
-| 4 | Install package on device | Install on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_4>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 5 | Verify installed package | Get packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
+| 4 | Install package on device | Install on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_4>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 5 | Verify installed package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
 
 ### Plugin Pre-condition 6: Register_And_Listen_Events
 
@@ -198,9 +198,9 @@ accessible via JSON-RPC under the callsign `org.rdk.AppManager` (version 1)
 | 7 | Configure packagemanager system application name | `PACKAGEMANAGER_SYSTEM_APPLICATION_NAME` must be set to the name of the pre-installed system application used for validation | The `PACKAGEMANAGER_SYSTEM_APPLICATION_NAME` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
-<a id="appmanager_check_response_get_installed_apps"></a>
+<a id="appmanager_get_installed_apps"></a>
 ### TestCase Name
-AppManager_Check_Response_Get_Installed_Apps
+AppManager_Get_Installed_Apps
 
 ### TestCase ID
 AM_01
@@ -216,9 +216,9 @@ Check the response when applications are installed
 
 ---
 
-<a id="appmanager_verify_isinstalled_valid_appid"></a>
+<a id="appmanager_isinstalled_valid_appid"></a>
 ### TestCase Name
-AppManager_Verify_IsInstalled_Valid_AppId
+AppManager_IsInstalled_Valid_AppId
 
 ### TestCase ID
 AM_02
@@ -234,9 +234,9 @@ Verify isInstalled with a valid appId of an installed application
 
 ---
 
-<a id="appmanager_verify_isinstalled_with_invalid_appid"></a>
+<a id="appmanager_isinstalled_with_invalid_appid"></a>
 ### TestCase Name
-AppManager_Verify_IsInstalled_With_Invalid_AppId
+AppManager_IsInstalled_With_Invalid_AppId
 
 ### TestCase ID
 AM_03
@@ -252,9 +252,9 @@ Verify isInstalled with an invalid appId of an application that is not installed
 
 ---
 
-<a id="appmanager_verify_isinstalled_empty_appid"></a>
+<a id="appmanager_isinstalled_empty_appid"></a>
 ### TestCase Name
-AppManager_Verify_IsInstalled_Empty_AppId
+AppManager_IsInstalled_Empty_AppId
 
 ### TestCase ID
 AM_04
@@ -270,9 +270,9 @@ Verify isInstalled with an empty string as appId
 
 ---
 
-<a id="appmanager_verify_isinstalled_nonexistent_appid"></a>
+<a id="appmanager_isinstalled_nonexistent_appid"></a>
 ### TestCase Name
-AppManager_Verify_IsInstalled_NonExistent_AppId
+AppManager_IsInstalled_NonExistent_AppId
 
 ### TestCase ID
 AM_05
@@ -288,9 +288,9 @@ Verify isInstalled with a non-existent appId (e.g., random string)
 
 ---
 
-<a id="appmanager_verify_isinstalled_numeric_appid"></a>
+<a id="appmanager_isinstalled_numeric_appid"></a>
 ### TestCase Name
-AppManager_Verify_IsInstalled_Numeric_AppId
+AppManager_IsInstalled_Numeric_AppId
 
 ### TestCase ID
 AM_06
@@ -306,9 +306,9 @@ Verify isInstalled with a numeric value as appId
 
 ---
 
-<a id="appmanager_verify_isinstalled_specialchar_appid"></a>
+<a id="appmanager_isinstalled_specialchar_appid"></a>
 ### TestCase Name
-AppManager_Verify_IsInstalled_SpecialChar_AppId
+AppManager_IsInstalled_SpecialChar_AppId
 
 ### TestCase ID
 AM_07
@@ -324,9 +324,9 @@ Verify isInstalled with a special character string as appId
 
 ---
 
-<a id="appmanager_verify_isinstalled_long_appid"></a>
+<a id="appmanager_isinstalled_long_appid"></a>
 ### TestCase Name
-AppManager_Verify_IsInstalled_Long_AppId
+AppManager_IsInstalled_Long_AppId
 
 ### TestCase ID
 AM_08
@@ -342,9 +342,9 @@ Verify isInstalled with a very long string as appId
 
 ---
 
-<a id="appmanager_verify_isinstalled_with_whitespace_appid"></a>
+<a id="appmanager_isinstalled_with_whitespace_appid"></a>
 ### TestCase Name
-AppManager_Verify_IsInstalled_With_Whitespace_AppId
+AppManager_IsInstalled_With_Whitespace_AppId
 
 ### TestCase ID
 AM_09
@@ -360,9 +360,9 @@ Verify isInstalled with an appId containing spaces or whitespace characters
 
 ---
 
-<a id="appmanager_verify_isinstalled_mixed_alphanumeric_specialchars"></a>
+<a id="appmanager_isinstalled_mixed_alphanumeric_specialchars"></a>
 ### TestCase Name
-AppManager_Verify_IsInstalled_Mixed_Alphanumeric_SpecialChars
+AppManager_IsInstalled_Mixed_Alphanumeric_SpecialChars
 
 ### TestCase ID
 AM_10
@@ -378,9 +378,9 @@ Verify isInstalled with an appId containing mixed alphanumeric and special chara
 
 ---
 
-<a id="appmanager_check_response_get_loaded_apps"></a>
+<a id="appmanager_get_loaded_apps"></a>
 ### TestCase Name
-AppManager_Check_Response_Get_Loaded_Apps
+AppManager_Get_Loaded_Apps
 
 ### TestCase ID
 AM_11
@@ -594,9 +594,9 @@ Verify that the launchApp method handles edge cases, such as extremely long stri
 
 ---
 
-<a id="appmanager_verify_preloadapp_valid_param"></a>
+<a id="appmanager_preloadapp_valid_param"></a>
 ### TestCase Name
-AppManager_Verify_PreloadApp_Valid_Param
+AppManager_PreloadApp_Valid_Param
 
 ### TestCase ID
 AM_22
@@ -702,9 +702,9 @@ Verify preloadApp with launchArgs containing special characters
 
 ---
 
-<a id="appmanager_verify_preloadapp_with_numeric_appid"></a>
+<a id="appmanager_preloadapp_with_numeric_appid"></a>
 ### TestCase Name
-AppManager_Verify_PreloadApp_with_Numeric_AppId
+AppManager_PreloadApp_with_Numeric_AppId
 
 ### TestCase ID
 AM_27
@@ -738,9 +738,9 @@ Verify preloadApp with launchArgs containing only numeric characters
 
 ---
 
-<a id="appmanager_verify_preloadapp_with_alphanumeric_appid"></a>
+<a id="appmanager_preloadapp_with_alphanumeric_appid"></a>
 ### TestCase Name
-AppManager_Verify_PreloadApp_with_Alphanumeric_AppId
+AppManager_PreloadApp_with_Alphanumeric_AppId
 
 ### TestCase ID
 AM_29
@@ -756,9 +756,9 @@ Verify preloadApp with an appId containing a mix of alphanumeric characters
 
 ---
 
-<a id="appmanager_verify_preloadapp_with_alphanumeric_launchargs"></a>
+<a id="appmanager_preloadapp_with_alphanumeric_launchargs"></a>
 ### TestCase Name
-AppManager_Verify_PreloadApp_with_Alphanumeric_LaunchArgs
+AppManager_PreloadApp_with_Alphanumeric_LaunchArgs
 
 ### TestCase ID
 AM_30
@@ -1520,9 +1520,9 @@ Verify clearAppData with appId containing a very long string
 
 ---
 
-<a id="clearappdata_numeric_appid"></a>
+<a id="appmanager_clearappdata_numeric_appid"></a>
 ### TestCase Name
-ClearAppData_Numeric_AppId
+AppManager_ClearAppData_Numeric_AppId
 
 ### TestCase ID
 AM_69
@@ -1574,9 +1574,9 @@ Verify that clearAllAppData successfully clears all persistent data for all inst
 
 ---
 
-<a id="appmanager_setappproperty_validappid_delay_10"></a>
+<a id="appmanager_setappproperty_validappid_with_delay"></a>
 ### TestCase Name
-AppManager_SetAppProperty_ValidAppId_Delay_10
+AppManager_SetAppProperty_ValidAppId_With_Delay
 
 ### TestCase ID
 AM_72
@@ -2332,11 +2332,11 @@ Verify that an app can be launched successfully after performing lock operation 
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Lock package valid parameters | Invoke lock on org.rdk.PackageManagerRDKEMS with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 1 | Lock package valid parameters | Invoke lock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Launch app after lock | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Check app launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 4 | Terminate app valid param | Invoke terminateApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 5 | Unlock package for management | Invoke unlock on org.rdk.PackageManagerRDKEMS with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 5 | Unlock package for management | Invoke unlock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
 
@@ -2366,8 +2366,8 @@ Verify that an app can be launch, terminate, lock and unlock successfully
 | 1 | Launch app before lock | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check app launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 3 | Terminate app valid param | Invoke terminateApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 4 | Lock package valid parameters | Invoke lock on org.rdk.PackageManagerRDKEMS with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 5 | Unlock package for management | Invoke unlock on org.rdk.PackageManagerRDKEMS with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 4 | Lock package valid parameters | Invoke lock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 5 | Unlock package for management | Invoke unlock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
 
@@ -2397,8 +2397,8 @@ Verify that an app can be launch, kill, lock and unlock successfully
 | 1 | Launch app before lock | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check app launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 3 | Kill app valid param | Invoke killApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.killApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 4 | Lock package valid parameters | Invoke lock on org.rdk.PackageManagerRDKEMS with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 5 | Unlock package for management | Invoke unlock on org.rdk.PackageManagerRDKEMS with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 4 | Lock package valid parameters | Invoke lock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 5 | Unlock package for management | Invoke unlock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ---
 
@@ -2428,8 +2428,8 @@ Verify that an app can be launch, close, lock and unlock successfully
 | 1 | Launch app before lock | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check app launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 3 | Close app valid params | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 4 | Lock package valid parameters | Invoke lock on org.rdk.PackageManagerRDKEMS with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 5 | Unlock package for management | Invoke unlock on org.rdk.PackageManagerRDKEMS with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 4 | Lock package valid parameters | Invoke lock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 5 | Unlock package for management | Invoke unlock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ### TestCase Post-condition
 
@@ -2441,9 +2441,9 @@ Verify that an app can be launch, close, lock and unlock successfully
 
 ---
 
-<a id="appmanager_check_on_applifecyclestatechanged_event_after_close"></a>
+<a id="appmanager_on_applifecyclestatechanged_event_after_close"></a>
 ### TestCase Name
-AppManager_Check_On_AppLifecycleStateChanged_Event_After_Close
+AppManager_On_AppLifecycleStateChanged_Event_After_Close
 
 ### TestCase ID
 AM_L2_05
@@ -2472,9 +2472,9 @@ Verify that appLifecycleStateChanged event is received with correct parameters w
 
 ---
 
-<a id="appmanager_check_on_applifecyclestatechanged_event_after_kill"></a>
+<a id="appmanager_on_applifecyclestatechanged_event_after_kill"></a>
 ### TestCase Name
-AppManager_Check_On_AppLifecycleStateChanged_Event_After_Kill
+AppManager_On_AppLifecycleStateChanged_Event_After_Kill
 
 ### TestCase ID
 AM_L2_06
@@ -2502,9 +2502,9 @@ Verify that appLifecycleStateChanged event is received with correct parameters w
 
 ---
 
-<a id="appmanager_check_on_applifecyclestatechanged_event_after_terminate"></a>
+<a id="appmanager_on_applifecyclestatechanged_event_after_terminate"></a>
 ### TestCase Name
-AppManager_Check_On_AppLifecycleStateChanged_Event_After_Terminate
+AppManager_On_AppLifecycleStateChanged_Event_After_Terminate
 
 ### TestCase ID
 AM_L2_07
@@ -2564,9 +2564,9 @@ Check that an app can be launched successfully after terminating the app which i
 
 ---
 
-<a id="appmanager_check_get_loaded_apps_after_launch"></a>
+<a id="appmanager_get_loaded_apps_after_launch"></a>
 ### TestCase Name
-AppManager_Check_Get_Loaded_Apps_After_Launch
+AppManager_Get_Loaded_Apps_After_Launch
 
 ### TestCase ID
 AM_L2_09
@@ -2601,9 +2601,9 @@ Verify that the launched app is reflected in the list of loaded apps
 
 ---
 
-<a id="appmanager_check_get_loaded_apps_after_close"></a>
+<a id="appmanager_get_loaded_apps_after_close"></a>
 ### TestCase Name
-AppManager_Check_Get_Loaded_Apps_After_Close
+AppManager_Get_Loaded_Apps_After_Close
 
 ### TestCase ID
 AM_L2_10
@@ -2639,9 +2639,9 @@ Verify that the closed app is no longer reflected in the list of loaded apps
 
 ---
 
-<a id="appmanager_check_get_loaded_apps_after_kill"></a>
+<a id="appmanager_get_loaded_apps_after_kill"></a>
 ### TestCase Name
-AppManager_Check_Get_Loaded_Apps_After_Kill
+AppManager_Get_Loaded_Apps_After_Kill
 
 ### TestCase ID
 AM_L2_11
@@ -2669,9 +2669,9 @@ Verify that the killed app is no longer reflected in the list of loaded apps
 
 ---
 
-<a id="appmanager_check_get_loaded_apps_after_terminate"></a>
+<a id="appmanager_get_loaded_apps_after_terminate"></a>
 ### TestCase Name
-AppManager_Check_Get_Loaded_Apps_After_Terminate
+AppManager_Get_Loaded_Apps_After_Terminate
 
 ### TestCase ID
 AM_L2_12
@@ -2712,8 +2712,8 @@ Verify that the terminated app is no longer reflected in the list of loaded apps
 | --- | --- | --- | --- |
 | 1 | Check loaded apps | Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate app valid param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate app on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 3 | Check package info | Get packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
-| 4 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 3 | Check package info | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
+| 4 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ## Test Attributes
 

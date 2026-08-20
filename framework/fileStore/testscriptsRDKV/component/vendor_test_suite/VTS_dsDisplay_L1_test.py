@@ -112,7 +112,7 @@ if "SUCCESS" in result.upper():
     #Set binary name
     binaryName = DeviceSettings_binaryName
     #Set TestCase Config
-    binaryConfig = Display_binaryConfig
+    binaryConfig = Display_SOURCE_binaryConfig if "SOURCE" in DEVICE_TYPE.upper() else Display_SINK_binaryConfig
     #Set Custom List of TestCases
     testCaseList = Display_L1_List
     #Set basepath of test
@@ -123,6 +123,11 @@ if "SUCCESS" in result.upper():
     words[0], words[-1] = words[-1], words[0]
     plugin_name = " ".join(words)
     testcaseID="dsDisplay L1"
+    #SkipTestCaseList
+    SkipTestCaseList = Display_L1_SkipTestCaseList
+    boxtype = obj.getDeviceBoxType();
+    if ("RPI-Client" in boxtype):
+        SkipTestCaseList = Display_L1_SkipTestCaseList_RPI
 
     testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
 
@@ -133,7 +138,7 @@ if "SUCCESS" in result.upper():
             print("####################################################################################")
 
             binaryPath = "cd " + basePath + " ; ./" + binaryName + " -p " + binaryConfig
-            executionSummary = runTest(binaryPath, module, testcaseID, testList, testCaseList)
+            executionSummary = runTest(binaryPath, module, testcaseID, testList, testCaseList, SkipTestCaseList, binaryConfig=binaryConfig)
     
             executePostRequisites()
 

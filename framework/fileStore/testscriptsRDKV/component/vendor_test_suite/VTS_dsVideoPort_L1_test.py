@@ -114,7 +114,7 @@ if "SUCCESS" in result.upper():
     binaryName = DeviceSettings_binaryName
     print ("BinaryName : ",binaryName)
     #Set TestCase Config
-    binaryConfig = VideoPort_binaryConfig
+    binaryConfig = VideoPort_SOURCE_binaryConfig if "SOURCE" in DEVICE_TYPE.upper() else VideoPort_SINK_binaryConfig
     print("BinaryConfig : ",binaryConfig)
     #Set Custom List of TestCases
     testCaseList = VideoPort_L1_List
@@ -141,7 +141,7 @@ if "SUCCESS" in result.upper():
 
             binaryPath = "cd " + basePath + " ; ./" + binaryName + " -p " + binaryConfig
             print("BinaryPath : ",binaryPath)
-            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList, SkipTestCaseList)
+            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList, SkipTestCaseList, binaryConfig)
     
             executePostRequisites()
 

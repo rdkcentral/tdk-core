@@ -167,7 +167,7 @@
             </testStep>
         </testCase>
        
- 	<testCase testCaseId="DI_06" testCaseName= "DeviceInfo_Check_Model_Name" desc="Checks the model name of the DUT">
+ 	<testCase testCaseId="DI_06" testCaseName= "DeviceInfo_Model_Name_Match_With_Device_Details" desc="Checks the model name of the DUT">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_Details" action="externalFnCall" saveResult="true">
                     <resultGeneration useMethodTag="system_get_device_details_from_file" >
@@ -181,7 +181,7 @@
             </testStep>
        </testCase> 
        
-       <testCase testCaseId="DI_07" testCaseName="DeviceInfo_Check_Firmware_Version" desc="Checks the firmware version of the DUT">
+      <testCase testCaseId="DI_07" testCaseName="DeviceInfo_Firmware_Version_Match_With_Version_File" desc="Checks the firmware version of the DUT">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Current_Image_Version" action="externalFnCall" saveResult="true">
                 <resultGeneration useMethodTag="getImageVersion" arguments="get_image_and_yocto_version" >
@@ -194,7 +194,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="DI_08" testCaseName="DeviceInfo_Check_Supported_Audio_Ports" desc="Check whether settop lists supported audio ports">
+       <testCase testCaseId="DI_08" testCaseName="DeviceInfo_Supported_Audio_Ports" desc="Check whether settop lists supported audio ports">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Supported_Audio_Ports" method="Get_Supported_Audio_Ports">
                 <resultGeneration useMethodTag="deviceinfo_check_supported_audio_and_video_ports" arguments="supportedAudioPorts" >
@@ -203,7 +203,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="DI_09" testCaseName="DeviceInfo_Check_Supported_Video_Displays" desc="Check whether settop displays supported video displays">
+       <testCase testCaseId="DI_09" testCaseName="DeviceInfo_Supported_Video_Displays" desc="Check whether settop displays supported video displays">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Supported_Video_Displays" method="Get_Supported_Video_Displays">
                 <resultGeneration useMethodTag="deviceinfo_check_supported_audio_and_video_ports" arguments="supportedVideoDisplays" >
@@ -212,14 +212,14 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="DI_10" testCaseName= "DeviceInfo_Check_Host_EDID" desc="Check the EDID status of host">
+       <testCase testCaseId="DI_10" testCaseName= "DeviceInfo_Host_EDID" desc="Check the EDID status of host">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DEVICEINFO_NA_TESTS" useMethodTag="deviceinfo_na_tests" arguments="hostedid"/>
             <testStep testStepId="1" name="Get_Host_EDID_Details" method="Get_Host_EDID">
                 <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
             </testStep>
        </testCase>
 
-       <testCase testCaseId="DI_11" testCaseName="DeviceInfo_Check_Default_Resolution" desc="Check whether the default resolution is available in supported resolutions" >
+       <testCase testCaseId="DI_11" testCaseName="DeviceInfo_Default_Resolution" desc="Check whether the default resolution is available in supported resolutions" >
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -237,7 +237,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="DI_12" testCaseName="DeviceInfo_Check_Supported_HDCP_Version" desc="Checks the supported HDCP version" >
+       <testCase testCaseId="DI_12" testCaseName="DeviceInfo_Supported_HDCP_Version" desc="Checks the supported HDCP version" >
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DEVICEINFO_NA_TESTS" useMethodTag="deviceinfo_na_tests" arguments="hdcpversion"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -252,7 +252,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="DI_13" testCaseName="DeviceInfo_Check_Model_ID" desc="Checks the model id of the DUT">
+      <testCase testCaseId="DI_13" testCaseName="DeviceInfo_Model_ID_Match_With_Device_Details_File" desc="Checks the model id of the DUT">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_Details" action="externalFnCall" saveResult="true">
                     <resultGeneration useMethodTag="system_get_device_details_from_file" >
@@ -266,7 +266,7 @@
             </testStep>
        </testCase>
 
-       <testCase testCaseId="DI_14" testCaseName="DeviceInfo_Check_Device_Type" desc="Checks the device type of the DUT">
+       <testCase testCaseId="DI_14" testCaseName="DeviceInfo_Device_Type" desc="Checks the device type of the DUT">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_Type" method="Get_Device_Type">
                 <resultGeneration useMethodTag="deviceinfo_check_expected_result" arguments="devicetype" >
@@ -332,7 +332,7 @@
        </testCase>
 
        <!-- Test case 16 -->
-       <testCase testCaseId="DI_16" testCaseName="DeviceInfo_Validate_Firmware_Version" desc="Verify whether the firmware version returned by deviceinfo API matches the firmware version in system or not">
+      <testCase testCaseId="DI_16" testCaseName="DeviceInfo_Firmware_Version_Match_With_System_Image_Version" desc="Verify whether the firmware version returned by deviceinfo API matches the firmware version in system or not">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="DeviceInfo_Get_Firmware_Version" method="Get_Firmware_Version" saveResult="true">
 		<resultGeneration useMethodTag="deviceinfo_validate_firmware_version" />
@@ -351,7 +351,7 @@
        </testCase>
 
        <!-- Test case 17 -->
-       <testCase testCaseId="DI_17" testCaseName="DeviceInfo_Validate_Serial_Number" desc="Verify whether the serial number returned by deviceinfo API matches the serial number in system or not">
+      <testCase testCaseId="DI_17" testCaseName="DeviceInfo_Serial_Number_Match_With_System_Serial_Number" desc="Verify whether the serial number returned by deviceinfo API matches the serial number in system or not">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="DeviceInfo_Get_Serial_Number" method="Get_Serial_Number" saveResult="true">
                 <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
@@ -367,7 +367,7 @@
        </testCase>	
 
        <!-- Test case 18 -->
-       <testCase testCaseId="DI_18" testCaseName="DeviceInfo_Validate_Supported_Audio_Ports" desc="Verify whether the audio ports returned by deviceinfo API matches the audio ports in displaysettings or not">
+      <testCase testCaseId="DI_18" testCaseName="DeviceInfo_Supported_Audio_Ports_Match_With_DisplaySettings" desc="Verify whether the audio ports returned by deviceinfo API matches the audio ports in displaysettings or not">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="DeviceInfo_Get_Supported_Audio_Ports" method="Get_Supported_Audio_Ports" saveResult="true">
 		    <resultGeneration useMethodTag="deviceinfo_check_audio_ports" />
@@ -380,7 +380,7 @@
        </testCase>
 
        <!-- Test case 19 -->
-       <testCase testCaseId="DI_19" testCaseName="DeviceInfo_Validate_Supported_Video_Ports" desc="Verify whether the video ports returned by deviceinfo API matches the video ports in displaysettings or not">
+      <testCase testCaseId="DI_19" testCaseName="DeviceInfo_Supported_Video_Ports_Match_With_DisplaySettings" desc="Verify whether the video ports returned by deviceinfo API matches the video ports in displaysettings or not">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="DeviceInfo_Get_Supported_Video_Displays" method="Get_Supported_Video_Displays" saveResult="true">
 		    <resultGeneration useMethodTag="deviceinfo_check_video_ports" />
@@ -393,7 +393,7 @@
        </testCase>
 
        <!-- Test case 20 -->
-       <testCase testCaseId="DI_20" testCaseName="DeviceInfo_Validate_Host_EDID" desc="Verify whether the host EDID details returned by deviceinfo API matches the EDID details in displaysettings or not">
+      <testCase testCaseId="DI_20" testCaseName="DeviceInfo_Host_EDID_Match_With_DisplaySettings" desc="Verify whether the host EDID details returned by deviceinfo API matches the EDID details in displaysettings or not">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DEVICEINFO_NA_TESTS" useMethodTag="deviceinfo_na_tests" arguments="hostedid"/>
 	    <testStep testStepId="1" name="DeviceInfo_Get_Host_EDID_Details" method="Get_Host_EDID" saveResult="true">
                 <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
@@ -409,7 +409,7 @@
        </testCase>
 
        <!-- Test case 21 -->
-       <testCase testCaseId="DI_21" testCaseName="DeviceInfo_Validate_HDCP_Version" desc="Verify whether the HDCP version returned by deviceinfo API matches the HDCP version in HdcpProfile plugin or not">
+      <testCase testCaseId="DI_21" testCaseName="DeviceInfo_Supported_HDCP_Version_Match_With_HdcpProfile" desc="Verify whether the HDCP version returned by deviceinfo API matches the HDCP version in HdcpProfile plugin or not">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DEVICEINFO_NA_TESTS" useMethodTag="deviceinfo_na_tests" arguments="hdcpversion"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -428,7 +428,7 @@
        </testCase>
 
        <!-- Test case 22 -->
-       <testCase testCaseId="DI_22" testCaseName="DeviceInfo_Validate_Default_Resolution" desc="Check whether the default resolution returned by deviceinfo API matches the default resolution in displaysettings plugin or not">
+      <testCase testCaseId="DI_22" testCaseName="DeviceInfo_Default_Resolution_Match_With_DisplaySettings" desc="Check whether the default resolution returned by deviceinfo API matches the default resolution in displaysettings plugin or not">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -444,7 +444,7 @@
        </testCase>    
 
        <!-- Test case 23 -->
-       <testCase testCaseId="DI_23" testCaseName="DeviceInfo_Check_SystemInfo_API_Date_Matches_DUT_Date" desc="Check if the date returned by the systeminfo API matches the DUT date">
+       <testCase testCaseId="DI_23" testCaseName="DeviceInfo_SystemInfo_API_Date_Matches_DUT_Date" desc="Check if the date returned by the systeminfo API matches the DUT date">
 	    <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_SystemInfo_API_Date" method="Get_System_Info" saveResult="true">
 		<resultGeneration useMethodTag="deviceinfo_get_system_info" arguments="get_systeminfo_date"/>
@@ -474,4 +474,68 @@
                 <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
             </testStep>
         </testCase>
+
+       <!-- Test case 26 -->
+       <testCase testCaseId="DI_26" testCaseName="DeviceInfo_Get_Brand_Name" desc="Checks the brand name of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Brand_Name" method="Get_Brand_Name">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 27 -->
+       <testCase testCaseId="DI_27" testCaseName="DeviceInfo_Get_Chipset_Info" desc="Checks the chipset of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Device_Chipset" method="Get_Device_Chipset">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 28 -->
+       <testCase testCaseId="DI_28" testCaseName="DeviceInfo_Get_Distributor_ID" desc="Checks the distributor ID of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Distributor_ID" method="Get_Distributor_ID">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 29 -->
+       <testCase testCaseId="DI_29" testCaseName="DeviceInfo_Get_ESTB_IP_Address" desc="Checks the STB IP address of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_ESTB_IP" method="Get_ESTB_IP">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 30 -->
+       <testCase testCaseId="DI_30" testCaseName="DeviceInfo_Get_Ethernet_MAC_Address" desc="Checks the Ethernet MAC address of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Ethernet_MAC" method="Get_Ethernet_MAC">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 31 -->
+       <testCase testCaseId="DI_31" testCaseName="DeviceInfo_Get_Release_Version" desc="Checks the release version of the device image">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Release_Version" method="Get_Release_Version">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 32 -->
+       <testCase testCaseId="DI_32" testCaseName="DeviceInfo_Get_WiFi_MAC_Address" desc="Checks the WiFi MAC address of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_WiFi_MAC" method="Get_WiFi_MAC">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!--Test case 33 -->
+       <testCase testCaseId="DI_33" testCaseName="DeviceInfo_Get_ESTB_MAC_Address" desc="Checks the ESTB MAC address of the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Estb_Mac_Address" method="Get_Estb_Mac">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
 </testPlugin>
