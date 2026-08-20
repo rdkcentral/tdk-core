@@ -1,0 +1,924 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2026 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<testPlugin pluginName="PowerManager" pluginVersion="1">
+  <pluginPreRequisite>
+    <prerequisite requisiteId="1" requisiteName="Activate_PowerManager_Plugin">
+      <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+        <params>
+          <param tag="plugin" value="org.rdk.PowerManager" indexOnly="true" />
+        </params>
+        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PowerManager" />
+      </testStep>
+      <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PowerManager" />
+        <params>
+          <param tag="callsign" value="org.rdk.PowerManager" />
+        </params>
+      </testStep>
+      <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+        <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PowerManager" />
+        <params>
+          <param tag="plugin" value="org.rdk.PowerManager" indexOnly="true" />
+        </params>
+        <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PowerManager" expectedValues="activated"/>
+      </testStep>
+    </prerequisite>
+
+    <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+      <event pluginName="PowerManager" eventName="Event_On_PowerMode_Changed" />
+      <event pluginName="PowerManager" eventName="Event_On_PowerMode_PreChange" />
+      <event pluginName="PowerManager" eventName="Event_On_NetworkStandbyMode_Changed" />
+      <event pluginName="PowerManager" eventName="Event_On_Reboot_Begin" />
+      <event pluginName="PowerManager" eventName="Event_On_ThermalMode_Changed" />
+      <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
+      <event pluginName="Controller" eventName="Event_Controller_All" />
+    </prerequisite>
+  </pluginPreRequisite>
+
+  <!-- Get current power state -->
+  <testCase testCaseId="PWRM_01" testCaseName="PowerManager_Get_Power_State" desc="Verify getPowerState returns valid currentState and previousState values">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Power_State" method="Get_Power_State">
+      <resultGeneration useMethodTag="powermanager_get_power_state"/>
+    </testStep>
+  </testCase>
+
+  <!-- Get power state before reboot -->
+  <testCase testCaseId="PWRM_02" testCaseName="PowerManager_Get_PowerState_Before_Reboot" desc="Verify getPowerStateBeforeReboot returns a valid power state enum value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Power_State_Before_Reboot" method="Get_Power_State_Before_Reboot">
+      <resultGeneration useMethodTag="powermanager_get_power_state_before_reboot"/>
+    </testStep>
+  </testCase>
+
+  <!-- Get network standby mode -->
+  <testCase testCaseId="PWRM_03" testCaseName="PowerManager_Get_Network_Standby_Mode" desc="Verify getNetworkStandbyMode returns a valid boolean standbyMode field">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Network_Standby_Mode" method="Get_Network_Standby_Mode">
+      <resultGeneration useMethodTag="powermanager_get_network_standby_mode"/>
+    </testStep>
+  </testCase>
+
+  <!-- Get temperature thresholds -->
+  <testCase testCaseId="PWRM_04" testCaseName="PowerManager_Get_Temperature_Thresholds" desc="Verify getTemperatureThresholds returns valid values for high and critical fields">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Temperature_Thresholds" method="Get_Temperature_Thresholds">
+      <resultGeneration useMethodTag="powermanager_get_temperature_thresholds"/>
+    </testStep>
+  </testCase>
+
+  <!-- Get thermal state -->
+  <testCase testCaseId="PWRM_05" testCaseName="PowerManager_Get_Thermal_State" desc="Verify getThermalState returns currentTemperature value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Thermal_State" method="Get_Thermal_State">
+      <resultGeneration useMethodTag="powermanager_get_thermal_state"/>
+    </testStep>
+  </testCase>
+
+  <!-- Get time since wakeup -->
+  <testCase testCaseId="PWRM_06" testCaseName="PowerManager_Get_Time_Since_Wakeup" desc="Verify getTimeSinceWakeup returns secondsSinceWakeup as a non-negative integer">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Time_Since_Wakeup" method="Get_Time_Since_Wakeup">
+      <resultGeneration useMethodTag="powermanager_get_time_since_wakeup"/>
+    </testStep>
+  </testCase>
+
+  <!-- Get wakeup source config -->
+  <testCase testCaseId="PWRM_07" testCaseName="PowerManager_Get_Wakeup_Source_Config" desc="Verify getWakeupSourceConfig returns a non-empty array with wakeupSource and enabled fields">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Wakeup_Source_Config" method="Get_Wakeup_Source_Config">
+      <resultGeneration useMethodTag="powermanager_get_wakeup_source_config"/>
+    </testStep>
+  </testCase>
+
+  <!-- Get last wakeup key code (read-only property) -->
+  <testCase testCaseId="PWRM_08" testCaseName="PowerManager_Get_Last_Wakeup_KeyCode" desc="Verify getLastWakeupKeyCode property returns a valid integer keycode">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Last_Wakeup_Key_Code" method="Get_Last_Wakeup_Key_Code">
+      <resultGeneration useMethodTag="powermanager_get_last_wakeup_keycode"/>
+    </testStep>
+  </testCase>
+
+  <!-- Get last wakeup reason (read-only property) -->
+  <testCase testCaseId="PWRM_09" testCaseName="PowerManager_Get_Last_Wakeup_Reason" desc="Verify getLastWakeupReason property returns a valid wakeupReason string from the documented enum">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Last_Wakeup_Reason" method="Get_Last_Wakeup_Reason">
+      <resultGeneration useMethodTag="powermanager_get_last_wakeup_reason"/>
+    </testStep>
+  </testCase>
+
+  <!-- Get overtemp grace interval (read-only property) -->
+  <testCase testCaseId="PWRM_10" testCaseName="PowerManager_Get_Overtemp_Grace_Interval" desc="Verify getOvertempGraceInterval property returns a non-negative integer graceInterval">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Overtemp_Grace_Interval" method="Get_Overtemp_Grace_Interval">
+      <resultGeneration useMethodTag="powermanager_get_overtemp_grace_interval"/>
+    </testStep>
+  </testCase>
+
+  <!-- SetNetworkStandbyMode with standbyMode true -->
+  <testCase testCaseId="PWRM_11" testCaseName="PowerManager_Set_NetworkStandbyMode_Enabled" desc="Verify setNetworkStandbyMode with standbyMode true returns null (success)">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Network_Standby_Mode_True" method="Set_Network_Standby_Mode">
+      <params>
+        <param tag="standbyMode" value="true"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+  </testCase>
+
+  <!-- SetNetworkStandbyMode with standbyMode false -->
+  <testCase testCaseId="PWRM_12" testCaseName="PowerManager_Set_NetworkStandbyMode_Disabled" desc="Verify setNetworkStandbyMode with standbyMode false returns null (success)">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Network_Standby_Mode_False" method="Set_Network_Standby_Mode">
+      <params>
+        <param tag="standbyMode" value="false"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+  </testCase>
+
+  <!-- SetOvertempGraceInterval with valid graceInterval -->
+  <testCase testCaseId="PWRM_13" testCaseName="PowerManager_Set_OvertempGraceInterval_Valid" desc="Verify setOvertempGraceInterval write-only property with graceInterval=300 returns null (success)">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Overtemp_Grace_Interval" method="Set_Overtemp_Grace_Interval">
+      <params>
+        <param tag="graceInterval" value="300"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+  </testCase>
+
+  <!-- SetWakeupSourceConfig with various wakeup sources and enabled true -->
+  <testCase testCaseId="PWRM_14" testCaseName="PowerManager_Set_WakeupSourceConfig" desc="Verify setWakeupSourceConfig with various wakeup sources and enabled true returns null (success)">
+    <testCaseInfo testCaseType="loop"/>
+    <testStep testStepId="1" name="Set_Wakeup_Source" testStepType="loop">
+      <subtestStep testStepId="1" name="Set_Wakeup_Source" method="Set_Wakeup_Source_Config">
+        <params>
+          <param tag="wakeupSource" useConfigFile="true" key="POWERMANAGER_WAKEUP_SOURCE_CONFIG" iteration="true"/>
+          <param tag="enabled" value="true"/>
+        </params>
+        <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+      </subtestStep>
+    </testStep>
+  </testCase>
+
+  <!-- Verify setNetworkStandbyMode(true) - getNetworkStandbyMode - verify true -->
+  <testCase testCaseId="PWRM_15" testCaseName="PowerManager_Get_NetworkStandbyMode_True" desc="Set network standby mode to true, then get it back and verify the value matches">
+    <testCaseInfo testCaseType="setandget"/>
+    <testStep testStepId="1" name="Set_Network_Standby_True" method="Set_Network_Standby_Mode">
+      <params>
+        <param tag="standbyMode" value="true"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Get_Network_Standby_Mode" method="Get_Network_Standby_Mode" delay="3">
+      <resultGeneration useMethodTag="powermanager_get_network_standby_mode" expectedValues="True"/>
+    </testStep>
+  </testCase>
+
+  <!-- Verify setNetworkStandbyMode(false) - getNetworkStandbyMode - verify false -->
+  <testCase testCaseId="PWRM_16" testCaseName="PowerManager_Get_NetworkStandbyMode_False" desc="Set network standby mode to false, then get it back and verify the value matches">
+    <testCaseInfo testCaseType="setandget"/>
+    <testStep testStepId="1" name="Set_Network_Standby_False" method="Set_Network_Standby_Mode">
+      <params>
+        <param tag="standbyMode" value="false"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Get_Network_Standby_Mode" method="Get_Network_Standby_Mode" delay="3">
+      <resultGeneration useMethodTag="powermanager_get_network_standby_mode" expectedValues="False"/>
+    </testStep>
+  </testCase>
+
+  <!-- Verify setTemperatureThresholds(0.0, 0.0) - getTemperatureThresholds - verify values match -->
+  <testCase testCaseId="PWRM_17" testCaseName="PowerManager_Event_ThermalModeChanged" desc="Set temperature thresholds to high equal to 0.0 and critical equal to 0.0, then get them back and verify values match">
+    <testCaseInfo testCaseType="setandget"/>
+    <testStep testStepId="1" name="Set_Temperature_Thresholds" method="Set_Temperature_Thresholds">
+      <params>
+        <param tag="high" value="0.0"/>
+        <param tag="critical" value="0.0"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Listen_ThermalMode_Changed_Event" event="Event_On_ThermalMode_Changed" action="eventListener" delay="5">
+      <resultGeneration useMethodTag="powermanager_check_thermal_mode_changed_event"/>
+    </testStep>
+    <testStep testStepId="3" name="Get_Temperature_Thresholds" method="Get_Temperature_Thresholds" delay="3">
+      <resultGeneration useMethodTag="powermanager_get_temperature_thresholds" expectedValues="0.0,0.0"/>
+    </testStep>
+  </testCase>
+
+  <!-- Verify setOvertempGraceInterval(300) - getOvertempGraceInterval - verify 300 -->
+  <testCase testCaseId="PWRM_18" testCaseName="PowerManager_Get_OvertempGraceInterval" desc="Set overtemp grace interval to 300, then get it back and verify the value matches">
+    <testCaseInfo testCaseType="setandget"/>
+    <testStep testStepId="1" name="Set_Overtemp_Grace_Interval" method="Set_Overtemp_Grace_Interval">
+      <params>
+        <param tag="graceInterval" value="300"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Get_Overtemp_Grace_Interval" method="Get_Overtemp_Grace_Interval" delay="3">
+      <resultGeneration useMethodTag="powermanager_get_overtemp_grace_interval" expectedValues="300"/>
+    </testStep>
+  </testCase>
+
+  <!-- State transition: setPowerState(STANDBY) - verify STANDBY -->
+  <testCase testCaseId="PWRM_19" testCaseName="PowerManager_SetPowerState_STANDBY" desc="Verify setPowerState (STANDBY) changes the power state to STANDBY and getPowerState reflects the change">
+    <testCaseInfo testCaseType="setandget"/>
+    <testStep testStepId="1" name="Get_Current_Power_State" method="Get_Power_State">
+      <resultGeneration useMethodTag="powermanager_get_power_state"/>
+    </testStep>
+    <testStep testStepId="2" name="Set_Power_State_STANDBY" method="Set_Power_State">
+      <params>
+        <param tag="powerState" value="STANDBY"/>
+        <param tag="reason" value="TDKAPITest"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="3" name="Verify_Power_State_STANDBY" method="Get_Power_State" delay="3">
+      <resultGeneration useMethodTag="powermanager_get_power_state" expectedValues="STANDBY" arguments="check_power_state"/>
+    </testStep>
+
+    <testCasePostRequisite>
+      <postrequisite requisiteId="1" requisiteName="Restore_PowerState_ON">
+        <testStep testStepId="1" name="Check_Current_Power_State" method="Get_Power_State" saveResult="true">
+          <resultGeneration useMethodTag="powermanager_get_power_state"/>
+        </testStep>
+        <testStep testStepId="2" name="Restore_Power_State_ON" method="Set_Power_State">
+          <conditionalExecution enable="true" Id="1" useMethodTag="powermanager_check_power_state_not_on"/>
+          <params>
+            <param tag="powerState" value="ON"/>
+            <param tag="reason" value="TDKRestore"/>
+          </params>
+          <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Verify_Power_State" method="Get_Power_State" delay="3">
+            <conditionalExecution enable="true" Id="1" useMethodTag="powermanager_check_power_state_not_on"/>
+            <resultGeneration useMethodTag="powermanager_get_power_state" expectedValues="ON" arguments="check_power_state"/>
+        </testStep>
+      </postrequisite>
+    </testCasePostRequisite>
+  </testCase>
+
+  <!-- State transition: setPowerState(LIGHT_SLEEP) - verify LIGHT_SLEEP -->
+  <testCase testCaseId="PWRM_20" testCaseName="PowerManager_SetPowerState_LIGHT_SLEEP" desc="Verify setPowerState changes the power state to LIGHT_SLEEP and getPowerState reflects the change">
+    <testCaseInfo testCaseType="setandget"/>
+    <testStep testStepId="1" name="Get_Current_Power_State" method="Get_Power_State">
+      <resultGeneration useMethodTag="powermanager_get_power_state"/>
+    </testStep>
+    <testStep testStepId="2" name="Set_Power_State_LIGHT_SLEEP" method="Set_Power_State">
+      <params>
+        <param tag="powerState" value="LIGHT_SLEEP"/>
+        <param tag="reason" value="TDKAPITest"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="3" name="Verify_Power_State_LIGHT_SLEEP" method="Get_Power_State" delay="3">
+      <resultGeneration useMethodTag="powermanager_get_power_state" expectedValues="LIGHT_SLEEP" arguments="check_power_state"/>
+    </testStep>
+
+    <testCasePostRequisite>
+      <postrequisite requisiteId="1" requisiteName="Restore_PowerState_ON">
+        <testStep testStepId="1" name="Check_Current_Power_State" method="Get_Power_State" saveResult="true">
+          <resultGeneration useMethodTag="powermanager_get_power_state"/>
+        </testStep>
+        <testStep testStepId="2" name="Restore_Power_State_ON" method="Set_Power_State">
+          <conditionalExecution enable="true" Id="1" useMethodTag="powermanager_check_power_state_not_on"/>
+          <params>
+            <param tag="powerState" value="ON"/>
+            <param tag="reason" value="TDKRestore"/>
+          </params>
+          <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Verify_Power_State" method="Get_Power_State" delay="3">
+            <conditionalExecution enable="true" Id="1" useMethodTag="powermanager_check_power_state_not_on"/>
+            <resultGeneration useMethodTag="powermanager_get_power_state" expectedValues="ON" arguments="check_power_state"/>
+        </testStep>
+      </postrequisite>
+    </testCasePostRequisite>
+  </testCase>
+
+  <!-- Event: setNetworkStandbyMode(true) - listen onNetworkStandbyModeChanged - verify enabled is true -->
+  <testCase testCaseId="PWRM_21" testCaseName="PowerManager_Event_NetworkStandbyModeChanged_True" desc="Set network standby mode to true and verify onNetworkStandbyModeChanged event fires with enabled is true">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Network_Standby_True" method="Set_Network_Standby_Mode">
+      <params>
+        <param tag="standbyMode" value="true"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Listen_NetworkStandbyMode_Changed" event="Event_On_NetworkStandbyMode_Changed" action="eventListener" delay="3">
+      <resultGeneration useMethodTag="powermanager_check_network_standby_changed_event" expectedValues="true"/>
+    </testStep>
+    <testStep testStepId="3" name="Get_Network_Standby_Mode" method="Get_Network_Standby_Mode">
+      <resultGeneration useMethodTag="powermanager_get_network_standby_mode" expectedValues="true"/>
+    </testStep>
+  </testCase>
+
+  <!-- Event: setNetworkStandbyMode(false) - listen onNetworkStandbyModeChanged - verify enabled is false -->
+  <testCase testCaseId="PWRM_22" testCaseName="PowerManager_Event_NetworkStandbyModeChanged_False" desc="Set network standby mode to false and verify onNetworkStandbyModeChanged event fires with enabled is false">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Network_Standby_False" method="Set_Network_Standby_Mode">
+      <params>
+        <param tag="standbyMode" value="false"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Listen_NetworkStandbyMode_Changed" event="Event_On_NetworkStandbyMode_Changed" action="eventListener" delay="3">
+      <resultGeneration useMethodTag="powermanager_check_network_standby_changed_event" expectedValues="false"/>
+    </testStep>
+    <testStep testStepId="3" name="Get_Network_Standby_Mode" method="Get_Network_Standby_Mode">
+      <resultGeneration useMethodTag="powermanager_get_network_standby_mode" expectedValues="false"/>
+    </testStep>
+  </testCase>
+
+  <!-- Event: setPowerState(STANDBY) - listen onPowerModeChanged - verify newState is STANDBY -->
+  <testCase testCaseId="PWRM_23" testCaseName="PowerManager_Event_PowerModeChanged_To_STANDBY" desc="Verify onPowerModeChanged event fires with newState is STANDBY">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Power_State_STANDBY" method="Set_Power_State">
+      <params>
+        <param tag="powerState" value="STANDBY"/>
+        <param tag="reason" value="TDKEventTest"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Listen_PowerMode_Changed_Event" event="Event_On_PowerMode_Changed" action="eventListener" delay="5">
+      <resultGeneration useMethodTag="powermanager_check_power_mode_changed_event" expectedValues="STANDBY"/>
+    </testStep>
+    <testStep testStepId="3" name="Verify_Power_State_STANDBY" method="Get_Power_State">
+      <resultGeneration useMethodTag="powermanager_get_power_state" expectedValues="STANDBY" arguments="check_power_state"/>
+    </testStep>
+
+    <testCasePostRequisite>
+      <postrequisite requisiteId="1" requisiteName="Restore_PowerState_ON">
+        <testStep testStepId="1" name="Check_Current_Power_State" method="Get_Power_State" saveResult="true">
+          <resultGeneration useMethodTag="powermanager_get_power_state"/>
+        </testStep>
+        <testStep testStepId="2" name="Restore_Power_State_ON" method="Set_Power_State">
+          <conditionalExecution enable="true" Id="1" useMethodTag="powermanager_check_power_state_not_on"/>
+          <params>
+            <param tag="powerState" value="ON"/>
+            <param tag="reason" value="TDKRestore"/>
+          </params>
+          <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Verify_Power_State_ON" method="Get_Power_State">
+            <conditionalExecution enable="true" Id="1" useMethodTag="powermanager_check_power_state_not_on"/>
+            <resultGeneration useMethodTag="powermanager_get_power_state" expectedValues="ON" arguments="check_power_state"/>
+        </testStep>
+      </postrequisite>
+    </testCasePostRequisite>
+  </testCase>
+
+  <!-- Event: setPowerState(LIGHT_SLEEP) - listen onPowerModeChanged - verify newState is LIGHT_SLEEP -->
+  <testCase testCaseId="PWRM_24" testCaseName="PowerManager_Event_PowerModeChanged_To_LIGHT_SLEEP" desc="Verify onPowerModeChanged event fires with newState is LIGHT_SLEEP">
+    <testCaseInfo testCaseType="direct" revert="true"/>
+    <testStep testStepId="1" name="Set_Power_State_LIGHT_SLEEP" method="Set_Power_State">
+      <params>
+        <param tag="powerState" value="LIGHT_SLEEP"/>
+        <param tag="reason" value="TDKEventTest"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Listen_PowerMode_Changed_Event" event="Event_On_PowerMode_Changed" action="eventListener" delay="5">
+      <resultGeneration useMethodTag="powermanager_check_power_mode_changed_event" expectedValues="LIGHT_SLEEP"/>
+    </testStep>
+    <testStep testStepId="3" name="Verify_Power_State_LIGHT_SLEEP" method="Get_Power_State">
+      <resultGeneration useMethodTag="powermanager_get_power_state" expectedValues="LIGHT_SLEEP" arguments="check_power_state"/>
+    </testStep>
+
+    <testCasePostRequisite>
+      <postrequisite requisiteId="1" requisiteName="Restore_PowerState_ON">
+        <testStep testStepId="1" name="Check_Current_Power_State" method="Get_Power_State" saveResult="true">
+          <resultGeneration useMethodTag="powermanager_get_power_state"/>
+        </testStep>
+        <testStep testStepId="2" name="Restore_Power_State_ON" method="Set_Power_State">
+          <conditionalExecution enable="true" Id="1" useMethodTag="powermanager_check_power_state_not_on"/>
+          <params>
+            <param tag="powerState" value="ON"/>
+            <param tag="reason" value="TDKRestore"/>
+          </params>
+          <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Verify_Power_State_ON" method="Get_Power_State">
+            <conditionalExecution enable="true" Id="1" useMethodTag="powermanager_check_power_state_not_on"/>
+            <resultGeneration useMethodTag="powermanager_get_power_state" expectedValues="ON" arguments="check_power_state"/>
+        </testStep>
+      </postrequisite>
+    </testCasePostRequisite>
+  </testCase>
+
+  <!-- Reboot - listen for onRebootBegin event -->
+  <testCase testCaseId="PWRM_25" testCaseName="PowerManager_Event_RebootBegin" desc="Trigger device reboot with reboot reason and verify onRebootBegin event fires with matching rebootRequestor">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Reboot_Device" method="Reboot">
+      <params>
+        <param tag="rebootRequestor" value="TDK"/>
+        <param tag="rebootReasonCustom" value="TDKAPITest"/>
+        <param tag="rebootReasonOther" value="TDK API Validation"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Listen_Reboot_Begin_Event" event="Event_On_Reboot_Begin" action="eventListener">
+      <resultGeneration useMethodTag="powermanager_check_reboot_begin_event" expectedValues="TDK,TDKAPITest,TDK API Validation"/>
+    </testStep>
+    <testStep testStepId="3" name="Wait_For_Device_To_Come_Up" action="externalFnCall" delay="2" rebootStep="yes">
+      <resultGeneration useMethodTag="wait_for_device_to_come_up"/>
+    </testStep>
+  </testCase>
+
+  <!-- addPowerModePreChangeClient with valid clientName -->
+  <testCase testCaseId="PWRM_26" testCaseName="PowerManager_AddPreChangeClient_Valid" desc="Verify addPowerModePreChangeClient with valid clientName returns a non-null integer clientId, then clean up">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Add_PreChange_Client" method="Add_Power_Mode_PreChange_Client" saveResult="true">
+      <params>
+        <param tag="clientName" value="TDKTestClient"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_add_client_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Remove_PreChange_Client" method="Remove_Power_Mode_PreChange_Client" delay="5">
+      <params>
+        <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="powermanager_get_client_id"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+  </testCase>
+
+  <!-- Full pre-change lifecycle: add client - setPowerState(STANDBY) - onPowerModePreChange - complete - remove -->
+  <testCase testCaseId="PWRM_27" testCaseName="PowerManager_PowerModePreChange_Lifecycle_Event" desc="Check onPowerModePreChange lifecycle for when a client is added, power state is set to STANDBY, onPowerModePreChange event is received, pre-change is completed, and client is removed">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Add_PreChange_Client" method="Add_Power_Mode_PreChange_Client" saveResult="true">
+      <params>
+        <param tag="clientName" value="TDKPreChangeLifecycle"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_add_client_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Set_Power_State_STANDBY" method="Set_Power_State">
+      <params>
+        <param tag="powerState" value="STANDBY"/>
+        <param tag="reason" value="TDKPreChangeTest"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="3" name="Listen_PowerMode_PreChange_Event" event="Event_On_PowerMode_PreChange" action="eventListener" delay="2" saveResult="true">
+      <resultGeneration useMethodTag="powermanager_check_power_mode_prechange_event" expectedValues="STANDBY"/>
+    </testStep>
+    <testStep testStepId="4" name="Signal_PreChange_Complete" method="Power_Mode_PreChange_Complete" delay="2">
+      <params>
+        <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="powermanager_get_client_id"/>
+        <param tag="transactionId" usePreviousResult="true" Id="3" useMethodTag="powermanager_get_transaction_id"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="5" name="Remove_PreChange_Client" method="Remove_Power_Mode_PreChange_Client" delay="2">
+      <params>
+        <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="powermanager_get_client_id"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+
+    <testCasePostRequisite>
+      <postrequisite requisiteId="1" requisiteName="Restore_PowerState_ON">
+        <testStep testStepId="1" name="Check_Current_Power_State" method="Get_Power_State" saveResult="true">
+          <resultGeneration useMethodTag="powermanager_get_power_state"/>
+        </testStep>
+        <testStep testStepId="2" name="Restore_Power_State_ON" method="Set_Power_State">
+          <conditionalExecution enable="true" Id="1" useMethodTag="powermanager_check_power_state_not_on"/>
+          <params>
+            <param tag="powerState" value="ON"/>
+            <param tag="reason" value="TDKRestore"/>
+          </params>
+          <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Verify_Power_State_ON" method="Get_Power_State">
+            <conditionalExecution enable="true" Id="1" useMethodTag="powermanager_check_power_state_not_on"/>
+            <resultGeneration useMethodTag="powermanager_get_power_state" expectedValues="ON" arguments="check_power_state"/>
+        </testStep>
+      </postrequisite>
+    </testCasePostRequisite>
+  </testCase>
+
+  <!-- Lifecycle: add client - delay - complete - remove client -->
+  <testCase testCaseId="PWRM_28" testCaseName="PowerManager_Lifecycle_PreChangeClient_Delay_Complete" desc="Register pre-change client, delay power mode change, signal complete, then remove client">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Add_PreChange_Client" method="Add_Power_Mode_PreChange_Client" saveResult="true">
+      <params>
+        <param tag="clientName" value="TDKPreChangeLifecycle"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_add_client_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Set_Power_State_STANDBY" method="Set_Power_State">
+      <params>
+        <param tag="powerState" value="STANDBY"/>
+        <param tag="reason" value="TDKPreChangeTest"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="3" name="Listen_PowerMode_PreChange_Event" event="Event_On_PowerMode_PreChange" action="eventListener" delay="2" saveResult="true">
+      <resultGeneration useMethodTag="powermanager_check_power_mode_prechange_event" expectedValues="STANDBY"/>
+    </testStep>
+    <testStep testStepId="4" name="Delay_Power_Mode_Change" method="Delay_Power_Mode_Change_By">
+      <params>
+        <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="powermanager_get_client_id"/>
+        <param tag="transactionId" usePreviousResult="true" Id="3" useMethodTag="powermanager_get_transaction_id"/>
+        <param tag="delayPeriod" usePreviousResult="true" Id="3" useMethodTag="powermanager_get_delay_id"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="5" name="Signal_PreChange_Complete" method="Power_Mode_PreChange_Complete" delay="2">
+      <params>
+        <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="powermanager_get_client_id"/>
+        <param tag="transactionId" usePreviousResult="true" Id="3" useMethodTag="powermanager_get_transaction_id"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="6" name="Remove_PreChange_Client" method="Remove_Power_Mode_PreChange_Client" delay="2">
+      <params>
+        <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="powermanager_get_client_id"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+
+    <testCasePostRequisite>
+      <postrequisite requisiteId="1" requisiteName="Restore_PowerState_ON">
+        <testStep testStepId="1" name="Check_Current_Power_State" method="Get_Power_State" saveResult="true">
+          <resultGeneration useMethodTag="powermanager_get_power_state"/>
+        </testStep>
+        <testStep testStepId="2" name="Restore_Power_State_ON" method="Set_Power_State">
+          <conditionalExecution enable="true" Id="1" useMethodTag="powermanager_check_power_state_not_on"/>
+          <params>
+            <param tag="powerState" value="ON"/>
+            <param tag="reason" value="TDKRestore"/>
+          </params>
+          <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Verify_Power_State_ON" method="Get_Power_State">
+            <conditionalExecution enable="true" Id="1" useMethodTag="powermanager_check_power_state_not_on"/>
+            <resultGeneration useMethodTag="powermanager_get_power_state" expectedValues="ON" arguments="check_power_state"/>
+        </testStep>
+      </postrequisite>
+    </testCasePostRequisite>
+  </testCase>
+
+  <!-- Multi-step power state cycle: STANDBY - LIGHT_SLEEP - ON -->
+  <testCase testCaseId="PWRM_29" testCaseName="PowerManager_MultiStep_PowerState_Cycle" desc="Check power state transitions through STANDBY, LIGHT_SLEEP, and ON with verification after each step">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Power_State_STANDBY" method="Set_Power_State">
+      <params>
+        <param tag="keyCode" value="0"/>
+        <param tag="powerState" value="STANDBY"/>
+        <param tag="reason" value="TDKCycleTest"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Verify_Power_State_STANDBY" method="Get_Power_State" delay="3">
+      <resultGeneration useMethodTag="powermanager_get_power_state" expectedValues="STANDBY" arguments="check_power_state"/>
+    </testStep>
+    <testStep testStepId="3" name="Set_Power_State_LIGHT_SLEEP" method="Set_Power_State">
+      <params>
+        <param tag="keyCode" value="0"/>
+        <param tag="powerState" value="LIGHT_SLEEP"/>
+        <param tag="reason" value="TDKCycleTest"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="4" name="Verify_Power_State_LIGHT_SLEEP" method="Get_Power_State" delay="3">
+      <resultGeneration useMethodTag="powermanager_get_power_state" expectedValues="LIGHT_SLEEP" arguments="check_power_state"/>
+    </testStep>
+    <testStep testStepId="5" name="Set_Power_State_ON" method="Set_Power_State">
+      <params>
+        <param tag="keyCode" value="0"/>
+        <param tag="powerState" value="ON"/>
+        <param tag="reason" value="TDKCycleTest"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="6" name="Verify_Power_State_ON" method="Get_Power_State" delay="3">
+      <resultGeneration useMethodTag="powermanager_get_power_state" expectedValues="ON" arguments="check_power_state"/>
+    </testStep>
+  </testCase>
+
+  <!-- setNetworkStandbyMode with invalid type (string "yes" instead of bool) -->
+  <testCase testCaseId="PWRM_30" testCaseName="PowerManager_SetNetworkStandbyMode_Invalid_Type" desc="Verify setNetworkStandbyMode with string type 'yes' instead of bool returns an error response">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Network_Standby_Invalid_Type" method="Negative_Set_Network_Standby_Mode">
+      <params>
+        <param tag="standbyMode" value="yes"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+    </testStep>
+  </testCase>
+
+  <!-- setTemperatureThresholds with string type for high param -->
+  <testCase testCaseId="PWRM_31" testCaseName="PowerManager_SetTemperatureThresholds_Invalid_HighType" desc="Verify setTemperatureThresholds with non-numeric string for high param returns an error">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Temperature_Thresholds_Invalid" method="Negative_Set_Temperature_Thresholds">
+      <params>
+        <param tag="high" value="hot"/>
+        <param tag="critical" value="100.0"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+    </testStep>
+  </testCase>
+
+  <!-- setTemperatureThresholds with missing critical param -->
+  <testCase testCaseId="PWRM_32" testCaseName="PowerManager_SetTemperatureThresholds_Missing_Critical" desc="Verify setTemperatureThresholds with missing required critical parameter returns an error">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Temperature_Thresholds_NoC" method="Without_Critical_Set_Temperature_Thresholds">
+      <params>
+        <param tag="high" value="60.0"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+    </testStep>
+  </testCase>
+
+  <!-- setWakeupSourceConfig with invalid wakeupSource enum value -->
+  <testCase testCaseId="PWRM_33" testCaseName="PowerManager_SetWakeupSourceConfig_Invalid_WakeupSource" desc="Verify setWakeupSourceConfig with unrecognized wakeupSource enum 'INVALID_SOURCE' returns an error">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Wakeup_Source_Invalid_Enum" method="Set_Wakeup_Source_Config">
+      <params>
+        <param tag="wakeupSource" value="INVALID_SOURCE"/>
+        <param tag="enabled" value="true"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+    </testStep>
+  </testCase>
+
+  <!-- setWakeupSourceConfig with missing enabled field -->
+  <testCase testCaseId="PWRM_34" testCaseName="PowerManager_SetWakeupSourceConfig_Missing_Enabled_Param" desc="Verify setWakeupSourceConfig with missing enabled field returns an error">
+  <testCaseInfo testCaseType="loop"/>
+    <testStep testStepId="1" name="Set_Wakeup_Source_Missing_Enabled_Param" testStepType="loop">
+      <subtestStep testStepId="1" name="Set_Wakeup_Source_Missing_Enabled_Param" method="Without_Enabled_Set_Wakeup_Source_Config">
+        <params>
+          <param tag="wakeupSource" useConfigFile="true" key="POWERMANAGER_WAKEUP_SOURCE_CONFIG" iteration="true"/>
+        </params>
+        <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+      </subtestStep>
+    </testStep>
+  </testCase>
+
+  <!-- setOvertempGraceInterval with negative value -->
+  <testCase testCaseId="PWRM_35" testCaseName="PowerManager_SetOvertempGraceInterval_Negative_Value" desc="Verify setOvertempGraceInterval with negative graceInterval (-100) returns an error">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Overtemp_Grace_Negative" method="Set_Overtemp_Grace_Interval">
+      <params>
+        <param tag="graceInterval" value="-100"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="Invalid Parameter"/>
+    </testStep>
+  </testCase>
+
+  <!-- addPowerModePreChangeClient with empty clientName string -->
+  <testCase testCaseId="PWRM_36" testCaseName="PowerManager_AddPreChangeClient_EmptyClientName" desc="Verify addPowerModePreChangeClient with empty string clientName returns an error">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Add_PreChange_Client_Empty_Name" method="Add_Power_Mode_PreChange_Client">
+      <params>
+        <param tag="clientName" value=""/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="Invalid Parameter"/>
+    </testStep>
+  </testCase>
+
+  <!-- addPowerModePreChangeClient with no params (missing clientName) -->
+  <testCase testCaseId="PWRM_37" testCaseName="PowerManager_AddPreChangeClient_No_Params" desc="Verify addPowerModePreChangeClient with no parameters (missing required clientName) returns an error">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Add_PreChange_Client_No_Params" method="Add_Power_Mode_PreChange_Client">
+      <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="Invalid Parameter"/>
+    </testStep>
+  </testCase>
+
+  <!-- removePowerModePreChangeClient with invalid clientId -->
+  <testCase testCaseId="PWRM_38" testCaseName="PowerManager_RemovePreChangeClient_Invalid_Id" desc="Verify removePowerModePreChangeClient with invalid clientId (-1) returns an error">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Remove_PreChange_Client_Invalid" method="Remove_Power_Mode_PreChange_Client">
+      <params>
+        <param tag="clientId" value="-1"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="Invalid Parameter"/>
+    </testStep>
+  </testCase>
+
+  <!-- powerModePreChangeComplete with invalid clientId -->
+  <testCase testCaseId="PWRM_39" testCaseName="PowerManager_PreChangeComplete_Invalid_ClientId" desc="Verify powerModePreChangeComplete with unregistered clientIdreturns an error">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="PreChange_Complete_Invalid_Client" method="Power_Mode_PreChange_Complete">
+      <params>
+        <param tag="clientId" value="9999"/>
+        <param tag="transactionId" value="0"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="Invalid Parameter"/>
+    </testStep>
+  </testCase>
+
+  <!-- delayPowerModeChangeBy with invalid clientId 99999 -->
+  <testCase testCaseId="PWRM_40" testCaseName="PowerManager_DelayPowerModeChange_Invalid_ClientId" desc="Verify delayPowerModeChangeBy with unregistered clientId 9999 returns an error">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Delay_Power_Mode_Change_Invalid" method="Delay_Power_Mode_Change_By">
+      <params>
+        <param tag="clientId" value="9999"/>
+        <param tag="transactionId" value="0"/>
+        <param tag="delayPeriod" value="5"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+    </testStep>
+  </testCase>
+
+  <!-- add client - remove - try powerModePreChangeComplete with removed clientId - expect error -->
+  <testCase testCaseId="PWRM_41" testCaseName="PowerManager_ErrorState_PreChangeComplete_After_Remove" desc="Verify powerModePreChangeComplete with removed clientId returns an error">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Add_PreChange_Client" method="Add_Power_Mode_PreChange_Client" saveResult="true">
+      <params>        <param tag="clientName" value="TDKTestClient"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_add_client_validation"/>
+    </testStep>
+    <testStep testStepId="2" name="Remove_PreChange_Client" method="Remove_Power_Mode_PreChange_Client" delay="5">
+      <params>
+        <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="powermanager_get_client_id"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="3" name="PreChange_Complete_On_Removed_Client" method="Power_Mode_PreChange_Complete">
+      <params>
+        <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="powermanager_get_client_id"/>
+        <param tag="transactionId" value="0"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+    </testStep>
+  </testCase>
+
+  <!-- setPowerState with invalid powerState value -->
+  <testCase testCaseId="PWRM_42" testCaseName="PowerManager_SetPowerState_Invalid_State" desc="Verify setPowerState with invalid powerState value returns an error">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Power_State_Invalid" method="Set_Power_State">
+      <params>
+        <param tag="powerState" value="INVALID_STATE"/>
+	<param tag="reason" value="TDKAPITest"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+    </testStep>
+  </testCase>
+
+  <!-- setPowerState with negative power state value -->
+  <testCase testCaseId="PWRM_43" testCaseName="PowerManager_SetPowerState_Negative_Value" desc="Verify setPowerState with negative powerState value (-1) returns an error">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Power_State_Negative" method="Negative_Set_Power_State">
+      <params>
+        <param tag="powerState" value="-1"/>
+	<param tag="reason" value="TDKAPITest"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="PWRM_44" testCaseName="PowerManager_ActivateDeactivate_StateChange_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+    <testCaseInfo testCaseType="direct" />
+    <testCasePreRequisite>
+      <prerequisite requisiteId="1" requisiteName="Activate_PowerManager_Plugin">
+        <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+          <params>
+            <param tag="plugin" value="org.rdk.PowerManager" indexOnly="true" />
+          </params>
+          <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PowerManager" />
+        </testStep>
+        <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+          <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PowerManager" />
+          <params>
+            <param tag="callsign" value="org.rdk.PowerManager" />
+          </params>
+        </testStep>
+        <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" delay="2">
+          <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PowerManager" />
+          <params>
+            <param tag="plugin" value="org.rdk.PowerManager" indexOnly="true" />
+          </params>
+          <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PowerManager" expectedValues="activated"/>
+        </testStep>
+      </prerequisite>
+    </testCasePreRequisite>
+
+    <testStep testStepId="1" name="Deactivate_PowerManager_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+      <params>
+        <param tag="callsign"  value="org.rdk.PowerManager" />
+      </params>
+    </testStep>
+    <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+      <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.powermanager,deactivated,requested"/>
+    </testStep>
+    <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+      <params>
+        <param tag="plugin" value="org.rdk.PowerManager" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PowerManager" expectedValues="deactivated"/>
+    </testStep>
+    <testStep testStepId="4" name="Activate_PowerManager_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+      <params>
+        <param tag="callsign" value="org.rdk.PowerManager" />
+      </params>
+    </testStep>
+    <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+      <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.powermanager,activated,requested"/>
+    </testStep>
+    <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+      <params>
+        <param tag="plugin" value="org.rdk.PowerManager" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PowerManager" expectedValues="activated"/>
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="PWRM_45" testCaseName="PowerManager_ActivateDeactivate_All_Event_Test" desc="Validates all event on Activating/deactivating the plugin">
+    <testCaseInfo testCaseType="direct" />
+    <testCasePreRequisite>
+      <prerequisite requisiteId="1" requisiteName="Activate_PowerManager_Plugin">
+        <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+          <params>
+            <param tag="plugin" value="org.rdk.PowerManager" indexOnly="true" />
+          </params>
+          <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PowerManager" />
+        </testStep>
+        <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+          <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PowerManager" />
+          <params>
+            <param tag="callsign" value="org.rdk.PowerManager" />
+          </params>
+        </testStep>
+        <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" delay="2">
+          <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PowerManager" />
+          <params>
+            <param tag="plugin" value="org.rdk.PowerManager" indexOnly="true" />
+          </params>
+          <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PowerManager" expectedValues="activated"/>
+        </testStep>
+      </prerequisite>
+    </testCasePreRequisite>
+
+    <testStep testStepId="1" name="Deactivate_PowerManager_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+      <params>
+        <param tag="callsign"  value="org.rdk.PowerManager" />
+      </params>
+    </testStep>
+    <testStep testStepId="2" name="Check_All_Event" event="Event_Controller_All" action="eventListener" delay="2" pluginName="Controller">
+      <resultGeneration useMethodTag="controller_check_all_event" expectedValues="org.rdk.powermanager,deactivated,requested"/>
+    </testStep>
+    <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+      <params>
+        <param tag="plugin" value="org.rdk.PowerManager" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PowerManager" expectedValues="deactivated"/>
+    </testStep>
+    <testStep testStepId="4" name="Activate_PowerManager_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+      <params>
+        <param tag="callsign" value="org.rdk.PowerManager" />
+      </params>
+    </testStep>
+    <testStep testStepId="5" name="Check_All_Event" event="Event_Controller_All" action="eventListener" delay="2" pluginName="Controller">
+      <resultGeneration useMethodTag="controller_check_all_event" expectedValues="org.rdk.powermanager,activated,requested"/>
+    </testStep>
+    <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+      <params>
+        <param tag="plugin" value="org.rdk.PowerManager" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PowerManager" expectedValues="activated"/>
+    </testStep>
+  </testCase>
+
+  <!-- Verify power state before reboot -->
+  <testCase testCaseId="PWRM_46" testCaseName="PowerManager_Get_PowerState_Before_Reboot" desc="Verify getPowerStateBeforeReboot returns a valid power state after reboot">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Power_State_Before_Reboot" method="Get_Power_State_Before_Reboot" saveResult="true">
+      <resultGeneration useMethodTag="powermanager_get_power_state_before_reboot"/>
+    </testStep>
+    <testStep testStepId="2" name="Reboot_Device" method="Reboot">
+      <params>
+        <param tag="rebootRequestor" value="TDK"/>
+        <param tag="rebootReasonCustom" value="TDKAPITest"/>
+        <param tag="rebootReasonOther" value="TDK API Validation"/>
+      </params>
+      <resultGeneration useMethodTag="powermanager_null_result_validation"/>
+    </testStep>
+    <testStep testStepId="3" name="Listen_Reboot_Begin_Event" event="Event_On_Reboot_Begin" action="eventListener">
+      <resultGeneration useMethodTag="powermanager_check_reboot_begin_event" expectedValues="TDK,TDKAPITest,TDK API Validation"/>
+    </testStep>
+    <testStep testStepId="4" name="Wait_For_Device_To_Come_Up" action="externalFnCall" delay="2" rebootStep="yes">
+      <resultGeneration useMethodTag="wait_for_device_to_come_up"/>
+    </testStep>
+    <testStep testStepId="5" name="Get_Power_State_Before_Reboot" method="Get_Power_State_Before_Reboot">
+      <resultGeneration useMethodTag="powermanager_get_power_state_before_reboot">
+        <expectedValues usePreviousResult="true" Id="1" useMethodTag="powermanager_get_power_state_before_reboot"/>
+      </resultGeneration>
+    </testStep>
+  </testCase>
+</testPlugin>
