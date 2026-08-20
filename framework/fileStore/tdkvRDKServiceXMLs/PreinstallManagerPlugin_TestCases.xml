@@ -253,7 +253,8 @@
     </testCase>
 
     <!-- TestCases 12 -->
-    <testCase testCaseId="PIM_12" testCaseName="PreinstallManager_On_AppInstallationStatus_Event_StartPreInstall_True" desc="Check onAppInstallationStatus event behavior when startPreinstall is called with true">
+    <!-- onAppInstallationStatus event has been deprecated, the corresponding test case has been commented out -->
+    <!--testCase testCaseId="PIM_12" testCaseName="PreinstallManager_On_AppInstallationStatus_Event_StartPreInstall_True" desc="Check onAppInstallationStatus event behavior when startPreinstall is called with true">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="StartPreInstall_ForceInstall_True" method="StartPreInstall">
             <params>
@@ -264,10 +265,11 @@
         <testStep testStepId="2" name="Check_On_AppInstallationStatus_Event" event="Event_On_AppInstallationStatus" action="eventListener" delay ="60">
             <resultGeneration useMethodTag="preinstallmanager_app_installation_status_event_validation"/>
         </testStep>
-    </testCase>
+    </testCase-->
 
     <!-- TestCases 13 -->
-    <testCase testCaseId="PIM_13" testCaseName="PreinstallManager_On_AppInstallationStatus_Event_StartPreInstall_False" desc="Check onAppInstallationStatus event behavior when startPreinstall is called with false">
+    <!-- onAppInstallationStatus event has been deprecated, the corresponding test case has been commented out -->
+    <!--testCase testCaseId="PIM_13" testCaseName="PreinstallManager_On_AppInstallationStatus_Event_StartPreInstall_False" desc="Check onAppInstallationStatus event behavior when startPreinstall is called with false">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Preinstall_Apps">
@@ -292,5 +294,5 @@
         <testStep testStepId="2" name="Check_On_AppInstallationStatus_Event" event="Event_On_AppInstallationStatus" action="eventListener" delay ="60">
             <resultGeneration useMethodTag="preinstallmanager_app_installation_status_event_validation" arguments="check_empty_event"/>
         </testStep>
-    </testCase>
+    </testCase-->
 </testPlugin>
