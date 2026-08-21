@@ -312,10 +312,13 @@ def disconnectFromWiFi(deviceIP):
         response = requests.post(url, json=payload, timeout=10)
         result = response.json()
         print("INFO: WiFiDisconnect response: {}".format(json.dumps(result)))
+        event_received = checkEvent("WIFI_STATE_DISCONNECTED")
         success = result.get("result", {}).get("success", False)
-        if success:
+        if success and event_received:
             print("INFO: WiFiDisconnect returned success=true")
-            return checkEvent("WIFI_STATE_DISCONNECTED")
+        elif not event_received:
+            print("INFO : WIFI_STATE_DISCONNECTED event not received")
+            success = False
         else:
             print("FAILURE: WiFiDisconnect did not return success=true")
         return success
