@@ -175,6 +175,7 @@ if expectedResult in result.upper():
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     result = "FAILURE"
+            connected = False
 
     else:
         print("FAILURE: Failed to get configuration values from device config")
