@@ -28,7 +28,7 @@ obj = tdklib.TDKScriptingLibrary("tdkb_e2e","1")
 obj1 = tdklib.TDKScriptingLibrary("advancedconfig","RDKB")
 
 #IP and Port of box, No need to change,
-#This will be replaced with correspoing Box Ip and port while executing script
+#This will be replaced with corresponding Box Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'E2E_ParentalControl_ManagedSites_WLAN_Block_WebsiteURL')
@@ -38,16 +38,17 @@ obj1.configureTestCase(ip,port,'E2E_ParentalControl_ManagedSites_WLAN_Block_Webs
 loadmodulestatus = obj.getLoadModuleResult()
 loadmodulestatus1 = obj1.getLoadModuleResult()
 print("[LIB LOAD STATUS]  :  %s" % loadmodulestatus)
+print("[LIB LOAD STATUS]  :  %s" % loadmodulestatus)
 
 if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.upper():
     obj.setLoadModuleStatus("SUCCESS")
+    obj1.setLoadModuleStatus("SUCCESS")
     expectedresult = "SUCCESS"
     finalStatus = "FAILURE"
 
     #Parse the device configuration file
     status = parseDeviceConfig(obj)
     if expectedresult in status:
-        obj.setLoadModuleStatus("SUCCESS")
         print("Parsed the device configuration file successfully")
 
         step = 1
@@ -57,7 +58,6 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
         ssidName = "Device.WiFi.SSID.%s.SSID" % tdkbE2EUtility.ssid_2ghz_index
         keyPassPhrase = "Device.WiFi.AccessPoint.%s.Security.KeyPassphrase" % tdkbE2EUtility.ssid_2ghz_index
         managedSiteEnable = "Device.X_Comcast_com_ParentalControl.ManagedSites.Enable"
-        blockedSite = "Device.X_Comcast_com_ParentalControl.ManagedSites.BlockedSite."
 
         #Get the value of the wifi parameters that are currently set.
         paramList = [ssidName, keyPassPhrase, managedSiteEnable]
@@ -466,4 +466,5 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 else:
     print("Failed to load the module")
     obj.setLoadModuleStatus("FAILURE")
+    obj1.setLoadModuleStatus("FAILURE")
     print("Module loading failed")
