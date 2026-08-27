@@ -129,7 +129,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                                             if expectedresult in status and serverOutput != "":
                                                 tdkTestObj.setResultStatus("SUCCESS")
                                                 print(f"ACTUAL RESULT {step}: TCP from LAN to WLAN is successful")
-                                                print(f"Bandwidth recieved from server : {serverOutput}")
+                                                print(f"Bandwidth received from server : {serverOutput}")
                                                 throughput = getThroughputInMbps(serverOutput)
                                                 print(f"Measured throughput: {throughput}")
                                                 print("[TEST EXECUTION RESULT] : SUCCESS")

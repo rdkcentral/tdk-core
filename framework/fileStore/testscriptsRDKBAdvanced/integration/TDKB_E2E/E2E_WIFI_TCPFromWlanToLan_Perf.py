@@ -129,11 +129,11 @@ if "SUCCESS" in loadmodulestatus.upper():
                                             print("Bandwidth received from client : %s" %clientOutput)
                                             if expectedresult in status:
                                                 tdkTestObj.setResultStatus("SUCCESS")
-                                                print(f"ACTUAL RESULT {step}: Average throughput recieved is within the expected range")
+                                                print(f"ACTUAL RESULT {step}: Average throughput received is within the expected range")
                                                 print("[TEST EXECUTION RESULT : SUCCESS")
                                             else:
                                                 tdkTestObj.setResultStatus("FAILURE")
-                                                print(f"ACTUAL RESULT {step}: Average throughput recieved is outside the expected range")
+                                                print(f"ACTUAL RESULT {step}: Average throughput received is outside the expected range")
                                                 print("[TEST EXECUTION RESULT] : FAILURE")
                                         else:
                                             tdkTestObj.setResultStatus("FAILURE")

@@ -92,7 +92,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                         if expectedresult in status and serverOutput != "":
                             tdkTestObj.setResultStatus("SUCCESS")
                             print(f"ACTUAL RESULT {step}: TCP from LAN to WAN is successful")
-                            print(f"Bandwidth recieved from server : {serverOutput}")
+                            print(f"Bandwidth received from server : {serverOutput}")
                             throughput = getThroughputInMbps(serverOutput)
                             print(f"Measured throughput: {throughput}")
                             raw_threshold = str(tdkbE2EUtility.lan_throughput_to_wan).strip()
