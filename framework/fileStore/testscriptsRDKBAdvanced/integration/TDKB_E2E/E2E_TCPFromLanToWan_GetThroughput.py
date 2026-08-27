@@ -19,29 +19,23 @@
 
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
-import time
 import tdkbE2EUtility
 from tdkbE2EUtility import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("tdkb_e2e","1")
-sysobj = tdklib.TDKScriptingLibrary("sysutil","1")
 
 #IP and Port of box, No need to change,
 #This will be replaced with correspoing Box Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'E2E_TCPFromLanToWan_GetThroughput')
-sysobj.configureTestCase(ip,port,'E2E_TCPFromLanToWan_GetThroughput')
 
 #Get the result of connection with test component
 loadmodulestatus =obj.getLoadModuleResult()
-print("[LIB LOAD STATUS]  :  %s" %loadmodulestatus)
-loadmodulestatus1 =sysobj.getLoadModuleResult()
-print("[LIB LOAD STATUS]  :  %s" %loadmodulestatus1)
-if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.upper() :
+print("[LIB LOAD STATUS] : %s" %loadmodulestatus)
+if "SUCCESS" in loadmodulestatus.upper():
     obj.setLoadModuleStatus("SUCCESS")
-    sysobj.setLoadModuleStatus("SUCCESS")
     expectedresult = "SUCCESS"
     step = 0
     status = "FAILURE"
@@ -64,30 +58,30 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
             step += 1
             #Connect to LAN client and obtain its IP
-            print(f"\nTEST STEP {step}: Get the IP address of the lan client after connecting to it")
-            print(f"EXPECTED RESULT {step}: Should get the IP address of the lan client after connecting to it")
+            print(f"\nTEST STEP {step}: Get the IP address of the LAN client after connecting to it")
+            print(f"EXPECTED RESULT {step}: Should get the IP address of the LAN client after connecting to it")
             lanIP = getLanIPAddress(tdkbE2EUtility.lan_interface)
             if lanIP != "":
                 tdkTestObj.setResultStatus("SUCCESS")
-                print(f"ACTUAL RESULT {step}: Got the IP address of the lan client as {lanIP}")
+                print(f"ACTUAL RESULT {step}: Got the IP address of the LAN client as {lanIP}")
                 print("[TEST EXECUTION RESULT] : SUCCESS")
 
                 step += 1
-                print(f"\nTEST STEP {step}: Check whether lan ip address is in same DHCP range")
-                print(f"EXPECTED RESULT {step}: lan ip address should be in same DHCP range")
+                print(f"\nTEST STEP {step}: Check whether LAN IP address is in same DHCP range")
+                print(f"EXPECTED RESULT {step}: LAN IP address should be in same DHCP range")
                 status = checkIpRange(curIPAddress,lanIP)
                 if expectedresult in status:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print(f"ACTUAL RESULT {step}: lan ip address is in same DHCP range")
+                    print(f"ACTUAL RESULT {step}: LAN IP address is in same DHCP range")
                     print("[TEST EXECUTION RESULT] : SUCCESS")
 
                     step += 1
-                    print(f"\nTEST STEP {step}: Add static route from lan client to wan via gateway")
-                    print(f"EXPECTED RESULT {step}: Should add static route from lan client to wan via gateway")
+                    print(f"\nTEST STEP {step}: Add static route from LAN client to WAN via gateway")
+                    print(f"EXPECTED RESULT {step}: Should add static route from LAN client to WAN via gateway")
                     status = addStaticRoute(tdkbE2EUtility.wan_ip, curIPAddress,tdkbE2EUtility.lan_interface,"LAN")
                     if expectedresult in status:
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print(f"ACTUAL RESULT {step}: Successfully added the static add route from lan client to wan via gateway")
+                        print(f"ACTUAL RESULT {step}: Successfully added the static add route from LAN client to WAN via gateway")
                         print("[TEST EXECUTION RESULT] : SUCCESS")
 
                         step += 1
@@ -104,22 +98,32 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                             raw_threshold = str(tdkbE2EUtility.lan_throughput_to_wan).strip()
                             if raw_threshold.isdigit():
                                 threshold = int(raw_threshold)
-                            perf_offset = 5
-                            lowerBound = threshold - perf_offset
-                            upperBound = threshold + perf_offset
+                                raw_offset = str(tdkbE2EUtility.perf_test_offset).strip()
+                                if raw_offset.isdigit():
+                                    perf_offset = int(raw_offset)
+                                    lowerBound = threshold - perf_offset
+                                    upperBound = threshold + perf_offset
 
-                            step += 1
-                            print(f"\nTEST STEP {step}: Check if the throughput is in desirable throughput  range.")
-                            print(f"EXPECTED RESULT {step}: Throughput should be in desirable range.")
-                            print(f"Actual Throughput(Mbps): {throughput}")
-                            print(f"Desirable throughput range (Mbps): {lowerBound} - {upperBound}")
-                            if  throughput >= lowerBound and throughput <= upperBound:
-                                tdkTestObj.setResultStatus("SUCCESS")
-                                print(f"ACTUAL RESULT {step}: Throughput  is within desirable range.")
-                                print("[TEST EXECUTION RESULT] : SUCCESS")
+                                    step += 1
+                                    print(f"\nTEST STEP {step}: Check if the throughput is in desirable throughput range.")
+                                    print(f"EXPECTED RESULT {step}: Throughput should be in desirable range.")
+                                    print(f"Actual Throughput(Mbps): {throughput}")
+                                    print(f"Desirable throughput range (Mbps): {lowerBound} - {upperBound}")
+                                    if  throughput >= lowerBound and throughput <= upperBound:
+                                        tdkTestObj.setResultStatus("SUCCESS")
+                                        print(f"ACTUAL RESULT {step}: Throughput is within desirable range.")
+                                        print("[TEST EXECUTION RESULT] : SUCCESS")
+                                    else:
+                                        tdkTestObj.setResultStatus("FAILURE")
+                                        print(f"ACTUAL RESULT {step}: Throughput is outside desirable range.")
+                                        print("[TEST EXECUTION RESULT] : FAILURE")
+                                else:
+                                    tdkTestObj.setResultStatus("FAILURE")
+                                    print(f"Invalid or non-integer offset value: '{raw_offset}'")
+                                    print("[TEST EXECUTION RESULT] : FAILURE")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
-                                print(f"ACTUAL RESULT {step}: Throughput  is outside desirable range.")
+                                print(f"Invalid or non-integer threshold value: '{raw_threshold}'. Cannot evaluate throughput range.")
                                 print("[TEST EXECUTION RESULT] : FAILURE")
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
@@ -128,24 +132,24 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                         step += 1
                         #delete the added route
-                        print(f"\nTEST STEP {step}: Delete the static route added from lan client to wan via gateway")
-                        print(f"EXPECTED RESULT {step}: Should delete the static route added from lan client to wan via gateway successfully")
+                        print(f"\nTEST STEP {step}: Delete the static route added from LAN client to WAN via gateway")
+                        print(f"EXPECTED RESULT {step}: Should delete the static route added from LAN client to WAN via gateway successfully")
                         status = delStaticRoute(tdkbE2EUtility.wan_ip, curIPAddress,tdkbE2EUtility.lan_interface,"LAN")
                         if expectedresult in status:
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print(f"ACTUAL RESULT {step}: Successfully deleted the added route from lan client to wan via gateway")
+                            print(f"ACTUAL RESULT {step}: Successfully deleted the added route from LAN client to WAN via gateway")
                             print("[TEST EXECUTION RESULT] : SUCCESS")
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
-                            print(f"ACTUAL RESULT {step}: Failed to delete the added route from lan client to wan via gateway")
+                            print(f"ACTUAL RESULT {step}: Failed to delete the added route from LAN client to WAN via gateway")
                             print("[TEST EXECUTION RESULT] : FAILURE")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print(f"ACTUAL RESULT {step}: Failed to add static route from lan client to wan via gateway")
+                        print(f"ACTUAL RESULT {step}: Failed to add static route from LAN client to WAN via gateway")
                         print("[TEST EXECUTION RESULT] : FAILURE")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print(f"ACTUAL RESULT {step}: lan ip address is not in DHCP range")
+                    print(f"ACTUAL RESULT {step}: LAN IP address is not in DHCP range")
                     print("[TEST EXECUTION RESULT] : FAILURE")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
@@ -153,16 +157,14 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                 print("[TEST EXECUTION RESULT] : FAILURE")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print(f"ACTUAL RESULT {step}: Failed to get the gateway ip")
+            print(f"ACTUAL RESULT {step}: Failed to get the gateway IP")
             print("[TEST EXECUTION RESULT] : FAILURE")
     else:
         obj.setLoadModuleStatus("FAILURE")
         print("Failed to parse the device configuration file")
     clientDisconnect()
     obj.unloadModule("tdkb_e2e")
-    sysobj.unloadModule("sysutil")
 else:
-    print("Failed to load tdkb_e2e and sysutil module")
+    print("Failed to load tdkb_e2e")
     obj.setLoadModuleStatus("FAILURE")
-    sysobj.setLoadModuleStatus("FAILURE")
-    print("Modules loading failed")
+    print("Module loading failed")

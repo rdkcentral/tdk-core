@@ -18,30 +18,24 @@
 ##########################################################################
 
 # use tdklib library,which provides a wrapper for tdk testcase script
-import tdklib;
-import time;
+import tdklib
 import tdkbE2EUtility
 from tdkbE2EUtility import *
 
 #Test component to be tested
-obj = tdklib.TDKScriptingLibrary("tdkb_e2e","1");
-sysobj = tdklib.TDKScriptingLibrary("sysutil","1")
+obj = tdklib.TDKScriptingLibrary("tdkb_e2e","1")
 
 #IP and Port of box, No need to change,
 #This will be replaced with correspoing Box Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'E2E_WIFI_TCPFromWlanToLan_Perf');
-sysobj.configureTestCase(ip,port,'E2E_WIFI_TCPFromWlanToLan_Perf');
+obj.configureTestCase(ip,port,'E2E_WIFI_TCPFromWlanToLan_Perf')
 #Get the result of connection with test component
 loadmodulestatus =obj.getLoadModuleResult()
-print("[LIB LOAD STATUS]  :  %s" %loadmodulestatus)
-loadmodulestatus1 =sysobj.getLoadModuleResult()
-print("[LIB LOAD STATUS]  :  %s" %loadmodulestatus1)
+print("[LIB LOAD STATUS] : %s" %loadmodulestatus)
 
-if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.upper():
-    obj.setLoadModuleStatus("SUCCESS");
-    sysobj.setLoadModuleStatus("SUCCESS")
+if "SUCCESS" in loadmodulestatus.upper():
+    obj.setLoadModuleStatus("SUCCESS")
     expectedresult = "SUCCESS"
     step = 0
     status = "FAILURE"
@@ -49,7 +43,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
     #Parse the device configuration file
     status = parseDeviceConfig(obj)
     if expectedresult in status:
-        obj.setLoadModuleStatus("SUCCESS");
+        obj.setLoadModuleStatus("SUCCESS")
         print("Parsed the device configuration file successfully")
 
         if tdkbE2EUtility.mlo_capability == "True":
@@ -74,23 +68,23 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                     print("The current ssid and keypassphrase are same as configured in the device configuration file")
                     tdkTestObj.setResultStatus("SUCCESS")
 
-                    #Connect to the wifi ssid from wlan client
+                    #Connect to the wifi ssid from WLAN client
                     step += 1
-                    print(f"\nTEST STEP {step}: From wlan client, Connect to the wifi ssid")
-                    print(f"EXPECTED RESULT {step}: wlan client should connect to the wifi ssid")
+                    print(f"\nTEST STEP {step}: From WLAN client, Connect to the wifi ssid")
+                    print(f"EXPECTED RESULT {step}: WLAN client should connect to the wifi ssid")
                     status = wlanConnectWifiSsid(tdkbE2EUtility.ssid_name,tdkbE2EUtility.ssid_pwd,tdkbE2EUtility.wlan_interface)
                     if expectedresult in status:
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print(f"ACTUAL RESULT {step}: wlan client connected to wifi ssid successfully")
+                        print(f"ACTUAL RESULT {step}: WLAN client connected to wifi ssid successfully")
                         print("[TEST EXECUTION RESULT] : SUCCESS")
 
                         step += 1
-                        print(f"\nTEST STEP {step}: Get the IP address of the wlan client after connecting to wifi")
-                        print(f"EXPECTED RESULT {step}: Should get the IP address of the wlan client after connecting to wifi")
+                        print(f"\nTEST STEP {step}: Get the IP address of the WLAN client after connecting to wifi")
+                        print(f"EXPECTED RESULT {step}: Should get the IP address of the WLAN client after connecting to wifi")
                         wlanIP = getWlanIPAddress(tdkbE2EUtility.wlan_interface)
                         if wlanIP != "":
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print(f"ACTUAL RESULT {step}: Got the IP address of the wlan client as {wlanIP}")
+                            print(f"ACTUAL RESULT {step}: Got the IP address of the WLAN client as {wlanIP}")
                             print("[TEST EXECUTION RESULT] : SUCCESS")
                             step += 1
                             print(f"\nTEST STEP {step}: Get the current LAN IP address DHCP range")
@@ -102,48 +96,48 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                 print(f"ACTUAL RESULT {step}: Got the LAN IP Address: {curIPAddress}")
                                 print("[TEST EXECUTION RESULT] : SUCCESS")
                                 step += 1
-                                print(f"\nTEST STEP {step}: Check whether wlan ip address is in same DHCP range")
-                                print(f"EXPECTED RESULT {step}: wlan ip address should be in same DHCP range")
+                                print(f"\nTEST STEP {step}: Check whether WLAN IP address is in same DHCP range")
+                                print(f"EXPECTED RESULT {step}: WLAN IP address should be in same DHCP range")
                                 status = checkIpRange(curIPAddress,wlanIP)
                                 if expectedresult in status:
                                     tdkTestObj.setResultStatus("SUCCESS")
-                                    print(f"ACTUAL RESULT {step}: wlan ip address is in same DHCP range")
+                                    print(f"ACTUAL RESULT {step}: WLAN IP address is in same DHCP range")
                                     print("[TEST EXECUTION RESULT] : SUCCESS")
                                     #Connect to LAN client and obtain its IP
                                     step += 1
-                                    print(f"\nTEST STEP {step}: Get the IP address of the lan client after connecting to it")
-                                    print(f"EXPECTED RESULT {step}: Should get the IP address of the lan client after connecting to it")
+                                    print(f"\nTEST STEP {step}: Get the IP address of the LAN client after connecting to it")
+                                    print(f"EXPECTED RESULT {step}: Should get the IP address of the LAN client after connecting to it")
                                     lanIP = getLanIPAddress(tdkbE2EUtility.lan_interface)
                                     if lanIP != "":
                                         tdkTestObj.setResultStatus("SUCCESS")
-                                        print(f"ACTUAL RESULT {step}: Got IP address of the lan client as {lanIP}")
+                                        print(f"ACTUAL RESULT {step}: Got IP address of the LAN client as {lanIP}")
                                         print("[TEST EXECUTION RESULT] : SUCCESS")
                                         step += 1
-                                        print(f"\nTEST STEP {step}: Check whether lan ip address is in same DHCP range")
-                                        print(f"EXPECTED RESULT {step}: lan ip address should be in same DHCP range")
+                                        print(f"\nTEST STEP {step}: Check whether LAN IP address is in same DHCP range")
+                                        print(f"EXPECTED RESULT {step}: LAN IP address should be in same DHCP range")
                                         status = checkIpRange(curIPAddress,lanIP)
                                         if expectedresult in status:
                                             tdkTestObj.setResultStatus("SUCCESS")
-                                            print(f"ACTUAL RESULT {step}: lan ip address is in same DHCP range")
+                                            print(f"ACTUAL RESULT {step}: LAN IP address is in same DHCP range")
                                             print("[TEST EXECUTION RESULT] : SUCCESS")
                                             #Verify TCP from WLAN to LAN
                                             step += 1
-                                            print(f"\nTEST STEP {step}: Check if average throughput is in desired range duringTCP from WLAN to LAN ");
-                                            print(f"EXPECTED RESULT {step}:  Average throughput should be in desired range duringTCP from WLAN to LAN")
-                                            status,clientOutput,clientOutput_avg = getThroughput("WLAN","LAN",lanIP,wlanIP,tdkbE2EUtility.wlan_mlo_throughput_outfile,tdkbE2EUtility.wlan_mlo_throughput_to_lan,tdkTestObj);
-                                            print("Average Bandwidth received from client : %s" %clientOutput_avg);
-                                            print("Bandwidth received from client : %s" %clientOutput);
+                                            print(f"\nTEST STEP {step}: Check if average throughput is in desired range during TCP from WLAN to LAN ")
+                                            print(f"EXPECTED RESULT {step}: Average throughput should be in desired range during TCP from WLAN to LAN")
+                                            status,clientOutput,clientOutput_avg = getThroughput("WLAN","LAN",lanIP,wlanIP,tdkbE2EUtility.wlan_mlo_throughput_outfile,tdkbE2EUtility.wlan_mlo_throughput_to_lan,tdkTestObj)
+                                            print("Average Bandwidth received from client : %s" %clientOutput_avg)
+                                            print("Bandwidth received from client : %s" %clientOutput)
                                             if expectedresult in status:
-                                                tdkTestObj.setResultStatus("SUCCESS");
+                                                tdkTestObj.setResultStatus("SUCCESS")
                                                 print(f"ACTUAL RESULT {step}: Average throughput recieved is within the expected range")
                                                 print("[TEST EXECUTION RESULT : SUCCESS")
                                             else:
                                                 tdkTestObj.setResultStatus("FAILURE")
-                                                print(f"ACTUAL RESULT {step}: Average throughput recieved is within the expected range")
+                                                print(f"ACTUAL RESULT {step}: Average throughput recieved is outside the expected range")
                                                 print("[TEST EXECUTION RESULT] : FAILURE")
                                         else:
                                             tdkTestObj.setResultStatus("FAILURE")
-                                            print(f"ACTUAL STEP {step}: lan ip address is not in DHCP range")
+                                            print(f"ACTUAL STEP {step}: LAN IP address is not in DHCP range")
                                             print("[TEST EXECUTION RESULT] : FAILURE")
                                     else:
                                         tdkTestObj.setResultStatus("FAILURE")
@@ -151,20 +145,20 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                         print("[TEST EXECUTION RESULT] : FAILURE")
                                 else:
                                     tdkTestObj.setResultStatus("FAILURE")
-                                    print(f"ACTUAL STEP {step}: wlan ip address is not in DHCP range")
+                                    print(f"ACTUAL STEP {step}: WLAN IP address is not in DHCP range")
                                     print("[TEST EXECUTION RESULT] : FAILURE")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
-                                print(f"ACTUAL STEP {step}: Failed to get gateway lan ip")
+                                print(f"ACTUAL STEP {step}: Failed to get gateway LAN IP")
                                 print("[TEST EXECUTION RESULT] : FAILURE")
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
-                            print(f"ACTUAL STEP {step}: Failed to get the wlan ip address")
+                            print(f"ACTUAL STEP {step}: Failed to get the WLAN IP address")
                             print("[TEST EXECUTION RESULT] : FAILURE")
 
                         step += 1
-                        print(f"\nTEST STEP {step}: From wlan client, Disconnect from the wifi ssid")
-                        print(f"EXPECTED RESULT {step}: wlan client should be disconnected from wifi ssid")
+                        print(f"\nTEST STEP {step}: From WLAN client, Disconnect from the wifi ssid")
+                        print(f"EXPECTED RESULT {step}: WLAN client should be disconnected from wifi ssid")
                         status = wlanDisconnectWifiSsid(tdkbE2EUtility.wlan_interface)
                         if expectedresult in status:
                             tdkTestObj.setResultStatus("SUCCESS")
@@ -172,7 +166,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                             print("[TEST EXECUTION RESULT] : SUCCESS")
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
-                            print(f"ACTUAL STEP {step}:Disconnect from WIFI SSID: FAILED")
+                            print(f"ACTUAL STEP {step}: Disconnect from WIFI SSID: FAILED")
                             print("[TEST EXECUTION RESULT] : FAILURE")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
@@ -195,10 +189,8 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
     #Handle any post execution cleanup required
     postExecutionCleanup()
     obj.unloadModule("tdkb_e2e")
-    sysobj.unloadModule("sysutil")
 
 else:
-    print("Failed to load tdkb_e2e and sysutil module")
+    print("Failed to load tdkb_e2e module")
     obj.setLoadModuleStatus("FAILURE")
-    sysobj.setLoadModuleStatus("FAILURE")
     print("Module loading failed")
