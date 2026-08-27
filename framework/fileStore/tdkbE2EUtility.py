@@ -533,6 +533,9 @@ def parseDeviceConfig(obj):
         global perf_test_poll_interval
         perf_test_poll_interval = config.get(deviceConfig, "PERF_TEST_POLL_INTERVAL")
 
+        global perf_test_offset
+        perf_test_offset = config.get(deviceConfig, "PERF_TEST_OFFSET")
+
         if mlo_capability == "False":
             global wlan_2ghz_throughput_to_wan
             wlan_2ghz_throughput_to_wan = config.get(deviceConfig, "WLAN_2GHZ_THROUGHPUT_TO_WAN")
@@ -883,7 +886,7 @@ def wlanConnectWifiSsid(ssidName,ssidPwd,wlanInterface,securityType= "Protected"
             if ssidName in status:
                 status = wifiConnect(ssidName,ssidPwd,securityType)
                 if mlo_capability == "False":
-                    if wlan_2ghz_ssid_connect_status in status or wlan_5ghz_ssid_connect_status in status or wlan_6ghz_ssid_connect_status in status or wlan_2ghz_public_ssid_connect_status in status or wlan_5ghz_public_ssid_connect_status in status or wlan_6ghz_public_ssid_connect_status:
+                    if wlan_2ghz_ssid_connect_status in status or wlan_5ghz_ssid_connect_status in status or wlan_6ghz_ssid_connect_status in status or wlan_2ghz_public_ssid_connect_status in status or wlan_5ghz_public_ssid_connect_status in status or wlan_6ghz_public_ssid_connect_status in status:
                         sleep(60);
                         status = getConnectedSsidName(wlanInterface)
                         if ssidName in status:
@@ -2137,23 +2140,29 @@ def getThroughput(source,destination,dest_ip,src_ip, outfile, expected_perf, tdk
     global isPerformanceTest;
     global perf_test_duration
     global perf_test_poll_interval;
+    global perf_test_offset;
     global clientOutput_avg
     global perf_out_file
     global testObj;
 
     testObj = tdkTestObj
-    perf_offset = 5
 
     try:
         clientOutput_avg = 0
         isPerformanceTest = True
         perf_out_file = outfile
         status,outputValue,clientOutput = tcp_udpInClients(source,destination,dest_ip,src_ip,connectivityType)
-        if clientOutput_avg>(int(expected_perf)-perf_offset) and clientOutput_avg<(int(expected_perf)+perf_offset):
-            status = "SUCCESS"
+        print(f"Expected Threshold value : {expected_perf}")
+        raw_offset = str(perf_test_offset).strip()
+        if raw_offset.isdigit():
+            perf_offset = int(raw_offset)
+            if clientOutput_avg>(int(expected_perf)-perf_offset) and clientOutput_avg<(int(expected_perf)+perf_offset):
+                status = "SUCCESS"
+            else:
+                status = "FAILURE"
         else:
+            print(f"Invalid or non-integer offset value: '{raw_offset}'")
             status = "FAILURE"
-
     except Exception as e:
         print(e);
         status = e;
@@ -3515,14 +3524,15 @@ def getThroughputInMbps(serverOutput):
     throughput = 0.0
     try:
         if serverOutput:
-            parts = serverOutput.split(" ")
-            bandwidth = float(parts[0])
-            if "Gbits/sec" in serverOutput:
-                throughput = bandwidth * 1000
-            elif "Kbits/sec" in serverOutput:
-                throughput = bandwidth * 0.001
-            else:
-                throughput = bandwidth
+            parts = serverOutput.split()
+            if parts:
+                bandwidth = float(parts[0])
+                if "Gbits/sec" in serverOutput:
+                    throughput = bandwidth * 1000
+                elif "Kbits/sec" in serverOutput:
+                    throughput = bandwidth * 0.001
+                else:
+                    throughput = bandwidth
     except Exception as e:
         print(e)
         throughput = 0.0
@@ -3578,7 +3588,7 @@ def firewallSet(obj,level,step,revert="false"):
 ########## End of Function ##########
 
 def lanManagementSet(obj,setList,step,revert="false"):
-# firewallSet
+# lanManagementSet
 # Syntax      : lanManagementSet(obj,setList,step,revert="false")
 # Description : Function to set the Lan Management IP and address ranges
 # Parameters  : obj - tdkb_e2e object
@@ -3616,7 +3626,7 @@ def lanManagementSet(obj,setList,step,revert="false"):
         else:
             status = "SUCCESS"
     else:
-        print(f"ACTUAL RESULT {step}: Lan Mangement parameters are not SET successfully")
+        print(f"ACTUAL RESULT {step}: Lan Management parameters are not SET successfully")
         print(f"TEST EXECUTION RESULT : FAILURE")
         tdkTestObj.setResultStatus("FAILURE")
 
