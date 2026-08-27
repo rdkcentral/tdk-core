@@ -40,7 +40,7 @@ obj1.configureTestCase(ip,port,'E2E_ParentalControl_ManagedServices_Block_WLAN_H
 loadmodulestatus = obj.getLoadModuleResult()
 loadmodulestatus1 = obj1.getLoadModuleResult()
 print("[LIB LOAD STATUS]  :  %s" % loadmodulestatus)
-print("[LIB LOAD STATUS]  :  %s" % loadmodulestatus)
+print("[LIB LOAD STATUS]  :  %s" % loadmodulestatus1)
 
 if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.upper():
     obj.setLoadModuleStatus("SUCCESS")
