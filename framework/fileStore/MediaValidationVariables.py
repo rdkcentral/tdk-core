@@ -483,37 +483,37 @@ video_src_url_playready_dash_av1 = ""
 video_src_url_playready_dash_av1_drmconfigs = ""
 
 # Widevine DRM URLs
-video_src_url_widevine_dash_aac = ""
+video_src_url_widevine_dash_aac = test_streams_base_path + "DASH_H264_AAC_Crypt_block/master.mpd"
 video_src_url_widevine_dash_aac_drmconfigs = ""
 
-video_src_url_widevine_dash_h264 = ""
+video_src_url_widevine_dash_h264 = test_streams_base_path + "DASH_H264_AAC_CBCS/dash_h264_aac_cbcs_master.mpd"
 video_src_url_widevine_dash_h264_drmconfigs = ""
 
-video_src_url_widevine_dash_ac3 = ""
-video_src_url_widevine_dash_ac3_drmconfigs =""
+video_src_url_widevine_dash_ac3 = test_streams_base_path + "DASH_H264_AC3_CBCS/master.mpd"
+video_src_url_widevine_dash_ac3_drmconfigs = ""
 
-video_src_url_widevine_dash_ec3 = ""
-video_src_url_widevine_dash_ec3_drmconfigs =""
+video_src_url_widevine_dash_ec3 = test_streams_base_path + "DASH_H264_EC3_Widevine_no_auth/dash_h264_ec3_master.mpd"
+video_src_url_widevine_dash_ec3_drmconfigs = ""
 
-video_src_url_widevine_dash_hevc = ""
-video_src_url_widevine_dash_hevc_drmconfigs =""
+video_src_url_widevine_dash_hevc =  test_streams_base_path + "DASH_HEVC_AAC_Widevine_no_auth/dash_hevc_aac_master.mpd"
+video_src_url_widevine_dash_hevc_drmconfigs = ""
 
-video_src_url_widevine_dash_vp9 = ""
+video_src_url_widevine_dash_vp9 = test_streams_base_path + "DASH_VP9_OPUS_Widevine_no_auth/dash_vp9_opus_master.mpd"
 video_src_url_widevine_dash_vp9_drmconfigs = ""
 
-video_src_url_widevine_hls_aac = ""
+video_src_url_widevine_hls_aac = test_streams_base_path + "HLS_H264_AAC_no_auth/hls_master.m3u8"
 video_src_url_widevine_hls_aac_drmconfigs = ""
 
-video_src_url_widevine_hls_h264 = ""
+video_src_url_widevine_hls_h264 = test_streams_base_path + "HLS_H264_AAC_no_auth/hls_master.m3u8"
 video_src_url_widevine_hls_h264_drmconfigs = ""
 
-video_src_url_widevine_hls_hevc = ""
+video_src_url_widevine_hls_hevc = test_streams_base_path + "HLS_HEVC_Widevine_No_auth/HLS_HEVC_master.m3u8"
 video_src_url_widevine_hls_hevc_drmconfigs = ""
 
-video_src_url_widevine_dash_av1 = ""
+video_src_url_widevine_dash_av1 =  test_streams_base_path + "DASH_AV1_Widevine_no_auth/dash_AV1_master.mpd"
 video_src_url_widevine_dash_av1_drmconfigs = ""
 
-video_src_url_widevine_dash_opus = ""
+video_src_url_widevine_dash_opus = test_streams_base_path + "DASH_VP9_OPUS_Widevine_no_auth/dash_vp9_opus_master.mpd"
 video_src_url_widevine_dash_opus_drmconfigs = ""
 
 video_src_url_widevine_dash_vp8 = ""
@@ -591,7 +591,7 @@ video_src_url_widevine_crypt_skip_block_hls_hevc_aac_drmconfigs = ""
 
 
 #Multi-DRM Test streams
-video_src_url_multi_drm_dash = ""
+video_src_url_multi_drm_dash = test_streams_base_path + "DASH_H264_AC3_MultiDRM/master.mpd"
 video_src_url_multi_drm_dash_pref_playready_drmconfigs = ""
 video_src_url_multi_drm_dash_pref_widevine_drmconfigs  = ""
 
@@ -602,10 +602,10 @@ video_src_url_playready_cbcs_dash_drmconfigs = ""
 video_src_url_playready_cbcs_hls = ""
 video_src_url_playready_cbcs_hls_drmconfigs = ""
 
-video_src_url_widevine_cbcs_dash = ""
+video_src_url_widevine_cbcs_dash = test_streams_base_path + "DASH_H264_AAC_CBCS_no_auth/dash_h264_aac_cbcs_master.mpd"
 video_src_url_widevine_cbcs_dash_drmconfigs = ""
 
-video_src_url_widevine_cbcs_hls = ""
+video_src_url_widevine_cbcs_hls = test_streams_base_path + "HLS_H264_AAC_CBCS/hls_h264_cbcs_master.m3u8"
 video_src_url_widevine_cbcs_hls_drmconfigs = ""
 
 video_src_url_playready_cbcs_dash_av1 = ""
