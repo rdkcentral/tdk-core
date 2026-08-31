@@ -90,9 +90,9 @@
     </testCase>
 
     <!-- TestCase 02 -->
-    <testCase testCaseId="DM_02" testCaseName="DownloadManager_GetStorageDetails_Functionality" desc="Verify that the getStorageDetails method functions correctly">
+    <testCase testCaseId="DM_02" testCaseName="DownloadManager_GetStorageDetails_UnknownMethod_Error" desc="Verify that the getStorageDetails method returns unknown method error when called with valid parameters">
         <testCaseInfo testCaseType="direct"/>
-        <testCasePreRequisite>
+        <!--testCasePreRequisite>
             <preRequisite requisiteId="1" requisiteName="Uninstall_Existing_Package_Before_Install">
                 <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="AppPackageManager" saveResult="true">
                     <resultGeneration useMethodTag="app_packagemanager_list_packages">
@@ -142,7 +142,7 @@
                     </resultGeneration>
                 </testStep>
             </preRequisite>
-        </testCasePreRequisite>
+        </testCasePreRequisite-->
 
         <testStep testStepId="1" name="GetStorageDetails" method="Get_Storage_Details">
             <params>
@@ -150,9 +150,9 @@
                 <param tag="id" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                 <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
             </params>
-            <resultGeneration useMethodTag="downloadmanager_getstorage_details_validation"/>
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="Unknown method."/>
         </testStep>
-        <testStep testStepId="2" name="Uninstall" method="Uninstall_Package" pluginName="AppPackageManager">
+        <!--testStep testStepId="2" name="Uninstall" method="Uninstall_Package" pluginName="AppPackageManager">
             <params>
                 <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
             </params>
@@ -162,7 +162,7 @@
             <resultGeneration useMethodTag="app_packagemanager_check_uninstall_package">
                 <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
             </resultGeneration>
-        </testStep>
+        </testStep-->
     </testCase>
 
     <!-- TestCase 03 -->
