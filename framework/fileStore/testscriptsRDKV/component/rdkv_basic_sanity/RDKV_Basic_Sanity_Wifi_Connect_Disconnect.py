@@ -37,6 +37,7 @@ print("[LIB LOAD STATUS]  :  %s" % result)
 obj.setLoadModuleStatus(result.upper())
 
 expectedResult = "SUCCESS"
+connected = False
 
 if expectedResult in result.upper():
 
@@ -154,24 +155,27 @@ if expectedResult in result.upper():
                 print("")
                 if "SUCCESS" in details:
                     tdkTestObj.setResultStatus("SUCCESS")
+                    connected = True
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     result = "FAILURE"
 
             # ==============================================================
-            # STEP 5: WiFi Disconnect (always run per band)
+            # STEP 5: WiFi Disconnect (run if SSID is connected)
             # ==============================================================
-            tdkTestObj = obj.createTestStep('rdkv_basic_sanity_wifiDisconnect')
-            tdkTestObj.executeTestCase(expectedResult)
-            disc_result  = tdkTestObj.getResult()
-            disc_details = tdkTestObj.getResultDetails()
-            print("[%s - STEP 5 - WiFi Disconnect] : %s" % (band_label, disc_details))
-            print("")
-            if disc_result == "SUCCESS":
-                tdkTestObj.setResultStatus("SUCCESS")
-            else:
-                tdkTestObj.setResultStatus("FAILURE")
-                result = "FAILURE"
+            if connected:
+                tdkTestObj = obj.createTestStep('rdkv_basic_sanity_wifiDisconnect')
+                tdkTestObj.executeTestCase(expectedResult)
+                disc_result  = tdkTestObj.getResult()
+                disc_details = tdkTestObj.getResultDetails()
+                print("[%s - STEP 5 - WiFi Disconnect] : %s" % (band_label, disc_details))
+                print("")
+                if disc_result == "SUCCESS":
+                    tdkTestObj.setResultStatus("SUCCESS")
+                else:
+                    tdkTestObj.setResultStatus("FAILURE")
+                    result = "FAILURE"
+            connected = False
 
     else:
         print("FAILURE: Failed to get configuration values from device config")
