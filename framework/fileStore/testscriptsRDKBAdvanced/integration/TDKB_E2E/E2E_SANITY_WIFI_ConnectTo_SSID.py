@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2019 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,79 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
-'''
-<?xml version='1.0' encoding='utf-8'?>
-<xml>
-  <id></id>
-  <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>5</version>
-  <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>E2E_SANITY_WIFI_ConnectTo_SSID</name>
-  <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
-  <primitive_test_id> </primitive_test_id>
-  <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>tdkb_e2e_Get</primitive_test_name>
-  <!--  -->
-  <primitive_test_version>2</primitive_test_version>
-  <!--  -->
-  <status>FREE</status>
-  <!--  -->
-  <synopsis>To check if the connection to 2.4GHZ and 5GHz SSIDs are success or not</synopsis>
-  <!--  -->
-  <groups_id />
-  <!--  -->
-  <execution_time>30</execution_time>
-  <!--  -->
-  <long_duration>false</long_duration>
-  <!--  -->
-  <advanced_script>false</advanced_script>
-  <!-- execution_time is the time out time for test execution -->
-  <remarks></remarks>
-  <!-- Reason for skipping the tests if marked to skip -->
-  <skip>false</skip>
-  <!--  -->
-  <box_types>
-    <box_type>Broadband</box_type>
-    <!--  -->
-    <box_type>Emulator</box_type>
-    <!--  -->
-    <box_type>RPI</box_type>
-    <!--  -->
-  <box_type>BPI</box_type></box_types>
-  <rdk_versions>
-    <rdk_version>RDKB</rdk_version>
-    <!--  -->
-  </rdk_versions>
-  <test_cases>
-    <test_case_id>TC_TDKB_E2E_402</test_case_id>
-    <test_objective>To check if the connection to 2.4GHZ and 5GHz SSIDs are success or not</test_objective>
-    <test_type>Positive</test_type>
-    <test_setup>Broadband,Emulator,RPI</test_setup>
-    <pre_requisite>Ensure the client setup is up with the IP address assigned by the gateway</pre_requisite>
-    <api_or_interface_used>None</api_or_interface_used>
-    <input_parameters>Device.WiFi.SSID.1.SSID
-Device.WiFi.AccessPoint.1.Security.KeyPassphrase
-Device.WiFi.SSID.2.SSID
-Device.WiFi.AccessPoint.2.Security.KeyPassphrase</input_parameters>
-    <automation_approch>1. Load tdkb_e2e module
-2. Using tdkb_e2e_Get, get and save ssid name and password of 2.4GHZ and 5GHZ
-3. Check whether SSID for 2.4GHZ and 5GHZ are broadcasting and able to connect to those SSIDs
-5. Revert the values to original value
-6.Unload tdkb_e2e module</automation_approch>
-    <except_output>The SSIDs for both 2.4GHZ and 5GHZ should broadcast and should be able to connect to them</except_output>
-    <priority>High</priority>
-    <test_stub_interface>tdkb_e2e</test_stub_interface>
-    <test_script>E2E_WIFI_ConnectTo_SSID</test_script>
-    <skipped>No</skipped>
-    <release_version>M59</release_version>
-    <remarks></remarks>
-  </test_cases>
-  <script_tags>
-    <script_tag>BASIC</script_tag>
-    <!--  -->
-  </script_tags>
-</xml>
-'''
+
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import time
@@ -162,7 +90,7 @@ if "SUCCESS" in loadmodulestatus.upper():
         #Get the value of the wifi parameters that are currently set.
         tdkTestObj,status,orgValue = getMultipleParameterValues(obj,paramList)
 
-        if expectedresult in status:
+        if expectedresult in status and orgValue != "":
             tdkTestObj.setResultStatus("SUCCESS")
             print(f"\nTEST STEP {step}: Get the current WiFi SSID and keypassphrase values")
             print(f"EXPECTED RESULT {step}: Should retrieve the current WiFi SSID and keypassphrase values")
@@ -220,7 +148,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                             print(f"EXPECTED RESULT {step}: WLAN client should get an IP address")
                             wlanIP = getWlanIPAddress(wlanInterface)
 
-                            if wlanIP:
+                            if wlanIP != "":
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 print(f"ACTUAL RESULT {step}: WLAN IP Address is {wlanIP}")
                                 print("[TEST EXECUTION RESULT] : SUCCESS")
@@ -232,7 +160,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                                 tdkTestObj,status,curIPAddress = getParameterValue(obj,param)
                                 print("Gateway LAN IP Address: %s" %curIPAddress)
 
-                                if expectedresult in status and curIPAddress:
+                                if expectedresult in status and curIPAddress != "":
                                     tdkTestObj.setResultStatus("SUCCESS")
                                     print(f"ACTUAL RESULT {step}: LAN IP Address retrieved as {curIPAddress}")
                                     print("[TEST EXECUTION RESULT] : SUCCESS")
@@ -303,30 +231,35 @@ if "SUCCESS" in loadmodulestatus.upper():
                 print(f"ACTUAL RESULT {step}: {details}")
                 print("[TEST EXECUTION RESULT] : FAILURE")
 
-            #Prepare the list of parameter values to be reverted
-            revertParamList = []
-            index = 0
-            for param in paramList:
-                revertParamList = revertParamList + [param,orgValue[index],'string']
-                index = index + 1
-
-            #Concatenate the lists with the elements separated by pipe
-            revertParamList = "|".join(map(str, revertParamList))
-
             #Revert the values to original
             step = step + 1
             print(f"\nTEST STEP {step}: Revert the WiFi SSID and keypassphrase values to original")
             print(f"EXPECTED RESULT {step}: Should set the original WiFi SSID and keypassphrase values")
-            tdkTestObj,actualresult,details = setMultipleParameterValues(obj,revertParamList)
 
-            if expectedresult in actualresult and expectedresult in finalStatus:
-                tdkTestObj.setResultStatus("SUCCESS")
-                print(f"ACTUAL RESULT {step}: {details}")
-                print("[TEST EXECUTION RESULT] : SUCCESS")
+            if len(orgValue) == len(paramList):
+                #Prepare the list of parameter values to be reverted
+                revertParamList = []
+                index = 0
+                for param in paramList:
+                    revertParamList = revertParamList + [param,orgValue[index],'string']
+                    index = index + 1
+
+                #Concatenate the lists with the elements separated by pipe
+                revertParamList = "|".join(map(str, revertParamList))
+
+                tdkTestObj,actualresult,details = setMultipleParameterValues(obj,revertParamList)
+
+                if expectedresult in actualresult and expectedresult in finalStatus:
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    print(f"ACTUAL RESULT {step}: {details}")
+                    print("[TEST EXECUTION RESULT] : SUCCESS")
+                else:
+                    tdkTestObj.setResultStatus("FAILURE")
+                    print(f"ACTUAL RESULT {step}: {details}")
+                    print("[TEST EXECUTION RESULT] : FAILURE")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                details = tdkTestObj.getResultDetails()
-                print(f"ACTUAL RESULT {step}: {details}")
+                print(f"ACTUAL RESULT {step}: Failed to revert because the retrieved original values are incomplete")
                 print("[TEST EXECUTION RESULT] : FAILURE")
         else:
             tdkTestObj.setResultStatus("FAILURE")
