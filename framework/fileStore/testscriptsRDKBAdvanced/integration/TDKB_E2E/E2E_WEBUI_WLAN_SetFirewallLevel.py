@@ -28,7 +28,7 @@ from tdkbWEBUIUtility import *
 obj = tdklib.TDKScriptingLibrary("tdkb_e2e","1")
 
 #IP and Port of box, No need to change,
-#This will be replaced with correspoing Box Ip and port while executing script
+#This will be replaced with corresponding Box Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'E2E_WEBUI_WLAN_SetFirewallLevel')
@@ -61,7 +61,7 @@ if "SUCCESS" in loadmodulestatus.upper():
 
         if expectedresult in status:
             tdkTestObj.setResultStatus("SUCCESS")
-            print(f"TEST STEP {step}: Get the current ssid and keypassphrase and firewall level")
+            print(f"\nTEST STEP {step}: Get the current ssid and keypassphrase and firewall level")
             print(f"EXPECTED RESULT {step}: Should retrieve the current ssid and keypassphrase and firewall level")
             print(f"ACTUAL RESULT {step}: {orgValue}")
             print("[TEST EXECUTION RESULT] : SUCCESS")
@@ -92,7 +92,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                 tdkTestObj,firewallResult,details = setMultipleParameterValues(obj,firewallParam)
                 if expectedresult in actualresult and expectedresult in firewallResult:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print(f"TEST STEP {step}: Set the ssid and keypassphrase and firewall level")
+                    print(f"\nTEST STEP {step}: Set the ssid and keypassphrase and firewall level")
                     print(f"EXPECTED RESULT {step}: Should set the ssid and keypassphrase and firewall level")
                     print(f"ACTUAL RESULT {step}: {details}")
                     print("[TEST EXECUTION RESULT] : SUCCESS")
@@ -104,20 +104,20 @@ if "SUCCESS" in loadmodulestatus.upper():
                     step += 1
                     if expectedresult in status and setValuesList == newValues:
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print(f"TEST STEP {step}: Get the current ssid and keypassphrase and firewall")
+                        print(f"\nTEST STEP {step}: Get the current ssid and keypassphrase and firewall")
                         print(f"EXPECTED RESULT {step}: Should retrieve the current ssid and keypassphrase and firewall")
                         print(f"ACTUAL RESULT {step}: {newValues}")
                         print("[TEST EXECUTION RESULT] : SUCCESS")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print(f"TEST STEP {step}: Get the current ssid and keypassphrase and firewall")
+                        print(f"\nTEST STEP {step}: Get the current ssid and keypassphrase and firewall")
                         print(f"EXPECTED RESULT {step}: Should retrieve the current ssid and keypassphrase and firewall")
                         print(f"ACTUAL RESULT {step}: {newValues}")
                         print("[TEST EXECUTION RESULT] : FAILURE")
                         status = "FAILURE"
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print(f"TEST STEP {step}: Set the ssid and keypassphrase and firewall level")
+                    print(f"\nTEST STEP {step}: Set the ssid and keypassphrase and firewall level")
                     print(f"EXPECTED RESULT {step}: Should set the ssid and keypassphrase and firewall level")
                     print(f"ACTUAL RESULT {step}: {details}")
                     print("[TEST EXECUTION RESULT] : FAILURE")
@@ -129,7 +129,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                 tdkTestObj,firewallResult,details = setMultipleParameterValues(obj,firewallParam)
                 if expectedresult in firewallResult:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print(f"TEST STEP {step}: Set the firewall level")
+                    print(f"\nTEST STEP {step}: Set the firewall level")
                     print(f"EXPECTED RESULT {step}: Should set the firewall level")
                     print(f"ACTUAL RESULT {step}: {details}")
                     print("[TEST EXECUTION RESULT] : SUCCESS")
@@ -139,20 +139,20 @@ if "SUCCESS" in loadmodulestatus.upper():
                     step += 1
                     if expectedresult in status and setValuesList == newValues:
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print(f"TEST STEP {step}: Get the current ssid and keypassphrase and firewall")
+                        print(f"\nTEST STEP {step}: Get the current ssid and keypassphrase and firewall")
                         print(f"EXPECTED RESULT {step}: Should retrieve the current ssid and keypassphrase and firewall")
                         print(f"ACTUAL RESULT {step}: {newValues}")
                         print("[TEST EXECUTION RESULT] : SUCCESS")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print(f"TEST STEP {step}: Get the current ssid and keypassphrase and firewall")
+                        print(f"\nTEST STEP {step}: Get the current ssid and keypassphrase and firewall")
                         print(f"EXPECTED RESULT {step}: Should retrieve the current ssid and keypassphrase and firewall")
                         print(f"ACTUAL RESULT {step}: {newValues}")
                         print("[TEST EXECUTION RESULT] : FAILURE")
                         status = "FAILURE"
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print(f"TEST STEP {step}: Set the firewall level")
+                    print(f"\nTEST STEP {step}: Set the firewall level")
                     print(f"EXPECTED RESULT {step}: Should set the firewall level")
                     print(f"ACTUAL RESULT {step}: {details}")
                     print("[TEST EXECUTION RESULT] : FAILURE")
@@ -168,19 +168,19 @@ if "SUCCESS" in loadmodulestatus.upper():
 
                     #Connect to the wifi ssid from wlan client
                     step += 1
-                    print(f"TEST STEP {step}: From wlan client, Connect to the wifi ssid")
+                    print(f"\nTEST STEP {step}: From wlan client, Connect to the wifi ssid")
                     status = wlanConnectWifiSsid(tdkbE2EUtility.ssid_name,tdkbE2EUtility.ssid_pwd,tdkbE2EUtility.wlan_interface)
                     if expectedresult in status:
                         tdkTestObj.setResultStatus("SUCCESS")
 
                         step += 1
-                        print(f"TEST STEP {step}: Get the IP address of the wlan client after connecting to wifi")
+                        print(f"\nTEST STEP {step}: Get the IP address of the wlan client after connecting to wifi")
                         wlanIP = getWlanIPAddress(tdkbE2EUtility.wlan_interface)
                         if wlanIP:
                             tdkTestObj.setResultStatus("SUCCESS")
 
                             step += 1
-                            print(f"TEST STEP {step}: Get the current LAN IP address DHCP range")
+                            print(f"\nTEST STEP {step}: Get the current LAN IP address DHCP range")
                             param = "Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress"
                             tdkTestObj,status,curIPAddress = getParameterValue(obj,param)
                             print(f"LAN IP Address: {curIPAddress}")
@@ -189,7 +189,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                                 tdkTestObj.setResultStatus("SUCCESS")
 
                                 step += 1
-                                print(f"TEST STEP {step}: Check whether wlan ip address is in same DHCP range")
+                                print(f"\nTEST STEP {step}: Check whether wlan ip address is in same DHCP range")
                                 status = "SUCCESS"
                                 status = checkIpRange(curIPAddress,wlanIP)
                                 if expectedresult in status:
@@ -280,7 +280,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                     print("[TEST EXECUTION RESULT] : FAILURE")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print(f"TEST STEP {step}: Get the current ssid and keypassphrase and firewall level")
+            print(f"\nTEST STEP {step}: Get the current ssid and keypassphrase and firewall level")
             print(f"EXPECTED RESULT {step}: Should retrieve the current ssid and keypassphrase and firewall level")
             print(f"ACTUAL RESULT {step}: {orgValue}")
             print("[TEST EXECUTION RESULT] : FAILURE")

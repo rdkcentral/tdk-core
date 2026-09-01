@@ -63,7 +63,7 @@ if "SUCCESS" in loadmodulestatus.upper():
 
         if expectedresult in status:
             tdkTestObj.setResultStatus("SUCCESS")
-            print(f"TEST STEP {step}: Get the current wifienable status")
+            print(f"\nTEST STEP {step}: Get the current wifienable status")
             print(f"EXPECTED RESULT {step}: Should retrieve the current wifienable status")
             print(f"ACTUAL RESULT {step}: {orgValue}")
             print("[TEST EXECUTION RESULT] : SUCCESS")
@@ -76,7 +76,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                 tdkTestObj,actualresult,details = setMultipleParameterValues(obj,setParamList)
                 if expectedresult in actualresult:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print(f"TEST STEP {step}: Set the wifi enable status to true")
+                    print(f"\nTEST STEP {step}: Set the wifi enable status to true")
                     print(f"EXPECTED RESULT {step}: Should set the wifi enable status to true")
                     print(f"ACTUAL RESULT {step}: {details}")
                     print("[TEST EXECUTION RESULT] : SUCCESS")
@@ -87,7 +87,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                     step += 1
                     if expectedresult in status and setValuesList == newValues:
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print(f"TEST STEP {step}: Get the current wifi enable status")
+                        print(f"\nTEST STEP {step}: Get the current wifi enable status")
                         print(f"EXPECTED RESULT {step}: Should retrieve the current wifi enable status")
                         print(f"ACTUAL RESULT {step}: {newValues}")
                         print("[TEST EXECUTION RESULT] : SUCCESS")
@@ -96,7 +96,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                         time.sleep(60)
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print(f"TEST STEP {step}: Failed to set the wifi enable status to true")
+                        print(f"\nTEST STEP {step}: Failed to set the wifi enable status to true")
                         print(f"EXPECTED RESULT {step}: Should retrieve the wifi enable status as true")
                         print("[TEST EXECUTION RESULT] : FAILURE")
                         obj.unloadModule("tdkb_e2e")
@@ -104,12 +104,12 @@ if "SUCCESS" in loadmodulestatus.upper():
 
             #Connect to LAN client and obtain its IP
             step += 1
-            print(f"TEST STEP {step}: Get the IP address of the lan client after connecting to it")
+            print(f"\nTEST STEP {step}: Get the IP address of the lan client after connecting to it")
             lanIP = getLanIPAddress(tdkbE2EUtility.lan_interface)
             if lanIP:
                 tdkTestObj.setResultStatus("SUCCESS")
                 step += 1
-                print(f"TEST STEP {step}: Get the current LAN IP address DHCP range")
+                print(f"\nTEST STEP {step}: Get the current LAN IP address DHCP range")
                 param = "Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress"
                 tdkTestObj,status,curIPAddress = getParameterValue(obj,param)
                 print(f"LAN IP Address: {curIPAddress}")
@@ -117,7 +117,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                 if expectedresult in status and curIPAddress:
                     tdkTestObj.setResultStatus("SUCCESS")
                     step += 1
-                    print(f"TEST STEP {step}: Check whether lan ip address is in same DHCP range")
+                    print(f"\nTEST STEP {step}: Check whether lan ip address is in same DHCP range")
                     status = "SUCCESS"
                     status = checkIpRange(curIPAddress,lanIP)
                     if expectedresult in status:
@@ -143,7 +143,7 @@ if "SUCCESS" in loadmodulestatus.upper():
 
                                 #Check if 2.4GHz wifi broadcasting is stopped to validate the disabling of wifi
                                 step += 1
-                                print(f"TEST STEP {step}: Check if the SSID name is listed in wifi client")
+                                print(f"\nTEST STEP {step}: Check if the SSID name is listed in wifi client")
                                 time.sleep(30)
                                 status = wlanIsSSIDAvailable(ssidName)
                                 if expectedresult not in status:
@@ -195,7 +195,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                 print("[TEST EXECUTION RESULT] : FAILURE")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print(f"TEST STEP {step}: Get the current wifi enable status")
+            print(f"\nTEST STEP {step}: Get the current wifi enable status")
             print(f"EXPECTED RESULT {step}: Should retrieve the current wifi enable status")
             print(f"ACTUAL RESULT {step}: {orgValue}")
             print("[TEST EXECUTION RESULT] : FAILURE")
