@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_MEDIA_1089
+RDKV_MEDIA_1140
 ## TestCase Name
 RDKV_CERT_MVS_Video_HTML_Play_Successive_DASH_H264_TO_HEVC
 <a name="head.TOC"></a>

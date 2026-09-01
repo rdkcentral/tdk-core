@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_MEDIA_1097
+RDKV_MEDIA_1145
 ## TestCase Name
 RDKV_CERT_MVS_Video_HTML_Play_Successive_SDR_TO_HDR
 <a name="head.TOC"></a>
