@@ -63,7 +63,7 @@ if expectedResult in result.upper():
             thunder_port=rdkv_performancelib.devicePort
             event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 9,"method": "org.rdk.AppManager.1.register","params": {"event": "onAppLifecycleStateChanged", "id": "client.events.1" }}'],"/jsonrpc",False)
             time.sleep(5)
-            for i in range(4):
+            for i in range(test_count):
                 print("ITERATION: ", i+1)
                 event_listener.clearEventsBuffer()
                 tdkTestObj = obj.createTestStep('rdkservice_launch_app')
