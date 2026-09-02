@@ -1612,4 +1612,15 @@
       <resultGeneration useMethodTag="system_check_negative_scenario" />
     </testStep>
   </testCase>
+
+  <!-- Test case 56 -->
+  <testCase testCaseId="SYS_56" testCaseName="System_GetPlatformConfiguration_Invalid_Query" desc="Validates negative scenario for getPlatformConfiguration with invalid query value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Platform_Configuration_Invalid_Query" method="Get_Platform_Configuration">
+      <params>
+        <param tag="query" value="INVALID.QUERY" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
 </testPlugin>
