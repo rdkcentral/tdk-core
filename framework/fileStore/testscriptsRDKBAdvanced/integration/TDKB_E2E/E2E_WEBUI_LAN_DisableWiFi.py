@@ -61,7 +61,7 @@ if "SUCCESS" in loadmodulestatus.upper():
         paramList=[wifiEnable]
         tdkTestObj,status,orgValue = getMultipleParameterValues(obj,paramList)
 
-        if expectedresult in status:
+        if expectedresult in status and orgValue != "":
             tdkTestObj.setResultStatus("SUCCESS")
             print(f"\nTEST STEP {step}: Get the current wifienable status")
             print(f"EXPECTED RESULT {step}: Should retrieve the current wifienable status")
@@ -106,7 +106,7 @@ if "SUCCESS" in loadmodulestatus.upper():
             step += 1
             print(f"\nTEST STEP {step}: Get the IP address of the lan client after connecting to it")
             lanIP = getLanIPAddress(tdkbE2EUtility.lan_interface)
-            if lanIP:
+            if lanIP != "":
                 tdkTestObj.setResultStatus("SUCCESS")
                 step += 1
                 print(f"\nTEST STEP {step}: Get the current LAN IP address DHCP range")
@@ -114,7 +114,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                 tdkTestObj,status,curIPAddress = getParameterValue(obj,param)
                 print(f"LAN IP Address: {curIPAddress}")
 
-                if expectedresult in status and curIPAddress:
+                if expectedresult in status and curIPAddress != "":
                     tdkTestObj.setResultStatus("SUCCESS")
                     step += 1
                     print(f"\nTEST STEP {step}: Check whether lan ip address is in same DHCP range")
@@ -149,9 +149,11 @@ if "SUCCESS" in loadmodulestatus.upper():
                                 if expectedresult not in status:
                                     tdkTestObj.setResultStatus("SUCCESS")
                                     print(f"Network name {ssidName} is not broadcasted on the network")
+                                    print("[TEST EXECUTION RESULT] : SUCCESS")
                                 else:
                                     tdkTestObj.setResultStatus("FAILURE")
                                     print(f"Network name {ssidName} is broadcasted on the network")
+                                    print("[TEST EXECUTION RESULT] : FAILURE")
                             except Exception as error:
                                 tdkTestObj.setResultStatus("FAILURE")
                                 print(error)
@@ -182,6 +184,7 @@ if "SUCCESS" in loadmodulestatus.upper():
             #Revert the values to original
             tdkTestObj,actualresult,details = setMultipleParameterValues(obj,revertParamList)
             step += 1
+            print(f"\nTEST STEP {step}: Revert the wifi enable status to original")
             if expectedresult in actualresult:
                 tdkTestObj.setResultStatus("SUCCESS")
                 print(f"EXPECTED RESULT {step}: Should set the original wifi enable status")

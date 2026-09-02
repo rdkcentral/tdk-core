@@ -57,7 +57,7 @@ if "SUCCESS" in loadmodulestatus.upper():
         paramList = [ssidName, keyPassPhrase, noOfClientsConnected]
         tdkTestObj, status, orgValue = getMultipleParameterValues(obj, paramList)
 
-        if expectedresult in status:
+        if expectedresult in status and orgValue != "":
             tdkTestObj.setResultStatus("SUCCESS")
             print(f"\nTEST STEP {step}: Get the current ssid and keypassphrase and number of clients connected to WLAN 2.4GHZ")
             print(f"EXPECTED RESULT {step}: Should retrieve the current ssid and keypassphrase and  clients connected count")
@@ -137,7 +137,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                         step += 1
                         print(f"\nTEST STEP {step}: Get the IP address of the wlan client after connecting to wifi")
                         wlanIP = getWlanIPAddress(tdkbE2EUtility.wlan_interface)
-                        if wlanIP:
+                        if wlanIP != "":
                             tdkTestObj.setResultStatus("SUCCESS")
 
                             step += 1
@@ -146,7 +146,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                             tdkTestObj, status, curIPAddress = getParameterValue(obj, param)
                             print(f"LAN IP Address: {curIPAddress}")
 
-                            if expectedresult in status and curIPAddress:
+                            if expectedresult in status and curIPAddress != "":
                                 tdkTestObj.setResultStatus("SUCCESS")
 
                                 step += 1
