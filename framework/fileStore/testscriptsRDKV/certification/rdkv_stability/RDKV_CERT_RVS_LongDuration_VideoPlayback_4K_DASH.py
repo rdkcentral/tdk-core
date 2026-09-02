@@ -195,28 +195,32 @@ if expectedResult in (result.upper() and pre_condition_status):
             print("app_download_url", app_download_url)
             status = rdkservice_install_launch_app(obj, app_bundle_name, app_name,app_download_url)
             if status == "SUCCESS":
-                    if logging_method == "REST_API":
-                        result_dict_list = testUsingRestAPI(obj,result_dict_list);
-                    elif logging_method == "WEB_INSPECT":
-                        webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
-                        result_dict_list = testUsingWebInspect(obj,webkit_console_socket,result_dict_list);
-                        webkit_console_socket.disconnect()
+                if logging_method == "REST_API":
+                    result_dict_list = testUsingRestAPI(obj,result_dict_list);
+                elif logging_method == "WEB_INSPECT":
+                    webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
+                    result_dict_list = testUsingWebInspect(obj,webkit_console_socket,result_dict_list);
+                    webkit_console_socket.disconnect()
+                
+                if result_dict_list != []:
                     time.sleep(5)
                     cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
                     json.dump(cpu_mem_info_dict,json_file)
                     json_file.close()
-                    #Set the URL back to previous
-                    print("\n Terminating the app")
-                    tdkTestObj = obj.createTestStep('rdkv_terminate_app')
-                    tdkTestObj.addParameter("app_id",app_name)
-                    tdkTestObj.executeTestCase(expectedResult)
-                    result = tdkTestObj.getResult()
-                    if result == "SUCCESS":
-                        print("\n URL is reverted successfully \n")
-                        tdkTestObj.setResultStatus("SUCCESS");
-                    else:
-                        print("\n Failed to revert the URL")
-                        tdkTestObj.setResultStatus("FAILURE");
+                else:
+                    print("\n No CPU and Memory info collected")
+                    tdkTestObj.setResultStatus("FAILURE");
+                print("\n Terminating the app")
+                tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                tdkTestObj.addParameter("app_id",app_name)
+                tdkTestObj.executeTestCase(expectedResult)
+                result = tdkTestObj.getResult()
+                if result == "SUCCESS":
+                    print("\n URL is reverted successfully \n")
+                    tdkTestObj.setResultStatus("SUCCESS");
+                else:
+                    print("\n Failed to revert the URL")
+                    tdkTestObj.setResultStatus("FAILURE");
             else:
                 print("\n Failed to launch the app ")
                 tdkTestObj.setResultStatus("FAILURE");
