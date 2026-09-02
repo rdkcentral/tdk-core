@@ -53,7 +53,7 @@ if expectedResult in result.upper():
     download_id = None
     if status == "SUCCESS":
         bundle_name = PerformanceTestVariables.Large_Validation_File
-        download_url = PerformanceTestVariables.app_download_url + bundle_name
+        download_url = PerformanceTestVariables.app_download_url.rstrip("/") + "/" + bundle_name
         print("\nStep 1 : Trigger the download of %s from %s" % (bundle_name, download_url))
 
         tdkTestObj = obj.createTestStep("rdkservice_download_app_bundle")

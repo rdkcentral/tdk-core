@@ -56,8 +56,7 @@ if expectedResult in result.upper():
     if status == "SUCCESS":
         conf_file,_ = getConfigFileName(obj.realpath)
         config_status,file_locator = getDeviceConfigKeyValue(conf_file,"PACKAGEMANAGER_FILE_LOCATOR")
-        file_locator,_ = file_locator.split("/CDL")
-        file_locator = file_locator + "/CDL/"
+        file_locator = file_locator.rstrip("/") + "/"
         print("File locator URL from the configuration is : ", file_locator)
         tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
         tdkTestObj.addParameter("realpath", obj.realpath)
@@ -72,7 +71,7 @@ if expectedResult in result.upper():
             credentials = ssh_params_dict.get("credentials")
             if not ssh_method or not credentials:
                 print("SSH method or credentials not found in configuration")
-                tdkTestObj.setResultStatus("FAILURE")
+                obj.setLoadModuleStatus("FAILURE")
             else:
                 cmd = "du -sk " + shlex.quote(file_locator) + " | awk '{print $1}'" 
                 tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
@@ -89,7 +88,7 @@ if expectedResult in result.upper():
                 event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 2,"method": "org.rdk.DownloadManager.1.register","params": {"event": "onAppDownloadStatus", "id": "client.events.1" }}'],"/jsonrpc",False)
                 time.sleep(5)
                 app_bundle_name = PerformanceTestVariables.Large_Validation_File
-                app_download_url = PerformanceTestVariables.app_download_url+app_bundle_name 
+                app_download_url = PerformanceTestVariables.app_download_url.rstrip("/") + "/" + app_bundle_name
                 time.sleep(1)
                 event_listener.clearEventsBuffer() 
                 print(f"\nStart download of {app_bundle_name}")
