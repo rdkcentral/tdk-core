@@ -226,8 +226,7 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
                     tdkTestObj = obj.createTestStep('rdkv_terminate_app')
                     tdkTestObj.addParameter("app_id",app_name_1)
                     tdkTestObj.executeTestCase(expectedResult)
-                    result1 = tdkTestObj.getResult()
-                    tdkTestObj.setResultStatus(result1)
+                    tdkTestObj.setResultStatus("FAILURE")
             else:
                 print("Failed to launch Test App 1")
                 tdkTestObj.setResultStatus("FAILURE")
