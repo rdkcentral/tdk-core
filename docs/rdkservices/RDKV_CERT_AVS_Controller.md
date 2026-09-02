@@ -564,7 +564,7 @@ Check if able to get the error message when querying configuration for empty val
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get plugin configuration | Invoke configuration on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.configuration"}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` / error code `22` must be configured: no plugin callsign specified in the request |
+| 1 | Get plugin configuration | Invoke configuration on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.configuration"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Could not access requested service` |
 
 ---
 

@@ -1338,7 +1338,7 @@
         <param tag="territory" value="ABC" />
         <param tag="region" value="AB-CD" />
       </params>
-      <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory" />
+      <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
     </testStep>
   </testCase>
 
@@ -1350,7 +1350,7 @@
         <param tag="territory" value="" />
         <param tag="region" value="" />
       </params>
-      <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory" />
+      <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory name" />
     </testStep>
   </testCase>
 
@@ -1362,7 +1362,7 @@
         <param tag="territory" value="ABC" />
         <param tag="region" value="US-AS" />
       </params>
-      <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory" />
+      <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
     </testStep>
   </testCase>
 
@@ -1374,7 +1374,7 @@
         <param tag="territory" value="" />
         <param tag="region" value="US-AS" />
       </params>
-      <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory" />
+      <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory name" />
     </testStep>
   </testCase>
 
@@ -1421,7 +1421,7 @@
         <param tag="territory" value="CHN" />
         <param tag="region" value="TestingValue" />
       </params>
-      <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid region"/>
+      <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
     </testStep>
   </testCase>
 
