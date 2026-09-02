@@ -196,7 +196,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                     print("Failed to set the selenium grid")
 
                 # Kill selenium hub and node
-                status = tdkbWEBUIUtility.kill_hub_node("LAN")
+                status = tdkbWEBUIUtility.kill_hub_node("WLAN")
                 if status == "SUCCESS":
                     tdkTestObj.setResultStatus("SUCCESS")
                     print("Post-requisite success")
@@ -224,7 +224,6 @@ if "SUCCESS" in loadmodulestatus.upper():
                     print("[TEST EXECUTION RESULT] : SUCCESS")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    details = tdkTestObj.getResultDetails()
                     print(f"EXPECTED RESULT {step}: Should set the original ssid and keypassphrase")
                     print(f"ACTUAL RESULT {step}: {details}")
                     print("[TEST EXECUTION RESULT] : FAILURE")

@@ -192,7 +192,6 @@ if "SUCCESS" in loadmodulestatus.upper():
                 print("[TEST EXECUTION RESULT] : SUCCESS")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                details = tdkTestObj.getResultDetails()
                 print(f"EXPECTED RESULT {step}: Should set the original wifi enable status")
                 print(f"ACTUAL RESULT {step}: {details}")
                 print("[TEST EXECUTION RESULT] : FAILURE")
