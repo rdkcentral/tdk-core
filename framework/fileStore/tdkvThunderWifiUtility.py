@@ -215,9 +215,18 @@ def on_wifi_state_message(ws, message):
         if "onWiFiStateChange" in method:
             params = data.get("params", {})
             wifi_state_data = params
-            wifi_state_event_received = True
+            #------------------------------------------------------
+            # For connection verification
+            # Wait until WIFI_STATE_CONNECTED event is received
+            #
+            # For disconnection verification
+            # Wait until WIFI_STATE_DISCONNECTED event is received
+            #------------------------------------------------------
+            target = getattr(ws, "target_status", "")
+            if target == wifi_state_data["status"]:
+                wifi_state_event_received = True
+                ws.close()
             print("INFO: onWiFiStateChange event received: {}".format(json.dumps(params)))
-            ws.close()
     except Exception as e:
         print("INFO: Could not parse websocket message: {}".format(e))
 
@@ -243,7 +252,7 @@ def on_wifi_connect_open(ws):
 #----------------------------------------------------------------------
 # START WEBSOCKET LISTENER FOR WIFI CONNECT IN BACKGROUND THREAD
 #----------------------------------------------------------------------
-def startWiFiConnectEventListener(deviceIP):
+def startWiFiConnectEventListener(deviceIP, verification_event):
     global ws_connect_instance
     ws_url = "ws://{}:{}/jsonrpc".format(deviceIP, THUNDER_PORT)
     print("INFO: Connecting to websocket for WiFiConnect: {}".format(ws_url))
@@ -254,6 +263,7 @@ def startWiFiConnectEventListener(deviceIP):
         on_error=on_wifi_connect_error,
         on_close=on_wifi_connect_close
     )
+    ws_connect_instance.target_status = verification_event
     ws_connect_instance.run_forever()
 
 #----------------------------------------------------------------------
@@ -290,6 +300,8 @@ def triggerWiFiConnect(deviceIP, ssid, passphrase, security):
 # DISCONNECT FROM WIFI VIA HTTP JSON-RPC
 #----------------------------------------------------------------------
 def disconnectFromWiFi(deviceIP):
+    setupEventListener(deviceIP,"WIFI_STATE_DISCONNECTED")
+
     url = "http://{}:{}/jsonrpc".format(deviceIP, THUNDER_PORT)
     payload = {
         "jsonrpc": "2.0",
@@ -300,9 +312,13 @@ def disconnectFromWiFi(deviceIP):
         response = requests.post(url, json=payload, timeout=10)
         result = response.json()
         print("INFO: WiFiDisconnect response: {}".format(json.dumps(result)))
+        event_received = checkEvent("WIFI_STATE_DISCONNECTED")
         success = result.get("result", {}).get("success", False)
-        if success:
+        if success and event_received:
             print("INFO: WiFiDisconnect returned success=true")
+        elif not event_received:
+            print("INFO : WIFI_STATE_DISCONNECTED event not received")
+            success = False
         else:
             print("FAILURE: WiFiDisconnect did not return success=true")
         return success
@@ -330,32 +346,28 @@ def getConnectedSSID(deviceIP):
         return {}
 
 #----------------------------------------------------------------------
-# MAIN FUNCTION: CONNECT TO WIFI SSID AND VERIFY
-# Returns True on success, False on failure
+# SETUP EVENT LISTENER
 #----------------------------------------------------------------------
-def connectToWiFiSSID(deviceIP, ssid, passphrase, security=6):
+def setupEventListener(deviceIP, verification_event):
     global wifi_state_event_received, wifi_state_data, ws_connect_instance, connect_event_thread
 
     wifi_state_event_received = False
     wifi_state_data = {}
-
     # Start websocket listener for onWiFiStateChange in background thread
-    connect_event_thread = threading.Thread(target=startWiFiConnectEventListener, args=(deviceIP,))
+    connect_event_thread = threading.Thread(target=startWiFiConnectEventListener, args=(deviceIP,verification_event),)
     connect_event_thread.daemon = True
     connect_event_thread.start()
 
     # Allow time for websocket connection and event registration
     time.sleep(2)
 
-    # Trigger WiFi connect
-    connect_triggered = triggerWiFiConnect(deviceIP, ssid, passphrase, security)
-    if not connect_triggered:
-        if ws_connect_instance:
-            ws_connect_instance.close()
-        return False
-
+#----------------------------------------------------------------------
+# VERIFY EVENT IS RECEIVED
+#----------------------------------------------------------------------
+def checkEvent(event):
+    global wifi_state_event_received, wifi_state_data, ws_connect_instance, connect_event_thread
     # Wait for onWiFiStateChange event up to CONNECT_TIMEOUT
-    print("INFO: Waiting for onWiFiStateChange event (max {}s)...".format(CONNECT_TIMEOUT))
+    print("INFO: Waiting for onWiFiStateChange event {} (max {}s)...".format(event,CONNECT_TIMEOUT))
     elapsed = 0
     while elapsed < CONNECT_TIMEOUT:
         if wifi_state_event_received:
@@ -368,7 +380,26 @@ def connectToWiFiSSID(deviceIP, ssid, passphrase, security=6):
     connect_event_thread.join(timeout=5)
 
     if not wifi_state_event_received:
-        print("FAILURE: onWiFiStateChange event not received within {}s".format(CONNECT_TIMEOUT))
+        print("FAILURE: onWiFiStateChange event {} not received within {}s".format(event,CONNECT_TIMEOUT))
+        return False
+    else:
+        return True
+
+#----------------------------------------------------------------------
+# MAIN FUNCTION: CONNECT TO WIFI SSID AND VERIFY
+# Returns True on success, False on failure
+#----------------------------------------------------------------------
+def connectToWiFiSSID(deviceIP, ssid, passphrase, security=6):
+    setupEventListener(deviceIP,"WIFI_STATE_CONNECTED")
+
+    # Trigger WiFi connect
+    connect_triggered = triggerWiFiConnect(deviceIP, ssid, passphrase, security)
+    if not connect_triggered:
+        if ws_connect_instance:
+            ws_connect_instance.close()
+        return False
+
+    if not checkEvent("WIFI_STATE_CONNECTED"):
         return False
 
     # Verify connection via GetConnectedSSID
@@ -383,8 +414,9 @@ def connectToWiFiSSID(deviceIP, ssid, passphrase, security=6):
         print("FAILURE: Expected SSID '{}' but got '{}' (success={})".format(ssid, connected_ssid, conn_success))
         result = False
 
-    # Disconnect after validation
-    disconnectFromWiFi(deviceIP)
+    if result:
+        # Disconnect after validation
+        disconnectFromWiFi(deviceIP)
     return result
 
 #----------------------------------------------------------------------

@@ -152,7 +152,11 @@ if expectedResult in result.upper():
             total_time = 0
             time.sleep(60)
             print("\n checking for Tuning log")
-            command = 'cat /opt/logs/dacapp.log | grep -nr "Tuning to channel" | tail -1'
+            cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
+            log_path = rdkv_performancelib.rdkservice_getRequiredLog(ssh_param_dict["ssh_method"], ssh_param_dict["credentials"], cmd)
+            log_path = log_path.split("\n")[1].strip()
+            log_file = log_path +"/" + app_name + "/"+ app_name+".log"
+            command = 'cat ' + log_file + ' | grep -nr "Tuning to channel" | tail -1'
             print("COMMAND : %s" %(command))
             #Primitive test case which associated to this Script
             tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
@@ -170,7 +174,7 @@ if expectedResult in result.upper():
             if "Tuning to channel" in output and expectedResult in result:
                 print("Tuning logs are present in logs")
                 print("checking for playing log")
-                command = 'cat /opt/logs/dacapp.log | grep -nr Playing | head -n1'
+                command = 'cat ' + log_file + ' | grep -nr Playing | head -n1'
                 print("COMMAND : %s" %(command))
                 #Primitive test case which associated to this Script
                 tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
@@ -189,7 +193,7 @@ if expectedResult in result.upper():
                     print("Playing logs are present in logs")
                     print("\nchecking time taken for channel change")
                     #checking for time taken print
-                    command = 'cat /opt/logs/dacapp.log | grep -nr "channel change:"'
+                    command = 'cat ' + log_file + ' | grep -nr "channel change:"'
                     print("COMMAND : %s" %(command))
                     #Primitive test case which associated to this Script
                     tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
@@ -258,7 +262,7 @@ if expectedResult in result.upper():
             total_time = 0
             time.sleep(60)
             print("\n checking for Tuning log")
-            command = 'cat /opt/logs/dacapp.log | grep -nr "Tuning to channel" | tail -1'
+            command = 'cat ' + log_file + ' | grep -nr "Tuning to channel" | tail -1'
             print("COMMAND : %s" %(command))
             #Primitive test case which associated to this Script
             tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
@@ -276,7 +280,7 @@ if expectedResult in result.upper():
             if "Tuning to channel" in output and expectedResult in result:
                 print("Tuning logs are present in logs")
                 print("checking for playing log")
-                command = 'cat /opt/logs/dacapp.log | grep -nr Playing | head -n1'
+                command = 'cat ' + log_file + ' | grep -nr Playing | head -n1'
                 print("COMMAND : %s" %(command))
                 #Primitive test case which associated to this Script
                 tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
@@ -295,7 +299,7 @@ if expectedResult in result.upper():
                     print("Playing logs are present in logs")
                     print("\nchecking time taken for channel change")
                     #checking for time taken print
-                    command = 'cat /opt/logs/dacapp.log | grep -nr "channel change:"'
+                    command = 'cat ' + log_file + ' | grep -nr "channel change:"'
                     print("COMMAND : %s" %(command))
                     #Primitive test case which associated to this Script
                     tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
