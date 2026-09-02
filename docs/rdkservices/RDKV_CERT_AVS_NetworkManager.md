@@ -83,6 +83,9 @@ RDKV_CERT_AVS_NetworkManager
    - [NetworkManager_Internet_IPv6_Connectivity](#networkmanager_internet_ipv6_connectivity)
    - [NetworkManager_Get_IPSettings_IPv6](#networkmanager_get_ipsettings_ipv6)
    - [NetworkManager_Primary_Interface_After_LightSleep](#networkmanager_primary_interface_after_lightsleep)
+   - [NetworkManager_Connect_To_Known_SSID_2.4GHz](#networkmanager_connect_to_known_ssid_2-4ghz)
+   - [NetworkManager_Connect_To_Known_SSID_5GHz](#networkmanager_connect_to_known_ssid_5ghz)
+   - [NetworkManager_Set_Host_Name](#networkmanager_set_host_name)
    - [NetworkManager_ActivateDeactivate_Event_Test](#networkmanager_activatedeactivate_event_test)
    - [NetworkManager_Wifi_Connect_Error](#networkmanager_wifi_connect_error)
    - [NetworkManager_GetAvailableInterfaces_Error](#networkmanager_getavailableinterfaces_error)
@@ -1919,12 +1922,109 @@ Check if the StopWiFiScan method returns an error when the plugin is in a deacti
 
 ---
 
+<a id="networkmanager_connect_to_known_ssid_2-4ghz"></a>
+### TestCase Name
+NetworkManager_Connect_To_Known_SSID_2.4GHz
+
+### TestCase ID
+NM_78
+
+### TestCase Objective
+Connects to a known 2.4GHz SSID and checks the connection status
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Enable_Wifi_Interface
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get Interface State | Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and `enabled` state returned |
+| 2 | Set Interface State | *(Conditional statement executed only if previous step condition is met)*<br>Set Interface State on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.SetInterfaceState", "params": {"interface": "wlan0", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that interface state is set successfully |
+| 3 | Get Interface State | *(Conditional statement executed only if previous step condition is met)*<br>Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and `enabled` state returned |
+| 4 | Wifi Disconnect | Wi Fi Disconnect on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that wifi is disconnected successfully |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get known SSIDs | Invoke GetKnownSSIDs on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetKnownSSIDs"}' http://127.0.0.1:9998/jsonrpc` | Verify that the known ssids is returned successfully |
+| 2 | Remove known SSID | *(Conditional statement executed only if previous step condition is met)*<br>Invoke RemoveKnownSSID on org.rdk.NetworkManager with ssid: "<WIFI_SSID_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.RemoveKnownSSID", "params": {"ssid": "<WIFI_SSID_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that known ssid is unregistered successfully |
+| 3 | Get known SSIDs | *(Conditional statement executed only if previous step condition is met)*<br>Invoke GetKnownSSIDs on org.rdk.NetworkManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetKnownSSIDs"}' http://127.0.0.1:9998/jsonrpc` | Verify that the known ssids is returned successfully |
+| 4 | Add to known SSIDs | Invoke AddToKnownSSIDs on org.rdk.NetworkManager with ssid: "<WIFI_SSID_NAME>", passphrase: "<WIFI_PASSPHRASE>", security: "<WIFI_SECURITY_MODE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.AddToKnownSSIDs", "params": {"ssid": "<WIFI_SSID_NAME>", "passphrase": "<WIFI_PASSPHRASE>", "security": "<WIFI_SECURITY_MODE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that to known ssids is registered successfully |
+| 5 | Get known SSIDs | Invoke GetKnownSSIDs on org.rdk.NetworkManager (wait 2 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetKnownSSIDs"}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and known SSIDs list returned |
+| 6 | Connect to known SSID | Invoke ConnectToKnownSSID on org.rdk.NetworkManager with ssid: "<WIFI_SSID_NAME>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.ConnectToKnownSSID", "params": {"ssid": "<WIFI_SSID_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that to known ssid connection is established successfully |
+| 7 | Listen for WiFi state change event | Listen for `Event_On_WiFiStateChange` event and wait up to 10 second(s) | API should return `success`: `true` and `state`: `5`, `status`: `WIFI_STATE_CONNECTED` |
+| 8 | Get connected SSID | Invoke GetConnectedSSID on org.rdk.NetworkManager (wait 5 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetConnectedSSID"}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and connected SSID returned |
+| 9 | WiFi disconnect | Invoke WiFiDisconnect on org.rdk.NetworkManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that wifi is disconnected successfully |
+| 10 | Listen for WiFi state change event | Listen for `Event_On_WiFiStateChange` event and wait up to 10 second(s) | API should return `success`: `true` and `state`: `2`, `status`: `WIFI_STATE_DISCONNECTED` |
+
+
+---
+
+<a id="networkmanager_connect_to_known_ssid_5ghz"></a>
+### TestCase Name
+NetworkManager_Connect_To_Known_SSID_5GHz
+
+### TestCase ID
+NM_79
+
+### TestCase Objective
+Connects to a known 5GHz SSID and checks the connection
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Enable_Wifi_Interface
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get Interface State | Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and `enabled` state returned |
+| 2 | Set Interface State | *(Conditional statement executed only if previous step condition is met)*<br>Set Interface State on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.SetInterfaceState", "params": {"interface": "wlan0", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that interface state is set successfully |
+| 3 | Get Interface State | *(Conditional statement executed only if previous step condition is met)*<br>Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and `enabled` state returned |
+| 4 | Wifi Disconnect | Wi Fi Disconnect on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that wifi is disconnected successfully |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get known SSIDs | Invoke GetKnownSSIDs on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetKnownSSIDs"}' http://127.0.0.1:9998/jsonrpc` | Verify that the known ssids is returned successfully |
+| 2 | Remove known SSID | *(Conditional statement executed only if previous step condition is met)*<br>Invoke RemoveKnownSSID on org.rdk.NetworkManager with ssid: "<WIFI_SSID_NAME_5GHZ>" (wait 5 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.RemoveKnownSSID", "params": {"ssid": "<WIFI_SSID_NAME_5GHZ>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that known ssid is unregistered successfully |
+| 3 | Get known SSIDs | *(Conditional statement executed only if previous step condition is met)*<br>Invoke GetKnownSSIDs on org.rdk.NetworkManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetKnownSSIDs"}' http://127.0.0.1:9998/jsonrpc` | Verify that the known ssids is returned successfully |
+| 4 | Add to known SSIDs | Invoke AddToKnownSSIDs on org.rdk.NetworkManager with ssid: "<WIFI_SSID_NAME_5GHZ>", passphrase: "<WIFI_PASSPHRASE_5GHZ>", security: "<WIFI_SECURITY_MODE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.AddToKnownSSIDs", "params": {"ssid": "<WIFI_SSID_NAME_5GHZ>", "passphrase": "<WIFI_PASSPHRASE_5GHZ>", "security": "<WIFI_SECURITY_MODE>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that to known ssids is registered successfully |
+| 5 | Get known SSIDs | Invoke GetKnownSSIDs on org.rdk.NetworkManager (wait 2 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetKnownSSIDs"}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and known SSIDs list returned |
+| 6 | Connect to known SSID | Invoke ConnectToKnownSSID on org.rdk.NetworkManager with ssid: "<WIFI_SSID_NAME_5GHZ>" (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.ConnectToKnownSSID", "params": {"ssid": "<WIFI_SSID_NAME_5GHZ>"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that to known ssid connection is established successfully |
+| 7 | Listen for WiFi state change event | Listen for `Event_On_WiFiStateChange` event and wait up to 10 second(s) | API should return `success`: `true` and `state`: `5`, `status`: `WIFI_STATE_CONNECTED` |
+| 8 | Get connected SSID | Invoke GetConnectedSSID on org.rdk.NetworkManager (wait 5 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetConnectedSSID"}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and connected SSID returned |
+| 9 | WiFi disconnect | Invoke WiFiDisconnect on org.rdk.NetworkManager (wait 3 second(s) before invoking)<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that wifi is disconnected successfully |
+| 10 | Listen for WiFi state change event | Listen for `Event_On_WiFiStateChange` event and wait up to 10 second(s) | API should return `success`: `true` and `state`: `2`, `status`: `WIFI_STATE_DISCONNECTED` |
+
+
+---
+
+<a id="networkmanager_set_host_name"></a>
+### TestCase Name
+NetworkManager_Set_Host_Name
+
+### TestCase ID
+NM_80
+
+### TestCase Objective
+To configure a custom DHCP hostname instead of the default (which is typically the default hostname)
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set hostname | Invoke SetHostname on org.rdk.NetworkManager with hostname: "MyDevice"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.SetHostname", "params": {"hostname": "MyDevice"}}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and confirm that hostname is set successfully |
+
+
+---
+
 <a id="networkmanager_activatedeactivate_event_test"></a>
 ### TestCase Name
 NetworkManager_ActivateDeactivate_Event_Test
 
 ### TestCase ID
-NM_78
+NM_81
 
 ### TestCase Objective
 Check if the WiFiDisconnect method returns an error when the plugin is in a deactivated state
@@ -1952,7 +2052,7 @@ Check if the WiFiDisconnect method returns an error when the plugin is in a deac
 NetworkManager_Wifi_Connect_Error
 
 ### TestCase ID
-NM_79
+NM_82
 
 ### TestCase Objective
 Scan for 2.4GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs event are on the 2.4GHz band
@@ -1983,7 +2083,7 @@ Scan for 2.4GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs e
 NetworkManager_GetAvailableInterfaces_Error
 
 ### TestCase ID
-NM_80
+NM_83
 
 ### TestCase Objective
 Scan for 5GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs event are on the 5GHz band
@@ -2014,7 +2114,7 @@ Scan for 5GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs eve
 NetworkManager_GetPrimaryInterface_Error
 
 ### TestCase ID
-NM_81
+NM_84
 
 ### TestCase Objective
 This test case checks if NetworkManager can scan for a specific SSID on the 2.4GHz band and confirm its presence
@@ -2045,7 +2145,7 @@ This test case checks if NetworkManager can scan for a specific SSID on the 2.4G
 NetworkManager_GetPublicIP_Error
 
 ### TestCase ID
-NM_82
+NM_85
 
 ### TestCase Objective
 This test case checks if NetworkManager can scan for a specific SSID on the 5GHz band and confirm its presence
@@ -2076,7 +2176,7 @@ This test case checks if NetworkManager can scan for a specific SSID on the 5GHz
 NetworkManager_Ping_Error
 
 ### TestCase ID
-NM_83
+NM_86
 
 ### TestCase Objective
 Traces the empty endpoint
@@ -2094,7 +2194,7 @@ Traces the empty endpoint
 NetworkManager_Trace_Error
 
 ### TestCase ID
-NM_84
+NM_87
 
 ### TestCase Objective
 Check if the Trace method returns an error when parameters are not provided
@@ -2112,7 +2212,7 @@ Check if the Trace method returns an error when parameters are not provided
 NetworkManager_IsConnectedToInternet_Error
 
 ### TestCase ID
-NM_85
+NM_88
 
 ### TestCase Objective
 Check if the WifiConnect method returns an error when parameter is not provided
@@ -2130,7 +2230,7 @@ Check if the WifiConnect method returns an error when parameter is not provided
 NetworkManager_GetInterfaceState_Error
 
 ### TestCase ID
-NM_86
+NM_89
 
 ### TestCase Objective
 Validate public IPv6 IP address of the device
@@ -2148,7 +2248,7 @@ Validate public IPv6 IP address of the device
 NetworkManager_SetInterfaceState_Error
 
 ### TestCase ID
-NM_87
+NM_90
 
 ### TestCase Objective
 Seeks whether the device has internet connectivity
@@ -2166,7 +2266,7 @@ Seeks whether the device has internet connectivity
 NetworkManager_StopWiFiScan_Error
 
 ### TestCase ID
-NM_88
+NM_91
 
 ### TestCase Objective
 Gets the IP setting for the given interface
@@ -2184,7 +2284,7 @@ Gets the IP setting for the given interface
 NetworkManager_WiFiDisconnect_Error
 
 ### TestCase ID
-NM_89
+NM_92
 
 ### TestCase Objective
 Checks the primary interface after the device has been put in sleep mode and then woken up
