@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <style>
+      body {
+        background-color: white;
+        color: black;
+      }
+    </style>
+    <script type="text/javascript" src="audio-codec-test.js"></script>
+    <script type="text/javascript" src="audio-testing.js"></script>
+    <script type="text/javascript" src="buffer-loader.js"></script>
+    <script>
+      // Test 24bit WAV decoder, 22.05 kHz sample rate.  This also tests the resampler because the
+      // context is running at 44.1 kHz.
+      var url = "24bit-22khz.wav"
+	  
+
+      window.onload = function () { runDecodingTest(url) };
+    </script>
+  </head>
+  <body>
+      <div id="codecInfo"></div>
+  </body>
+</html>

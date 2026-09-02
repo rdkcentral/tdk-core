@@ -839,7 +839,7 @@ def render_compare_statement(statement):
 
 
 # An `if (...)` condition guarding the failing statement.
- Accepts a guard that
+# Accepts a guard that
 # opens a block (`if (...) {`), a bare condition, and an inline single-statement
 # body such as `if (handle == 0) break;` or `if (cond) continue;`.
 #   if(!isConnected) {
