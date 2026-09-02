@@ -896,7 +896,7 @@
   </testCase>
 
   <!-- Verify power state before reboot -->
-  <testCase testCaseId="PWRM_46" testCaseName="PowerManager_Get_PowerState_Before_Reboot" desc="Verify getPowerStateBeforeReboot returns a valid power state after reboot">
+  <testCase testCaseId="PWRM_46" testCaseName="PowerManager_PowerState_Before_Reboot_Persistence" desc="Verify getPowerStateBeforeReboot returns a valid power state after reboot">
     <testCaseInfo testCaseType="direct"/>
     <testStep testStepId="1" name="Get_Power_State_Before_Reboot" method="Get_Power_State_Before_Reboot" saveResult="true">
       <resultGeneration useMethodTag="powermanager_get_power_state_before_reboot"/>

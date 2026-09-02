@@ -51,7 +51,7 @@ RDKV_CERT_AVS_PowerManager
    - [PowerManager_SetPowerState_Negative_Value](#powermanager_setpowerstate_negative_value)
    - [PowerManager_ActivateDeactivate_StateChange_Event_Test](#powermanager_activatedeactivate_statechange_event_test)
    - [PowerManager_ActivateDeactivate_All_Event_Test](#powermanager_activatedeactivate_all_event_test)
-   - [PowerManager_Get_PowerState_Before_Reboot](#powermanager_get_powerstate_before_reboot)
+   - [PowerManager_PowerState_Before_Reboot_Persistence](#powermanager_powerstate_before_reboot_persistence)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -1026,9 +1026,9 @@ Validates all event on Activating/deactivating the plugin
 
 ---
 
-<a id="powermanager_get_powerstate_before_reboot"></a>
+<a id="powermanager_powerstate_before_reboot_persistence"></a>
 ### TestCase Name
-PowerManager_Get_PowerState_Before_Reboot
+PowerManager_PowerState_Before_Reboot_Persistence
 
 ### TestCase ID
 PWRM_46

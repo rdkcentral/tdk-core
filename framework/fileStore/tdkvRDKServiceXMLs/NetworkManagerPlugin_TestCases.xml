@@ -1286,8 +1286,6 @@
 
     <!-- Test case 39 -->
     <!-- StopConnectivityMonitoring method has been deprecated and removed from the networkmanager plugin documentation, therefore, this testcase is commented out -->
-    --&gt;
-
     <!--testCase testCaseId="NM_39" testCaseName="NetworkManager_Stop_Internet_Connectivity_Monitoring" desc="Check if able to stop the internet connectivity monitoring process for valid endpoint">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Stop_Connectivity_Monitoring" method="NetworkManager_Stop_Connectivity_Monitoring" >
