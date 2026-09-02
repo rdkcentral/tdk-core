@@ -1,5 +1,5 @@
 ## TestCase ID
-RDKV_STABILITY_18
+RDKV_STABILITY_21
 ## TestCase Name
 RDKV_CERT_RVS_AppManager_AppLifeCycleState
 <a name="head.TOC"></a>
