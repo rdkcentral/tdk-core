@@ -30,7 +30,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_LaunchAfterUninstall');
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_Launch_After_Uninstall');
 #The device will reboot before starting the performance testing if "pre_req_reboot_pvs" is
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
@@ -40,7 +40,6 @@ print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
 
-expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     status ="SUCCESS"
     print("\nCheck the status of AppManagers in the device")
@@ -54,17 +53,10 @@ if expectedResult in result.upper():
     app_bundle_name = PerformanceTestVariables.google_bundle
     app_name = app_bundle_name.split("+")[0]
     app_download_url = PerformanceTestVariables.app_download_url
-    test_status = "FAILURE"
 
     if status == "SUCCESS":
-        print("Checking whether the application is available for uninstall")
-        installed_packages = rdkv_getInstalledPackages()
-        if installed_packages and app_name in str(installed_packages):
-            print("Application is already installed: %s" % app_name)
-            status = "SUCCESS"
-        else:
-            print("Application is unavailable; installing: %s" % app_name)
-            status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url, launch=False)
+        print("Installing %s if it is not already available in the device" % app_name)
+        status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url, launch=False)
         if status == "SUCCESS":
             print("Application installed successfully")
             tdkTestObj = obj.createTestStep("rdkservice_uninstall_app")
@@ -72,7 +64,7 @@ if expectedResult in result.upper():
             tdkTestObj.executeTestCase(expectedResult)
             uninstall_result = tdkTestObj.getResult()
 
-            if uninstall_result in (None, "", expectedResult):
+            if uninstall_result == expectedResult:
                 print("Application uninstalled successfully")
                 time.sleep(5)
                 print("Attempting to launch the uninstalled application")
@@ -83,17 +75,20 @@ if expectedResult in result.upper():
 
                 if launch_result != expectedResult:
                     print("Launch was rejected as expected")
-                    test_status = "SUCCESS"
+                    tdkTestObj.setResultStatus("SUCCESS")
                 else:
                     print("FAILURE: Uninstalled application launched successfully")
+                    tdkTestObj.setResultStatus("FAILURE")
             else:
                 print("Failed to uninstall the application")
+                tdkTestObj.setResultStatus("FAILURE")
         else:
             print("Failed to install the application")
+            obj.setLoadModuleStatus("FAILURE")
     else:
         print("AppManager plugins are not active")
+        obj.setLoadModuleStatus("FAILURE")
 
-    obj.setLoadModuleStatus(test_status)
     obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")

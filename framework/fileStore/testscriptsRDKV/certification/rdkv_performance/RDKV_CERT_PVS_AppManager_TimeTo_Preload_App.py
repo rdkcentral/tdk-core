@@ -74,7 +74,7 @@ if expectedResult in result.upper():
                 print("Check for preload event")
                 tdkTestObj.setResultStatus("SUCCESS")
                 continue_count = 0
-                end_time = ""
+                event = ""
                 while True:
                     if continue_count > 120:
                         break
@@ -114,7 +114,6 @@ if expectedResult in result.upper():
                     if 0 < int(time_taken_for_launch) < (int(launch_threshold) + int(launch_offset)) :
                         print("\n Time taken for preloading the app is within the expected range")
                         tdkTestObj.setResultStatus("SUCCESS")
-                        event_listener.disconnect()
                     else:
                         print("\n Time taken for preloading the app is not within the expected range")
                         tdkTestObj.setResultStatus("FAILURE")  

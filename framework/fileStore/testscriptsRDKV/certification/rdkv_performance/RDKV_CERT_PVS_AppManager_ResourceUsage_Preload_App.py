@@ -41,7 +41,7 @@ result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
-Summ_list=[]
+
 if expectedResult in result.upper():
     status ="SUCCESS"
     print("\nCheck the status of AppManagers in the device")

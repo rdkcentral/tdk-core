@@ -59,18 +59,28 @@ if expectedResult in result.upper():
         file_locator,_ = file_locator.split("/CDL")
         file_locator = file_locator + "/CDL/"
         print("File locator URL from the configuration is : ", file_locator)
-        ssh_params = rdkv_performancelib.rdkservice_getSSHParams(obj.realpath, ip)
-        if ssh_params != "" or ssh_params != "{}":
+        tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+        tdkTestObj.addParameter("realpath", obj.realpath)
+        tdkTestObj.addParameter("deviceIP", ip)
+        tdkTestObj.executeTestCase(expectedResult)
+        status = tdkTestObj.getResult()
+        ssh_params = tdkTestObj.getResultDetails()
+        if status == expectedResult and ssh_params not in ("", "{}"):
+            tdkTestObj.setResultStatus("SUCCESS")
             ssh_params_dict = json.loads(ssh_params)
             ssh_method = ssh_params_dict.get("ssh_method")
             credentials = ssh_params_dict.get("credentials")
-            
             if not ssh_method or not credentials:
                 print("SSH method or credentials not found in configuration")
                 tdkTestObj.setResultStatus("FAILURE")
             else:
                 cmd = "du -sk " + shlex.quote(file_locator) + " | awk '{print $1}'" 
-                output = rdkv_performancelib.rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+                tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                tdkTestObj.addParameter("ssh_method", ssh_method)
+                tdkTestObj.addParameter("credentials", credentials)
+                tdkTestObj.addParameter("command", cmd)
+                tdkTestObj.executeTestCase(expectedResult)
+                output = tdkTestObj.getResultDetails()
                 output = output.strip().splitlines()[-1]
                 initial_used_memory = int(float(output))
                 print("Disk usage :\n", initial_used_memory,"KB")
@@ -147,13 +157,23 @@ if expectedResult in result.upper():
                                     if status == "SUCCESS":
                                         print("Verifying the package deletion from the device ...")
                                         cmd = "ls -l " + shlex.quote(filelocator_url)
-                                        output = rdkv_performancelib.rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+                                        tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                                        tdkTestObj.addParameter("ssh_method", ssh_method)
+                                        tdkTestObj.addParameter("credentials", credentials)
+                                        tdkTestObj.addParameter("command", cmd)
+                                        tdkTestObj.executeTestCase(expectedResult)
+                                        output = tdkTestObj.getResultDetails()
                                         if "No such file or directory" in output:
                                             print("Package deleted successfully from the device")
                                             tdkTestObj.setResultStatus("SUCCESS")
                                             print("Checking the disk usage after deletion of the package")
                                             cmd = "du -sk " + shlex.quote(file_locator) + " | awk '{print $1}'"
-                                            output = rdkv_performancelib.rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+                                            tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                                            tdkTestObj.addParameter("ssh_method", ssh_method)
+                                            tdkTestObj.addParameter("credentials", credentials)
+                                            tdkTestObj.addParameter("command", cmd)
+                                            tdkTestObj.executeTestCase(expectedResult)
+                                            output = tdkTestObj.getResultDetails()
                                             output = output.strip().splitlines()[-1]
                                             final_used_memory = int(float(output))
                                             print("Disk usage after deletion of the package :\n", final_used_memory,"KB")
@@ -177,6 +197,7 @@ if expectedResult in result.upper():
                             tdkTestObj.setResultStatus("FAILURE")      
                     else:
                         print(f"Download of {app_bundle_name} is not in progress, progress is : {progress}")
+                        print(f"Please verify the size of {app_bundle_name} configured as Large_Validation_File in PerformanceTestVariables. A small file can complete downloading before the progress check and leave no window to cancel it")
                         tdkTestObj.setResultStatus("FAILURE") 
                 else:
                     print(f"Failed to download {app_bundle_name} from {app_download_url}")
@@ -185,6 +206,7 @@ if expectedResult in result.upper():
                 event_listener.disconnect()   
         else:
             print("Failed to get SSH parameters from configuration")
+            tdkTestObj.setResultStatus("FAILURE")
             obj.setLoadModuleStatus("FAILURE")
     else:
         print("The download manager is not active")

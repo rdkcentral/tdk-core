@@ -53,12 +53,14 @@ if expectedResult in result.upper():
         status = StabilityTestUtility.set_plugins_status(obj,plugin_status_needed)
         time.sleep(10)
     if status == "SUCCESS":
-        conf_file,_ = getConfigFileName(obj.realpath)
-        config_status,file_locator = getDeviceConfigKeyValue(conf_file,"PACKAGEMANAGER_FILE_LOCATOR")
-        file_locator,_ = file_locator.split("/CDL")
-        print("File locator URL from the configuration is : ", file_locator)
-        ssh_params = rdkv_performancelib.rdkservice_getSSHParams(obj.realpath, ip)
-        if ssh_params != "" or ssh_params != "{}":
+        tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+        tdkTestObj.addParameter("realpath", obj.realpath)
+        tdkTestObj.addParameter("deviceIP", ip)
+        tdkTestObj.executeTestCase(expectedResult)
+        status = tdkTestObj.getResult()
+        ssh_params = tdkTestObj.getResultDetails()
+        if status == expectedResult and ssh_params not in ("", "{}"):
+            tdkTestObj.setResultStatus("SUCCESS")
             ssh_params_dict = json.loads(ssh_params)
             ssh_method = ssh_params_dict.get("ssh_method")
             credentials = ssh_params_dict.get("credentials")
@@ -104,7 +106,6 @@ if expectedResult in result.upper():
                         tdkTestObj = obj.createTestStep('rdkservice_download_app_bundle')
                         tdkTestObj.addParameter("download_url", valid_app_download_url)
                         tdkTestObj.executeTestCase(expectedResult)
-                        tdkTestObj.executeTestCase(expectedResult)
                         status = tdkTestObj.getResult()
                         result = tdkTestObj.getResultDetails()
                         if status == "SUCCESS":
@@ -140,7 +141,12 @@ if expectedResult in result.upper():
                                     status = tdkTestObj.getResult()
                                     if status == "SUCCESS":
                                         cmd = "ls -l " + shlex.quote(filelocator_url)
-                                        output = rdkv_performancelib.rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+                                        tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                                        tdkTestObj.addParameter("ssh_method", ssh_method)
+                                        tdkTestObj.addParameter("credentials", credentials)
+                                        tdkTestObj.addParameter("command", cmd)
+                                        tdkTestObj.executeTestCase(expectedResult)
+                                        output = tdkTestObj.getResultDetails()
                                         print("ls output:\n", output)
                                         if ("No such file or directory" in output) or ("cannot access" in output.lower()):
                                             print("Verification passed: package not found on DUT")
@@ -165,7 +171,7 @@ if expectedResult in result.upper():
                         print("Failed to receive DOWNLOAD FAILURE event")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print("Download API accepting invalid URL")
+                    print(f"org.rdk.DownloadManager.download returned SUCCESS for the invalid URL {failing_app_download_url}. The API is expected to reject an invalid download URL with an error")
                     tdkTestObj.setResultStatus("FAILURE")
                 event_listener.disconnect()
                 
