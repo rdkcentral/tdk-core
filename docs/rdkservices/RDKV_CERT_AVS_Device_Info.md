@@ -39,6 +39,8 @@ RDKV_CERT_AVS_Device_Info
    - [DeviceInfo_Get_Release_Version](#deviceinfo_get_release_version)
    - [DeviceInfo_Get_WiFi_MAC_Address](#deviceinfo_get_wifi_mac_address)
    - [DeviceInfo_Get_ESTB_MAC_Address](#deviceinfo_get_estb_mac_address)
+   - [DeviceInfo_Get_Device_ID](#deviceinfo_get_device_id)
+   - [DeviceInfo_Get_Hardware_ID](#deviceinfo_get_hardware_id)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -727,6 +729,42 @@ Checks the ESTB MAC address of the device
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get ESTB MAC | Invoke estbmac on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.estbmac"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the estbmac API is not empty |
+
+---
+
+<a id="deviceinfo_get_device_id"></a>
+### TestCase Name
+DeviceInfo_Get_Device_ID
+
+### TestCase ID
+DI_34
+
+### TestCase Objective
+Checks the stable alphanumeric device identifier
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get device ID | Invoke deviceid on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.deviceid"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the deviceid API is not empty |
+
+---
+
+<a id="deviceinfo_get_hardware_id"></a>
+### TestCase Name
+DeviceInfo_Get_Hardware_ID
+
+### TestCase ID
+DI_35
+
+### TestCase Objective
+Checks the hardware identifier
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get hardware ID | Invoke hardwareid on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.hardwareid"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the hardwareid API is not empty |
 
 ## Plugin Post-conditions
 
