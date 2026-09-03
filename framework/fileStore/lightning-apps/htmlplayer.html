@@ -127,6 +127,8 @@
 <!-- Starter function to fetch the url value from PersistentStore, format it & replace the current browser URL -->
 <script>
 function getValuePS(){
+  // Mid-successive-playback: this page was loaded as one of the queued URLs, don't navigate away
+  if (sessionStorage.getItem('successiveURLs')) return;
   if (sessionStorage.getItem('loadURL')) return;
 
   const WS_URL=WEBSOCKET_URL;
@@ -140,20 +142,44 @@ function getValuePS(){
     return s;
   };
 
-  const replaceUrl=(raw)=>{
-    const html_url=formatUrl(raw);
-    console.log('[HTML_getValuePS] The formatted URL obtained from PersistentStore: '+ html_url);
-    if(!html_url) return;
-    sessionStorage.setItem('loadURL','1');
-    console.log('[HTML_getValuePS] Loading the new URL obtained from PersistentStore');
-    window.location.replace(html_url);
+  const handleResponse=(raw)=>{
+    if(!raw) return;
+    const value=String(raw).trim();
+
+    // Check if the value is a JSON array (list) or a single URL
+    let isList=false;
+    let urls=null;
+    try{
+      const parsed=JSON.parse(value);
+      if(Array.isArray(parsed)){
+        isList=true;
+        urls=parsed.map(u=>formatUrl(u)).filter(u=>/^https?:\/\//i.test(u));
+      }
+    }catch(_){}
+
+    console.log('[HTML_getValuePS] Value is a '+(isList?'list of '+urls.length+' URL(s)':'single URL'));
+
+    if(isList){
+      sessionStorage.setItem('successiveURLs', JSON.stringify(urls));
+      sessionStorage.setItem('successiveIndex', '0');
+      sessionStorage.setItem('successiveResults', JSON.stringify([]));
+      sessionStorage.setItem('loadURL', '1');
+      window.location.replace(urls[0]);
+    } else {
+      const html_url=formatUrl(value);
+      console.log('[HTML_getValuePS] The formatted URL obtained from PersistentStore: '+html_url);
+      if(!html_url) return;
+      sessionStorage.setItem('loadURL','1');
+      console.log('[HTML_getValuePS] Loading the new URL obtained from PersistentStore');
+      window.location.replace(html_url);
+    }
   };
 
   try{
     const ws=new WebSocket(WS_URL);
     const to=setTimeout(()=>{ try{ws.close()}catch{} },WEBSOCKET_TIMEOUT);
     ws.onopen   =()=> ws.send(JSON.stringify(REQ));
-    ws.onmessage=(e)=>{ clearTimeout(to); try{ replaceUrl((JSON.parse(e.data)?.result?.value)||''); } finally{ try{ws.close()}catch{} } };
+    ws.onmessage=(e)=>{ clearTimeout(to); try{ handleResponse((JSON.parse(e.data)?.result?.value)||''); } finally{ try{ws.close()}catch{} } };
     ws.onerror  =()=>{ try{ws.close()}catch{} };
   }catch{}
 }
@@ -414,9 +440,7 @@ getValuePS();
             const log_msg = "[ " + dispTime() + " ] [" + player + "] " + msg;
             console.log(log_msg);
             if (logging === "REST_API") {
-                if (msg.includes("TEST RESULT")) {
-                    pushAppLogs(log_msg);
-                } else if (msg.includes("Video PlayBack Failed")) {
+                if (msg.includes("TEST RESULT") || msg.includes("PLAYBACK RESULT") || msg.includes("Video PlayBack Failed")) {
                     pushAppLogs(log_msg);
                 } else {
                     captureAppLogs(log_msg);
@@ -473,7 +497,16 @@ getValuePS();
 
         function load(autoplay = true) {
             const player = (GetURLParameter("player") || "HTMLPlayer");
-            logMsg("URL Info: " + videoURL)
+            const _succURLs = sessionStorage.getItem('successiveURLs');
+            if (_succURLs) {
+                const _allURLs = JSON.parse(_succURLs);
+                const _idx = parseInt(sessionStorage.getItem('successiveIndex') || '0');
+                const _ordinals = ["first","second","third","fourth","fifth","sixth","seventh","eighth","ninth","tenth"];
+                const _label = _idx < _ordinals.length ? _ordinals[_idx] : (_idx + 1) + "th";
+                logMsg("Loading the " + _label + " stream URL (stream " + (_idx + 1) + " of " + _allURLs.length + "): " + videoURL);
+            } else {
+                logMsg("URL Info: " + videoURL);
+            }
             logMsg("Selected Player : " + player);
 
             // --- Cleanup any existing players ---
@@ -1249,14 +1282,18 @@ getValuePS();
         function dispTestResult() {
             clearInterval(progressLogger);
             stopFPSMonitoring();
-            logMsg("**************** TEST STATUS ****************");
+            const _storedForLabel = sessionStorage.getItem('successiveURLs');
+            const _streamNum = _storedForLabel ? parseInt(sessionStorage.getItem('successiveIndex') || '0') + 1 : null;
+            const _streamPrefix = _streamNum ? "STREAM " + _streamNum + " " : "";
+            // Use "PLAYBACK RESULT" for per-stream labels to avoid triggering Python's "TEST RESULT" stop condition prematurely
+            const _resultLabel = _streamNum ? "STREAM " + _streamNum + " PLAYBACK RESULT" : "TEST RESULT";
             let fpsCheckStatus = "SUCCESS";
             if (fpsList.length > 0) {
                 const roundedFPS = Math.round(fpsList.reduce((a, b) => a + b, 0) / fpsList.length);
                 // If expectedfps(...) is passed in URL options, treat it as the final minimum FPS.
                 const minFPS = expectedFPSProvided ? expectedFPS : (expectedFPS - FPS_THRESHOLD);
                 const fpsComparison = roundedFPS >= minFPS ? ">=" : "<";
-                logMsg("AVERAGE FPS OBTAINED : " + roundedFPS + " " + fpsComparison + " " + minFPS);
+                logMsg(_streamPrefix + "AVERAGE FPS OBTAINED : " + roundedFPS + " " + fpsComparison + " " + minFPS);
                 if (roundedFPS < minFPS) {
                     fpsCheckStatus = "FAILURE";
                 }
@@ -1265,27 +1302,73 @@ getValuePS();
                 logMsg("Failure Reason: No FPS data collected");
             }
             const droppedFramesStatus = droppedFramesTotal <= DROPPED_FRAMES_THRESHOLD ? "SUCCESS" : "FAILURE";
-            logMsg("TOTAL DROPPED FRAMES : " + droppedFramesTotal);
+            logMsg(_streamPrefix + "TOTAL DROPPED FRAMES : " + droppedFramesTotal);
             if (droppedFramesStatus === "FAILURE") {
                 fpsCheckStatus = "FAILURE";
                 logMsg("Failure Reason: Dropped frames count (" + droppedFramesTotal + ") exceeded the threshold of " + DROPPED_FRAMES_THRESHOLD);
             }
-            logMsg("OVERALL FPS VALIDATION STATUS : " + fpsCheckStatus);
-            logMsg("OVERALL DROPPED FRAMES VALIDATION STATUS : " + droppedFramesStatus);
-            logMsg("OVERALL VIDEO PLAYBACK ERROR EVENT STATUS : " + (errorFlag ? "FAILURE" : "SUCCESS"));
-            logMsg("OVERALL VIDEO PROGRESS POSITION VALIDATION STATUS : " + (pos_val_result.includes("FAILURE") ? "FAILURE" : "SUCCESS"));
-            logMsg("OVERALL VIDEO OPERATIONS EVENTS VALIDATION STATUS : " + (eventFlowFlag ? "SUCCESS" : "FAILURE"));
+            logMsg(_streamPrefix + "OVERALL FPS VALIDATION STATUS : " + fpsCheckStatus);
+            logMsg(_streamPrefix + "OVERALL DROPPED FRAMES VALIDATION STATUS : " + droppedFramesStatus);
+            logMsg(_streamPrefix + "OVERALL VIDEO PLAYBACK ERROR EVENT STATUS : " + (errorFlag ? "FAILURE" : "SUCCESS"));
+            logMsg(_streamPrefix + "OVERALL VIDEO PROGRESS POSITION VALIDATION STATUS : " + (pos_val_result.includes("FAILURE") ? "FAILURE" : "SUCCESS"));
+            logMsg(_streamPrefix + "OVERALL VIDEO OPERATIONS EVENTS VALIDATION STATUS : " + (eventFlowFlag ? "SUCCESS" : "FAILURE"));
             if (eventFlowFlag === 1 && errorFlag === 0 && !pos_val_result.includes("FAILURE") && fpsCheckStatus === "SUCCESS") {
-                logMsg("TEST RESULT: SUCCESS");
+                logMsg(_resultLabel + " : SUCCESS");
             } else {
-                logMsg("TEST RESULT: FAILURE");
+                logMsg(_resultLabel + " : FAILURE");
+            }
+
+        // Successive playback: record per-URL result, then navigate to next URL or report combined result
+        const storedURLs = sessionStorage.getItem('successiveURLs');
+        if (storedURLs) {
+            const urls = JSON.parse(storedURLs);
+            const index = parseInt(sessionStorage.getItem('successiveIndex') || '0');
+            const results = JSON.parse(sessionStorage.getItem('successiveResults') || '[]');
+
+            const stepResult = (eventFlowFlag === 1 && errorFlag === 0 && !pos_val_result.includes("FAILURE") && fpsCheckStatus === "SUCCESS") ? "SUCCESS" : "FAILURE";
+            const reasons = [];
+            if (fpsCheckStatus === "FAILURE") reasons.push("FPS check failed");
+            if (droppedFramesStatus === "FAILURE") reasons.push("Dropped frames exceeded threshold");
+            if (errorFlag) reasons.push("Video error event occurred");
+            if (pos_val_result.includes("FAILURE")) reasons.push("Video progress position validation failed");
+            if (!eventFlowFlag) reasons.push("Video operations event flow failed");
+
+            results.push({ index, url: urls[index], status: stepResult, reasons });
+            sessionStorage.setItem('successiveResults', JSON.stringify(results));
+
+            const nextIndex = index + 1;
+            if (nextIndex < urls.length) {
+                sessionStorage.setItem('successiveIndex', String(nextIndex));
+                // flush any buffered logs before navigating so they are not lost
+                if (message.length > 0) { sendLog(message); message = ""; }
+                setTimeout(() => window.location.replace(urls[nextIndex]), 1000);
+            } else {
+                // All URLs processed — log combined result
+                logMsg("**************** SUCCESSIVE PLAYBACK RESULT ****************");
+                let combinedStatus = "SUCCESS";
+                results.forEach((r) => {
+                    let displayUrl = r.url;
+                    try {
+                        const streamParam = new URL(r.url).searchParams.get('url');
+                        if (streamParam) displayUrl = decodeURIComponent(streamParam).replace(/:and:/g, '&').replace(/:eq:/g, '=');
+                    } catch(_) {}
+                    const label = "STREAM " + (r.index + 1) + " [" + displayUrl + "]";
+                    if (r.status !== "SUCCESS") {
+                        combinedStatus = "FAILURE";
+                        logMsg(label + " : FAILURE - " + (r.reasons.length ? r.reasons.join(", ") : "Unknown reason"));
+                    } else {
+                        logMsg(label + " : SUCCESS");
+                    }
+                });
+                logMsg("FINAL TEST RESULT: " + combinedStatus);
+                sessionStorage.removeItem('successiveURLs');
+                sessionStorage.removeItem('successiveIndex');
+                sessionStorage.removeItem('successiveResults');
+                sessionStorage.removeItem('loadURL');
             }
         }
+        }
 
-        /* ------------------------
-           COMMUNICATING WITH TM
-           Stores app logs and send them to TM in batches
-           ------------------------ */
         // Method to store the app logs and send them to TM
         function captureAppLogs(msg) {
             if (message.length < 300) {
@@ -1298,11 +1381,10 @@ getValuePS();
 
         // Method to push the app logs
         function pushAppLogs(msg) {
-            if (message.length > 0) {
-                sendLog(message);
-                message = "";
-            }
-            sendLog(msg);
+            // combine with any buffered logs so everything lands in one HTTP call
+            message = message.length > 0 ? message + "\n" + msg : msg;
+            sendLog(message);
+            message = "";
         }
 
         // Method to send logs to TM via REST API
