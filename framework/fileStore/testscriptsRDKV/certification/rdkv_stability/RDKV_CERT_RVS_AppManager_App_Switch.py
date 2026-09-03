@@ -46,7 +46,7 @@ rebootwaitTime = StabilityTestVariables.rebootwaitTime
 #Check the device status before starting the stress test
 pre_condition_status = check_device_state(obj)
 
-if expectedResult in (result.upper() and pre_condition_status):
+if expectedResult in result.upper() and expectedResult in pre_condition_status:
     status ="SUCCESS"
     print("\nCheck the status of AppManagers in the device")
     plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]
@@ -66,7 +66,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         tdkTestObj = obj.createTestStep('rdkservice_rebootDevice')
         tdkTestObj.addParameter("waitTime",rebootwaitTime)
         tdkTestObj.executeTestCase(expectedResult)
-        result = tdkTestObj.getResultDetails()
+        result = tdkTestObj.getResult()
         if expectedResult in result:
             print("Device rebooted successfully")
             tdkTestObj.setResultStatus("SUCCESS")
@@ -191,7 +191,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                             print("Failed to receive Zorder\n")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print("App instance id of Test App 1 not received")
+                        print("App instance id of Test App 1 and/or Test App 2 not received")
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.setResultStatus("FAILURE") 
 
@@ -208,17 +208,28 @@ if expectedResult in (result.upper() and pre_condition_status):
                     result2 = tdkTestObj.getResult()
 
                     if result1 == "SUCCESS" and result2 == "SUCCESS":
-                        tdkTestObj.setResultStatus("SUCCESS")
-                        print("Successfully terminated the apps")
+                        time.sleep(10)
+                        loaded_apps = rdkservice_get_loaded_apps()
+                        if app_name_1 not in loaded_apps and app_name_2 not in loaded_apps:
+                            tdkTestObj.setResultStatus("SUCCESS")
+                            print("Successfully terminated the apps")
+                        else:
+                            tdkTestObj.setResultStatus("FAILURE")
+                            print("Apps are still listed in loaded apps after terminate")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
                         print("Unable to terminate the apps")                          
                 else:
                     print("Failed to launch Test App 2")
-                    tdkTestObj.setResultStatus("SUCCESS")
+                    tdkTestObj.setResultStatus("FAILURE")
+                    print("\n Terminating Test App 1")
+                    tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                    tdkTestObj.addParameter("app_id",app_name_1)
+                    tdkTestObj.executeTestCase(expectedResult)
+                    tdkTestObj.setResultStatus("FAILURE")
             else:
                 print("Failed to launch Test App 1")
-                tdkTestObj.setResultStatus("SUCCESS")
+                tdkTestObj.setResultStatus("FAILURE")
         else:
             print("Failed to reboot the device")        
             obj.setLoadModuleStatus("FAILURE") 

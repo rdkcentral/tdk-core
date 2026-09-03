@@ -17,8 +17,6 @@ RDKV_CERT_AVS_PreinstallManager
    - [PreinstallManager_StartPreInstall_Null_Parameter](#preinstallmanager_startpreinstall_null_parameter)
    - [PreinstallManager_StartPreInstall_CaseSensitive](#preinstallmanager_startpreinstall_casesensitive)
    - [PreinstallManager_GetPreInstallState](#preinstallmanager_getpreinstallstate)
-   - [PreinstallManager_On_AppInstallationStatus_Event_StartPreInstall_True](#preinstallmanager_on_appinstallationstatus_event_startpreinstall_true)
-   - [PreinstallManager_On_AppInstallationStatus_Event_StartPreInstall_False](#preinstallmanager_on_appinstallationstatus_event_startpreinstall_false)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -266,53 +264,6 @@ Check getPreinstallState method behavior
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check pre-install state transition | Invoke getPreinstallState on org.rdk.PreinstallManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.getPreinstallState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the maintenance status transitions through `NOT_STARTED`, `IN_PROGRESS`, and `COMPLETED` states  |
-
----
-
-<a id="preinstallmanager_on_appinstallationstatus_event_startpreinstall_true"></a>
-### TestCase Name
-PreinstallManager_On_AppInstallationStatus_Event_StartPreInstall_True
-
-### TestCase ID
-PIM_12
-
-### TestCase Objective
-Check onAppInstallationStatus event behavior when startPreinstall is called with true
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | StartPreInstall ForceInstall true | Invoke startPreinstall on org.rdk.PreinstallManager with forceInstall: "true"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.startPreinstall", "params": {"forceInstall": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 2 | Check on AppInstallationStatus event | Listen for `Event_On_AppInstallationStatus` event (wait 60s) | Verify that the event is received and validated successfully |
-
----
-
-<a id="preinstallmanager_on_appinstallationstatus_event_startpreinstall_false"></a>
-### TestCase Name
-PreinstallManager_On_AppInstallationStatus_Event_StartPreInstall_False
-
-### TestCase ID
-PIM_13
-
-### TestCase Objective
-Check onAppInstallationStatus event behavior when startPreinstall is called with false
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Preinstall_Apps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | StartPreInstall ForceInstall true | Start Preinstall on PreinstallManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.startPreinstall", "params": {"forceInstall": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 2 | Check on AppInstallationStatus event | Check On AppInstallationStatus Event | Verify that the event is received and validated successfully |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | StartPreInstall ForceInstall false | Invoke startPreinstall on org.rdk.PreinstallManager with forceInstall: "false"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.startPreinstall", "params": {"forceInstall": false}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 2 | Check on AppInstallationStatus event | Listen for `Event_On_AppInstallationStatus` event (wait 60s) | Verify that the event is received and validated successfully |
 
 ## Plugin Post-conditions
 

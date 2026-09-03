@@ -61,6 +61,7 @@ RDKV_CERT_AVS_System
    - [System_Invalid_Set_Power_State](#system_invalid_set_power_state)
    - [System_Invalid_TimeZone_ErrorValidation](#system_invalid_timezone_errorvalidation)
    - [System_Invalid_Key_ErrorMessage](#system_invalid_key_errormessage)
+   - [System_GetPlatformConfiguration_Invalid_Query](#system_getplatformconfiguration_invalid_query)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -573,7 +574,7 @@ Checks the model number of the DUT
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get device details | SSH to device: grep model_number /tmp/.deviceDetails.cache \| cut -d'=' -f2- \| xargs reads the model_number field from the device details cache file (path from config key SYSTEM_DEVICE_DETAILS_FILE_PATH) | Verify that the model number is read from the device cache file successfully |
-| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.model"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "DeviceInfo.model"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `MODEL_NUMBER` returned by `getPlatformConfiguration` matches the `model_number` value read from device cache file in step 1  |
+| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.model"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "DeviceInfo.model"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `MODEL_NUMBER` returned by `getPlatformConfiguration` matches the `model_number` value read from device cache file in step 1  |
 
 ---
 
@@ -592,7 +593,7 @@ Checks the device MAC address
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get device details | SSH to device: grep estb_mac /tmp/.deviceDetails.cache \| cut -d'=' -f2- \| xargs reads the estb_mac field from the device details cache file (path from config key SYSTEM_DEVICE_DETAILS_FILE_PATH) | Verify that the ESTB MAC address is read from the device cache file successfully |
-| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "AccountInfo.deviceMACAddress"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "AccountInfo.deviceMACAddress"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `deviceMACAddress` returned by `getPlatformConfiguration` matches the `estb_mac` value read from device cache file in step 1  |
+| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "AccountInfo.deviceMACAddress"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "AccountInfo.deviceMACAddress"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `deviceMACAddress` returned by `getPlatformConfiguration` matches the `estb_mac` value read from device cache file in step 1  |
 
 ---
 
@@ -611,7 +612,7 @@ Checks the firmware upgrade status
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get SWUpdate file status | SSH to device: [ -f "/opt/swupdate.conf" ] && echo 1 \|\| echo 0 checks whether /opt/swupdate.conf exists; if file exists → FIRMWARE_UPGRADE_STATUS: true; if not → FIRMWARE_UPGRADE_STATUS: false result saved for comparison in step 2 | Verify that the `/opt/swupdate.conf` presence is checked successfully `FIRMWARE_UPGRADE_STATUS` saved (`true` or `false`)  |
-| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "AccountInfo.firmwareUpdateDisabled"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "AccountInfo.firmwareUpdateDisabled"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `firmwareUpdateDisabled` value returned by `getPlatformConfiguration` matches the `FIRMWARE_UPGRADE_STATUS` read from `/opt/swupdate.conf` in step 1  |
+| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "AccountInfo.firmwareUpdateDisabled"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "AccountInfo.firmwareUpdateDisabled"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `firmwareUpdateDisabled` value returned by `getPlatformConfiguration` matches the `FIRMWARE_UPGRADE_STATUS` read from `/opt/swupdate.conf` in step 1  |
 
 ---
 
@@ -630,7 +631,7 @@ Checks the public IP address
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get public IP address | SSH to device: curl -s ifconfig.me fetches the device's public IP address from the external service; result saved as PUBLIC_IP for comparison in step 2 | Verify that the public IP address is retrieved from the device successfully |
-| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.publicIP"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "DeviceInfo.publicIP"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `publicIP` returned by `getPlatformConfiguration` matches the `PUBLIC_IP` value is retrieved via `ifconfig.me` in step 1  |
+| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.publicIP"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "DeviceInfo.publicIP"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `publicIP` returned by `getPlatformConfiguration` matches the `PUBLIC_IP` value is retrieved via `ifconfig.me` in step 1  |
 
 ---
 
@@ -795,7 +796,7 @@ Checks whether time zone setting is persist after reboot
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get time zones | Invoke getTimeZones on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.2.getTimeZones"}' http://127.0.0.1:9998/jsonrpc` | Verify that the full list of supported time zones is returned successfully |
+| 1 | Get time zones | Invoke getTimeZones on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getTimeZones"}' http://127.0.0.1:9998/jsonrpc` | Verify that the full list of supported time zones is returned successfully |
 | 2 | Set TimeZone DST | Invoke setTimeZoneDST on org.rdk.System with timeZone: "<baseline_timezone>"<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.setTimeZoneDST","params":{"timeZone":"<baseline_timezone>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that timezone is set successfully (`success` : `true`) |
 | 3 | Get TimeZone DST | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Verify that the timezone returned matches the baseline timezone set in step 2  |
 | 4 | Get TimeZone DST *(loop repeated for each timezone in the iteration set)* | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current timezone is returned successfully |
@@ -970,7 +971,7 @@ Sets invalid territory and region
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "ABC", region: "AB-CD"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "ABC", "region": "AB-CD"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid territory` |
+| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "ABC", region: "AB-CD"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "ABC", "region": "AB-CD"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
 
 ---
 
@@ -988,7 +989,7 @@ Sets empty territory and region
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "", region: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "", "region": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid territory` |
+| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "", region: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "", "region": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid territory name` |
 
 ---
 
@@ -1006,7 +1007,7 @@ Sets invalid territory and valid region
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "ABC", region: "US-AS"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "ABC", "region": "US-AS"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid territory` |
+| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "ABC", region: "US-AS"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "ABC", "region": "US-AS"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
 
 ---
 
@@ -1024,7 +1025,7 @@ Sets empty territory and valid region
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "", region: "US-AS"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "", "region": "US-AS"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid territory` |
+| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "", region: "US-AS"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "", "region": "US-AS"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid territory name` |
 
 ---
 
@@ -1081,7 +1082,7 @@ Check whether able to set valid territory and invalid region to set territory AP
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | System set valid territory and set invalid region | Invoke setTerritory on org.rdk.System with territory: "CHN", region: "TestingValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "CHN", "region": "TestingValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid region` |
+| 1 | System set valid territory and set invalid region | Invoke setTerritory on org.rdk.System with territory: "CHN", region: "TestingValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "CHN", "region": "TestingValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
 
 ---
 
@@ -1245,6 +1246,24 @@ Validate error message with invalid key in deviceInfo api
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get device info | Invoke getDeviceInfo on org.rdk.System with params: "INVALID"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "INVALID"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getDeviceInfo` returns an error response with `success: false` for the invalid key `"INVALID"`  |
+
+---
+
+<a id="system_getplatformconfiguration_invalid_query"></a>
+### TestCase Name
+System_GetPlatformConfiguration_Invalid_Query
+
+### TestCase ID
+SYS_56
+
+### TestCase Objective
+Validates negative scenario for getPlatformConfiguration with invalid query value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get platform configuration with invalid query | Invoke getPlatformConfiguration on org.rdk.System with query: "INVALID.QUERY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "INVALID.QUERY"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getPlatformConfiguration` returns an error response with `success: false` for the invalid query `"INVALID.QUERY"`  |
 
 ## Plugin Post-conditions
 
