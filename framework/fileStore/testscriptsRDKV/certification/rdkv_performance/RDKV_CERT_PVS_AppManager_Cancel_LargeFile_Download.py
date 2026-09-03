@@ -219,7 +219,7 @@ if expectedResult in result.upper():
         else:
             print("Failed to get SSH parameters from configuration")
             tdkTestObj.setResultStatus("FAILURE")
-            obj.setLoadModuleStatus("FAILURE")
+            
     else:
         print("The download manager is not active")
         obj.setLoadModuleStatus("FAILURE")  
