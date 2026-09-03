@@ -112,7 +112,7 @@ if "SUCCESS" in result.upper():
     #Set binary name
     binaryName = HDMICEC_binaryName
     #Set TestCase Config
-    binaryConfig = HDMICEC_binaryConfig
+    binaryConfig = HDMICEC_SOURCE_binaryConfig if "SOURCE" in DEVICE_TYPE.upper() else HDMICEC_SINK_binaryConfig
     #Set basepath of test
     basePath = VTS_Binary_basePath + HDMICEC_basePath
     plugin_name = "HDMICEC L1"
@@ -130,7 +130,7 @@ if "SUCCESS" in result.upper():
                 print("####################################################################################")
 
                 binaryPath = "cd " + basePath + " ; ./" + binaryName + " -p " + binaryConfig
-                executionSummary = runTest(binaryPath, module, testCaseID, testList, testCaseList)
+                executionSummary = runTest(binaryPath, module, testCaseID, testList, testCaseList, binaryConfig=binaryConfig)
                 executePostRequisites()
    
                 failed_testCases = printTestSummary(executionSummary, plugin_name)

@@ -23,35 +23,35 @@ RDKV_CERT_AVS_System
    - [System_Get_rf4ce_mac](#system_get_rf4ce_mac)
    - [System_Get_Bluetooth_mac](#system_get_bluetooth_mac)
    - [System_Get_WiFi_Mac](#system_get_wifi_mac)
-   - [Check_Power_State_Before_Reboot](#check_power_state_before_reboot)
-   - [System_Check_On_SystemMode_Changed](#system_check_on_systemmode_changed)
-   - [System_Check_Reboot_Reason_Event](#system_check_reboot_reason_event)
-   - [Enable_And_Disable_Telemetry_OptOut_Status](#enable_and_disable_telemetry_optout_status)
+   - [System_Power_State_Before_Reboot](#system_power_state_before_reboot)
+   - [System_On_SystemMode_Changed](#system_on_systemmode_changed)
+   - [System_Reboot_Reason_Event](#system_reboot_reason_event)
+   - [System_Enable_And_Disable_Telemetry_OptOut_Status](#system_enable_and_disable_telemetry_optout_status)
    - [System_Validate_Firmware_Upgrade](#system_validate_firmware_upgrade)
-   - [System_Check_Model_Number](#system_check_model_number)
-   - [System_Check_Device_Mac_Address](#system_check_device_mac_address)
-   - [System_Check_Firmware_Upgrade_Status](#system_check_firmware_upgrade_status)
-   - [System_Check_Public_IP_Address](#system_check_public_ip_address)
-   - [System_Check_HDR_Capabilities](#system_check_hdr_capabilities)
-   - [SetAndGet_All_Time_Zones](#setandget_all_time_zones)
+   - [System_Model_Number](#system_model_number)
+   - [System_Device_Mac_Address](#system_device_mac_address)
+   - [System_Firmware_Upgrade_Status](#system_firmware_upgrade_status)
+   - [System_Public_IP_Address](#system_public_ip_address)
+   - [System_HDR_Capabilities](#system_hdr_capabilities)
+   - [System_SetAndGet_All_Time_Zones](#system_setandget_all_time_zones)
    - [System_Toggle_Network_Standby_Mode_Status](#system_toggle_network_standby_mode_status)
-   - [Check_Power_State_Before_Reboot_On_Standby_State](#check_power_state_before_reboot_on_standby_state)
-   - [Check_Time_Zones_Persist_After_Reboot](#check_time_zones_persist_after_reboot)
-   - [System_Reboot_And_Check_System_Uptime](#system_reboot_and_check_system_uptime)
-   - [System_Check_On_TimeZoneDST_Changed_Event](#system_check_on_timezonedst_changed_event)
-   - [System_Check_RFC_Status](#system_check_rfc_status)
+   - [System_Power_State_Before_Reboot_On_Standby_State](#system_power_state_before_reboot_on_standby_state)
+   - [System_Time_Zones_Persist_After_Reboot](#system_time_zones_persist_after_reboot)
+   - [System_Reboot_And_System_Uptime](#system_reboot_and_system_uptime)
+   - [System_On_TimeZoneDST_Changed_Event](#system_on_timezonedst_changed_event)
+   - [System_RFC_Status](#system_rfc_status)
    - [System_SetandGet_Friendly_Name](#system_setandget_friendly_name)
-   - [System_Check_Friendly_Name_Persist](#system_check_friendly_name_persist)
+   - [System_Friendly_Name_Persist](#system_friendly_name_persist)
    - [System_Set_Invalid_TimeZone_DST](#system_set_invalid_timezone_dst)
-   - [System_Check_RFCList_with_Empty_Value](#system_check_rfclist_with_empty_value)
-   - [System_Check_Device_Type](#system_check_device_type)
-   - [System_Check_Device_SSH_State_After_Reboot_On_Standby_State](#system_check_device_ssh_state_after_reboot_on_standby_state)
+   - [System_RFCList_with_Empty_Value](#system_rfclist_with_empty_value)
+   - [System_Device_Type](#system_device_type)
+   - [System_Device_SSH_State_After_Reboot_On_Standby_State](#system_device_ssh_state_after_reboot_on_standby_state)
    - [System_Set_Invalid_Territory_And_Region](#system_set_invalid_territory_and_region)
    - [System_Set_Empty_Territory_And_Region](#system_set_empty_territory_and_region)
    - [System_Set_Invalid_Territory_And_Valid_Region](#system_set_invalid_territory_and_valid_region)
    - [System_Set_Empty_Territory_And_Valid_Region](#system_set_empty_territory_and_valid_region)
    - [System_Set_And_Get_Territory_Region](#system_set_and_get_territory_region)
-   - [System_Verify_Set_Territory_without_Params](#system_verify_set_territory_without_params)
+   - [System_Set_Territory_without_Params](#system_set_territory_without_params)
    - [System_Set_Valid_Territory_And_Set_Invalid_Region](#system_set_valid_territory_and_set_invalid_region)
    - [System_Set_Valid_Territory_And_Set_Empty_Region](#system_set_valid_territory_and_set_empty_region)
    - [System_Get_Mfg_Serial_Number](#system_get_mfg_serial_number)
@@ -61,6 +61,7 @@ RDKV_CERT_AVS_System
    - [System_Invalid_Set_Power_State](#system_invalid_set_power_state)
    - [System_Invalid_TimeZone_ErrorValidation](#system_invalid_timezone_errorvalidation)
    - [System_Invalid_Key_ErrorMessage](#system_invalid_key_errormessage)
+   - [System_GetPlatformConfiguration_Invalid_Query](#system_getplatformconfiguration_invalid_query)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -436,9 +437,9 @@ Gets device WiFi mac
 
 ---
 
-<a id="check_power_state_before_reboot"></a>
+<a id="system_power_state_before_reboot"></a>
 ### TestCase Name
-Check_Power_State_Before_Reboot
+System_Power_State_Before_Reboot
 
 ### TestCase ID
 SYS_18
@@ -456,9 +457,9 @@ Checks the powerstate before reboot
 
 ---
 
-<a id="system_check_on_systemmode_changed"></a>
+<a id="system_on_systemmode_changed"></a>
 ### TestCase Name
-System_Check_On_SystemMode_Changed
+System_On_SystemMode_Changed
 
 ### TestCase ID
 SYS_19
@@ -476,9 +477,9 @@ Checks for the system mode changed event
 
 ---
 
-<a id="system_check_reboot_reason_event"></a>
+<a id="system_reboot_reason_event"></a>
 ### TestCase Name
-System_Check_Reboot_Reason_Event
+System_Reboot_Reason_Event
 
 ### TestCase ID
 SYS_20
@@ -495,9 +496,9 @@ Retrieve basic information about a reboot
 
 ---
 
-<a id="enable_and_disable_telemetry_optout_status"></a>
+<a id="system_enable_and_disable_telemetry_optout_status"></a>
 ### TestCase Name
-Enable_And_Disable_Telemetry_OptOut_Status
+System_Enable_And_Disable_Telemetry_OptOut_Status
 
 ### TestCase ID
 SYS_21
@@ -536,7 +537,7 @@ Upgrades to specified firmware version
 | 5 | Create new model ID | *(Conditional statement executed only if previous step condition is met)*<br>Create model ID rule in XCONF: `POST /xconfAdminService/updates/models` with the model name from step 3 | Verify that new model ID rule `TDK_{MODEL}_TEST_MODEL` is created in XCONF successfully (step skipped if model ID already existed in step 4) |
 | 6 | Check existing firmware configuration | Query XCONF REST API: `GET /xconfAdminService/queries/firmwares/model/TDK_{MODEL}_TEST_MODEL?applicationType=stb` checks whether a firmware configuration already exists for this model | Verify that the XCONF query executes successfully; existing firmware configuration is returned and saved (or empty triggers step 7) |
 | 7 | Create new firmware configuration | *(Conditional statement executed only if previous step condition is met)*<br>Create firmware configuration in XCONF: `POST /xconfAdminService/updates/firmwares` linking the model to target firmware `<FIRMWARE_VERSION>` | Verify that new firmware configuration `TDK_{MODEL}_TEST_FIRMWARE_CONFIGURATION` is created in XCONF successfully (step skipped if configuration already existed in step 6) |
-| 8 | Get ESTB MAC | Invoke getDeviceInfo on org.rdk.System with params: `<SYSTEM_DEVICE_PARAMS>`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "<SYSTEM_DEVICE_PARAMS>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the ESTB MAC address is returned with `success`: `true` and the MAC value is non-empty saved for use in steps 9–12 |
+| 8 | Get ESTB MAC | Invoke estbmac on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.estbmac"}' http://127.0.0.1:9998/jsonrpc` | Verify that the ESTB MAC address is returned from the DeviceInfo plugin and saved successfully for use in steps 9–12 |
 | 9 | Check existing firmware rule | Query XCONF REST API: `GET /xconfAdminService/firmwarerule/filtered?name=TDK_{MODEL}_TEST_FIRMWARE_RULE&applicationType=stb&templateId=MAC_RULE` using ESTB MAC from step 8, model from step 3, and firmware config from step 6/7 | Verify that the XCONF query executes successfully; existing firmware rule is returned and saved (or `null` if not found triggers step 10) |
 | 10 | Create new firmware rule | *(Conditional statement executed only if previous step condition is met)*<br>Create MAC-based firmware rule in XCONF: `POST /xconfAdminService/firmwarerule/importAll?applicationType=stb` with condition `eStbMac IS <ESTB_MAC>`, configId from step 6/7, and `rebootImmediately: true` | Verify that new firmware rule `TDK_{MODEL}_TEST_FIRMWARE_RULE` is imported to XCONF with `IMPORTED` list non-empty (step skipped if rule already existed in step 9) |
 | 11 | Check existing firmware local server rule | Query XCONF REST API: `GET /xconfAdminService/firmwarerule/filtered?name=TDK_{MODEL}_TEST_FIRMWARE_LOCAL_SERVER_RULE&applicationType=stb&templateId=DOWNLOAD_LOCATION_FILTER` checks if a local server download filter rule exists for this device | Verify that the XCONF query executes successfully; existing local server rule is returned and saved (or `null` if not found triggers step 12) |
@@ -558,9 +559,9 @@ Upgrades to specified firmware version
 
 ---
 
-<a id="system_check_model_number"></a>
+<a id="system_model_number"></a>
 ### TestCase Name
-System_Check_Model_Number
+System_Model_Number
 
 ### TestCase ID
 SYS_23
@@ -573,13 +574,13 @@ Checks the model number of the DUT
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get device details | SSH to device: grep model_number /tmp/.deviceDetails.cache \| cut -d'=' -f2- \| xargs reads the model_number field from the device details cache file (path from config key SYSTEM_DEVICE_DETAILS_FILE_PATH) | Verify that the model number is read from the device cache file successfully |
-| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.model"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "DeviceInfo.model"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `MODEL_NUMBER` returned by `getPlatformConfiguration` matches the `model_number` value read from device cache file in step 1  |
+| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.model"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "DeviceInfo.model"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `MODEL_NUMBER` returned by `getPlatformConfiguration` matches the `model_number` value read from device cache file in step 1  |
 
 ---
 
-<a id="system_check_device_mac_address"></a>
+<a id="system_device_mac_address"></a>
 ### TestCase Name
-System_Check_Device_Mac_Address
+System_Device_Mac_Address
 
 ### TestCase ID
 SYS_24
@@ -592,13 +593,13 @@ Checks the device MAC address
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get device details | SSH to device: grep estb_mac /tmp/.deviceDetails.cache \| cut -d'=' -f2- \| xargs reads the estb_mac field from the device details cache file (path from config key SYSTEM_DEVICE_DETAILS_FILE_PATH) | Verify that the ESTB MAC address is read from the device cache file successfully |
-| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "AccountInfo.deviceMACAddress"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "AccountInfo.deviceMACAddress"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `deviceMACAddress` returned by `getPlatformConfiguration` matches the `estb_mac` value read from device cache file in step 1  |
+| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "AccountInfo.deviceMACAddress"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "AccountInfo.deviceMACAddress"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `deviceMACAddress` returned by `getPlatformConfiguration` matches the `estb_mac` value read from device cache file in step 1  |
 
 ---
 
-<a id="system_check_firmware_upgrade_status"></a>
+<a id="system_firmware_upgrade_status"></a>
 ### TestCase Name
-System_Check_Firmware_Upgrade_Status
+System_Firmware_Upgrade_Status
 
 ### TestCase ID
 SYS_25
@@ -611,13 +612,13 @@ Checks the firmware upgrade status
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get SWUpdate file status | SSH to device: [ -f "/opt/swupdate.conf" ] && echo 1 \|\| echo 0 checks whether /opt/swupdate.conf exists; if file exists → FIRMWARE_UPGRADE_STATUS: true; if not → FIRMWARE_UPGRADE_STATUS: false result saved for comparison in step 2 | Verify that the `/opt/swupdate.conf` presence is checked successfully `FIRMWARE_UPGRADE_STATUS` saved (`true` or `false`)  |
-| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "AccountInfo.firmwareUpdateDisabled"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "AccountInfo.firmwareUpdateDisabled"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `firmwareUpdateDisabled` value returned by `getPlatformConfiguration` matches the `FIRMWARE_UPGRADE_STATUS` read from `/opt/swupdate.conf` in step 1  |
+| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "AccountInfo.firmwareUpdateDisabled"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "AccountInfo.firmwareUpdateDisabled"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `firmwareUpdateDisabled` value returned by `getPlatformConfiguration` matches the `FIRMWARE_UPGRADE_STATUS` read from `/opt/swupdate.conf` in step 1  |
 
 ---
 
-<a id="system_check_public_ip_address"></a>
+<a id="system_public_ip_address"></a>
 ### TestCase Name
-System_Check_Public_IP_Address
+System_Public_IP_Address
 
 ### TestCase ID
 SYS_26
@@ -630,13 +631,13 @@ Checks the public IP address
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get public IP address | SSH to device: curl -s ifconfig.me fetches the device's public IP address from the external service; result saved as PUBLIC_IP for comparison in step 2 | Verify that the public IP address is retrieved from the device successfully |
-| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.publicIP"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.2.getPlatformConfiguration", "params": {"query": "DeviceInfo.publicIP"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `publicIP` returned by `getPlatformConfiguration` matches the `PUBLIC_IP` value is retrieved via `ifconfig.me` in step 1  |
+| 2 | Get platform configuration | Invoke getPlatformConfiguration on org.rdk.System with query: "DeviceInfo.publicIP"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "DeviceInfo.publicIP"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the `publicIP` returned by `getPlatformConfiguration` matches the `PUBLIC_IP` value is retrieved via `ifconfig.me` in step 1  |
 
 ---
 
-<a id="system_check_hdr_capabilities"></a>
+<a id="system_hdr_capabilities"></a>
 ### TestCase Name
-System_Check_HDR_Capabilities
+System_HDR_Capabilities
 
 ### TestCase ID
 SYS_27
@@ -668,9 +669,9 @@ Checks the HDR Capabilities of the device
 
 ---
 
-<a id="setandget_all_time_zones"></a>
+<a id="system_setandget_all_time_zones"></a>
 ### TestCase Name
-SetAndGet_All_Time_Zones
+System_SetAndGet_All_Time_Zones
 
 ### TestCase ID
 SYS_28
@@ -709,9 +710,9 @@ Toggle Network Standby Mode Status
 
 ---
 
-<a id="check_power_state_before_reboot_on_standby_state"></a>
+<a id="system_power_state_before_reboot_on_standby_state"></a>
 ### TestCase Name
-Check_Power_State_Before_Reboot_On_Standby_State
+System_Power_State_Before_Reboot_On_Standby_State
 
 ### TestCase ID
 SYS_30
@@ -740,9 +741,9 @@ Checks the powerstate before reboot
 
 ---
 
-<a id="check_time_zones_persist_after_reboot"></a>
+<a id="system_time_zones_persist_after_reboot"></a>
 ### TestCase Name
-Check_Time_Zones_Persist_After_Reboot
+System_Time_Zones_Persist_After_Reboot
 
 ### TestCase ID
 SYS_31
@@ -761,9 +762,9 @@ Checks whether time zone setting is persist after reboot
 
 ---
 
-<a id="system_reboot_and_check_system_uptime"></a>
+<a id="system_reboot_and_system_uptime"></a>
 ### TestCase Name
-System_Reboot_And_Check_System_Uptime
+System_Reboot_And_System_Uptime
 
 ### TestCase ID
 SYS_32
@@ -781,9 +782,9 @@ To reboot and check the system uptime
 
 ---
 
-<a id="system_check_on_timezonedst_changed_event"></a>
+<a id="system_on_timezonedst_changed_event"></a>
 ### TestCase Name
-System_Check_On_TimeZoneDST_Changed_Event
+System_On_TimeZoneDST_Changed_Event
 
 ### TestCase ID
 SYS_33
@@ -795,7 +796,7 @@ Checks whether time zone setting is persist after reboot
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get time zones | Invoke getTimeZones on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.2.getTimeZones"}' http://127.0.0.1:9998/jsonrpc` | Verify that the full list of supported time zones is returned successfully |
+| 1 | Get time zones | Invoke getTimeZones on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getTimeZones"}' http://127.0.0.1:9998/jsonrpc` | Verify that the full list of supported time zones is returned successfully |
 | 2 | Set TimeZone DST | Invoke setTimeZoneDST on org.rdk.System with timeZone: "<baseline_timezone>"<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.setTimeZoneDST","params":{"timeZone":"<baseline_timezone>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that timezone is set successfully (`success` : `true`) |
 | 3 | Get TimeZone DST | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Verify that the timezone returned matches the baseline timezone set in step 2  |
 | 4 | Get TimeZone DST *(loop repeated for each timezone in the iteration set)* | Invoke getTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc":"2.0","id":3,"method":"org.rdk.System.1.getTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current timezone is returned successfully |
@@ -805,9 +806,9 @@ Checks whether time zone setting is persist after reboot
 
 ---
 
-<a id="system_check_rfc_status"></a>
+<a id="system_rfc_status"></a>
 ### TestCase Name
-System_Check_RFC_Status
+System_RFC_Status
 
 ### TestCase ID
 SYS_34
@@ -850,9 +851,9 @@ Check whether able to set and get friendly name
 
 ---
 
-<a id="system_check_friendly_name_persist"></a>
+<a id="system_friendly_name_persist"></a>
 ### TestCase Name
-System_Check_Friendly_Name_Persist
+System_Friendly_Name_Persist
 
 ### TestCase ID
 SYS_36
@@ -889,9 +890,9 @@ Checks whether able to set invalid timezone
 
 ---
 
-<a id="system_check_rfclist_with_empty_value"></a>
+<a id="system_rfclist_with_empty_value"></a>
 ### TestCase Name
-System_Check_RFCList_with_Empty_Value
+System_RFCList_with_Empty_Value
 
 ### TestCase ID
 SYS_38
@@ -907,9 +908,9 @@ Check RFC configurations list with empty value
 
 ---
 
-<a id="system_check_device_type"></a>
+<a id="system_device_type"></a>
 ### TestCase Name
-System_Check_Device_Type
+System_Device_Type
 
 ### TestCase ID
 SYS_39
@@ -925,9 +926,9 @@ Check the device type of the DUT with getPlatformConfiguration API
 
 ---
 
-<a id="system_check_device_ssh_state_after_reboot_on_standby_state"></a>
+<a id="system_device_ssh_state_after_reboot_on_standby_state"></a>
 ### TestCase Name
-System_Check_Device_SSH_State_After_Reboot_On_Standby_State
+System_Device_SSH_State_After_Reboot_On_Standby_State
 
 ### TestCase ID
 SYS_40
@@ -970,7 +971,7 @@ Sets invalid territory and region
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "ABC", region: "AB-CD"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "ABC", "region": "AB-CD"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid territory` |
+| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "ABC", region: "AB-CD"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "ABC", "region": "AB-CD"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
 
 ---
 
@@ -988,7 +989,7 @@ Sets empty territory and region
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "", region: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "", "region": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid territory` |
+| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "", region: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "", "region": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid territory name` |
 
 ---
 
@@ -1006,7 +1007,7 @@ Sets invalid territory and valid region
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "ABC", region: "US-AS"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "ABC", "region": "US-AS"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid territory` |
+| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "ABC", region: "US-AS"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "ABC", "region": "US-AS"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
 
 ---
 
@@ -1024,7 +1025,7 @@ Sets empty territory and valid region
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "", region: "US-AS"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "", "region": "US-AS"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid territory` |
+| 1 | System set territory | Invoke setTerritory on org.rdk.System with territory: "", region: "US-AS"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "", "region": "US-AS"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid territory name` |
 
 ---
 
@@ -1049,9 +1050,9 @@ Check whether able to set and get territory and region
 
 ---
 
-<a id="system_verify_set_territory_without_params"></a>
+<a id="system_set_territory_without_params"></a>
 ### TestCase Name
-System_Verify_Set_Territory_without_Params
+System_Set_Territory_without_Params
 
 ### TestCase ID
 SYS_46
@@ -1081,7 +1082,7 @@ Check whether able to set valid territory and invalid region to set territory AP
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | System set valid territory and set invalid region | Invoke setTerritory on org.rdk.System with territory: "CHN", region: "TestingValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "CHN", "region": "TestingValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid region` |
+| 1 | System set valid territory and set invalid region | Invoke setTerritory on org.rdk.System with territory: "CHN", region: "TestingValue"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "CHN", "region": "TestingValue"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
 
 ---
 
@@ -1245,6 +1246,24 @@ Validate error message with invalid key in deviceInfo api
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get device info | Invoke getDeviceInfo on org.rdk.System with params: "INVALID"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "INVALID"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getDeviceInfo` returns an error response with `success: false` for the invalid key `"INVALID"`  |
+
+---
+
+<a id="system_getplatformconfiguration_invalid_query"></a>
+### TestCase Name
+System_GetPlatformConfiguration_Invalid_Query
+
+### TestCase ID
+SYS_56
+
+### TestCase Objective
+Validates negative scenario for getPlatformConfiguration with invalid query value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get platform configuration with invalid query | Invoke getPlatformConfiguration on org.rdk.System with query: "INVALID.QUERY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "INVALID.QUERY"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getPlatformConfiguration` returns an error response with `success: false` for the invalid query `"INVALID.QUERY"`  |
 
 ## Plugin Post-conditions
 

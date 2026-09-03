@@ -47,8 +47,8 @@ if "SUCCESS" in loadmodulestatus.upper():
         print("Parsed the device configuration file successfully")
 
         #Assign the WIFI parameters names to a variable
-        ssidName = f"Device.WiFi.SSID.{tdkbE2EUtility.ssid_5ghz_index}.SSID"
-        keyPassPhrase = f"Device.WiFi.AccessPoint.{tdkbE2EUtility.ssid_5ghz_index}.Security.KeyPassphrase"
+        ssidName = f"Device.WiFi.SSID.{tdkbE2EUtility.ssid_2ghz_index}.SSID"
+        keyPassPhrase = f"Device.WiFi.AccessPoint.{tdkbE2EUtility.ssid_2ghz_index}.Security.KeyPassphrase"
         dnsServer = "Device.DNS.Client.Server.1.DNSServer"
         wan_ip_address = "Device.DeviceInfo.X_COMCAST-COM_WAN_IPv6"
 
@@ -75,112 +75,141 @@ if "SUCCESS" in loadmodulestatus.upper():
                 print(f"ACTUAL RESULT {step}: Retrieved SSID and key passphrase values {orgValue[0:2]} and DNS server value {dnsServerValue}")
                 print("[TEST EXECUTION RESULT] : SUCCESS")
 
-                setValuesList = [tdkbE2EUtility.ssid_5ghz_name,tdkbE2EUtility.ssid_5ghz_pwd]
-                print(f"WIFI parameter values that are set: {setValuesList}")
+                # Check whether device has MLO capability.
+                # When MLO is disabled, perform the 2.4 GHz get-set-get flow.
+                # When MLO is enabled, use the configured MLO values directly.
 
-                list1 = [ssidName,tdkbE2EUtility.ssid_5ghz_name,'string']
-                list2 = [keyPassPhrase,tdkbE2EUtility.ssid_5ghz_pwd,'string']
+                failure_flag = 0
+                revert_required = False
+                if tdkbE2EUtility.mlo_capability == "False":
+                    print("MLO capability is disabled in device configuration file")
+                    wifiSsid = tdkbE2EUtility.ssid_2ghz_name
+                    wifiPassPhrase = tdkbE2EUtility.ssid_2ghz_pwd
+                    wlanInterface = tdkbE2EUtility.wlan_2ghz_interface
+                    set_required = True
+                else:
+                    print("MLO capability is enabled in device configuration file")
+                    wifiSsid = tdkbE2EUtility.ssid_name
+                    wifiPassPhrase = tdkbE2EUtility.ssid_pwd
+                    wlanInterface = tdkbE2EUtility.wlan_interface
+                    set_required = False
 
-                #Concatenate the lists with the elements separated by pipe
-                setParamList = list1 + list2
-                setParamList = "|".join(map(str, setParamList))
+                if set_required:
+                    setValuesList = [wifiSsid,wifiPassPhrase]
+                    print(f"WIFI parameter values that are set: {setValuesList}")
 
-                #Set the ssid and keypassphrase values.
-                step += 1
-                print(f"\nTEST STEP {step}: Set the ssid,keypassphrase")
-                print(f"EXPECTED RESULT {step}: Should set the ssid,keypassphrase")
-                tdkTestObj,actualresult,details = setMultipleParameterValues(obj,setParamList)
-                if expectedresult in actualresult:
-                    tdkTestObj.setResultStatus("SUCCESS")
-                    print(f"ACTUAL RESULT {step}: {details}")
-                    print("[TEST EXECUTION RESULT] : SUCCESS")
+                    list1 = [ssidName,wifiSsid,'string']
+                    list2 = [keyPassPhrase,wifiPassPhrase,'string']
 
-                    #Retrieve the values after set and compare
-                    newParamList=[ssidName,keyPassPhrase]
-                    tdkTestObj,status,newValues = getMultipleParameterValues(obj,newParamList)
+                    #Concatenate the lists with the elements separated by pipe
+                    setParamList = list1 + list2
+                    setParamList = "|".join(map(str, setParamList))
+
+                    #Set the ssid and keypassphrase values.
                     step += 1
-                    print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase")
-                    print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase")
-                    if expectedresult in status and setValuesList == newValues:
+                    print(f"\nTEST STEP {step}: Set the ssid,keypassphrase")
+                    print(f"EXPECTED RESULT {step}: Should set the ssid,keypassphrase")
+                    tdkTestObj,actualresult,details = setMultipleParameterValues(obj,setParamList)
+                    if expectedresult in actualresult:
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print(f"ACTUAL RESULT {step}: {newValues}")
+                        print(f"ACTUAL RESULT {step}: {details}")
                         print("[TEST EXECUTION RESULT] : SUCCESS")
 
-                        #Wait for the changes to reflect in client device
-                        time.sleep(60)
-
-                        #Connect to the wifi ssid from wlan client
+                        #Retrieve the values after set and compare
+                        newParamList=[ssidName,keyPassPhrase]
+                        tdkTestObj,status,newValues = getMultipleParameterValues(obj,newParamList)
                         step += 1
-                        print(f"\nTEST STEP {step}: Connect to the wifi ssid from wlan client")
-                        print(f"EXPECTED RESULT {step}: WLAN client should connect to the wifi ssid")
-                        status = wlanConnectWifiSsid(tdkbE2EUtility.ssid_5ghz_name,tdkbE2EUtility.ssid_5ghz_pwd,tdkbE2EUtility.wlan_5ghz_interface)
+                        print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase")
+                        print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase")
+                        if expectedresult in status and setValuesList == newValues:
+                            revert_required = True
+                            tdkTestObj.setResultStatus("SUCCESS")
+                            print(f"ACTUAL RESULT {step}: {newValues}")
+                            print("[TEST EXECUTION RESULT] : SUCCESS")
+                        else:
+                            failure_flag = 1
+                            tdkTestObj.setResultStatus("FAILURE")
+                            print(f"ACTUAL RESULT {step}: Get Operation Failed. Details : {newValues}")
+                            print(f"[TEST EXECUTION RESULT] : FAILURE")
+                    else:
+                        failure_flag = 1
+                        tdkTestObj.setResultStatus("FAILURE")
+                        print(f"ACTUAL RESULT {step}: Set Operation Failed. Details : {details}")
+                        print(f"[TEST EXECUTION RESULT] : FAILURE")
+
+                if failure_flag == 0:
+                    #Wait for the changes to reflect in client device
+                    time.sleep(60)
+
+                    #Connect to the wifi ssid from wlan client
+                    step += 1
+                    print(f"\nTEST STEP {step}: Connect to the wifi ssid from wlan client")
+                    print(f"EXPECTED RESULT {step}: WLAN client should connect to the wifi ssid")
+                    status = wlanConnectWifiSsid(wifiSsid,wifiPassPhrase,wlanInterface)
+                    if expectedresult in status:
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        print(f"ACTUAL RESULT {step}: WiFi connected successfully")
+                        print("[TEST EXECUTION RESULT] : SUCCESS")
+
+                        #Resolve domain name with nslookup in WLAN Client
+                        step += 1
+                        print(f"\nTEST STEP {step}: Resolve domain name with nslookup from WLAN Client")
+                        print(f"EXPECTED RESULT {step}: DNS Primary Server should resolve the DNS query from WLAN client")
+                        status=nslookupInClient(tdkbE2EUtility.nslookup_domain_name,dnsServerValue,'WLAN')
                         if expectedresult in status:
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print(f"ACTUAL RESULT {step}: WiFi connected successfully")
+                            print(f"ACTUAL RESULT {step}: DNS Primary Server successfully resolves the DNS query")
                             print("[TEST EXECUTION RESULT] : SUCCESS")
-
-                            #Resolve domain name with nslookup in WLAN Client
-                            step += 1
-                            print(f"\nTEST STEP {step}: Resolve domain name with nslookup from WLAN Client")
-                            print(f"EXPECTED RESULT {step}: DNS Primary Server should resolve the DNS query from WLAN client")
-                            status=nslookupInClient(tdkbE2EUtility.nslookup_domain_name,orgValue[2],'WLAN')
-                            if expectedresult in status:
-                                tdkTestObj.setResultStatus("SUCCESS")
-                                print(f"ACTUAL RESULT {step}: DNS Primary Server successfully resolves the DNS query")
-                                print("[TEST EXECUTION RESULT] : SUCCESS")
-                            else:
-                                tdkTestObj.setResultStatus("FAILURE")
-                                print(f"ACTUAL RESULT {step}: DNS Primary Server doesn't resolve the DNS query")
-                                print("[TEST EXECUTION RESULT] : FAILURE")
-
-                            #Disconnect the WLAN client from the wifi ssid.
-                            step += 1
-                            print(f"\nTEST STEP {step}: From wlan client, Disconnect from the wifi ssid")
-                            print(f"EXPECTED RESULT {step}: WLAN client should disconnect from the wifi ssid")
-                            status = wlanDisconnectWifiSsid(tdkbE2EUtility.wlan_5ghz_interface)
-                            if expectedresult in status:
-                                tdkTestObj.setResultStatus("SUCCESS")
-                                print(f"ACTUAL RESULT {step}: WiFi disconnected successfully")
-                                print("[TEST EXECUTION RESULT] : SUCCESS")
-                            else:
-                                tdkTestObj.setResultStatus("FAILURE")
-                                print(f"ACTUAL RESULT {step}: Wifi disconnect failed")
-                                print("[TEST EXECUTION RESULT] : FAILURE")
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
-                            print(f"ACTUAL RESULT {step}: WiFi connection failed")
+                            print(f"ACTUAL RESULT {step}: DNS Primary Server doesn't resolve the DNS query")
+                            print("[TEST EXECUTION RESULT] : FAILURE")
+
+                        #Disconnect the WLAN client from the wifi ssid.
+                        step += 1
+                        print(f"\nTEST STEP {step}: From wlan client, Disconnect from the wifi ssid")
+                        print(f"EXPECTED RESULT {step}: WLAN client should disconnect from the wifi ssid")
+                        status = wlanDisconnectWifiSsid(wlanInterface)
+                        if expectedresult in status:
+                            tdkTestObj.setResultStatus("SUCCESS")
+                            print(f"ACTUAL RESULT {step}: WiFi disconnected successfully")
+                            print("[TEST EXECUTION RESULT] : SUCCESS")
+                        else:
+                            tdkTestObj.setResultStatus("FAILURE")
+                            print(f"ACTUAL RESULT {step}: Wifi disconnect failed")
                             print("[TEST EXECUTION RESULT] : FAILURE")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print(f"ACTUAL RESULT {step}: Get Operation Failed. Details : {newValues}")
-                        print(f"[TEST EXECUTION RESULT] : FAILURE")
+                        print(f"ACTUAL RESULT {step}: WiFi connection failed")
+                        print("[TEST EXECUTION RESULT] : FAILURE")
+
+                    # Revert the SSID and key passphrase values to original values
+                    if revert_required:
+                        print("Reverting the SSID and key passphrase values to original values.")
+                        #Prepare the list of parameter values to be reverted
+                        list1 = [ssidName,orgValue[0],'string']
+                        list2 = [keyPassPhrase,orgValue[1],'string']
+
+                        #Concatenate the lists with the elements separated by pipe
+                        revertParamList = list1 + list2
+                        revertParamList = "|".join(map(str, revertParamList))
+
+                        #Revert the values to original
+                        step += 1
+                        print(f"\nTEST STEP {step}: Set the original ssid,keypassphrase")
+                        print(f"EXPECTED RESULT {step}: Should set the original ssid,keypassphrase")
+                        tdkTestObj,actualresult,details = setMultipleParameterValues(obj,revertParamList)
+                        if expectedresult in actualresult:
+                            tdkTestObj.setResultStatus("SUCCESS")
+                            print(f"ACTUAL RESULT {step}: Set Operation succeeded. Details : {details}")
+                            print("[TEST EXECUTION RESULT] : SUCCESS")
+                        else:
+                            tdkTestObj.setResultStatus("FAILURE")
+                            details = tdkTestObj.getResultDetails()
+                            print(f"ACTUAL RESULT {step}: Set Operation Failed. Details : {details}")
+                            print("[TEST EXECUTION RESULT] : FAILURE")
                 else:
-                    tdkTestObj.setResultStatus("FAILURE")
-                    print(f"ACTUAL RESULT {step}: Set Operation Failed. Details : {details}")
-                    print(f"[TEST EXECUTION RESULT] : FAILURE")
-
-                #Prepare the list of parameter values to be reverted
-                list1 = [ssidName,orgValue[0],'string']
-                list2 = [keyPassPhrase,orgValue[1],'string']
-
-                #Concatenate the lists with the elements separated by pipe
-                revertParamList = list1 + list2
-                revertParamList = "|".join(map(str, revertParamList))
-
-                #Revert the values to original
-                step += 1
-                print(f"\nTEST STEP {step}: Set the original ssid,keypassphrase")
-                print(f"EXPECTED RESULT {step}: Should set the original ssid,keypassphrase")
-                tdkTestObj,actualresult,details = setMultipleParameterValues(obj,revertParamList)
-                if expectedresult in actualresult:
-                    tdkTestObj.setResultStatus("SUCCESS")
-                    print(f"ACTUAL RESULT {step}: Set Operation succeeded. Details : {details}")
-                    print("[TEST EXECUTION RESULT] : SUCCESS")
-                else:
-                    tdkTestObj.setResultStatus("FAILURE")
-                    details = tdkTestObj.getResultDetails()
-                    print(f"ACTUAL RESULT {step}: Set Operation Failed. Details : {details}")
-                    print("[TEST EXECUTION RESULT] : FAILURE")
+                    print("Failed to set the SSID and key passphrase values. Hence skipping the test")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
                 print(f"ACTUAL RESULT {step}: Get Operation Failed. Details : {orgValue}")

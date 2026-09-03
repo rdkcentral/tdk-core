@@ -2593,7 +2593,14 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 else:
                     info["Test_Step_Status"] = "FAILURE"
             elif arg[0] == "check_paired_device_list_empty":
-                if len(result.get("pairedDevices")) == 0:
+                info = checkAndGetAllResultInfo(result,result.get("success"))
+                pairedDevices = result.get("pairedDevices")
+                success = str(result.get("success")).lower() == "true"
+                status = False
+                for pairedDevice in pairedDevices:
+                    if str(pairedDevice.get("name")) not in arg[1]:
+                        status = True
+                if success and status:
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
@@ -2631,10 +2638,18 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 else:
                     info["Test_Step_Status"] = "FAILURE"
             elif arg[0] == "check_connected_device_list_empty":
-                if len(result.get("connectedDevices")) == 0:
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
+                info = checkAndGetAllResultInfo(result,result.get("success"))
+                connectedDevices = result.get("connectedDevices")
+                success = str(result.get("success")).lower() == "true"
+                status = False
+                for connectedDevice in connectedDevices:
+                    if str(connectedDevice.get("name")) in arg[1]:
+                        status = True
+                        break
+                if success and status:
                     info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["Test_Step_Status"] = "SUCCESS"
             elif arg[0] == "get_connected_bt_emu_details":
                 info = checkAndGetAllResultInfo(result,result.get("success"))
                 connectedDevices= result.get("connectedDevices")
@@ -4708,8 +4723,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        # PackageManager Response result parser steps
-        elif tag == "packagemanager_list_packages_validation":
+        # AppPackageManager Response result parser steps
+        elif tag == "app_packagemanager_list_packages_validation":
             try:
                 if len(result) >= 1:
                     info["result"] = result
@@ -4718,7 +4733,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_list_packages":
+        elif tag == "app_packagemanager_list_packages":
             try:
                 appStatus = "FALSE"
                 info["result"] = result
@@ -4739,7 +4754,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["appStatus"] = "FALSE"
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_null_result_validation":
+        elif tag == "app_packagemanager_null_result_validation":
             try:
                 if otherInfo and "error" in otherInfo:
                     info["error_info"] = otherInfo["error"]
@@ -4754,7 +4769,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_check_install_package":
+        elif tag == "app_packagemanager_check_install_package":
             try:
                 info["result"] = result
                 for item in result:
@@ -4771,7 +4786,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_check_uninstall_package":
+        elif tag == "app_packagemanager_check_uninstall_package":
             try:
                 info["result"] = result
                 for item in result:
@@ -4788,7 +4803,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_negative_scenario_validation":
+        elif tag == "app_packagemanager_negative_scenario_validation":
             try:
                 info["otherInfo"] = otherInfo
                 message = otherInfo.get("error").get("message")
@@ -4800,7 +4815,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_check_package_state":
+        elif tag == "app_packagemanager_check_package_state":
             try:
                 info["result"] = result
                 if str(result).strip().lower() in str(expectedValues[0]).strip().lower():
@@ -4811,7 +4826,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "packagemanager_non_empty_result_check":
+        elif tag == "app_packagemanager_non_empty_result_check":
             try:
                 info["result"] = result
                 status = has_empty_values(result)
@@ -4980,6 +4995,231 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             except Exception as e:
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
+
+        # PowerManager Plugin Response result parser steps
+        elif tag == "powermanager_get_power_state":
+            try:
+                currentState = result.get("currentState")
+                previousState = result.get("previousState")
+                info["currentState"] = currentState
+                info["previousState"] = previousState
+                if currentState and previousState:
+                    if len(arg) and arg[0] == "check_power_state":
+                        if str(currentState).upper() in [str(powerstate).upper() for powerstate in expectedValues] and previousState:
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        if str(currentState).upper() in [str(powerstate).upper() for powerstate in expectedValues] and str(previousState).upper() in [str(powerstate).upper() for powerstate in expectedValues]:
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_get_power_state_before_reboot":
+            try:
+                powerStateBeforeReboot = result.get("powerStateBeforeReboot")
+                info["powerStateBeforeReboot"] = powerStateBeforeReboot
+                if powerStateBeforeReboot is not None and str(powerStateBeforeReboot).upper() in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_get_network_standby_mode":
+            try:
+                standbyMode = result.get("standbyMode")
+                info["standbyMode"] = standbyMode
+                if standbyMode is not None:
+                    if expectedValues:
+                        if str(standbyMode).lower() in str(expectedValues):
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_get_temperature_thresholds":
+            try:
+                high = result.get("high")
+                critical = result.get("critical")
+                info["high"] = high
+                info["critical"] = critical
+                #Validate that both high and critical thresholds are present
+                if high is not None and critical is not None:
+                    if expectedValues:
+                        #Validate that both high and critical thresholds are equal to the expected values
+                        if float(high) == float(expectedValues[0]) and float(critical) == float(expectedValues[1]):
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        #Validate that both high and critical thresholds are non-negative
+                        if float(high) >= 0.0 and float(critical) >= 0.0:
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_get_thermal_state":
+            try:
+                currentTemperature = result.get("currentTemperature")
+                info["currentTemperature"] = currentTemperature
+                #Validate that currentTemperature is present
+                if currentTemperature is not None:
+                    #Validate that currentTemperature is non-negative
+                    if float(currentTemperature) >= 0.0:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_get_time_since_wakeup":
+            try:
+                secondsSinceWakeup = result.get("secondsSinceWakeup")
+                info["secondsSinceWakeup"] = secondsSinceWakeup
+                if secondsSinceWakeup is not None and int(secondsSinceWakeup) >= 0:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_get_wakeup_source_config":
+            try:
+                if isinstance(result, list) and len(result) > 0:
+                    info["result"] = result
+                    item = result[0]
+                    if item.get("wakeupSource") is not None and item.get("enabled") is not None:
+                        if str(item.get("enabled")).lower() in ["true", "false"] and str(item.get("wakeupSource")).upper() in [str(expected).upper() for expected in expectedValues]:
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_get_last_wakeup_keycode":
+            try:
+                keycode = result.get("keycode")
+                info["keycode"] = keycode
+                if keycode is not None and isinstance(keycode, int):
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_get_last_wakeup_reason":
+            try:
+                wakeupReason = result.get("wakeupReason")
+                info["wakeupReason"] = wakeupReason
+                if wakeupReason and str(wakeupReason).upper() in [str(expected).upper() for expected in expectedValues]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_get_overtemp_grace_interval":
+            try:
+                graceInterval = result.get("graceInterval")
+                info["graceInterval"] = graceInterval
+                if expectedValues:
+                    if graceInterval is not None and isinstance(graceInterval, int) and int(graceInterval) == int(expectedValues[0]):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                else:
+                    if graceInterval is not None and isinstance(graceInterval, int) and graceInterval >= 0:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_null_result_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    if result is None or str(result).strip().lower() == "none":
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_get_network_standby_mode":
+            try:
+                standbyMode = result.get("standbyMode")
+                info["standbyMode"] = standbyMode
+                if standbyMode is not None:
+                    if expectedValues:
+                        if str(standbyMode).lower() == str(expectedValues[0]).lower():
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_add_client_validation":
+            try:
+                clientId = result.get("clientId")
+                info["clientId"] = clientId
+                if clientId is not None and isinstance(clientId, int) and clientId >= 0:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_negative_scenario_validation":
+             try:
+                info["otherInfo"] = otherInfo
+                message = otherInfo.get("error").get("message")
+                if str(message).lower() in [str(val).lower() for val in expectedValues]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+             except Exception as e:
+                 info["error"] = str(e)
+                 info["Test_Step_Status"] = "FAILURE"
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"
@@ -5501,8 +5741,8 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
             else:
                 result = "FALSE"
 
-        # PackageManager Plugin Response result parser steps
-        elif tag == "packagemanager_check_app_status":
+        # AppPackageManager Plugin Response result parser steps
+        elif tag == "app_packagemanager_check_app_status":
             testStepResults = list(testStepResults[0].values())[0]
             appStatus = testStepResults[0].get("appStatus")
             if len(arg) and arg[0] == "launch_app":
@@ -5515,6 +5755,15 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                     result = "FALSE"
                 else:
                     result = "TRUE"
+
+        # PowerManager Plugin conditional execution handler
+        elif tag == "powermanager_check_power_state_not_on":
+            testStepResults = list(testStepResults[0].values())[0]
+            currentState = testStepResults[0].get("currentState")
+            if currentState is not None and str(currentState).upper() != "ON":
+                result = "TRUE"
+            else:
+                result = "FALSE"
 
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
@@ -6722,6 +6971,23 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults = list(testStepResults[0].values())[0]
             info["id"] = testStepResults[0].get("id")
 
+        # PowerManager Plugin Response result parser steps
+        elif tag == "powermanager_get_client_id":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["clientId"] = testStepResults[0].get("clientId")
+
+        elif tag == "powermanager_get_transaction_id":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["transactionId"] = testStepResults[0].get("transactionId")
+
+        elif tag == "powermanager_get_delay_id":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["delayPeriod"] = testStepResults[0].get("stateChangeAfter")
+
+        elif tag == "powermanager_get_power_state_before_reboot":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["powerStateBeforeReboot"] = testStepResults[0].get("powerStateBeforeReboot")
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
@@ -7413,6 +7679,10 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
 
         elif tag == "initialize_pre-requisite":
             message = "Starting the pre-requisite initialization"
+            info["Test_Step_Message"] = message
+
+        elif tag == "wait_for_device_to_come_up":
+            message = "Waiting for the device to come up after a reboot"
             info["Test_Step_Message"] = message
 
         elif tag == "Check_And_Enable_XDial":
@@ -8119,6 +8389,38 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
         elif tag == "ocicontainer_form_container_id":
             containerId = arg[0].strip() + arg[1].strip()
             info["containerId"] = containerId
+
+        elif tag == "vnc_server_log_validation":
+            command = 'journalctl --since "1 min ago" -x -u wpeframework | grep -inr "'+expectedValues[0].strip()+'"'
+            output = executeCommand(execInfo, command)
+            print("Command Output:", output)
+            output = str(output).split("\n")[1].strip()
+            if len(output) and expectedValues[0].strip() in output:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "vnc_server_availability_check":
+            command = 'curl -v ' +execInfo[2]+':'+arg[0]
+            output = executeCommand(execInfo, command)
+            # Remove HTML tags
+            output = re.sub(r'<[^>]+>', ' ', output)
+            # Replace HTML entity
+            # Replace HTML entity
+            output = output.replace('&gt;', '>')
+            # Remove extra spaces/newlines
+            output = ' '.join(output.split())
+            print("Command Output:", output)
+            if len(arg) > 1 and arg[1] == "unavailability":
+                if "Failed to connect" in output:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                if "Connected" in output:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         else:
             print("\nError Occurred: [%s] No function call available for %s" %(inspect.stack()[0][3],methodTag))
