@@ -48,6 +48,7 @@ RDKV_CERT_AVS_RDKWindowManager
    - [RDKWindowManager_Reset_Inactivity_Interval](#rdkwindowmanager_reset_inactivity_interval)
    - [RDKWindowManager_On_User_Inactivity_Event_Disabled_Reporting](#rdkwindowmanager_on_user_inactivity_event_disabled_reporting)
    - [RDKWindowManager_On_Screenshot_Complete_Event](#rdkwindowmanager_on_screenshot_complete_event)
+   - [RDKWindowManager_Start_Stop_VNC_Server](#rdkwindowmanager_start_stop_vnc_server)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -970,6 +971,29 @@ Checks whether the screenshot complete event is triggered when a screenshot is c
 | --- | --- | --- | --- |
 | 1 | Capture screenshot | Invoke getScreenshot on org.rdk.RDKWindowManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.getScreenshot"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check on screenshot complete event | Listen for `Event_On_Screenshot_Complete` event and wait up to 120 second(s) | Ensure the `onScreenshotComplete` event is received, confirming the screenshot was captured successfully |
+
+---
+
+<a id="rdkwindowmanager_start_stop_vnc_server"></a>
+### TestCase Name
+RDKWindowManager_Start_Stop_VNC_Server
+
+### TestCase ID
+RWM_L2_06
+
+### TestCase Objective
+Checks whether the VNC server starts and stops correctly
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Start VNC server | Invoke startVncServer on org.rdk.RDKWindowManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.startVncServer"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 2 | VNC server start log validation | Check device wpeframework log for the entry `"VNC server started successfully"` (wait 3 second(s) before checking) | Verify that the wpeframework log contains the entry `"VNC server started successfully"`, confirming the VNC server has started |
+| 3 | Check VNC service availability | Check that the VNC service is reachable on port `5900` via `curl -v <DEVICE_IP>:5900` | Verify that the VNC service is reachable on port `5900` (connection response shows `"Connected"`) |
+| 4 | Stop VNC server | Invoke stopVncServer on org.rdk.RDKWindowManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.stopVncServer"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 5 | VNC server stop log validation | Check device wpeframework log for the entry `"VNC server stopped successfully"` (wait 3 second(s) before checking) | Verify that the wpeframework log contains the entry `"VNC server stopped successfully"`, confirming the VNC server has stopped |
+| 6 | Check VNC service unavailability | Check that the VNC service is unreachable on port `5900` via `curl -v <DEVICE_IP>:5900` | Verify that the VNC service is unreachable on port `5900` (connection response shows `"Failed to connect"`) |
 
 ## Plugin Post-conditions
 

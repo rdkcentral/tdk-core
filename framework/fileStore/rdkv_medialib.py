@@ -19,6 +19,7 @@
 
 import time
 import os
+import json
 import inspect
 import importlib
 import configparser
@@ -201,7 +202,8 @@ def rdkv_media_readUIData(elementExpandXpath,dataXpath,count):
 #---------------------------------------------------------------------------------------------
 def setPS_value(video_test_url):
     # Format the lightning URL to escape special characters
-    lightning_url = video_test_url.replace("\\", "\\\\").replace('"', '\\"')
+    url_str = json.dumps(video_test_url) if isinstance(video_test_url, list) else video_test_url
+    lightning_url = url_str.replace("\\", "\\\\").replace('"', '\\"')
     device_url = f"http://{deviceIP}:{devicePort}/jsonrpc"
     payload = ('{"jsonrpc":"2.0","id":1,''"method":"org.rdk.PersistentStore.setValue",''"params":{''"namespace":"MVS",''"key":"lightningURL",'f'"value":"{lightning_url}"''}}')
     curl_command = ["curl", "-H", "Content-Type: application/json", "-d", payload, device_url]
