@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Audio App</title>
+  <style>
+    #startVideoButton:active, #startAudioButton:active, #startSpeechButton:active {
+      background-color: white;
+    }
+
+    #videoPanel, #audioPanel, #speechPanel {
+      display: none;
+    }
+
+    #audioProgressBar, #speechProgressBar {
+      width: 0;
+      height: 20px;
+      background-color: lightblue;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<button id="startVideoButton">Start Video</button>
+<div id="videoPanel">
+  <video id="myVideo" width="640" height="360" controls>
+    <source src="<your_video_asset>.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+<button id="startAudioButton">Play Audio</button>
+<div id="audioPanel">
+  <div id="audioProgressBar"></div>
+</div>
+
+<button id="startSpeechButton">Start Speech Synthesis</button>
+<div id="speechPanel">
+  <div id="speechProgressBar"></div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Initialize Web Audio API
+  let audioContext;
+  let audioSource;
+  let speechSynthesisUtterance;
+  let speechRepeatCount = 0;
+  const maxSpeechRepeat = 5;
+
+  // Load audio file
+  const audioUrl = "https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg";
+  let audioBuffer;
+  let audioDuration;
+
+  fetch(audioUrl)
+    .then(response => response.arrayBuffer())
+    .then(data => {
+      // Create AudioContext before decoding audio data
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      console.log("AudioContext created successfully.");
+      return audioContext.decodeAudioData(data);
+    })
+    .then(buffer => {
+      audioBuffer = buffer;
+      audioDuration = buffer.duration;
+      console.log("Audio buffer loaded successfully. Duration:", audioDuration);
+    })
+    .catch(error => console.error("Error loading audio file:", error));
+
+  // Event handler for user gesture (e.g., button click) - Video
+  document.getElementById("startVideoButton").addEventListener("click", function() {
+    document.getElementById("videoPanel").style.display = "block";
+    document.getElementById("audioPanel").style.display = "block";
+    document.getElementById("speechPanel").style.display = "block";
+    startVideo();
+  });
+
+  // Event handler for user gesture (e.g., button click) - Audio
+  document.getElementById("startAudioButton").addEventListener("click", function() {
+    document.getElementById("videoPanel").style.display = "block";
+    document.getElementById("audioPanel").style.display = "block";
+    document.getElementById("speechPanel").style.display = "block";
+    startAudio();
+  });
+
+  // Event handler for user gesture (e.g., button click) - Speech Synthesis
+  document.getElementById("startSpeechButton").addEventListener("click", function() {
+    document.getElementById("videoPanel").style.display = "block";
+    document.getElementById("audioPanel").style.display = "block";
+    document.getElementById("speechPanel").style.display = "block";
+    startSpeechSynthesis();
+  });
+
+  function startVideo() {
+    const video = document.getElementById("myVideo");
+    video.play();
+    console.log("Video play started.");
+  }
+
+  function startAudio() {
+    if (audioContext) {
+      // Play audio
+      audioSource = audioContext.createBufferSource();
+      audioSource.buffer = audioBuffer;
+      audioSource.connect(audioContext.destination);
+      audioSource.start();
+      console.log("Audio started playing.");
+
+      // Update progress bar during audio playback
+      const audioProgressBar = document.getElementById("audioProgressBar");
+      const startTime = audioContext.currentTime;
+      const endTime = startTime + audioDuration;
+
+      function updateAudioProgressBar() {
+        const currentTime = audioContext.currentTime;
+        const progress = (currentTime - startTime) / (endTime - startTime);
+        audioProgressBar.style.width = (progress * 100) + "%";
+
+        if (currentTime < endTime) {
+          requestAnimationFrame(updateAudioProgressBar);
+        }
+      }
+
+      updateAudioProgressBar();
+    }
+  }
+
+  function startSpeechSynthesis() {
+    const textContainer = document.getElementById("speechPanel"); // Modified this line
+    const textToSpeech = "TDK - Test Development Kit for RDK";
+    console.log("Speech synthesis object created.");
+
+    // Display text in UI
+    textContainer.textContent = textToSpeech;
+
+    // Use SpeechSynthesis API to speak the text
+    speechSynthesisUtterance = new SpeechSynthesisUtterance(textToSpeech);
+    speechSynthesisUtterance.onend = function() {
+      console.log("Speech synthesis ended.");
+      speechRepeatCount++;
+      if (speechRepeatCount < maxSpeechRepeat) {
+        // Repeat after 5 seconds
+        setTimeout(() => {
+          textContainer.textContent = "";
+          startSpeechSynthesis();
+        }, 5000);
+      }
+    };
+
+    speechSynthesis.speak(speechSynthesisUtterance);
+
+    // Update progress bar during speech synthesis
+    const speechProgressBar = document.getElementById("speechProgressBar");
+
+    function updateSpeechProgressBar() {
+      const progress = (speechRepeatCount + 1) / maxSpeechRepeat;
+      speechProgressBar.style.width = (progress * 100) + "%";
+
+      if (speechRepeatCount < maxSpeechRepeat) {
+        requestAnimationFrame(updateSpeechProgressBar);
+      }
+    }
+
+    updateSpeechProgressBar();
+  }
+});
+</script>
+
+</body>
+</html>

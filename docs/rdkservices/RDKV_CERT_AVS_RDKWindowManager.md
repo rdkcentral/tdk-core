@@ -6,47 +6,49 @@ RDKV_CERT_AVS_RDKWindowManager
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [RWM_Check_Add_Key_Intercepts](#rwm_check_add_key_intercepts)
-   - [RWM_AddKeyIntercepts_Empty_Modifiers](#rwm_addkeyintercepts_empty_modifiers)
-   - [RWM_Check_AddKeyIntercepts_Invalid_Keys](#rwm_check_addkeyintercepts_invalid_keys)
-   - [RWM_Check_Create_Display_Valid_Params](#rwm_check_create_display_valid_params)
-   - [RWM_CreateDisplay_Empty_DisplayParams](#rwm_createdisplay_empty_displayparams)
-   - [RWM_Create_Display_Invalid_Params](#rwm_create_display_invalid_params)
-   - [RWM_Check_Enable_Inactivity_Reporting](#rwm_check_enable_inactivity_reporting)
-   - [RWM_Check_Disable_Inactivity_Reporting](#rwm_check_disable_inactivity_reporting)
-   - [RWM_Check_Enable_Inactivity_Reporting_Invalid_Value](#rwm_check_enable_inactivity_reporting_invalid_value)
-   - [RWM_Check_GenerateKey_Valid_Key](#rwm_check_generatekey_valid_key)
-   - [RWM_GenerateKey_Invalid_KeyCode](#rwm_generatekey_invalid_keycode)
-   - [RWM_GenerateKey_No_Params](#rwm_generatekey_no_params)
-   - [RWM_Check_Successful_Retrieval_Active_Application_IDs](#rwm_check_successful_retrieval_active_application_ids)
-   - [RWM_RemoveKeyIntercept_Valid_Params](#rwm_removekeyintercept_valid_params)
-   - [RWM_RemoveKeyIntercept_Invalid_Params](#rwm_removekeyintercept_invalid_params)
-   - [RWM_RemoveKeyIntercept_Empty_Params](#rwm_removekeyintercept_empty_params)
-   - [RWM_Check_Reset_Inactivity_Time](#rwm_check_reset_inactivity_time)
-   - [RWM_Check_SetInactivityInterval_Valid_Positive_Value](#rwm_check_setinactivityinterval_valid_positive_value)
-   - [RWM_SetInactivityInterval_NegativeValue](#rwm_setinactivityinterval_negativevalue)
-   - [RWM_Check_SetFocus_Valid_Client](#rwm_check_setfocus_valid_client)
-   - [RWM_SetFocus_Invalid_Client](#rwm_setfocus_invalid_client)
-   - [RWM_SetFocus_Empty_Client](#rwm_setfocus_empty_client)
-   - [RWM_SetVisible_Valid_Client_True](#rwm_setvisible_valid_client_true)
-   - [RWM_SetVisible_Valid_Client_False](#rwm_setvisible_valid_client_false)
-   - [RWM_SetVisible_Invalid_Client](#rwm_setvisible_invalid_client)
-   - [RWM_RenderReady_Valid_ClientId](#rwm_renderready_valid_clientid)
-   - [RWM_Check_RenderReady_Invalid_ClientId](#rwm_check_renderready_invalid_clientid)
-   - [RWM_Check_RenderReady_Empty_ClientId](#rwm_check_renderready_empty_clientid)
-   - [RWM_EnableDisplayRender_Valid_ClientId_Enable_True](#rwm_enabledisplayrender_valid_clientid_enable_true)
-   - [RWM_Check_EnableDisplayRender_Valid_ClientId_Enable_False](#rwm_check_enabledisplayrender_valid_clientid_enable_false)
-   - [RWM_EnableDisplayRender_Invalid_ClientId](#rwm_enabledisplayrender_invalid_clientid)
-   - [RWM_Check_SetZOrder_Valid_ClientId_ZOrder](#rwm_check_setzorder_valid_clientid_zorder)
-   - [RWM_SetZOrder_Invalid_ClientId](#rwm_setzorder_invalid_clientid)
-   - [RWM_SetZOrder_ValidClientId_InvalidZOrder](#rwm_setzorder_validclientid_invalidzorder)
-   - [RWM_Check_GetZOrder_Valid_ClientId](#rwm_check_getzorder_valid_clientid)
-   - [RWM_Check_GetZOrder_Invalid_ClientId](#rwm_check_getzorder_invalid_clientid)
-   - [RWM_GetZOrder_Empty_ClientId](#rwm_getzorder_empty_clientid)
-   - [RWM_Check_On_User_Inactivity_Event](#rwm_check_on_user_inactivity_event)
-   - [RWM_Check_User_Active](#rwm_check_user_active)
-   - [RWM_Reset_Inactivity_Interval](#rwm_reset_inactivity_interval)
-   - [RWM_Check_On_User_Inactivity_Event_Disabled_Reporting](#rwm_check_on_user_inactivity_event_disabled_reporting)
+   - [RDKWindowManager_Add_Key_Intercepts](#rdkwindowmanager_add_key_intercepts)
+   - [RDKWindowManager_AddKeyIntercepts_Empty_Modifiers](#rdkwindowmanager_addkeyintercepts_empty_modifiers)
+   - [RDKWindowManager_AddKeyIntercepts_Invalid_Keys](#rdkwindowmanager_addkeyintercepts_invalid_keys)
+   - [RDKWindowManager_Create_Display_Valid_Params](#rdkwindowmanager_create_display_valid_params)
+   - [RDKWindowManager_CreateDisplay_Empty_DisplayParams](#rdkwindowmanager_createdisplay_empty_displayparams)
+   - [RDKWindowManager_Create_Display_Invalid_Params](#rdkwindowmanager_create_display_invalid_params)
+   - [RDKWindowManager_Enable_Inactivity_Reporting](#rdkwindowmanager_enable_inactivity_reporting)
+   - [RDKWindowManager_Disable_Inactivity_Reporting](#rdkwindowmanager_disable_inactivity_reporting)
+   - [RDKWindowManager_Enable_Inactivity_Reporting_Invalid_Value](#rdkwindowmanager_enable_inactivity_reporting_invalid_value)
+   - [RDKWindowManager_GenerateKey_Valid_Key](#rdkwindowmanager_generatekey_valid_key)
+   - [RDKWindowManager_GenerateKey_Invalid_KeyCode](#rdkwindowmanager_generatekey_invalid_keycode)
+   - [RDKWindowManager_GenerateKey_No_Params](#rdkwindowmanager_generatekey_no_params)
+   - [RDKWindowManager_Get_Active_Application_IDs](#rdkwindowmanager_get_active_application_ids)
+   - [RDKWindowManager_RemoveKeyIntercept_Valid_Params](#rdkwindowmanager_removekeyintercept_valid_params)
+   - [RDKWindowManager_RemoveKeyIntercept_Invalid_Params](#rdkwindowmanager_removekeyintercept_invalid_params)
+   - [RDKWindowManager_RemoveKeyIntercept_Empty_Params](#rdkwindowmanager_removekeyintercept_empty_params)
+   - [RDKWindowManager_Reset_Inactivity_Time](#rdkwindowmanager_reset_inactivity_time)
+   - [RDKWindowManager_SetInactivityInterval_Valid_Positive_Value](#rdkwindowmanager_setinactivityinterval_valid_positive_value)
+   - [RDKWindowManager_SetInactivityInterval_NegativeValue](#rdkwindowmanager_setinactivityinterval_negativevalue)
+   - [RDKWindowManager_SetFocus_Valid_Client](#rdkwindowmanager_setfocus_valid_client)
+   - [RDKWindowManager_SetFocus_Invalid_Client](#rdkwindowmanager_setfocus_invalid_client)
+   - [RDKWindowManager_SetFocus_Empty_Client](#rdkwindowmanager_setfocus_empty_client)
+   - [RDKWindowManager_SetVisible_Valid_Client_True](#rdkwindowmanager_setvisible_valid_client_true)
+   - [RDKWindowManager_SetVisible_Valid_Client_False](#rdkwindowmanager_setvisible_valid_client_false)
+   - [RDKWindowManager_SetVisible_Invalid_Client](#rdkwindowmanager_setvisible_invalid_client)
+   - [RDKWindowManager_RenderReady_Valid_ClientId](#rdkwindowmanager_renderready_valid_clientid)
+   - [RDKWindowManager_RenderReady_Invalid_ClientId](#rdkwindowmanager_renderready_invalid_clientid)
+   - [RDKWindowManager_RenderReady_Empty_ClientId](#rdkwindowmanager_renderready_empty_clientid)
+   - [RDKWindowManager_EnableDisplayRender_Valid_ClientId_Enable_True](#rdkwindowmanager_enabledisplayrender_valid_clientid_enable_true)
+   - [RDKWindowManager_EnableDisplayRender_Valid_ClientId_Enable_False](#rdkwindowmanager_enabledisplayrender_valid_clientid_enable_false)
+   - [RDKWindowManager_EnableDisplayRender_Invalid_ClientId](#rdkwindowmanager_enabledisplayrender_invalid_clientid)
+   - [RDKWindowManager_SetZOrder_Valid_ClientId_ZOrder](#rdkwindowmanager_setzorder_valid_clientid_zorder)
+   - [RDKWindowManager_SetZOrder_Invalid_ClientId](#rdkwindowmanager_setzorder_invalid_clientid)
+   - [RDKWindowManager_SetZOrder_ValidClientId_InvalidZOrder](#rdkwindowmanager_setzorder_validclientid_invalidzorder)
+   - [RDKWindowManager_GetZOrder_Valid_ClientId](#rdkwindowmanager_getzorder_valid_clientid)
+   - [RDKWindowManager_GetZOrder_Invalid_ClientId](#rdkwindowmanager_getzorder_invalid_clientid)
+   - [RDKWindowManager_GetZOrder_Empty_ClientId](#rdkwindowmanager_getzorder_empty_clientid)
+   - [RDKWindowManager_On_User_Inactivity_Event](#rdkwindowmanager_on_user_inactivity_event)
+   - [RDKWindowManager_User_Active](#rdkwindowmanager_user_active)
+   - [RDKWindowManager_Reset_Inactivity_Interval](#rdkwindowmanager_reset_inactivity_interval)
+   - [RDKWindowManager_On_User_Inactivity_Event_Disabled_Reporting](#rdkwindowmanager_on_user_inactivity_event_disabled_reporting)
+   - [RDKWindowManager_On_Screenshot_Complete_Event](#rdkwindowmanager_on_screenshot_complete_event)
+   - [RDKWindowManager_Start_Stop_VNC_Server](#rdkwindowmanager_start_stop_vnc_server)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -73,13 +75,13 @@ accessible via JSON-RPC under the callsign `org.rdk.RDKWindowManager` (version 1
 | 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DownloadManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DownloadManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
 | 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of DownloadManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
-### Plugin Pre-condition 3: Activate_PackageManagerRDKEMS_Plugin
+### Plugin Pre-condition 3: Activate_AppPackageManager_Plugin
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of PackageManagerRDKEMS plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate PackageManagerRDKEMS plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.PackageManagerRDKEMS"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of PackageManagerRDKEMS plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check plugin active status | Check active status of AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppPackageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppPackageManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppPackageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 4: Activate_AppManager_Plugin
 
@@ -101,11 +103,11 @@ accessible via JSON-RPC under the callsign `org.rdk.RDKWindowManager` (version 1
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check existing package | Get packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
-| 2 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 1 | Check existing package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
+| 2 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 3 | Download valid parameters | Download on DownloadManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
-| 4 | Install package on device | Install on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_4>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 5 | Verify installed package | Get packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
+| 4 | Install package on device | Install on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_4>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 5 | Verify installed package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
 
 ### Plugin Pre-condition 7: Launch_Application
 
@@ -133,9 +135,9 @@ accessible via JSON-RPC under the callsign `org.rdk.RDKWindowManager` (version 1
 | 6 | Configure packagemanager additionalmetadata value | `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` must be set to the additional metadata value associated with the application/package | The `PACKAGEMANAGER_ADDITIONALMETADATA_VALUE` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
-<a id="rwm_check_add_key_intercepts"></a>
+<a id="rdkwindowmanager_add_key_intercepts"></a>
 ### TestCase Name
-RWM_Check_Add_Key_Intercepts
+RDKWindowManager_Add_Key_Intercepts
 
 ### TestCase ID
 RWM_01
@@ -152,9 +154,9 @@ Pass a valid list of key intercepts and ensure the method successfully adds the 
 
 ---
 
-<a id="rwm_addkeyintercepts_empty_modifiers"></a>
+<a id="rdkwindowmanager_addkeyintercepts_empty_modifiers"></a>
 ### TestCase Name
-RWM_AddKeyIntercepts_Empty_Modifiers
+RDKWindowManager_AddKeyIntercepts_Empty_Modifiers
 
 ### TestCase ID
 RWM_02
@@ -171,9 +173,9 @@ Pass an empty modifiers parameter to the addKeyIntercepts method and check that 
 
 ---
 
-<a id="rwm_check_addkeyintercepts_invalid_keys"></a>
+<a id="rdkwindowmanager_addkeyintercepts_invalid_keys"></a>
 ### TestCase Name
-RWM_Check_AddKeyIntercepts_Invalid_Keys
+RDKWindowManager_AddKeyIntercepts_Invalid_Keys
 
 ### TestCase ID
 RWM_03
@@ -190,9 +192,9 @@ Pass a list containing invalid key intercepts and ensure the method returns an a
 
 ---
 
-<a id="rwm_check_create_display_valid_params"></a>
+<a id="rdkwindowmanager_create_display_valid_params"></a>
 ### TestCase Name
-RWM_Check_Create_Display_Valid_Params
+RDKWindowManager_Create_Display_Valid_Params
 
 ### TestCase ID
 RWM_04
@@ -208,9 +210,9 @@ Test the createDisplay method by passing valid displayParams containing all requ
 
 ---
 
-<a id="rwm_createdisplay_empty_displayparams"></a>
+<a id="rdkwindowmanager_createdisplay_empty_displayparams"></a>
 ### TestCase Name
-RWM_CreateDisplay_Empty_DisplayParams
+RDKWindowManager_CreateDisplay_Empty_DisplayParams
 
 ### TestCase ID
 RWM_05
@@ -226,9 +228,9 @@ Test the createDisplay method by passing an empty object or null as displayParam
 
 ---
 
-<a id="rwm_create_display_invalid_params"></a>
+<a id="rdkwindowmanager_create_display_invalid_params"></a>
 ### TestCase Name
-RWM_Create_Display_Invalid_Params
+RDKWindowManager_Create_Display_Invalid_Params
 
 ### TestCase ID
 RWM_06
@@ -244,9 +246,9 @@ Test the createDisplay method by passing displayParams with invalid or malformed
 
 ---
 
-<a id="rwm_check_enable_inactivity_reporting"></a>
+<a id="rdkwindowmanager_enable_inactivity_reporting"></a>
 ### TestCase Name
-RWM_Check_Enable_Inactivity_Reporting
+RDKWindowManager_Enable_Inactivity_Reporting
 
 ### TestCase ID
 RWM_07
@@ -262,9 +264,9 @@ Test the API by passing enable parameter as true to ensure inactivity reporting 
 
 ---
 
-<a id="rwm_check_disable_inactivity_reporting"></a>
+<a id="rdkwindowmanager_disable_inactivity_reporting"></a>
 ### TestCase Name
-RWM_Check_Disable_Inactivity_Reporting
+RDKWindowManager_Disable_Inactivity_Reporting
 
 ### TestCase ID
 RWM_08
@@ -280,9 +282,9 @@ Test the API by passing enable parameter as false to ensure inactivity reporting
 
 ---
 
-<a id="rwm_check_enable_inactivity_reporting_invalid_value"></a>
+<a id="rdkwindowmanager_enable_inactivity_reporting_invalid_value"></a>
 ### TestCase Name
-RWM_Check_Enable_Inactivity_Reporting_Invalid_Value
+RDKWindowManager_Enable_Inactivity_Reporting_Invalid_Value
 
 ### TestCase ID
 RWM_09
@@ -298,9 +300,9 @@ Test the API by passing an invalid value for enable to ensure the API handles in
 
 ---
 
-<a id="rwm_check_generatekey_valid_key"></a>
+<a id="rdkwindowmanager_generatekey_valid_key"></a>
 ### TestCase Name
-RWM_Check_GenerateKey_Valid_Key
+RDKWindowManager_GenerateKey_Valid_Key
 
 ### TestCase ID
 RWM_10
@@ -317,9 +319,9 @@ Verify the behavior of generateKey when called with valid key press and release.
 
 ---
 
-<a id="rwm_generatekey_invalid_keycode"></a>
+<a id="rdkwindowmanager_generatekey_invalid_keycode"></a>
 ### TestCase Name
-RWM_GenerateKey_Invalid_KeyCode
+RDKWindowManager_GenerateKey_Invalid_KeyCode
 
 ### TestCase ID
 RWM_11
@@ -336,9 +338,9 @@ Test generateKey with invalid or unsupported key codes. Verify that the method h
 
 ---
 
-<a id="rwm_generatekey_no_params"></a>
+<a id="rdkwindowmanager_generatekey_no_params"></a>
 ### TestCase Name
-RWM_GenerateKey_No_Params
+RDKWindowManager_GenerateKey_No_Params
 
 ### TestCase ID
 RWM_12
@@ -354,9 +356,9 @@ Check the response of generateKey when no parameters are provided. Ensure the me
 
 ---
 
-<a id="rwm_check_successful_retrieval_active_application_ids"></a>
+<a id="rdkwindowmanager_get_active_application_ids"></a>
 ### TestCase Name
-RWM_Check_Successful_Retrieval_Active_Application_IDs
+RDKWindowManager_Get_Active_Application_IDs
 
 ### TestCase ID
 RWM_13
@@ -372,9 +374,9 @@ Verify the successful retrieval of active application IDs when there are multipl
 
 ---
 
-<a id="rwm_removekeyintercept_valid_params"></a>
+<a id="rdkwindowmanager_removekeyintercept_valid_params"></a>
 ### TestCase Name
-RWM_RemoveKeyIntercept_Valid_Params
+RDKWindowManager_RemoveKeyIntercept_Valid_Params
 
 ### TestCase ID
 RWM_14
@@ -391,9 +393,9 @@ Pass a valid intercept parameter and ensure the key intercept is successfully re
 
 ---
 
-<a id="rwm_removekeyintercept_invalid_params"></a>
+<a id="rdkwindowmanager_removekeyintercept_invalid_params"></a>
 ### TestCase Name
-RWM_RemoveKeyIntercept_Invalid_Params
+RDKWindowManager_RemoveKeyIntercept_Invalid_Params
 
 ### TestCase ID
 RWM_15
@@ -409,9 +411,9 @@ Verify removeKeyIntercept with an invalid intercept value
 
 ---
 
-<a id="rwm_removekeyintercept_empty_params"></a>
+<a id="rdkwindowmanager_removekeyintercept_empty_params"></a>
 ### TestCase Name
-RWM_RemoveKeyIntercept_Empty_Params
+RDKWindowManager_RemoveKeyIntercept_Empty_Params
 
 ### TestCase ID
 RWM_16
@@ -427,9 +429,9 @@ Pass a null or empty intercept parameter and ensure the API handles the input gr
 
 ---
 
-<a id="rwm_check_reset_inactivity_time"></a>
+<a id="rdkwindowmanager_reset_inactivity_time"></a>
 ### TestCase Name
-RWM_Check_Reset_Inactivity_Time
+RDKWindowManager_Reset_Inactivity_Time
 
 ### TestCase ID
 RWM_17
@@ -445,9 +447,9 @@ Call the resetInactivityTime method and ensure it executes successfully, resetti
 
 ---
 
-<a id="rwm_check_setinactivityinterval_valid_positive_value"></a>
+<a id="rdkwindowmanager_setinactivityinterval_valid_positive_value"></a>
 ### TestCase Name
-RWM_Check_SetInactivityInterval_Valid_Positive_Value
+RDKWindowManager_SetInactivityInterval_Valid_Positive_Value
 
 ### TestCase ID
 RWM_18
@@ -463,9 +465,9 @@ Call the setInactivityInterval method with a valid positive integer value for th
 
 ---
 
-<a id="rwm_setinactivityinterval_negativevalue"></a>
+<a id="rdkwindowmanager_setinactivityinterval_negativevalue"></a>
 ### TestCase Name
-RWM_SetInactivityInterval_NegativeValue
+RDKWindowManager_SetInactivityInterval_NegativeValue
 
 ### TestCase ID
 RWM_19
@@ -481,9 +483,9 @@ Call the setInactivityInterval method with a negative integer value for the inte
 
 ---
 
-<a id="rwm_check_setfocus_valid_client"></a>
+<a id="rdkwindowmanager_setfocus_valid_client"></a>
 ### TestCase Name
-RWM_Check_SetFocus_Valid_Client
+RDKWindowManager_SetFocus_Valid_Client
 
 ### TestCase ID
 RWM_20
@@ -500,9 +502,9 @@ Pass a valid client to the setFocus method and ensure the focus is successfully 
 
 ---
 
-<a id="rwm_setfocus_invalid_client"></a>
+<a id="rdkwindowmanager_setfocus_invalid_client"></a>
 ### TestCase Name
-RWM_SetFocus_Invalid_Client
+RDKWindowManager_SetFocus_Invalid_Client
 
 ### TestCase ID
 RWM_21
@@ -518,9 +520,9 @@ Pass an invalid or non-existent client to the setFocus method and ensure the met
 
 ---
 
-<a id="rwm_setfocus_empty_client"></a>
+<a id="rdkwindowmanager_setfocus_empty_client"></a>
 ### TestCase Name
-RWM_SetFocus_Empty_Client
+RDKWindowManager_SetFocus_Empty_Client
 
 ### TestCase ID
 RWM_22
@@ -536,9 +538,9 @@ Pass an empty string as the client to the setFocus method and ensure the method 
 
 ---
 
-<a id="rwm_setvisible_valid_client_true"></a>
+<a id="rdkwindowmanager_setvisible_valid_client_true"></a>
 ### TestCase Name
-RWM_SetVisible_Valid_Client_True
+RDKWindowManager_SetVisible_Valid_Client_True
 
 ### TestCase ID
 RWM_23
@@ -555,9 +557,9 @@ Test the setVisible method by passing a valid client and setting visible to true
 
 ---
 
-<a id="rwm_setvisible_valid_client_false"></a>
+<a id="rdkwindowmanager_setvisible_valid_client_false"></a>
 ### TestCase Name
-RWM_SetVisible_Valid_Client_False
+RDKWindowManager_SetVisible_Valid_Client_False
 
 ### TestCase ID
 RWM_24
@@ -574,9 +576,9 @@ Test the setVisible method by passing a valid client and setting visible to fals
 
 ---
 
-<a id="rwm_setvisible_invalid_client"></a>
+<a id="rdkwindowmanager_setvisible_invalid_client"></a>
 ### TestCase Name
-RWM_SetVisible_Invalid_Client
+RDKWindowManager_SetVisible_Invalid_Client
 
 ### TestCase ID
 RWM_25
@@ -592,9 +594,9 @@ Test the setVisible method by passing an invalid client and setting visible to t
 
 ---
 
-<a id="rwm_renderready_valid_clientid"></a>
+<a id="rdkwindowmanager_renderready_valid_clientid"></a>
 ### TestCase Name
-RWM_RenderReady_Valid_ClientId
+RDKWindowManager_RenderReady_Valid_ClientId
 
 ### TestCase ID
 RWM_26
@@ -611,9 +613,9 @@ Call the renderReady method with a valid clientId of an application that has ren
 
 ---
 
-<a id="rwm_check_renderready_invalid_clientid"></a>
+<a id="rdkwindowmanager_renderready_invalid_clientid"></a>
 ### TestCase Name
-RWM_Check_RenderReady_Invalid_ClientId
+RDKWindowManager_RenderReady_Invalid_ClientId
 
 ### TestCase ID
 RWM_27
@@ -629,9 +631,9 @@ Call the renderReady method with an invalid or non-existent clientId. Ensure the
 
 ---
 
-<a id="rwm_check_renderready_empty_clientid"></a>
+<a id="rdkwindowmanager_renderready_empty_clientid"></a>
 ### TestCase Name
-RWM_Check_RenderReady_Empty_ClientId
+RDKWindowManager_RenderReady_Empty_ClientId
 
 ### TestCase ID
 RWM_28
@@ -647,9 +649,9 @@ Call the renderReady method with a null or empty string as the clientId. Ensure 
 
 ---
 
-<a id="rwm_enabledisplayrender_valid_clientid_enable_true"></a>
+<a id="rdkwindowmanager_enabledisplayrender_valid_clientid_enable_true"></a>
 ### TestCase Name
-RWM_EnableDisplayRender_Valid_ClientId_Enable_True
+RDKWindowManager_EnableDisplayRender_Valid_ClientId_Enable_True
 
 ### TestCase ID
 RWM_29
@@ -666,9 +668,9 @@ Call the enableDisplayRender method with a valid clientId and set enable to true
 
 ---
 
-<a id="rwm_check_enabledisplayrender_valid_clientid_enable_false"></a>
+<a id="rdkwindowmanager_enabledisplayrender_valid_clientid_enable_false"></a>
 ### TestCase Name
-RWM_Check_EnableDisplayRender_Valid_ClientId_Enable_False
+RDKWindowManager_EnableDisplayRender_Valid_ClientId_Enable_False
 
 ### TestCase ID
 RWM_30
@@ -685,9 +687,9 @@ Call the enableDisplayRender method with a valid clientId and set enable to fals
 
 ---
 
-<a id="rwm_enabledisplayrender_invalid_clientid"></a>
+<a id="rdkwindowmanager_enabledisplayrender_invalid_clientid"></a>
 ### TestCase Name
-RWM_EnableDisplayRender_Invalid_ClientId
+RDKWindowManager_EnableDisplayRender_Invalid_ClientId
 
 ### TestCase ID
 RWM_31
@@ -703,9 +705,9 @@ Call the enableDisplayRender method with an invalid or non-existent clientId and
 
 ---
 
-<a id="rwm_check_setzorder_valid_clientid_zorder"></a>
+<a id="rdkwindowmanager_setzorder_valid_clientid_zorder"></a>
 ### TestCase Name
-RWM_Check_SetZOrder_Valid_ClientId_ZOrder
+RDKWindowManager_SetZOrder_Valid_ClientId_ZOrder
 
 ### TestCase ID
 RWM_32
@@ -722,9 +724,9 @@ Test the setZOrder method by providing a valid clientId and a valid zOrder value
 
 ---
 
-<a id="rwm_setzorder_invalid_clientid"></a>
+<a id="rdkwindowmanager_setzorder_invalid_clientid"></a>
 ### TestCase Name
-RWM_SetZOrder_Invalid_ClientId
+RDKWindowManager_SetZOrder_Invalid_ClientId
 
 ### TestCase ID
 RWM_33
@@ -740,9 +742,9 @@ Test the setZOrder method by providing an invalid clientId and a valid zOrder va
 
 ---
 
-<a id="rwm_setzorder_validclientid_invalidzorder"></a>
+<a id="rdkwindowmanager_setzorder_validclientid_invalidzorder"></a>
 ### TestCase Name
-RWM_SetZOrder_ValidClientId_InvalidZOrder
+RDKWindowManager_SetZOrder_ValidClientId_InvalidZOrder
 
 ### TestCase ID
 RWM_34
@@ -759,9 +761,9 @@ Test the setZOrder method by providing a valid clientId and an invalid zOrder va
 
 ---
 
-<a id="rwm_check_getzorder_valid_clientid"></a>
+<a id="rdkwindowmanager_getzorder_valid_clientid"></a>
 ### TestCase Name
-RWM_Check_GetZOrder_Valid_ClientId
+RDKWindowManager_GetZOrder_Valid_ClientId
 
 ### TestCase ID
 RWM_35
@@ -778,9 +780,9 @@ Pass a valid clientId to the getZOrder method and ensure it returns the correct 
 
 ---
 
-<a id="rwm_check_getzorder_invalid_clientid"></a>
+<a id="rdkwindowmanager_getzorder_invalid_clientid"></a>
 ### TestCase Name
-RWM_Check_GetZOrder_Invalid_ClientId
+RDKWindowManager_GetZOrder_Invalid_ClientId
 
 ### TestCase ID
 RWM_36
@@ -796,9 +798,9 @@ Pass an invalid or non-existent clientId to the getZOrder method and ensure it r
 
 ---
 
-<a id="rwm_getzorder_empty_clientid"></a>
+<a id="rdkwindowmanager_getzorder_empty_clientid"></a>
 ### TestCase Name
-RWM_GetZOrder_Empty_ClientId
+RDKWindowManager_GetZOrder_Empty_ClientId
 
 ### TestCase ID
 RWM_37
@@ -814,9 +816,9 @@ Verify getZOrder with a null or empty clientId
 
 ---
 
-<a id="rwm_check_on_user_inactivity_event"></a>
+<a id="rdkwindowmanager_on_user_inactivity_event"></a>
 ### TestCase Name
-RWM_Check_On_User_Inactivity_Event
+RDKWindowManager_On_User_Inactivity_Event
 
 ### TestCase ID
 RWM_L2_01
@@ -850,9 +852,9 @@ Test the user inactivity reporting by enabling it, setting a short inactivity in
 
 ---
 
-<a id="rwm_check_user_active"></a>
+<a id="rdkwindowmanager_user_active"></a>
 ### TestCase Name
-RWM_Check_User_Active
+RDKWindowManager_User_Active
 
 ### TestCase ID
 RWM_L2_02
@@ -888,9 +890,9 @@ Check device returns to active mode after user input via generateKey when it was
 
 ---
 
-<a id="rwm_reset_inactivity_interval"></a>
+<a id="rdkwindowmanager_reset_inactivity_interval"></a>
 ### TestCase Name
-RWM_Reset_Inactivity_Interval
+RDKWindowManager_Reset_Inactivity_Interval
 
 ### TestCase ID
 RWM_L2_03
@@ -926,9 +928,9 @@ Test the resetInactivityTime method to ensure it resets the inactivity timer cor
 
 ---
 
-<a id="rwm_check_on_user_inactivity_event_disabled_reporting"></a>
+<a id="rdkwindowmanager_on_user_inactivity_event_disabled_reporting"></a>
 ### TestCase Name
-RWM_Check_On_User_Inactivity_Event_Disabled_Reporting
+RDKWindowManager_On_User_Inactivity_Event_Disabled_Reporting
 
 ### TestCase ID
 RWM_L2_04
@@ -951,6 +953,48 @@ Checks whether the user inactivity reporting event is triggered when inactivity 
 | 1 | Set inactivity interval | Invoke setInactivityInterval on org.rdk.RDKWindowManager with interval: 1<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.setInactivityInterval", "params": {"interval": 1}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 | 2 | Check on UserInactivity event NoEvent | Listen for event Event_On_User_Inactivity | Verify that no event is triggered during this operation  |
 
+---
+
+<a id="rdkwindowmanager_on_screenshot_complete_event"></a>
+### TestCase Name
+RDKWindowManager_On_Screenshot_Complete_Event
+
+### TestCase ID
+RWM_L2_05
+
+### TestCase Objective
+Checks whether the screenshot complete event is triggered when a screenshot is captured
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Capture screenshot | Invoke getScreenshot on org.rdk.RDKWindowManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.getScreenshot"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 2 | Check on screenshot complete event | Listen for `Event_On_Screenshot_Complete` event and wait up to 120 second(s) | Ensure the `onScreenshotComplete` event is received, confirming the screenshot was captured successfully |
+
+---
+
+<a id="rdkwindowmanager_start_stop_vnc_server"></a>
+### TestCase Name
+RDKWindowManager_Start_Stop_VNC_Server
+
+### TestCase ID
+RWM_L2_06
+
+### TestCase Objective
+Checks whether the VNC server starts and stops correctly
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Start VNC server | Invoke startVncServer on org.rdk.RDKWindowManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.startVncServer"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 2 | VNC server start log validation | Check device wpeframework log for the entry `"VNC server started successfully"` (wait 3 second(s) before checking) | Verify that the wpeframework log contains the entry `"VNC server started successfully"`, confirming the VNC server has started |
+| 3 | Check VNC service availability | Check that the VNC service is reachable on port `5900` via `curl -v <DEVICE_IP>:5900` | Verify that the VNC service is reachable on port `5900` (connection response shows `"Connected"`) |
+| 4 | Stop VNC server | Invoke stopVncServer on org.rdk.RDKWindowManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.RDKWindowManager.1.stopVncServer"}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 5 | VNC server stop log validation | Check device wpeframework log for the entry `"VNC server stopped successfully"` (wait 3 second(s) before checking) | Verify that the wpeframework log contains the entry `"VNC server stopped successfully"`, confirming the VNC server has stopped |
+| 6 | Check VNC service unavailability | Check that the VNC service is unreachable on port `5900` via `curl -v <DEVICE_IP>:5900` | Verify that the VNC service is unreachable on port `5900` (connection response shows `"Failed to connect"`) |
+
 ## Plugin Post-conditions
 
 
@@ -967,8 +1011,8 @@ Checks whether the user inactivity reporting event is triggered when inactivity 
 | --- | --- | --- | --- |
 | 1 | Check loaded apps | Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
 | 2 | Terminate app valid param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate app on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 3 | Check package info | Get packages from PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
-| 4 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on PackageManagerRDKEMS<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PackageManagerRDKEMS.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 3 | Check package info | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
+| 4 | Uninstall existing package | *(Conditional statement executed only if package/app is currently present)*<br>Uninstall on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
 
 ## Test Attributes
 

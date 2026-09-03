@@ -17,23 +17,19 @@
 # limitations under the License.
 ##########################################################################
 #Tool chain script path
+#Only mention the script name instead of full path ex: oecore....sh
 SDK_INSTALL_SCRIPT=
 
 #Where to install the SDK
+#Mention the path from fileStore
+#If you want to install the SDK in fileStore/vtsPackageUtilities
+#Mention SDK_INSTALL_PATH=vtsPackageUtilities/RDK9_SDK/
 SDK_INSTALL_PATH=
 
-#HAL Headers Config
-SRC_DEEPSLEEP_HAL_HEADER_REVISION=1.0.5
-SRC_POWERMGR_HAL_HEADER_REVISION=1.0.4
-SRC_DS_HAL_HEADER_REVISION=6.0.1
-SRC_HDMICEC_HAL_HEADER_REVISION=1.4.0
-SRC_RMF_AUDIO_CAPTURE_HAL_HEADER_REVISION=1.0.6
-
-DEEPSLEEP_HAL_TEST_VERSION=1.4.3
-POWER_HAL_TEST_VERSION=1.5.4
-DS_HAL_TEST_VERSION=6.0.1
-HDMICEC_HAL_TEST_VERSION=1.6.1
-RMF_AUDIO_CAPTURE_HAL_TEST_VERSION=1.5.4
+#HPK release version (valid tag in rdk-hpk-documentation).
+#The HAL Testing versions for each module are derived automatically from the
+#RELEASE.md of this tag by vts_compile.sh.
+HPK_VERSION=3.1.0
 
 #VTS Skeleton lib versions
 DS_HAL_VTS_LIB=libdshal
@@ -44,3 +40,36 @@ RMF_HAL_VTS_LIB=""
 
 UT_CORE_PROJECT_VERSION=4.7.3
 REUSE_UT_CORE=true
+
+##########################################################################
+# Per-module HAL Testing version overrides (optional).
+#
+# By default, vts_compile.sh derives each module's HAL Testing version
+# automatically from the HPK_VERSION tag above (via RELEASE.md).
+#
+# If you need to pin a specific module to a different branch, tag, or
+# commit — for example to test a pre-release fix — uncomment the
+# relevant line below and set it to the desired git ref.
+#
+# An override here takes precedence over whatever HPK_VERSION provides.
+# Leave a line commented out (or empty) to continue using the HPK-derived
+# version for that module.
+##########################################################################
+
+# Device type: SOURCE or SINK — controls which device settings profile YAMLs
+# are bundled into the VTS package during compilation.
+DEVICE_TYPE=SOURCE
+
+#DS_HAL_TEST_VERSION_OVERRIDE=
+#DEEPSLEEP_HAL_TEST_VERSION_OVERRIDE=
+#POWER_HAL_TEST_VERSION_OVERRIDE=
+#HDMICEC_HAL_TEST_VERSION_OVERRIDE=
+#RMF_AUDIO_CAPTURE_HAL_TEST_VERSION_OVERRIDE=
+# HAL Interface (header) version overrides (optional).
+# Same rules as above: uncomment and set to pin a module's HAL header to a
+# specific git ref, overriding what HPK_VERSION provides.
+#DS_HAL_HEADER_VERSION_OVERRIDE=
+#DEEPSLEEP_HAL_HEADER_VERSION_OVERRIDE=
+#POWER_HAL_HEADER_VERSION_OVERRIDE=
+#HDMICEC_HAL_HEADER_VERSION_OVERRIDE=
+#RMF_AUDIO_CAPTURE_HAL_HEADER_VERSION_OVERRIDE=

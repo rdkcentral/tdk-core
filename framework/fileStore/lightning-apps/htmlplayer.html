@@ -53,7 +53,7 @@
         }
 
         .disp>div {
-            flex: 1 1 30%;
+            flex: 1 1 22%;
             text-align: center;
             margin: 0.25rem 0;
         }
@@ -72,6 +72,12 @@
         .disp #vidTime {
             color: #7CFC00;
             /* default green for time */
+            font-size: 0.95rem;
+        }
+
+        /* ---------- FPS Display ---------- */
+        .disp #fpsDisplay {
+            color: #00BFFF;
             font-size: 0.95rem;
         }
 
@@ -121,6 +127,8 @@
 <!-- Starter function to fetch the url value from PersistentStore, format it & replace the current browser URL -->
 <script>
 function getValuePS(){
+  // Mid-successive-playback: this page was loaded as one of the queued URLs, don't navigate away
+  if (sessionStorage.getItem('successiveURLs')) return;
   if (sessionStorage.getItem('loadURL')) return;
 
   const WS_URL=WEBSOCKET_URL;
@@ -134,20 +142,48 @@ function getValuePS(){
     return s;
   };
 
-  const replaceUrl=(raw)=>{
-    const html_url=formatUrl(raw);
-    console.log('[HTML_getValuePS] The formatted URL obtained from PersistentStore: '+ html_url);
-    if(!html_url) return;
-    sessionStorage.setItem('loadURL','1');
-    console.log('[HTML_getValuePS] Loading the new URL obtained from PersistentStore');
-    window.location.replace(html_url);
+  const handleResponse=(raw)=>{
+    if(!raw) return;
+    const value=String(raw).trim();
+
+    // Check if the value is a JSON array (list) or a single URL
+    let isList=false;
+    let urls=null;
+    try{
+      const parsed=JSON.parse(value);
+      if(Array.isArray(parsed)){
+        isList=true;
+        urls=parsed.map(u=>formatUrl(u)).filter(u=>/^https?:\/\//i.test(u));
+      }
+    }catch(_){}
+
+    console.log('[HTML_getValuePS] Value is a '+(isList?'list of '+urls.length+' URL(s)':'single URL'));
+
+    if(isList){
+      if(!urls || urls.length === 0){
+        console.log('[HTML_getValuePS] Parsed URL list is empty/invalid; ignoring successive playback');
+        return;
+      }
+      sessionStorage.setItem('successiveURLs', JSON.stringify(urls));
+      sessionStorage.setItem('successiveIndex', '0');
+      sessionStorage.setItem('successiveResults', JSON.stringify([]));
+      sessionStorage.setItem('loadURL', '1');
+      window.location.replace(urls[0]);
+    } else {
+      const html_url=formatUrl(value);
+      console.log('[HTML_getValuePS] The formatted URL obtained from PersistentStore: '+html_url);
+      if(!html_url) return;
+      sessionStorage.setItem('loadURL','1');
+      console.log('[HTML_getValuePS] Loading the new URL obtained from PersistentStore');
+      window.location.replace(html_url);
+    }
   };
 
   try{
     const ws=new WebSocket(WS_URL);
     const to=setTimeout(()=>{ try{ws.close()}catch{} },WEBSOCKET_TIMEOUT);
     ws.onopen   =()=> ws.send(JSON.stringify(REQ));
-    ws.onmessage=(e)=>{ clearTimeout(to); try{ replaceUrl((JSON.parse(e.data)?.result?.value)||''); } finally{ try{ws.close()}catch{} } };
+    ws.onmessage=(e)=>{ clearTimeout(to); try{ handleResponse((JSON.parse(e.data)?.result?.value)||''); } finally{ try{ws.close()}catch{} } };
     ws.onerror  =()=>{ try{ws.close()}catch{} };
   }catch{}
 }
@@ -165,6 +201,7 @@ getValuePS();
             </div>
             <div id="eventStatus"></div>
             <div id="vidTime"></div>
+            <div id="fpsDisplay">FPS: 0.00</div>
         </div>
 
         <!-- Video Player -->
@@ -191,6 +228,7 @@ getValuePS();
         const videoEl = document.getElementById('vid');
         const eventStatus = document.getElementById('eventStatus');
         const vidTime = document.getElementById('vidTime');
+        const fpsDisplay = document.getElementById('fpsDisplay'); /* FPS */
 
         let message = "";
         let message1 = "";
@@ -233,6 +271,19 @@ getValuePS();
         let checkInterval = 3000;
         const validationState = { initialPosCheckDone: false };
 
+        /* ------------------------
+           FPS state
+           ------------------------ */
+        let fpsList = [];
+        let prevFrameCount = 0;
+        let prevTimeStamp = 0;
+        let fpsInterval = null;
+        let enable_fps_flag = 1;
+        let expectedFPS = DEFAULT_EXPECTED_FPS;
+        let expectedFPSProvided = false;
+        let droppedFramesTotal = 0;
+        let prevDroppedCount = 0;
+
         inputs.forEach(item => {
             if (item.split("=")[0] == "drmconfigs") {
                 var drm_configs = GetURLParameter("drmconfigs")
@@ -262,6 +313,13 @@ getValuePS();
                 if (hlslib == "yes" || hlslib == "YES")
                     usehlslib = true;
             }
+            else if (item.includes("collectfps")) {
+                enable_fps_flag = 1;
+            }
+            else if (item.includes("expectedfps")) {
+                expectedFPS = parseInt(item.split('(')[1].split(')')[0]);
+                expectedFPSProvided = true;
+            }
         });
 
         // To display Events & Video position in UI
@@ -273,12 +331,110 @@ getValuePS();
         }
 
         /* ------------------------
+           FPS Monitoring
+           ------------------------ */
+        function resetFPSMonitoring() {
+            prevFrameCount = 0;
+            prevTimeStamp = 0;
+            prevDroppedCount = 0;
+            droppedFramesTotal = 0;
+            fpsList = [];
+            if (fpsDisplay) {
+                fpsDisplay.textContent = "FPS: 0.00";
+            }
+        }
+
+        function startFPSMonitoring() {
+            if (typeof videoEl.getVideoPlaybackQuality !== "function") {
+                if (fpsDisplay) fpsDisplay.textContent = "FPS: N/A";
+                logMsg("FPS API not supported: getVideoPlaybackQuality()");
+                return;
+            }
+
+            if (fpsInterval) {
+                clearInterval(fpsInterval);
+                fpsInterval = null;
+            }
+
+            if (initFlag === 0) fpsList = [];
+            try {
+                const quality = videoEl.getVideoPlaybackQuality();
+                prevFrameCount = typeof quality.totalVideoFrames === "number" ? quality.totalVideoFrames : 0;
+                prevDroppedCount = typeof quality.droppedVideoFrames === "number" ? quality.droppedVideoFrames : 0;
+                prevTimeStamp = performance.now();
+            } catch (e) {
+                prevFrameCount = 0;
+                prevDroppedCount = 0;
+                prevTimeStamp = performance.now();
+                logMsg("FPS baseline init error: " + e);
+            }
+
+            fpsInterval = setInterval(() => {
+                try {
+                    if (videoEl.paused || videoEl.ended) return;
+
+                    const quality = videoEl.getVideoPlaybackQuality();
+                    const now = performance.now();
+                    const totalFrames = typeof quality.totalVideoFrames === "number" ? quality.totalVideoFrames : 0;
+                    const droppedFrames = typeof quality.droppedVideoFrames === "number" ? quality.droppedVideoFrames : 0;
+
+                    // Accumulate dropped frames across all playback states
+                    const deltaDropped = droppedFrames - prevDroppedCount;
+                    if (deltaDropped > 0) droppedFramesTotal += deltaDropped;
+                    prevDroppedCount = droppedFrames;
+
+                    // Skip FPS sample and reset baseline during seek or non-1x playback
+                    if (videoEl.seeking || videoEl.playbackRate !== 1) {
+                        prevFrameCount = totalFrames;
+                        prevTimeStamp = now;
+                        if (fpsDisplay) fpsDisplay.textContent = "FPS: --";
+                        return;
+                    }
+
+                    const deltaFrames = totalFrames - prevFrameCount;
+                    const deltaTimeSec = (now - prevTimeStamp) / 1000;
+
+                    let fps = 0;
+                    if (deltaTimeSec > 0) {
+                        fps = deltaFrames / deltaTimeSec;
+                    }
+
+                    prevFrameCount = totalFrames;
+                    prevTimeStamp = now;
+
+                    if (fps < 0) {
+                        logMsg("Ignoring negative FPS value: " + fps.toFixed(2));
+                        return;
+                    }
+                    fpsList.push(fps);
+
+                    const fpsText = "FPS: " + fps.toFixed(2);
+                    if (fpsDisplay) {
+                        fpsDisplay.textContent = fpsText;
+                    }
+
+                    logMsg("Current FPS: " + fps.toFixed(2) +
+                        ", Dropped Frames: " + droppedFrames);
+                } catch (e) {
+                    logMsg("FPS calculation error: " + e);
+                }
+            }, 1000);
+        }
+
+        function stopFPSMonitoring() {
+            if (fpsInterval) {
+                clearInterval(fpsInterval);
+                fpsInterval = null;
+            }
+        }
+
+        /* ------------------------
            LOGGING
            ------------------------ */
         function logMsg(msg) {
             const logging = GetURLParameter("logging");
             const inputs1 = window.location.search.substring(1).split("&");
-            const player = GetURLParameter("player");
+            const player = GetURLParameter("player") || "HTML";
             const options1 = [];
             inputs1.forEach(item => {
                 if (item.split("=")[0] === "options") {
@@ -288,9 +444,7 @@ getValuePS();
             const log_msg = "[ " + dispTime() + " ] [" + player + "] " + msg;
             console.log(log_msg);
             if (logging === "REST_API") {
-                if (msg.includes("TEST RESULT")) {
-                    pushAppLogs(log_msg);
-                } else if (msg.includes("Video PlayBack Failed")) {
+                if (msg.includes("TEST RESULT") || msg.includes("PLAYBACK RESULT") || msg.includes("Video PlayBack Failed")) {
                     pushAppLogs(log_msg);
                 } else {
                     captureAppLogs(log_msg);
@@ -347,7 +501,16 @@ getValuePS();
 
         function load(autoplay = true) {
             const player = (GetURLParameter("player") || "HTMLPlayer");
-            logMsg("URL Info: " + videoURL)
+            const _succURLs = sessionStorage.getItem('successiveURLs');
+            if (_succURLs) {
+                const _allURLs = JSON.parse(_succURLs);
+                const _idx = parseInt(sessionStorage.getItem('successiveIndex') || '0');
+                const _ordinals = ["first","second","third","fourth","fifth","sixth","seventh","eighth","ninth","tenth"];
+                const _label = _idx < _ordinals.length ? _ordinals[_idx] : (_idx + 1) + "th";
+                logMsg("Loading the " + _label + " stream URL (stream " + (_idx + 1) + " of " + _allURLs.length + "): " + videoURL);
+            } else {
+                logMsg("URL Info: " + videoURL);
+            }
             logMsg("Selected Player : " + player);
 
             // --- Cleanup any existing players ---
@@ -608,6 +771,7 @@ getValuePS();
             const info = "[Event]: Video Player Playing";
             dispUIMessage(info);
             logMsg(info);
+            startFPSMonitoring();
             if (initFlag === 0) {
                 logMsg("******************* VIDEO STARTED PLAYING !!! *******************");
                 logMsg("VIDEO LOOP: " + videoEl.loop)
@@ -626,6 +790,7 @@ getValuePS();
             const info = "[Event]: Video Player Paused";
             dispUIMessage(info);
             checkAndLogEvents("pause", info);
+            stopFPSMonitoring();
             // Enable video progress pos validation with pos diff 0
             if (pos_zero_index_flag) {
                 pos_zero_index_flag = 0
@@ -638,6 +803,7 @@ getValuePS();
             const info = "[Event]: Video Player Ended";
             dispUIMessage(info);
             logMsg(info);
+            stopFPSMonitoring();
         });
 
         videoEl.addEventListener('seeking', (e) => {
@@ -688,6 +854,7 @@ getValuePS();
         /* error */
         videoEl.addEventListener('error', (e) => {
             errorFlag = 1;
+            stopFPSMonitoring();
             const err = videoEl.error;
             let errorMsg = "[ERROR]: ";
             if (!err) errorMsg += "Unknown error";
@@ -1021,6 +1188,7 @@ getValuePS();
                         updatePrevPosValidationResult()
                         logMsg("**************** Going to close ****************")
                         clearInterval(progressLogger);
+                        stopFPSMonitoring();
                         closePlayer()
                     }, actionInterval);
                 }
@@ -1089,6 +1257,7 @@ getValuePS();
                     updatePrevPosValidationResult()
                     logMsg("**************** Going to close ****************")
                     clearInterval(progressLogger);
+                    stopFPSMonitoring();
                     closePlayer()
                 }, (actionInterval + 10000));
             }
@@ -1116,21 +1285,94 @@ getValuePS();
 
         function dispTestResult() {
             clearInterval(progressLogger);
-            logMsg("**************** TEST STATUS ****************");
-            logMsg("OVERALL VIDEO PLAYBACK ERROR EVENT STATUS : " + (errorFlag ? "TRUE" : "FALSE"));
-            logMsg("OVERALL VIDEO PROGRESS POSITION VALIDATION STATUS : " + (pos_val_result.includes("FAILURE") ? "FAILURE" : "SUCCESS"));
-            logMsg("OVERALL VIDEO OPERATIONS EVENTS VALIDATION STATUS : " + (eventFlowFlag ? "SUCCESS" : "FAILURE"));
-            if (eventFlowFlag === 1 && errorFlag === 0 && !pos_val_result.includes("FAILURE")) {
-                logMsg("TEST RESULT: SUCCESS");
+            stopFPSMonitoring();
+            const _storedForLabel = sessionStorage.getItem('successiveURLs');
+            const _streamNum = _storedForLabel ? parseInt(sessionStorage.getItem('successiveIndex') || '0') + 1 : null;
+            const _streamPrefix = _streamNum ? "STREAM " + _streamNum + " " : "";
+            // Use "PLAYBACK RESULT" for per-stream labels to avoid triggering Python's "TEST RESULT" stop condition prematurely
+            const _resultLabel = _streamNum ? "STREAM " + _streamNum + " PLAYBACK RESULT" : "TEST RESULT";
+            let fpsCheckStatus = "SUCCESS";
+            if (fpsList.length > 0) {
+                const roundedFPS = Math.round(fpsList.reduce((a, b) => a + b, 0) / fpsList.length);
+                // If expectedfps(...) is passed in URL options, treat it as the final minimum FPS.
+                const minFPS = expectedFPSProvided ? expectedFPS : (expectedFPS - FPS_THRESHOLD);
+                const fpsComparison = roundedFPS >= minFPS ? ">=" : "<";
+                logMsg(_streamPrefix + "AVERAGE FPS OBTAINED : " + roundedFPS + " " + fpsComparison + " " + minFPS);
+                if (roundedFPS < minFPS) {
+                    fpsCheckStatus = "FAILURE";
+                }
             } else {
-                logMsg("TEST RESULT: FAILURE");
+                fpsCheckStatus = "FAILURE";
+                logMsg("Failure Reason: No FPS data collected");
+            }
+            const droppedFramesStatus = droppedFramesTotal <= DROPPED_FRAMES_THRESHOLD ? "SUCCESS" : "FAILURE";
+            logMsg(_streamPrefix + "TOTAL DROPPED FRAMES : " + droppedFramesTotal);
+            if (droppedFramesStatus === "FAILURE") {
+                fpsCheckStatus = "FAILURE";
+                logMsg("Failure Reason: Dropped frames count (" + droppedFramesTotal + ") exceeded the threshold of " + DROPPED_FRAMES_THRESHOLD);
+            }
+            logMsg(_streamPrefix + "OVERALL FPS VALIDATION STATUS : " + fpsCheckStatus);
+            logMsg(_streamPrefix + "OVERALL DROPPED FRAMES VALIDATION STATUS : " + droppedFramesStatus);
+            logMsg(_streamPrefix + "OVERALL VIDEO PLAYBACK ERROR EVENT STATUS : " + (errorFlag ? "FAILURE" : "SUCCESS"));
+            logMsg(_streamPrefix + "OVERALL VIDEO PROGRESS POSITION VALIDATION STATUS : " + (pos_val_result.includes("FAILURE") ? "FAILURE" : "SUCCESS"));
+            logMsg(_streamPrefix + "OVERALL VIDEO OPERATIONS EVENTS VALIDATION STATUS : " + (eventFlowFlag ? "SUCCESS" : "FAILURE"));
+            if (eventFlowFlag === 1 && errorFlag === 0 && !pos_val_result.includes("FAILURE") && fpsCheckStatus === "SUCCESS") {
+                logMsg(_resultLabel + " : SUCCESS");
+            } else {
+                logMsg(_resultLabel + " : FAILURE");
+            }
+
+        // Successive playback: record per-URL result, then navigate to next URL or report combined result
+        const storedURLs = sessionStorage.getItem('successiveURLs');
+        if (storedURLs) {
+            const urls = JSON.parse(storedURLs);
+            const index = parseInt(sessionStorage.getItem('successiveIndex') || '0');
+            const results = JSON.parse(sessionStorage.getItem('successiveResults') || '[]');
+
+            const stepResult = (eventFlowFlag === 1 && errorFlag === 0 && !pos_val_result.includes("FAILURE") && fpsCheckStatus === "SUCCESS") ? "SUCCESS" : "FAILURE";
+            const reasons = [];
+            if (fpsCheckStatus === "FAILURE") reasons.push("FPS check failed");
+            if (droppedFramesStatus === "FAILURE") reasons.push("Dropped frames exceeded threshold");
+            if (errorFlag) reasons.push("Video error event occurred");
+            if (pos_val_result.includes("FAILURE")) reasons.push("Video progress position validation failed");
+            if (!eventFlowFlag) reasons.push("Video operations event flow failed");
+
+            results.push({ index, url: urls[index], status: stepResult, reasons });
+            sessionStorage.setItem('successiveResults', JSON.stringify(results));
+
+            const nextIndex = index + 1;
+            if (nextIndex < urls.length) {
+                sessionStorage.setItem('successiveIndex', String(nextIndex));
+                // flush any buffered logs before navigating so they are not lost
+                if (message.length > 0) { sendLog(message); message = ""; }
+                setTimeout(() => window.location.replace(urls[nextIndex]), 1000);
+            } else {
+                // All URLs processed — log combined result
+                logMsg("**************** SUCCESSIVE PLAYBACK RESULT ****************");
+                let combinedStatus = "SUCCESS";
+                results.forEach((r) => {
+                    let displayUrl = r.url;
+                    try {
+                        const streamParam = new URL(r.url).searchParams.get('url');
+                        if (streamParam) displayUrl = decodeURIComponent(streamParam).replace(/:and:/g, '&').replace(/:eq:/g, '=');
+                    } catch(_) {}
+                    const label = "STREAM " + (r.index + 1) + " [" + displayUrl + "]";
+                    if (r.status !== "SUCCESS") {
+                        combinedStatus = "FAILURE";
+                        logMsg(label + " : FAILURE - " + (r.reasons.length ? r.reasons.join(", ") : "Unknown reason"));
+                    } else {
+                        logMsg(label + " : SUCCESS");
+                    }
+                });
+                logMsg("FINAL TEST RESULT: " + combinedStatus);
+                sessionStorage.removeItem('successiveURLs');
+                sessionStorage.removeItem('successiveIndex');
+                sessionStorage.removeItem('successiveResults');
+                sessionStorage.removeItem('loadURL');
             }
         }
+        }
 
-        /* ------------------------
-           COMMUNICATING WITH TM
-           Stores app logs and send them to TM in batches
-           ------------------------ */
         // Method to store the app logs and send them to TM
         function captureAppLogs(msg) {
             if (message.length < 300) {
@@ -1143,11 +1385,10 @@ getValuePS();
 
         // Method to push the app logs
         function pushAppLogs(msg) {
-            if (message.length > 0) {
-                sendLog(message);
-                message = "";
-            }
-            sendLog(msg);
+            // combine with any buffered logs so everything lands in one HTTP call
+            message = message.length > 0 ? message + "\n" + msg : msg;
+            sendLog(message);
+            message = "";
         }
 
         // Method to send logs to TM via REST API
@@ -1179,7 +1420,8 @@ getValuePS();
             load(true);
             window.HTMLPlayer = {
                 load, play, pause, seek, seekfwd, seekbwd, setPlaybackRate, getRate, setVolume, getVolume, mute, unmute,
-                getPosition, getDuration, dispTestResult, updatePrevPosValidationResult
+                getPosition, getDuration, dispTestResult, updatePrevPosValidationResult,
+                startFPSMonitoring, stopFPSMonitoring
             };
             logMsg("HTML player ready. API object: window.HTMLPlayer");
         });

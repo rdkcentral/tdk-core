@@ -17,8 +17,6 @@ RDKV_CERT_AVS_PreinstallManager
    - [PreinstallManager_StartPreInstall_Null_Parameter](#preinstallmanager_startpreinstall_null_parameter)
    - [PreinstallManager_StartPreInstall_CaseSensitive](#preinstallmanager_startpreinstall_casesensitive)
    - [PreinstallManager_GetPreInstallState](#preinstallmanager_getpreinstallstate)
-   - [Preinstall_Check_On_AppInstallationStatus_Event_StartPreInstall_True](#preinstall_check_on_appinstallationstatus_event_startpreinstall_true)
-   - [Preinstall_Check_On_AppInstallationStatus_Event_StartPreInstall_False](#preinstall_check_on_appinstallationstatus_event_startpreinstall_false)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -45,13 +43,13 @@ accessible via JSON-RPC under the callsign `org.rdk.PreinstallManager` (version 
 | 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate DownloadManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.DownloadManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
 | 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of DownloadManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.DownloadManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
-### Plugin Pre-condition 3: Activate_PackageManagerRDKEMS_Plugin
+### Plugin Pre-condition 3: Activate_AppPackageManager_Plugin
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of PackageManagerRDKEMS plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate PackageManagerRDKEMS plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.PackageManagerRDKEMS"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of PackageManagerRDKEMS plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PackageManagerRDKEMS"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+| 1 | Check plugin active status | Check active status of AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppPackageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.AppPackageManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of AppPackageManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.AppPackageManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Plugin Pre-condition 4: Activate_AppManager_Plugin
 
@@ -266,53 +264,6 @@ Check getPreinstallState method behavior
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Check pre-install state transition | Invoke getPreinstallState on org.rdk.PreinstallManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.getPreinstallState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the maintenance status transitions through `NOT_STARTED`, `IN_PROGRESS`, and `COMPLETED` states  |
-
----
-
-<a id="preinstall_check_on_appinstallationstatus_event_startpreinstall_true"></a>
-### TestCase Name
-Preinstall_Check_On_AppInstallationStatus_Event_StartPreInstall_True
-
-### TestCase ID
-PIM_12
-
-### TestCase Objective
-Check onAppInstallationStatus event behavior when startPreinstall is called with true
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | StartPreInstall ForceInstall true | Invoke startPreinstall on org.rdk.PreinstallManager with forceInstall: "true"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.startPreinstall", "params": {"forceInstall": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 2 | Check on AppInstallationStatus event | Listen for `Event_On_AppInstallationStatus` event (wait 60s) | Verify that the event is received and validated successfully |
-
----
-
-<a id="preinstall_check_on_appinstallationstatus_event_startpreinstall_false"></a>
-### TestCase Name
-Preinstall_Check_On_AppInstallationStatus_Event_StartPreInstall_False
-
-### TestCase ID
-PIM_13
-
-### TestCase Objective
-Check onAppInstallationStatus event behavior when startPreinstall is called with false
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Preinstall_Apps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | StartPreInstall ForceInstall true | Start Preinstall on PreinstallManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.startPreinstall", "params": {"forceInstall": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 2 | Check on AppInstallationStatus event | Check On AppInstallationStatus Event | Verify that the event is received and validated successfully |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | StartPreInstall ForceInstall false | Invoke startPreinstall on org.rdk.PreinstallManager with forceInstall: "false"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PreinstallManager.1.startPreinstall", "params": {"forceInstall": false}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 2 | Check on AppInstallationStatus event | Listen for `Event_On_AppInstallationStatus` event (wait 60s) | Verify that the event is received and validated successfully |
 
 ## Plugin Post-conditions
 
