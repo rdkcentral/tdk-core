@@ -73,44 +73,44 @@ if expectedResult in result.upper():
                     if app.get("appId") == app_name and app.get("lifecycleState") == "APP_STATE_ACTIVE":
                         app_instance_id = app.get("appInstanceId", "")
                         break
-            else:
-                tdkTestObj.setResultStatus("FAILURE")
-
-            if app_instance_id:
-                print("appInstanceId of %s is : %s" % (app_name, app_instance_id))
-                print("Setting the z-order of the application to %s" % requested_zorder)
-                tdkTestObj = obj.createTestStep("rdkservice_setValue")
-                tdkTestObj.addParameter("method", "org.rdk.RDKWindowManager.setZOrder")
-                tdkTestObj.addParameter(
-                    "value",
-                    '{"clientId": "%s", "zOrder": %d}' % (app_instance_id, requested_zorder)
-                )
-                tdkTestObj.executeTestCase(expectedResult)
-                if expectedResult in tdkTestObj.getResult():
-                    tdkTestObj.setResultStatus("SUCCESS")
-                    print("Reading back the z-order of the application")
+                if app_instance_id:
+                    print("appInstanceId of %s is : %s" % (app_name, app_instance_id))
+                    print("Setting the z-order of the application to %s" % requested_zorder)
                     tdkTestObj = obj.createTestStep("rdkservice_setValue")
-                    tdkTestObj.addParameter("method", "org.rdk.RDKWindowManager.getZOrder")
-                    tdkTestObj.addParameter("value", '{"clientId": "%s"}' % app_instance_id)
+                    tdkTestObj.addParameter("method", "org.rdk.RDKWindowManager.setZOrder")
+                    tdkTestObj.addParameter(
+                        "value",
+                        '{"clientId": "%s", "zOrder": %d}' % (app_instance_id, requested_zorder)
+                    )
                     tdkTestObj.executeTestCase(expectedResult)
                     if expectedResult in tdkTestObj.getResult():
-                        actual_zorder = ast.literal_eval(tdkTestObj.getResultDetails())
-                        print("Requested z-order: %s, returned z-order: %s" % (requested_zorder, actual_zorder))
-                        if actual_zorder == requested_zorder:
-                            print("Successfully set and got the application z-order")
-                            tdkTestObj.setResultStatus("SUCCESS")
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        print("Reading back the z-order of the application")
+                        tdkTestObj = obj.createTestStep("rdkservice_setValue")
+                        tdkTestObj.addParameter("method", "org.rdk.RDKWindowManager.getZOrder")
+                        tdkTestObj.addParameter("value", '{"clientId": "%s"}' % app_instance_id)
+                        tdkTestObj.executeTestCase(expectedResult)
+                        if expectedResult in tdkTestObj.getResult():
+                            actual_zorder = ast.literal_eval(tdkTestObj.getResultDetails())
+                            print("Requested z-order: %s, returned z-order: %s" % (requested_zorder, actual_zorder))
+                            if actual_zorder == requested_zorder:
+                                print("Successfully set and got the application z-order")
+                                tdkTestObj.setResultStatus("SUCCESS")
+                            else:
+                                print("Returned z-order does not match the requested z-order")
+                                tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print("Returned z-order does not match the requested z-order")
+                            print("org.rdk.RDKWindowManager.getZOrder failed for clientId %s" % app_instance_id)
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print("org.rdk.RDKWindowManager.getZOrder failed for clientId %s" % app_instance_id)
+                        print("org.rdk.RDKWindowManager.setZOrder failed for clientId %s" % app_instance_id)
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print("org.rdk.RDKWindowManager.setZOrder failed for clientId %s" % app_instance_id)
+                    print("Active application instance id was not received for %s" % app_name)
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print("Active application instance id was not received for %s" % app_name)
                 tdkTestObj.setResultStatus("FAILURE")
+                print("Failed to get the loaded apps")        
 
             print("Terminating the application %s" % app_name)
             tdkTestObj = obj.createTestStep("rdkv_terminate_app")

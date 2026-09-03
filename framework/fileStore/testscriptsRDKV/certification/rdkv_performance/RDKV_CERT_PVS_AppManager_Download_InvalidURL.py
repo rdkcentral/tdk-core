@@ -141,6 +141,7 @@ if expectedResult in result.upper():
                                     tdkTestObj.executeTestCase(expectedResult)
                                     status = tdkTestObj.getResult()
                                     if status == "SUCCESS":
+                                        tdkTestObj.setResultStatus("SUCCESS")
                                         cmd = "ls -l " + shlex.quote(filelocator_url)
                                         tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
                                         tdkTestObj.addParameter("ssh_method", ssh_method)
@@ -168,7 +169,6 @@ if expectedResult in result.upper():
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
                             print(f"Failed to download {app_bundle_name} from {valid_app_download_url}")
-                            tdkTestObj.setResultStatus("FAILURE")
                     else:
                         print("Failed to receive DOWNLOAD FAILURE event")
                         tdkTestObj.setResultStatus("FAILURE")
