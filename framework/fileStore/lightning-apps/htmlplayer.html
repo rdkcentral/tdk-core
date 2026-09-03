@@ -160,6 +160,10 @@ function getValuePS(){
     console.log('[HTML_getValuePS] Value is a '+(isList?'list of '+urls.length+' URL(s)':'single URL'));
 
     if(isList){
+      if(!urls || urls.length === 0){
+        console.log('[HTML_getValuePS] Parsed URL list is empty/invalid; ignoring successive playback');
+        return;
+      }
       sessionStorage.setItem('successiveURLs', JSON.stringify(urls));
       sessionStorage.setItem('successiveIndex', '0');
       sessionStorage.setItem('successiveResults', JSON.stringify([]));
