@@ -46,10 +46,10 @@ if expectedResult in result.upper():
 
     print("\nCheck the status of AppManagers in the device")
 
-    plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
+    plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]
     plugin_status_needed = {
         "org.rdk.DownloadManager":"activated",
-        "org.rdk.PackageManagerRDKEMS":"activated",
+        "org.rdk.AppPackageManager":"activated",
         "org.rdk.AppManager":"activated"
     }
 

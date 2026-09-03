@@ -48,14 +48,14 @@ mkdir -p "$WORK_DIR"
 cd "$WORK_DIR"
 echo "Working in directory: $(pwd)"
 
-# Export and configure Backend URL from BACKEND_SPRING_URL environment variable
-export BACKEND_URL="${BACKEND_SPRING_URL:-http://localhost:8443/tdkservice}"
-
-if [ -n "$BACKEND_SPRING_URL" ]; then
-    echo "BACKEND_URL set from BACKEND_SPRING_URL environment: '$BACKEND_URL'"
+# Export and configure Backend URL from BACKEND_URL environment variable
+if [ -n "$BACKEND_URL" ]; then
+    echo "BACKEND_URL set from BACKEND_URL environment: '$BACKEND_URL'"
 else
-    echo "BACKEND_SPRING_URL not found, using default BACKEND_URL: '$BACKEND_URL'"
+    BACKEND_URL="http://localhost:8443/tdkservice"
+    echo "BACKEND_URL not found, using default BACKEND_URL: '$BACKEND_URL'"
 fi
+export BACKEND_URL
 
 
 backendRepo="https://github.com/rdkcentral/tdk-testmanager-backend.git"

@@ -114,7 +114,7 @@ if "SUCCESS" in result.upper():
     #Set Custom List of TestCases
     testCaseList = HDMICEC_L2_List
     #Set TestCase Config
-    binaryConfig = HDMICEC_binaryConfig
+    binaryConfig = HDMICEC_SOURCE_binaryConfig if "SOURCE" in DEVICE_TYPE.upper() else HDMICEC_SINK_binaryConfig
     #Set basepath of test
     basePath = VTS_Binary_basePath + HDMICEC_basePath
     #SkipTestCaseList
@@ -136,7 +136,7 @@ if "SUCCESS" in result.upper():
             print("####################################################################################")
 
             binaryPath = "cd " + basePath + " ; ./" + binaryName 
-            executionSummary = runTest(binaryPath, module, testCaseID, testList, testCaseList, SkipTestCaseList)
+            executionSummary = runTest(binaryPath, module, testCaseID, testList, testCaseList, SkipTestCaseList, binaryConfig)
     
             executePostRequisites()
 

@@ -47,8 +47,8 @@ if expectedResult in result.upper():
     status = "SUCCESS"
 
     #Ensure plugins active before install
-    plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
-    plugin_status_needed = {"org.rdk.DownloadManager":"activated","org.rdk.PackageManagerRDKEMS":"activated","org.rdk.AppManager":"activated"}
+    plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]
+    plugin_status_needed = {"org.rdk.DownloadManager":"activated","org.rdk.AppPackageManager":"activated","org.rdk.AppManager":"activated"}
 
     curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj,plugins_list)
 

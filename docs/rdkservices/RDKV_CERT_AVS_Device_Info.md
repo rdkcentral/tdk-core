@@ -11,26 +11,36 @@ RDKV_CERT_AVS_Device_Info
    - [DeviceInfo_Get_SocketInfo_Negative_Case](#deviceinfo_get_socketinfo_negative_case)
    - [DeviceInfo_ActivateDeactivate_STRESS](#deviceinfo_activatedeactivate_stress)
    - [DeviceInfo_Get_Serial_Number](#deviceinfo_get_serial_number)
-   - [DeviceInfo_Check_Model_Name](#deviceinfo_check_model_name)
-   - [DeviceInfo_Check_Firmware_Version](#deviceinfo_check_firmware_version)
-   - [DeviceInfo_Check_Supported_Audio_Ports](#deviceinfo_check_supported_audio_ports)
-   - [DeviceInfo_Check_Supported_Video_Displays](#deviceinfo_check_supported_video_displays)
-   - [DeviceInfo_Check_Host_EDID](#deviceinfo_check_host_edid)
-   - [DeviceInfo_Check_Default_Resolution](#deviceinfo_check_default_resolution)
-   - [DeviceInfo_Check_Supported_HDCP_Version](#deviceinfo_check_supported_hdcp_version)
-   - [DeviceInfo_Check_Model_ID](#deviceinfo_check_model_id)
-   - [DeviceInfo_Check_Device_Type](#deviceinfo_check_device_type)
+   - [DeviceInfo_Model_Name_Match_With_Device_Details](#deviceinfo_model_name_match_with_device_details)
+   - [DeviceInfo_Firmware_Version_Match_With_Version_File](#deviceinfo_firmware_version_match_with_version_file)
+   - [DeviceInfo_Supported_Audio_Ports](#deviceinfo_supported_audio_ports)
+   - [DeviceInfo_Supported_Video_Displays](#deviceinfo_supported_video_displays)
+   - [DeviceInfo_Host_EDID](#deviceinfo_host_edid)
+   - [DeviceInfo_Default_Resolution](#deviceinfo_default_resolution)
+   - [DeviceInfo_Supported_HDCP_Version](#deviceinfo_supported_hdcp_version)
+   - [DeviceInfo_Model_ID_Match_With_Device_Details_File](#deviceinfo_model_id_match_with_device_details_file)
+   - [DeviceInfo_Device_Type](#deviceinfo_device_type)
    - [DeviceInfo_ActivateDeactivate_Event_Test](#deviceinfo_activatedeactivate_event_test)
-   - [DeviceInfo_Validate_Firmware_Version](#deviceinfo_validate_firmware_version)
-   - [DeviceInfo_Validate_Serial_Number](#deviceinfo_validate_serial_number)
-   - [DeviceInfo_Validate_Supported_Audio_Ports](#deviceinfo_validate_supported_audio_ports)
-   - [DeviceInfo_Validate_Supported_Video_Ports](#deviceinfo_validate_supported_video_ports)
-   - [DeviceInfo_Validate_Host_EDID](#deviceinfo_validate_host_edid)
-   - [DeviceInfo_Validate_HDCP_Version](#deviceinfo_validate_hdcp_version)
-   - [DeviceInfo_Validate_Default_Resolution](#deviceinfo_validate_default_resolution)
-   - [DeviceInfo_Check_SystemInfo_API_Date_Matches_DUT_Date](#deviceinfo_check_systeminfo_api_date_matches_dut_date)
+   - [DeviceInfo_Firmware_Version_Match_With_System_Image_Version](#deviceinfo_firmware_version_match_with_system_image_version)
+   - [DeviceInfo_Serial_Number_Match_With_System_Serial_Number](#deviceinfo_serial_number_match_with_system_serial_number)
+   - [DeviceInfo_Supported_Audio_Ports_Match_With_DisplaySettings](#deviceinfo_supported_audio_ports_match_with_displaysettings)
+   - [DeviceInfo_Supported_Video_Ports_Match_With_DisplaySettings](#deviceinfo_supported_video_ports_match_with_displaysettings)
+   - [DeviceInfo_Host_EDID_Match_With_DisplaySettings](#deviceinfo_host_edid_match_with_displaysettings)
+   - [DeviceInfo_Supported_HDCP_Version_Match_With_HdcpProfile](#deviceinfo_supported_hdcp_version_match_with_hdcpprofile)
+   - [DeviceInfo_Default_Resolution_Match_With_DisplaySettings](#deviceinfo_default_resolution_match_with_displaysettings)
+   - [DeviceInfo_SystemInfo_API_Date_Matches_DUT_Date](#deviceinfo_systeminfo_api_date_matches_dut_date)
    - [DeviceInfo_Get_Device_SocName](#deviceinfo_get_device_socname)
    - [DeviceInfo_Get_Device_Manufacturer](#deviceinfo_get_device_manufacturer)
+   - [DeviceInfo_Get_Brand_Name](#deviceinfo_get_brand_name)
+   - [DeviceInfo_Get_Chipset_Info](#deviceinfo_get_chipset_info)
+   - [DeviceInfo_Get_Distributor_ID](#deviceinfo_get_distributor_id)
+   - [DeviceInfo_Get_ESTB_IP_Address](#deviceinfo_get_estb_ip_address)
+   - [DeviceInfo_Get_Ethernet_MAC_Address](#deviceinfo_get_ethernet_mac_address)
+   - [DeviceInfo_Get_Release_Version](#deviceinfo_get_release_version)
+   - [DeviceInfo_Get_WiFi_MAC_Address](#deviceinfo_get_wifi_mac_address)
+   - [DeviceInfo_Get_ESTB_MAC_Address](#deviceinfo_get_estb_mac_address)
+   - [DeviceInfo_Get_Device_ID](#deviceinfo_get_device_id)
+   - [DeviceInfo_Get_Hardware_ID](#deviceinfo_get_hardware_id)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -183,9 +193,9 @@ Checks the serial number
 
 ---
 
-<a id="deviceinfo_check_model_name"></a>
+<a id="deviceinfo_model_name_match_with_device_details"></a>
 ### TestCase Name
-DeviceInfo_Check_Model_Name
+DeviceInfo_Model_Name_Match_With_Device_Details
 
 ### TestCase ID
 DI_06
@@ -202,9 +212,9 @@ Checks the model name of the DUT
 
 ---
 
-<a id="deviceinfo_check_firmware_version"></a>
+<a id="deviceinfo_firmware_version_match_with_version_file"></a>
 ### TestCase Name
-DeviceInfo_Check_Firmware_Version
+DeviceInfo_Firmware_Version_Match_With_Version_File
 
 ### TestCase ID
 DI_07
@@ -221,9 +231,9 @@ Checks the firmware version of the DUT
 
 ---
 
-<a id="deviceinfo_check_supported_audio_ports"></a>
+<a id="deviceinfo_supported_audio_ports"></a>
 ### TestCase Name
-DeviceInfo_Check_Supported_Audio_Ports
+DeviceInfo_Supported_Audio_Ports
 
 ### TestCase ID
 DI_08
@@ -239,9 +249,9 @@ Check whether settop lists supported audio ports
 
 ---
 
-<a id="deviceinfo_check_supported_video_displays"></a>
+<a id="deviceinfo_supported_video_displays"></a>
 ### TestCase Name
-DeviceInfo_Check_Supported_Video_Displays
+DeviceInfo_Supported_Video_Displays
 
 ### TestCase ID
 DI_09
@@ -257,9 +267,9 @@ Check whether settop displays supported video displays
 
 ---
 
-<a id="deviceinfo_check_host_edid"></a>
+<a id="deviceinfo_host_edid"></a>
 ### TestCase Name
-DeviceInfo_Check_Host_EDID
+DeviceInfo_Host_EDID
 
 ### TestCase ID
 DI_10
@@ -275,9 +285,9 @@ Check the EDID status of host
 
 ---
 
-<a id="deviceinfo_check_default_resolution"></a>
+<a id="deviceinfo_default_resolution"></a>
 ### TestCase Name
-DeviceInfo_Check_Default_Resolution
+DeviceInfo_Default_Resolution
 
 ### TestCase ID
 DI_11
@@ -295,9 +305,9 @@ Check whether the default resolution is available in supported resolutions
 
 ---
 
-<a id="deviceinfo_check_supported_hdcp_version"></a>
+<a id="deviceinfo_supported_hdcp_version"></a>
 ### TestCase Name
-DeviceInfo_Check_Supported_HDCP_Version
+DeviceInfo_Supported_HDCP_Version
 
 ### TestCase ID
 DI_12
@@ -314,9 +324,9 @@ Checks the supported HDCP version
 
 ---
 
-<a id="deviceinfo_check_model_id"></a>
+<a id="deviceinfo_model_id_match_with_device_details_file"></a>
 ### TestCase Name
-DeviceInfo_Check_Model_ID
+DeviceInfo_Model_ID_Match_With_Device_Details_File
 
 ### TestCase ID
 DI_13
@@ -333,9 +343,9 @@ Checks the model id of the DUT
 
 ---
 
-<a id="deviceinfo_check_device_type"></a>
+<a id="deviceinfo_device_type"></a>
 ### TestCase Name
-DeviceInfo_Check_Device_Type
+DeviceInfo_Device_Type
 
 ### TestCase ID
 DI_14
@@ -384,9 +394,9 @@ Validates statechange event on activating/deactivating the plugin
 
 ---
 
-<a id="deviceinfo_validate_firmware_version"></a>
+<a id="deviceinfo_firmware_version_match_with_system_image_version"></a>
 ### TestCase Name
-DeviceInfo_Validate_Firmware_Version
+DeviceInfo_Firmware_Version_Match_With_System_Image_Version
 
 ### TestCase ID
 DI_16
@@ -404,9 +414,9 @@ Verify whether the firmware version returned by deviceinfo API matches the firmw
 
 ---
 
-<a id="deviceinfo_validate_serial_number"></a>
+<a id="deviceinfo_serial_number_match_with_system_serial_number"></a>
 ### TestCase Name
-DeviceInfo_Validate_Serial_Number
+DeviceInfo_Serial_Number_Match_With_System_Serial_Number
 
 ### TestCase ID
 DI_17
@@ -424,9 +434,9 @@ Verify whether the serial number returned by deviceinfo API matches the serial n
 
 ---
 
-<a id="deviceinfo_validate_supported_audio_ports"></a>
+<a id="deviceinfo_supported_audio_ports_match_with_displaysettings"></a>
 ### TestCase Name
-DeviceInfo_Validate_Supported_Audio_Ports
+DeviceInfo_Supported_Audio_Ports_Match_With_DisplaySettings
 
 ### TestCase ID
 DI_18
@@ -443,9 +453,9 @@ Verify whether the audio ports returned by deviceinfo API matches the audio port
 
 ---
 
-<a id="deviceinfo_validate_supported_video_ports"></a>
+<a id="deviceinfo_supported_video_ports_match_with_displaysettings"></a>
 ### TestCase Name
-DeviceInfo_Validate_Supported_Video_Ports
+DeviceInfo_Supported_Video_Ports_Match_With_DisplaySettings
 
 ### TestCase ID
 DI_19
@@ -462,9 +472,9 @@ Verify whether the video ports returned by deviceinfo API matches the video port
 
 ---
 
-<a id="deviceinfo_validate_host_edid"></a>
+<a id="deviceinfo_host_edid_match_with_displaysettings"></a>
 ### TestCase Name
-DeviceInfo_Validate_Host_EDID
+DeviceInfo_Host_EDID_Match_With_DisplaySettings
 
 ### TestCase ID
 DI_20
@@ -482,9 +492,9 @@ Verify whether the host EDID details returned by deviceinfo API matches the EDID
 
 ---
 
-<a id="deviceinfo_validate_hdcp_version"></a>
+<a id="deviceinfo_supported_hdcp_version_match_with_hdcpprofile"></a>
 ### TestCase Name
-DeviceInfo_Validate_HDCP_Version
+DeviceInfo_Supported_HDCP_Version_Match_With_HdcpProfile
 
 ### TestCase ID
 DI_21
@@ -502,9 +512,9 @@ Verify whether the HDCP version returned by deviceinfo API matches the HDCP vers
 
 ---
 
-<a id="deviceinfo_validate_default_resolution"></a>
+<a id="deviceinfo_default_resolution_match_with_displaysettings"></a>
 ### TestCase Name
-DeviceInfo_Validate_Default_Resolution
+DeviceInfo_Default_Resolution_Match_With_DisplaySettings
 
 ### TestCase ID
 DI_22
@@ -522,9 +532,9 @@ Check whether the default resolution returned by deviceinfo API matches the defa
 
 ---
 
-<a id="deviceinfo_check_systeminfo_api_date_matches_dut_date"></a>
+<a id="deviceinfo_systeminfo_api_date_matches_dut_date"></a>
 ### TestCase Name
-DeviceInfo_Check_SystemInfo_API_Date_Matches_DUT_Date
+DeviceInfo_SystemInfo_API_Date_Matches_DUT_Date
 
 ### TestCase ID
 DI_23
@@ -575,6 +585,186 @@ Checks the device manufacturer
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get device manufacturer | Invoke make on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.make"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the make API is not empty  |
+
+---
+
+<a id="deviceinfo_get_brand_name"></a>
+### TestCase Name
+DeviceInfo_Get_Brand_Name
+
+### TestCase ID
+DI_26
+
+### TestCase Objective
+Checks the brand name of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get brand name | Invoke brandname on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.brandname"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the brandname API is not empty |
+
+---
+
+<a id="deviceinfo_get_chipset_info"></a>
+### TestCase Name
+DeviceInfo_Get_Chipset_Info
+
+### TestCase ID
+DI_27
+
+### TestCase Objective
+Checks the chipset of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get device chipset | Invoke chipset on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.chipset"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the chipset API is not empty |
+
+---
+
+<a id="deviceinfo_get_distributor_id"></a>
+### TestCase Name
+DeviceInfo_Get_Distributor_ID
+
+### TestCase ID
+DI_28
+
+### TestCase Objective
+Checks the distributor ID of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get distributor ID | Invoke distributorid on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.distributorid"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the distributorid API is not empty |
+
+---
+
+<a id="deviceinfo_get_estb_ip_address"></a>
+### TestCase Name
+DeviceInfo_Get_ESTB_IP_Address
+
+### TestCase ID
+DI_29
+
+### TestCase Objective
+Checks the STB IP address of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get ESTB IP | Invoke estbip on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.estbip"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the estbip API is not empty |
+
+---
+
+<a id="deviceinfo_get_ethernet_mac_address"></a>
+### TestCase Name
+DeviceInfo_Get_Ethernet_MAC_Address
+
+### TestCase ID
+DI_30
+
+### TestCase Objective
+Checks the Ethernet MAC address of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get Ethernet MAC | Invoke ethmac on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.ethmac"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the ethmac API is not empty |
+
+---
+
+<a id="deviceinfo_get_release_version"></a>
+### TestCase Name
+DeviceInfo_Get_Release_Version
+
+### TestCase ID
+DI_31
+
+### TestCase Objective
+Checks the release version of the device image
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get release version | Invoke releaseversion on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.releaseversion"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the releaseversion API is not empty |
+
+---
+
+<a id="deviceinfo_get_wifi_mac_address"></a>
+### TestCase Name
+DeviceInfo_Get_WiFi_MAC_Address
+
+### TestCase ID
+DI_32
+
+### TestCase Objective
+Checks the WiFi MAC address of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get WiFi MAC | Invoke wifimac on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.wifimac"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the wifimac API is not empty |
+
+---
+
+<a id="deviceinfo_get_estb_mac_address"></a>
+### TestCase Name
+DeviceInfo_Get_ESTB_MAC_Address
+
+### TestCase ID
+DI_33
+
+### TestCase Objective
+Checks the ESTB MAC address of the device
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get ESTB MAC | Invoke estbmac on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.estbmac"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the estbmac API is not empty |
+
+---
+
+<a id="deviceinfo_get_device_id"></a>
+### TestCase Name
+DeviceInfo_Get_Device_ID
+
+### TestCase ID
+DI_34
+
+### TestCase Objective
+Checks the stable alphanumeric device identifier
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get device ID | Invoke deviceid on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.deviceid"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the deviceid API is not empty |
+
+---
+
+<a id="deviceinfo_get_hardware_id"></a>
+### TestCase Name
+DeviceInfo_Get_Hardware_ID
+
+### TestCase ID
+DI_35
+
+### TestCase Objective
+Checks the hardware identifier
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get hardware ID | Invoke hardwareid on DeviceInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "DeviceInfo.1.hardwareid"}' http://127.0.0.1:9998/jsonrpc` | Verify that the information retrieved from the hardwareid API is not empty |
 
 ## Plugin Post-conditions
 
