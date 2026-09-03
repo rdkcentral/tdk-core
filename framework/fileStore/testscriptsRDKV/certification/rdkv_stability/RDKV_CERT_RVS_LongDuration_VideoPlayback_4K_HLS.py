@@ -209,6 +209,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         result = tdkTestObj.getResult()
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
+            print("App terminated successfully")
         else:
             tdkTestObj.setResultStatus("FAILURE")
             print("Unable to terminate the app")

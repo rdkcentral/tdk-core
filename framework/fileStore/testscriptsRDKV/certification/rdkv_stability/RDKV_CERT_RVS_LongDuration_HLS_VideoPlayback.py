@@ -208,10 +208,10 @@ if expectedResult in (result.upper() and pre_condition_status):
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
                 if result == "SUCCESS":
-                    print("\n URL is reverted successfully \n")
+                    print("\n Successfully terminated the app \n")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print("\n Failed to revert the URL")
+                    print("\n Failed to terminate the app")
                     tdkTestObj.setResultStatus("FAILURE");    
             else:
                 print("\n Failed to launch the app")
