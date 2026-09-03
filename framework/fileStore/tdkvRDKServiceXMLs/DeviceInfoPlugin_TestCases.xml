@@ -538,4 +538,20 @@
                 <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
             </testStep>
        </testCase>
+
+       <!-- Test case 34 -->
+       <testCase testCaseId="DI_34" testCaseName="DeviceInfo_Get_Device_ID" desc="Checks the stable alphanumeric device identifier">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Device_ID" method="Get_Device_ID">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 35 -->
+       <testCase testCaseId="DI_35" testCaseName="DeviceInfo_Get_Hardware_ID" desc="Checks the hardware identifier">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Hardware_ID" method="Get_Hardware_ID">
+                <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+       </testCase>
 </testPlugin>

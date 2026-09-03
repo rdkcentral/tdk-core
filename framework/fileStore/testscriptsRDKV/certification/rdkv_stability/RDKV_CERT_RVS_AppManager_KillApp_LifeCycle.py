@@ -42,7 +42,6 @@ result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
-Summ_list=[]
 if expectedResult in result.upper():
     status ="SUCCESS"
     print("\nCheck the status of AppManagers in the device")
@@ -66,6 +65,7 @@ if expectedResult in result.upper():
             time.sleep(5)
             for i in range(test_count):
                 print("ITERATION: ", i+1)
+                event_listener.clearEventsBuffer()
                 tdkTestObj = obj.createTestStep('rdkservice_launch_app')
                 tdkTestObj.addParameter("app_name", app_name)
                 tdkTestObj.executeTestCase(expectedResult)
@@ -73,55 +73,73 @@ if expectedResult in result.upper():
                 details = tdkTestObj.getResultDetails()
                 if status == "SUCCESS":
                     tdkTestObj.setResultStatus("SUCCESS")
-                    time.sleep(30) 
-                    print("\n Killing the app")
-                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                    tdkTestObj.addParameter("method", "org.rdk.AppManager.killApp")
-                    tdkTestObj.addParameter("value", '{"appId": "' + app_name + '"}')
-                    tdkTestObj.executeTestCase(expectedResult)
-                    result = tdkTestObj.getResult()
-                    if result == "SUCCESS":
-                        event_dict = {"APP_STATE_PAUSED" : False, "APP_STATE_TERMINATING" : False, "APP_STATE_UNLOADED" : False}
+                    time.sleep(30)
+                    print("Check if the app is launched")
+                    loaded_apps = rdkservice_get_loaded_apps()
+                    print(loaded_apps)
+                    if app_name in loaded_apps:
                         tdkTestObj.setResultStatus("SUCCESS")
-                        continue_count = 0
-                        while True:
-                            if continue_count > 120:
+                        print("Successfully launched the app")
+                        print("\n Killing the app")
+                        tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                        tdkTestObj.addParameter("method", "org.rdk.AppManager.killApp")
+                        tdkTestObj.addParameter("value", '{"appId": "' + app_name + '"}')
+                        tdkTestObj.executeTestCase(expectedResult)
+                        result = tdkTestObj.getResult()
+                        if result == "SUCCESS":
+                            event_dict = {"APP_STATE_PAUSED" : False, "APP_STATE_TERMINATING" : False, "APP_STATE_UNLOADED" : False}
+                            tdkTestObj.setResultStatus("SUCCESS")
+                            continue_count = 0
+                            while True:
+                                if continue_count > 120:
+                                    break
+                                if len(event_listener.getEventsBuffer()) == 0:
+                                    time.sleep(1)
+                                    continue_count += 1
+                                    continue
+                                event = event_listener.getEventsBuffer().pop(0)
+                                print("\nEvent:", event)
+                                if app_name in event and "onAppLifecycleStateChanged" in str(event):
+                                    if "\"newState\":\"APP_STATE_PAUSED\"" in event:
+                                        print ("Received APP_STATE_PAUSED event")
+                                        paused_time = datetime.strptime(str(event).split("$$$")[0], "%H:%M:%S.%f")
+                                        event_dict["APP_STATE_PAUSED"] = True
+                                    if "\"newState\":\"APP_STATE_TERMINATING\"" in event:
+                                        print ("Received APP_STATE_TERMINATING event")
+                                        terminate_time = datetime.strptime(str(event).split("$$$")[0], "%H:%M:%S.%f")
+                                        event_dict["APP_STATE_TERMINATING"] = True
+                                    if "\"newState\":\"APP_STATE_UNLOADED\"" in event:
+                                        print ("Received APP_STATE_UNLOADED event")
+                                        unload_time = datetime.strptime(str(event).split("$$$")[0], "%H:%M:%S.%f")
+                                        event_dict["APP_STATE_UNLOADED"] = True
+                                        break    
+                            if all(event_dict.values()):
+                                print("Received all Kill events successfully")
+                                loaded_apps = rdkservice_get_loaded_apps()
+                                print(loaded_apps)
+                                if app_name not in loaded_apps:
+                                    print(f"Successfully verified {app_name} was removed from loaded apps")
+                                    tdkTestObj.setResultStatus("SUCCESS")
+                                else:
+                                    print(f"\nIteration {i+1}: {app_name} is still listed in loaded apps after kill")
+                                    tdkTestObj.setResultStatus("FAILURE")
+                                    break
+                            else:
+                                print(f"\nIteration {i+1}: Failed to receive Kill event")
+                                print([name for name, value in event_dict.items() if not value])
+                                tdkTestObj.setResultStatus("FAILURE")
                                 break
-                            if len(event_listener.getEventsBuffer()) == 0:
-                                time.sleep(1)
-                                continue_count += 1
-                                continue
-                            event = event_listener.getEventsBuffer().pop(0)
-                            print("\nEvent:", event)
-                            if app_name in event and "onAppLifecycleStateChanged" in str(event):
-                                if "\"newState\":\"APP_STATE_PAUSED\"" in event:
-                                    print ("Received APP_STATE_PAUSED event")
-                                    paused_time = datetime.strptime(str(event).split("$$$")[0], "%H:%M:%S.%f")
-                                    event_dict["APP_STATE_PAUSED"] = True
-                                if "\"newState\":\"APP_STATE_TERMINATING\"" in event:
-                                    print ("Received APP_STATE_TERMINATING event")
-                                    terminate_time = datetime.strptime(str(event).split("$$$")[0], "%H:%M:%S.%f")
-                                    event_dict["APP_STATE_TERMINATING"] = True
-                                if "\"newState\":\"APP_STATE_UNLOADED\"" in event:
-                                    print ("Received APP_STATE_UNLOADED event")
-                                    unload_time = datetime.strptime(str(event).split("$$$")[0], "%H:%M:%S.%f")
-                                    event_dict["APP_STATE_UNLOADED"] = True
-                                    break    
-                        if all(event_dict.values()):
-                            print("Received all Kill events successfully")
-                            tdkTestObj.setResultStatus("SUCCESS")                             
                         else:
-                            print("Failed to receive Kill event")
-                            print([name for name, value in event_dict.items() if not value])
                             tdkTestObj.setResultStatus("FAILURE")
+                            print(f"\nIteration {i+1}: Unable to terminate the app")
                             break
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print("Unable to terminate the app")
+                        print(f"\nIteration {i+1}: App is not listed in loaded apps")
                         break
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print("Unable to launch the app")
+                    print(f"\nIteration {i+1}: Unable to launch the app")
                     break
             event_listener.disconnect()        
         else:
