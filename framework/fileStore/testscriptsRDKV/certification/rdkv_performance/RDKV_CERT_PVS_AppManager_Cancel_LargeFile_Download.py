@@ -196,7 +196,7 @@ if expectedResult in result.upper():
                                                         status = tdkTestObj.getResult()
                                                         output = tdkTestObj.getResultDetails()
                                                         if status == expectedResult:
-                                                            tdk
+                                                            tdkTestObj.setResultStatus("SUCCESS")
                                                             output = output.strip().splitlines()[-1]
                                                             if output != "":
                                                                 final_used_memory = int(float(output))
