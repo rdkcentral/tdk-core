@@ -73,6 +73,7 @@ if expectedResult in result.upper():
                 tdkTestObj.addParameter("value", '{"downloadId": "%s"}' % download_id)
                 tdkTestObj.executeTestCase(expectedResult)
                 if tdkTestObj.getResult() == expectedResult:
+                    tdkTestObj.setResultStatus("SUCCESS")
                     progress = ast.literal_eval(tdkTestObj.getResultDetails())
                     print("Current progress of download ID %s : %s" % (download_id, progress))
                 if isinstance(progress, (int, float)) and 0 < progress < 100:
@@ -87,42 +88,55 @@ if expectedResult in result.upper():
                 tdkTestObj.addParameter("value", '{"downloadId": "%s"}' % download_id)
                 tdkTestObj.executeTestCase(expectedResult)
                 if tdkTestObj.getResult() == expectedResult:
+                    tdkTestObj.setResultStatus("SUCCESS")
                     print("Pause request accepted. Waiting 3 seconds before re-reading the progress to confirm it is frozen")
                     time.sleep(3)
                     tdkTestObj = obj.createTestStep("rdkservice_setValue")
                     tdkTestObj.addParameter("method", "org.rdk.DownloadManager.progress")
                     tdkTestObj.addParameter("value", '{"downloadId": "%s"}' % download_id)
                     tdkTestObj.executeTestCase(expectedResult)
-                    paused_progress = ast.literal_eval(tdkTestObj.getResultDetails())
-                    print("Progress read after pause : %s (progress before pause : %s)" % (paused_progress, progress))
-
-                    if paused_progress == progress:
-                        print("Download is paused, progress is held at %s percent" % paused_progress)
-                        print("\nStep 4 : Resume the download using org.rdk.DownloadManager.resume")
-                        tdkTestObj = obj.createTestStep("rdkservice_setValue")
-                        tdkTestObj.addParameter("method", "org.rdk.DownloadManager.resume")
-                        tdkTestObj.addParameter("value", '{"downloadId": "%s"}' % download_id)
-                        tdkTestObj.executeTestCase(expectedResult)
-                        if tdkTestObj.getResult() == expectedResult:
-                            print("Resume request accepted. Waiting 5 seconds before re-reading the progress to confirm it is advancing")
-                            time.sleep(5)
+                    status = tdkTestObj.getResult()
+                    if status == expectedResult:
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        paused_progress = ast.literal_eval(tdkTestObj.getResultDetails())
+                        print("Progress read after pause : %s (progress before pause : %s)" % (paused_progress, progress))
+                        if paused_progress == progress:
+                            print("Download is paused, progress is held at %s percent" % paused_progress)
+                            print("\nStep 4 : Resume the download using org.rdk.DownloadManager.resume")
                             tdkTestObj = obj.createTestStep("rdkservice_setValue")
-                            tdkTestObj.addParameter("method", "org.rdk.DownloadManager.progress")
+                            tdkTestObj.addParameter("method", "org.rdk.DownloadManager.resume")
                             tdkTestObj.addParameter("value", '{"downloadId": "%s"}' % download_id)
                             tdkTestObj.executeTestCase(expectedResult)
-                            resumed_progress = ast.literal_eval(tdkTestObj.getResultDetails())
-                            print("Progress read after resume : %s (progress while paused : %s)" % (resumed_progress, paused_progress))
-                            if isinstance(resumed_progress, (int, float)) and resumed_progress > paused_progress:
-                                print("Download pause and resume validated successfully")
+                            if tdkTestObj.getResult() == expectedResult:
                                 tdkTestObj.setResultStatus("SUCCESS")
+                                print("Resume request accepted. Waiting 5 seconds before re-reading the progress to confirm it is advancing")
+                                time.sleep(5)
+                                tdkTestObj = obj.createTestStep("rdkservice_setValue")
+                                tdkTestObj.addParameter("method", "org.rdk.DownloadManager.progress")
+                                tdkTestObj.addParameter("value", '{"downloadId": "%s"}' % download_id)
+                                tdkTestObj.executeTestCase(expectedResult)
+                                status = tdkTestObj.getResult()
+                                if status == expectedResult:
+                                    resumed_progress = ast.literal_eval(tdkTestObj.getResultDetails())
+                                    print("Progress read after resume : %s (progress while paused : %s)" % (resumed_progress, paused_progress))
+                                    tdkTestObj.setResultStatus("SUCCESS")
+                                    if isinstance(resumed_progress, (int, float)) and resumed_progress > paused_progress:
+                                        print("Download pause and resume validated successfully")
+                                        tdkTestObj.setResultStatus("SUCCESS")
+                                    else:
+                                        print("Download progress did not advance after resume, it stayed at %s percent" % resumed_progress)
+                                        tdkTestObj.setResultStatus("FAILURE")
+                                else:
+                                    print("Failed to get the download progress after resume for download ID %s" % download_id)
+                                    tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print("Download progress did not advance after resume, it stayed at %s percent" % resumed_progress)
+                                print("org.rdk.DownloadManager.resume failed for download ID %s" % download_id)
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print("org.rdk.DownloadManager.resume failed for download ID %s" % download_id)
+                            print("Download progress moved from %s to %s while paused, the pause request was not honoured" % (progress, paused_progress))
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print("Download progress moved from %s to %s while paused, the pause request was not honoured" % (progress, paused_progress))
+                        print("Failed to get the download progress for download ID %s" % download_id)
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
                     print("org.rdk.DownloadManager.pause failed for download ID %s" % download_id)
