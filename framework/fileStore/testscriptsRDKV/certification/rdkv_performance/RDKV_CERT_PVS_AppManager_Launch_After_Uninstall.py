@@ -65,6 +65,7 @@ if expectedResult in result.upper():
             uninstall_result = tdkTestObj.getResult()
 
             if uninstall_result == expectedResult:
+                tdkTestObj.setResultStatus("SUCCESS")
                 print("Application uninstalled successfully")
                 time.sleep(5)
                 print("Attempting to launch the uninstalled application")
@@ -80,8 +81,8 @@ if expectedResult in result.upper():
                     print("FAILURE: Uninstalled application launched successfully")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print("Failed to uninstall the application")
                 tdkTestObj.setResultStatus("FAILURE")
+                print("Failed to uninstall the application")
         else:
             print("Failed to install the application")
             obj.setLoadModuleStatus("FAILURE")

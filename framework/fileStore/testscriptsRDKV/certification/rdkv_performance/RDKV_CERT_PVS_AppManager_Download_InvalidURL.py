@@ -67,7 +67,7 @@ if expectedResult in result.upper():
             
             if not ssh_method or not credentials:   
                 print("SSH method or credentials not found in configuration") 
-                obj.setLoadModuleStatus("FAILURE")
+                tdkTestObj.setResultStatus("FAILURE")
             else:
                 print("Register for the Download event")
                 thunder_port = rdkv_performancelib.devicePort
@@ -86,6 +86,7 @@ if expectedResult in result.upper():
                 failure_status = tdkTestObj.getResult()
                 failure_details = tdkTestObj.getResultDetails()
                 if failure_status != "SUCCESS":
+                    tdkTestObj.setResultStatus("SUCCESS")
                     continue_count = 0
                     event = ""
                     while True:
@@ -108,6 +109,7 @@ if expectedResult in result.upper():
                         status = tdkTestObj.getResult()
                         result = tdkTestObj.getResultDetails()
                         if status == "SUCCESS":
+                            tdkTestObj.setResultStatus("SUCCESS")
                             download_id = ast.literal_eval(result)
                             print("Checking for download event")
                             continue_count = 0
@@ -164,6 +166,7 @@ if expectedResult in result.upper():
                                 print("Failed to receive the download event")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
+                            tdkTestObj.setResultStatus("FAILURE")
                             print(f"Failed to download {app_bundle_name} from {valid_app_download_url}")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:

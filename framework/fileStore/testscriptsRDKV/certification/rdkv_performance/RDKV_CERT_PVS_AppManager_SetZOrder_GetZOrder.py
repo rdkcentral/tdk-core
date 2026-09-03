@@ -67,11 +67,14 @@ if expectedResult in result.upper():
             tdkTestObj.addParameter("method", "org.rdk.AppManager.getLoadedApps")
             tdkTestObj.executeTestCase(expectedResult)
             if expectedResult in tdkTestObj.getResult():
+                tdkTestObj.setResultStatus("SUCCESS")
                 loaded_apps = ast.literal_eval(tdkTestObj.getResultDetails())
                 for app in loaded_apps:
                     if app.get("appId") == app_name and app.get("lifecycleState") == "APP_STATE_ACTIVE":
                         app_instance_id = app.get("appInstanceId", "")
                         break
+            else:
+                tdkTestObj.setResultStatus("FAILURE")
 
             if app_instance_id:
                 print("appInstanceId of %s is : %s" % (app_name, app_instance_id))
@@ -84,6 +87,7 @@ if expectedResult in result.upper():
                 )
                 tdkTestObj.executeTestCase(expectedResult)
                 if expectedResult in tdkTestObj.getResult():
+                    tdkTestObj.setResultStatus("SUCCESS")
                     print("Reading back the z-order of the application")
                     tdkTestObj = obj.createTestStep("rdkservice_setValue")
                     tdkTestObj.addParameter("method", "org.rdk.RDKWindowManager.getZOrder")
