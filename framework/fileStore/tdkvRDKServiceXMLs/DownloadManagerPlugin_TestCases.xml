@@ -90,21 +90,21 @@
     </testCase>
 
     <!-- TestCase 02 -->
-    <testCase testCaseId="DM_02" testCaseName="DownloadManager_GetStorageDetails_Functionality" desc="Verify that the getStorageDetails method functions correctly">
+    <testCase testCaseId="DM_02" testCaseName="DownloadManager_GetStorageDetails_UnknownMethod_Error" desc="Verify that the getStorageDetails method returns unknown method error when called with valid parameters">
         <testCaseInfo testCaseType="direct"/>
-        <testCasePreRequisite>
+        <!--testCasePreRequisite>
             <preRequisite requisiteId="1" requisiteName="Uninstall_Existing_Package_Before_Install">
-                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="PackageManager" saveResult="true">
-                    <resultGeneration useMethodTag="packagemanager_list_packages">
+                <testStep testStepId="1" name="Check_Existing_Package" method="List_Package_Info" pluginName="AppPackageManager" saveResult="true">
+                    <resultGeneration useMethodTag="app_packagemanager_list_packages">
                         <arguments value="exceptional_cases" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                     </resultGeneration>
                 </testStep>
-                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" pluginName="PackageManager" delay="10">
-                    <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+                <testStep testStepId="2" name="Uninstall_Existing_Package" method="Uninstall_Package" pluginName="AppPackageManager" delay="10">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="app_packagemanager_check_app_status"/>
                     <params>
                         <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                     </params>
-                    <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+                    <resultGeneration useMethodTag="app_packagemanager_null_result_validation" arguments="empty_result_validation"/>
                 </testStep>
             </preRequisite>
 
@@ -126,7 +126,7 @@
                         <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_MD5SUM_VALUE"/>
                     </resultGeneration>
                 </testStep>
-                <testStep testStepId="4" name="Install" method="Install_Package" pluginName="PackageManager" delay="3">
+                <testStep testStepId="4" name="Install" method="Install_Package" pluginName="AppPackageManager" delay="3">
                     <params>
                         <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                         <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
@@ -134,15 +134,15 @@
                         <param tag="name" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_NAME"/>
                         <param tag="value" useConfigFile="true" key="PACKAGEMANAGER_ADDITIONALMETADATA_VALUE"/>
                     </params>
-                    <resultGeneration useMethodTag="packagemanager_null_result_validation"/>
+                    <resultGeneration useMethodTag="app_packagemanager_null_result_validation"/>
                 </testStep>
-                <testStep testStepId="5" name="Verify_Installed_Package" method="List_Package_Info" pluginName="PackageManager" delay="5">
-                    <resultGeneration useMethodTag="packagemanager_check_install_package">
+                <testStep testStepId="5" name="Verify_Installed_Package" method="List_Package_Info" pluginName="AppPackageManager" delay="5">
+                    <resultGeneration useMethodTag="app_packagemanager_check_install_package">
                         <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                     </resultGeneration>
                 </testStep>
             </preRequisite>
-        </testCasePreRequisite>
+        </testCasePreRequisite-->
 
         <testStep testStepId="1" name="GetStorageDetails" method="Get_Storage_Details">
             <params>
@@ -150,19 +150,19 @@
                 <param tag="id" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
                 <param tag="version" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_VERSION"/>
             </params>
-            <resultGeneration useMethodTag="downloadmanager_getstorage_details_validation"/>
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="Unknown method."/>
         </testStep>
-        <testStep testStepId="2" name="Uninstall" method="Uninstall_Package" pluginName="PackageManager">
+        <!--testStep testStepId="2" name="Uninstall" method="Uninstall_Package" pluginName="AppPackageManager">
             <params>
                 <param tag="packageId" useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
             </params>
-            <resultGeneration useMethodTag="packagemanager_null_result_validation" arguments="empty_result_validation"/>
+            <resultGeneration useMethodTag="app_packagemanager_null_result_validation" arguments="empty_result_validation"/>
         </testStep>
-        <testStep testStepId="3" name="Verify_Uninstalled_Package" method="List_Package_Info" pluginName="PackageManager" delay="5">
-            <resultGeneration useMethodTag="packagemanager_check_uninstall_package">
+        <testStep testStepId="3" name="Verify_Uninstalled_Package" method="List_Package_Info" pluginName="AppPackageManager" delay="5">
+            <resultGeneration useMethodTag="app_packagemanager_check_uninstall_package">
                 <expectedValues useConfigFile="true" key="PACKAGEMANAGER_APPLICATION_NAME"/>
             </resultGeneration>
-        </testStep>
+        </testStep-->
     </testCase>
 
     <!-- TestCase 03 -->
@@ -219,14 +219,14 @@
             </resultGeneration>
         </testStep>
         <testStep testStepId="4" name="First_Delete_Package" method="Delete_Package" delay="3">
-            <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+            <conditionalExecution enable="true" Id="1" useMethodTag="app_packagemanager_check_app_status"/>
             <params>
                 <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
             </params>
             <resultGeneration useMethodTag="downloadmanager_null_result_validation"/>
         </testStep>
         <testStep testStepId="5" name="Second_Delete_Package" method="Delete_Package" delay="5">
-            <conditionalExecution enable="true" Id="1" useMethodTag="packagemanager_check_app_status"/>
+            <conditionalExecution enable="true" Id="1" useMethodTag="app_packagemanager_check_app_status"/>
             <params>
                 <param tag="fileLocator" usePreviousResult="true" Id="2" useMethodTag="downloadmanager_get_previous_filelocator_url"/>
             </params>

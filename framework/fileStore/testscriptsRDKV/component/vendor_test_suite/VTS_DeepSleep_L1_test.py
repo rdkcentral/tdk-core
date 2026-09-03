@@ -139,7 +139,7 @@ if "SUCCESS" in result.upper():
             print("            PLUGIN NAME :  ",plugin_name)
             print("####################################################################################")
             binaryPath = "cd " + basePath + " ; ./" + binaryName 
-            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList, SkipTestCaseList)
+            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList, SkipTestCaseList, binaryConfig)
             executePostRequisites()
             failed_testCases = printTestSummary(executionSummary, plugin_name)
         else:

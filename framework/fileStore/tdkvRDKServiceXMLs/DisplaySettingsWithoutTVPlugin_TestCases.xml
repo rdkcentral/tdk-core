@@ -61,7 +61,7 @@
           </prerequisite>
     </pluginPreRequisite>
 
-    <testCase testCaseId="DSWTV_1" testCaseName="Read_EDID_Without_TV" desc="Check the EDID status when TV is disconnected">
+    <testCase testCaseId="DSWTV_1" testCaseName="DisplaySettingsWithoutTV_Read_EDID_Without_TV" desc="Check the EDID status when TV is disconnected">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -75,14 +75,14 @@
         </testStep>
     </testCase>
 
-    <testCase testCaseId="DSWTV_2" testCaseName="Check_Connected_Video_Displays_Without_TV_Connected"  desc="Checks whether getConnectedVideoDisplays API is returning empty list when TV is not connected">
+    <testCase testCaseId="DSWTV_2" testCaseName="DisplaySettingsWithoutTV_Connected_Video_Displays_Without_TV_Connected"  desc="Checks whether getConnectedVideoDisplays API is returning empty list when TV is not connected">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Check_Display_Connected_Status" pluginName="DisplaySettings" method="Get_Connected_VideoDisplays" >
             <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_not_connected" />
         </testStep>
     </testCase>
 
-    <testCase testCaseId="DSWTV_3" testCaseName="Check_Active_Input_Status_Without_TV_Connected"  desc="Checks active input status with and without passing video port name when TV is not connected">
+    <testCase testCaseId="DSWTV_3" testCaseName="DisplaySettingsWithoutTV_Active_Input_Status_Without_TV_Connected"  desc="Checks active input status with and without passing video port name when TV is not connected">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -103,7 +103,7 @@
     </testCase>
 
     <!-- Test case 04 -->
-    <testCase testCaseId="DSWTV_4" testCaseName="Check_Connected_AudioPorts_Without_TV_Connected"  desc="Checks whether getConnectedAudioPorts API does not return HDMI0 when TV is not connected">
+    <testCase testCaseId="DSWTV_4" testCaseName="DisplaySettingsWithoutTV_Connected_AudioPorts_Without_TV_Connected"  desc="Checks whether getConnectedAudioPorts API does not return HDMI0 when TV is not connected">
         <testCaseInfo testCaseType="direct"/>
 	<testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" pluginName="DisplaySettings">
             <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_connected"/>
@@ -114,7 +114,7 @@
     </testCase>
 
     <!-- Test case 05 -->
-    <testCase testCaseId="DSWTV_5" testCaseName="Check_HDCP_Status_Without_TV_Connected"  desc="Checks getHDCPStatus API response when TV is not connected">
+    <testCase testCaseId="DSWTV_5" testCaseName="DisplaySettingsWithoutTV_HDCP_Status_Without_TV_Connected"  desc="Checks getHDCPStatus API response when TV is not connected">
         <testCaseInfo testCaseType="direct"/>
 	<testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
             <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_connected"/>
@@ -127,7 +127,7 @@
     </testCase>
 
     <!-- Test case 06 -->
-    <testCase testCaseId="DSWTV_6" testCaseName="Check_GetCurrentResolution_Status_Without_TV_Connected"  desc="Checks getCurrentResolution API response when TV is not connected">
+    <testCase testCaseId="DSWTV_6" testCaseName="DisplaySettingsWithoutTV_GetCurrentResolution_Status_Without_TV_Connected"  desc="Checks getCurrentResolution API response when TV is not connected">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
             <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_connected"/>
@@ -138,7 +138,7 @@
     </testCase>
 
     <!-- Test case 07 -->
-    <testCase testCaseId="DSWTV_7" testCaseName="Check_SetCurrentResolution_Status_Without_TV_Connected"  desc="Checks setCurrentResolution API response when TV is not connected">
+    <testCase testCaseId="DSWTV_7" testCaseName="DisplaySettingsWithoutTV_SetCurrentResolution_Status_Without_TV_Connected"  desc="Checks setCurrentResolution API response when TV is not connected">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
             <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_connected"/>
@@ -154,7 +154,7 @@
     </testCase>
 
     <!-- Test case 08 -->
-    <testCase testCaseId="DSWTV_8" testCaseName="Check_GetDefaultResolution_Status_Without_TV_Connected"  desc="Checks getDefaultResolution API response when TV is not connected">
+    <testCase testCaseId="DSWTV_8" testCaseName="DisplaySettingsWithoutTV_GetDefaultResolution_Status_Without_TV_Connected"  desc="Checks getDefaultResolution API response when TV is not connected">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
             <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_connected"/>
@@ -165,7 +165,7 @@
     </testCase>
 
     <!-- Test case 09 -->
-    <testCase testCaseId="DSWTV_9" testCaseName="Check_PortName_Status_Without_TV_Connected"  desc="Checks portname API response when TV is not connected">
+    <testCase testCaseId="DSWTV_9" testCaseName="DisplaySettingsWithoutTV_PortName_Status_Without_TV_Connected"  desc="Checks portname API response when TV is not connected">
         <testCaseInfo testCaseType="direct"/>
 	<testCasePreRequisite>
 	<prerequisite requisiteId="1" requisiteName="Activate_Plugin">

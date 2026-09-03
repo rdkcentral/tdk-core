@@ -41,12 +41,11 @@ result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
-Summ_list=[]
 if expectedResult in result.upper():
     status ="SUCCESS"
     print("\nCheck the status of AppManagers in the device")
-    plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
-    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated","org.rdk.AppManager":"activated"}
+    plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]
+    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.AppPackageManager":"activated","org.rdk.AppManager":"activated"}
     curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj,plugins_list)
     if curr_plugins_status_dict != plugin_status_needed:
         status = StabilityTestUtility.set_plugins_status(obj,plugin_status_needed)
@@ -62,57 +61,99 @@ if expectedResult in result.upper():
             print(f"\nLaunching {app_name}")
             thunder_port=rdkv_performancelib.devicePort
             event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 9,"method": "org.rdk.AppManager.1.register","params": {"event": "onAppLifecycleStateChanged", "id": "client.events.1" }}'],"/jsonrpc",False)
-            time.sleep(60)
+            time.sleep(20)
             for i in range(test_count):
                 print("ITERATION: ", i+1)
+                event_listener.clearEventsBuffer()
                 tdkTestObj = obj.createTestStep('rdkservice_launch_app')
                 tdkTestObj.addParameter("app_name", app_name)
                 tdkTestObj.executeTestCase(expectedResult)
                 status = tdkTestObj.getResult()
                 details = tdkTestObj.getResultDetails()
                 if status == "SUCCESS":
-                    tdkTestObj.setResultStatus("SUCCESS")
-                    print("\n Closing the app")
-                    tdkTestObj = obj.createTestStep('rdkservice_close_app')
-                    tdkTestObj.addParameter("app_id",app_name)
-                    tdkTestObj.executeTestCase(expectedResult)
-                    result = tdkTestObj.getResult()
-                    if result == "SUCCESS":
-                        event_dict = {"APP_STATE_ACTIVE": False, "APP_STATE_PAUSED" : False}
+                    print("Verifying app launch status")
+                    time.sleep(10)
+                    app_ids = rdkservice_get_loaded_apps()
+                    if app_name in app_ids:
+                        print(f"\nSuccessfully launched {app_name}")
                         tdkTestObj.setResultStatus("SUCCESS")
-                        continue_count = 0
-                        while True:
-                            if continue_count > 120:
+                        print("\n Closing the app")
+                        tdkTestObj = obj.createTestStep('rdkservice_close_app')
+                        tdkTestObj.addParameter("app_id",app_name)
+                        tdkTestObj.executeTestCase(expectedResult)
+                        result = tdkTestObj.getResult()
+                        if result == "SUCCESS":
+                            event_dict = {"APP_STATE_ACTIVE": False, "APP_STATE_PAUSED" : False}
+                            tdkTestObj.setResultStatus("SUCCESS")
+                            continue_count = 0
+                            while True:
+                                if continue_count > 120:
+                                    break
+                                if len(event_listener.getEventsBuffer()) == 0:
+                                    time.sleep(1)
+                                    continue_count += 1
+                                    continue
+                                event = event_listener.getEventsBuffer().pop(0)
+                                print("\nEvent:", event)
+                                if app_name in event and "onAppLifecycleStateChanged" in str(event):
+                                    if "\"oldState\":\"APP_STATE_ACTIVE\"" in event:
+                                        print("Received APP_STATE_ACTIVE event")
+                                        event_dict["APP_STATE_ACTIVE"] = True
+                                    if "\"newState\":\"APP_STATE_PAUSED\"" in event:
+                                        print ("Received APP_STATE_PAUSED event")
+                                        event_dict["APP_STATE_PAUSED"] = True
+                                if all(event_dict.values()):
+                                    break
+                            if all(event_dict.values()):
+                                print("Received close app lifecycle events successfully")
+                                app_ids = rdkservice_get_loaded_apps()
+                                if app_name not in app_ids:
+                                    print(f"Successfully verified {app_name} is no longer active")
+                                    tdkTestObj.setResultStatus("SUCCESS")
+                                    print("\n Terminating the app")
+                                    tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                                    tdkTestObj.addParameter("app_id", app_name)
+                                    tdkTestObj.executeTestCase(expectedResult)
+                                    result = tdkTestObj.getResult()
+                                    if result == "SUCCESS":
+                                        tdkTestObj.setResultStatus("SUCCESS")
+                                        time.sleep(10)
+                                        app_ids = rdkservice_get_loaded_apps()
+                                        if app_name not in app_ids:
+                                            print(f"Successfully verified {app_name} was terminated")
+                                            tdkTestObj.setResultStatus("SUCCESS")
+                                        else:
+                                            print(f"Iteration {i+1}: {app_name} is still listed in loaded apps after terminate")
+                                            tdkTestObj.setResultStatus("FAILURE")
+                                            break
+                                    else:
+                                        print(f"Iteration {i+1}: Unable to terminate the app")
+                                        tdkTestObj.setResultStatus("FAILURE")
+                                        break
+                                else:
+                                    print(f"Iteration {i+1}: {app_name} is still listed as active in loaded apps after close")
+                                    tdkTestObj.setResultStatus("FAILURE")
+                                    break
+                            else:
+                                print(f"Iteration {i+1}: Failed to receive close app lifecycle events")
+                                print([name for name, value in event_dict.items() if not value])
+                                tdkTestObj.setResultStatus("FAILURE")
                                 break
-                            if len(event_listener.getEventsBuffer()) == 0:
-                                time.sleep(1)
-                                continue_count += 1
-                                continue
-                            event = event_listener.getEventsBuffer().pop(0)
-                            print("\nEvent:", event)
-                            if app_name in event and "onAppLifecycleStateChanged" in str(event):
-                                if "APP_STATE_ACTIVE" in event:
-                                    print("Received APP_STATE_ACTIVE event")
-                                    event_dict["APP_STATE_ACTIVE"] = True
-                                if "APP_STATE_PAUSED" in event:
-                                    print ("Received APP_STATE_PAUSED event")
-                                    event_dict["APP_STATE_PAUSED"] = True
-                                    break   
-                        if all(event_dict.values()):
-                            print("Received all launch events successfully")
-                            tdkTestObj.setResultStatus("SUCCESS")                             
                         else:
-                            print("Failed to receive launch event")
-                            print([name for name, value in event_dict.items() if not value])
                             tdkTestObj.setResultStatus("FAILURE")
+                            print(f"Iteration {i+1}: Unable to close the app")
+                            break
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print("Unable to close the app")
+                        print(f"Iteration {i+1}: Unable to get the app lifecycle state")
+                        break
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print("Unable to launch the app")
+                    print(f"Iteration {i+1}: Unable to launch the app")
+                    break
         else:
             print("Failed to install the app")
+            obj.setLoadModuleStatus("FAILURE")
     else:
         print("The download manager is not active")
         obj.setLoadModuleStatus("FAILURE")
