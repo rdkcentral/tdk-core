@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Synthesis Test</title>
+</head>
+<body>
+    <h1>Speech Synthesis Test</h1>
+    
+    <textarea id="textToSpeak" placeholder="Enter text to be spoken">TDK - Test Development Kit for RDK.</textarea>
+
+    <!-- Add a dropdown for voice selection -->
+    <label for="voiceSelect">Select a voice:</label>
+    <select id="voiceSelect"></select>
+
+    <button onclick="speakText()">Speak</button>
+
+    <script>
+        function populateVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            const voices = window.speechSynthesis.getVoices();
+
+            if (voices.length > 0) {
+                console.log("SUCCESS: Voices populated successfully");
+
+                voices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                console.log('FAILURE: No voices available.');
+            }
+        }
+
+        function speakText() {
+            // Check if speech synthesis is supported
+            if ('speechSynthesis' in window) {
+                console.log("SUCCESS: Speech synthesis supported");
+
+                const textToSpeak = document.getElementById('textToSpeak').value;
+
+                // Get the selected voice from the dropdown
+                const selectedVoice = document.getElementById('voiceSelect').value;
+
+                // Create a new SpeechSynthesisUtterance instance
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+                // Get voices directly from the speechSynthesis object
+                const voices = window.speechSynthesis.getVoices();
+
+                // Find the selected voice by name
+                const selectedVoiceObject = voices.find(voice => voice.name === selectedVoice);
+
+                if (selectedVoiceObject) {
+                    utterance.voice = selectedVoiceObject;
+                } else {
+                    console.log('FAILURE: Voice not found.');
+                }
+
+                // Optional: Set additional parameters
+                utterance.rate = 1.0; // Set speech rate (1.0 is the default)
+                utterance.pitch = 1.0; // Set pitch (1.0 is the default)
+
+                // Use the SpeechSynthesis API to speak the text
+                window.speechSynthesis.speak(utterance);
+            } else {
+                // Speech synthesis not supported
+                console.log('FAILURE: Speech synthesis is not supported on your browser');
+            }
+        }
+
+        // Wait for voices to be loaded before populating the dropdown
+        window.speechSynthesis.onvoiceschanged = function() {
+            populateVoices();
+            speakText(); // Speak default text on voices changed
+        };
+
+        // Call the speakText function with the default content on page load
+        window.onload = function() {
+            // Populate voices immediately if voices are already loaded
+            if (window.speechSynthesis.getVoices().length > 0) {
+                populateVoices();
+            }
+        };
+    </script>
+</body>
+</html>

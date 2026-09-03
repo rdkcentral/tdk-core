@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Synthesis Example</title>
+</head>
+<body>
+    <h1>Speech Synthesis Test</h1>
+    
+    <textarea id="textToSpeak" placeholder="Enter text to be spoken">TDK - Test Development Kit for RDK.</textarea>
+    <button onclick="speakText()">Speak</button>
+
+    <script>
+        function speakText() {
+            // Check if speech synthesis is supported
+            if ('speechSynthesis' in window) {
+			    console.log("SUCCESS : speech synthesis supported")
+                const textToSpeak = document.getElementById('textToSpeak').value;
+                
+                // Create a new SpeechSynthesisUtterance instance
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+				utterance.rate = 1.0; // Set speech rate (1.0 is the default)
+                utterance.pitch = 100.0;
+				utterance.volume = 1000;
+ 
+                // Optional: Set additional parameters
+                // utterance.lang = 'en-US'; // Set language
+                // utterance.rate = 1.0; // Set speech rate (1.0 is the default)
+                // utterance.pitch = 1.0; // Set pitch (1.0 is the default)
+
+                // Use the SpeechSynthesis API to speak the text
+                window.speechSynthesis.speak(utterance);
+            } else {
+                // Speech synthesis not supported
+                console.log('FAILURE : Speech synthesis is not supported on your browser');
+            }
+        }
+
+        // Call the speakText function with the default content on page load
+        window.onload = speakText;
+    </script>
+</body>
+</html>

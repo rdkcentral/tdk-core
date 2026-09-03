@@ -53,8 +53,8 @@ pre_condition_status = check_device_state(obj)
 if expectedResult in (result.upper() and pre_condition_status):
     status ="SUCCESS"
     print("\nCheck the status of AppManagers in the device")
-    plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS"]
-    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.PackageManagerRDKEMS":"activated"}
+    plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager"]
+    plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.AppPackageManager":"activated"}
     curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj,plugins_list)
     if curr_plugins_status_dict != plugin_status_needed:
         status = StabilityTestUtility.set_plugins_status(obj,plugin_status_needed)
@@ -80,33 +80,51 @@ if expectedResult in (result.upper() and pre_condition_status):
                 if status == "SUCCESS":
                     tdkTestObj.setResultStatus("SUCCESS")
                     time.sleep(10)
-                    print("Terminating the app")
-                    tdkTestObj = obj.createTestStep('rdkv_terminate_app')
-                    tdkTestObj.addParameter("app_id",app_name)
-                    tdkTestObj.executeTestCase(expectedResult)
-                    result = tdkTestObj.getResult()
-                    if result == "SUCCESS":
-                        time.sleep(5)
-                        tdkTestObj.setResultStatus("SUCCESS")
-                        print("\n Validating resource usage:")
-                        tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                    print("Check if the app is launched")
+                    loaded_apps = rdkv_performancelib.rdkservice_get_loaded_apps()
+                    print(loaded_apps)
+                    if app_name in loaded_apps:
+                        print("Successfully launched the app")
+                        print("Terminating the app")
+                        tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                        tdkTestObj.addParameter("app_id",app_name)
                         tdkTestObj.executeTestCase(expectedResult)
-                        resource_usage = tdkTestObj.getResultDetails()
                         result = tdkTestObj.getResult()
-                        if expectedResult in result and resource_usage != "ERROR":
-                            print("\n Resource usage is within the expected limit")
+                        if result == "SUCCESS":
+                            time.sleep(5)
                             tdkTestObj.setResultStatus("SUCCESS")
+                            print("Verifying app termination")
+                            loaded_apps = rdkv_performancelib.rdkservice_get_loaded_apps()
+                            print(loaded_apps)
+                            if app_name not in loaded_apps:
+                                print(f"Successfully verified {app_name} was terminated")
+                                print("\n Validating resource usage:")
+                                tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                                tdkTestObj.executeTestCase(expectedResult)
+                                resource_usage = tdkTestObj.getResultDetails()
+                                result = tdkTestObj.getResult()
+                                if expectedResult in result and resource_usage != "ERROR":
+                                    print("\n Resource usage is within the expected limit")
+                                    tdkTestObj.setResultStatus("SUCCESS")
+                                else:
+                                    print(f"\nIteration {i+1} Error while validating resource usage")
+                                    tdkTestObj.setResultStatus("FAILURE")
+                                    break
+                            else:
+                                print(f"\nIteration {i+1}: {app_name} is still listed in loaded apps after terminate")
+                                tdkTestObj.setResultStatus("FAILURE")
+                                break
                         else:
-                            print("\n Error while validating resource usage")
                             tdkTestObj.setResultStatus("FAILURE")
+                            print(f"\nIteration {i+1}: Failed to terminate {app_name}")
                             break
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print(f"\nFailed to terminate {app_name}")
+                        print(f"\nIteration {i+1}: {app_name} is not listed in loaded apps")
                         break
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print(f"\nFailed to launch {app_name}")
+                    print(f"\nIteration {i+1}: Failed to launch {app_name}")
                     break
         else:
             print("Failed to install the app")

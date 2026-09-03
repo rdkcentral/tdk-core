@@ -6,11 +6,11 @@ RDKV_CERT_AVS_ScreenCapture
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [ScreenCapture_Check_Upload_Screen_Invalid_Url](#screencapture_check_upload_screen_invalid_url)
+   - [ScreenCapture_Upload_Screen_Invalid_Url](#screencapture_upload_screen_invalid_url)
    - [ScreenCapture_Upload_Screen](#screencapture_upload_screen)
-   - [ScreenCapture_Check_Upload_Complete_Event](#screencapture_check_upload_complete_event)
-   - [ScreenCapture_Check_Upload_Complete_Event_Invalid_Url](#screencapture_check_upload_complete_event_invalid_url)
-   - [ScreenCapture_Check_CallGUID](#screencapture_check_callguid)
+   - [ScreenCapture_Upload_Complete_Event](#screencapture_upload_complete_event)
+   - [ScreenCapture_Upload_Complete_Event_Invalid_Url](#screencapture_upload_complete_event_invalid_url)
+   - [ScreenCapture_CallGUID](#screencapture_callguid)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -43,9 +43,9 @@ accessible via JSON-RPC under the callsign `org.rdk.ScreenCapture` (version 1)
 | 2 | Configure SC upload URL | `SC_UPLOAD_URL` must be set to the CGI server URL for uploading the captured image PNG data | The `SC_UPLOAD_URL` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
-<a id="screencapture_check_upload_screen_invalid_url"></a>
+<a id="screencapture_upload_screen_invalid_url"></a>
 ### TestCase Name
-ScreenCapture_Check_Upload_Screen_Invalid_Url
+ScreenCapture_Upload_Screen_Invalid_Url
 
 ### TestCase ID
 SC_01
@@ -79,9 +79,9 @@ Uploads the screenshot
 
 ---
 
-<a id="screencapture_check_upload_complete_event"></a>
+<a id="screencapture_upload_complete_event"></a>
 ### TestCase Name
-ScreenCapture_Check_Upload_Complete_Event
+ScreenCapture_Upload_Complete_Event
 
 ### TestCase ID
 SC_03
@@ -98,9 +98,9 @@ Upload screen and receive uploadComplete Event
 
 ---
 
-<a id="screencapture_check_upload_complete_event_invalid_url"></a>
+<a id="screencapture_upload_complete_event_invalid_url"></a>
 ### TestCase Name
-ScreenCapture_Check_Upload_Complete_Event_Invalid_Url
+ScreenCapture_Upload_Complete_Event_Invalid_Url
 
 ### TestCase ID
 SC_04
@@ -117,9 +117,9 @@ Uploads screen and checks if uploadComplete Event is received for invalid url
 
 ---
 
-<a id="screencapture_check_callguid"></a>
+<a id="screencapture_callguid"></a>
 ### TestCase Name
-ScreenCapture_Check_CallGUID
+ScreenCapture_CallGUID
 
 ### TestCase ID
 SC_05

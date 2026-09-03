@@ -15,7 +15,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#########################################################################
+##########################################################################
 
 ###########################################################################################################
 #                                     Variable Definitions                                                #
@@ -50,11 +50,64 @@
 # VTS - all binaries base path
 VTS_Binary_basePath = " /VTS_Package/"
 
+# Device type: determines which profile YAMLs are bundled during compilation.
+# Set to "SOURCE" to include Source_* profile files.
+# Set to "SINK" to include Sink_* profile files.
+DEVICE_TYPE = "SOURCE"
+
+##########################################################################
+# HPK release version.
+# This must match the tag in rdk-hpk-documentation used during vts_compile.sh.
+# It is recorded here for traceability — this file travels with the package.
+##########################################################################
+HPK_VERSION = "3.1.0"
+
+##########################################################################
+# Per-module HAL Testing version overrides (optional).
+#
+# By default, the HAL Testing versions are derived from HPK_VERSION during
+# compilation (vts_compile.sh reads them from RELEASE.md).
+# The compiled versions are baked into the VTS package at build time.
+#
+# These entries are provided here for informational traceability only.
+# To pin a module to a different version before compilation, set the
+# corresponding _OVERRIDE variable in configure_vts.txt instead.
+#
+# Leave a variable set to "" to indicate "use whatever HPK_VERSION provides".
+##########################################################################
+DS_HAL_TEST_VERSION_OVERRIDE              = ""
+DEEPSLEEP_HAL_TEST_VERSION_OVERRIDE       = ""
+POWER_HAL_TEST_VERSION_OVERRIDE           = ""
+HDMICEC_HAL_TEST_VERSION_OVERRIDE         = ""
+RMF_AUDIO_CAPTURE_HAL_TEST_VERSION_OVERRIDE = ""
+
+# HAL Interface (header) version overrides (optional).
+# Same rules as test version overrides above: leave "" to use the HPK-derived
+# header version; set a value to pin the HAL header to a specific git ref.
+DS_HAL_HEADER_VERSION_OVERRIDE              = ""
+DEEPSLEEP_HAL_HEADER_VERSION_OVERRIDE       = ""
+POWER_HAL_HEADER_VERSION_OVERRIDE           = ""
+HDMICEC_HAL_HEADER_VERSION_OVERRIDE         = ""
+RMF_AUDIO_CAPTURE_HAL_HEADER_VERSION_OVERRIDE = ""
+
+# Failure analysis: set to "yes" to enable post-failure flow analysis.
+# Set to "no" to skip analysis and save time when not needed.
+FAILURE_ANALYSIS = "no"
+
+# Default timeout (in seconds) applied to each test case command execution.
+# Increase this if some test cases legitimately need longer to complete.
+DEFAULT_TESTCASE_TIMEOUT = 30
+
 # Device Settings HAL Test Configurations
 DeviceSettings_basePath = "device_settings/"
 DeviceSettings_binaryName = "hal_test_dshal"
 
-VideoDevice_binaryConfig = "Source_VideoDevice.yaml"
+VideoDevice_SOURCE_binaryConfig = "Source_VideoDevice.yaml"
+VideoDevice_SINK_binaryConfig = "Sink_4K_VideoDevice.yaml"
+# COMMON CHANGE: VideoDevice_L1_List / VideoDevice_L1_SkipTestCaseList entries below drive
+# VTS_dsVideoDevice_L1_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 VideoDevice_L1_List = []
 VideoDevice_L1_SkipTestCaseList = {}
 VideoDevice_L1_SkipTestCaseList_RPI = {}
@@ -66,6 +119,10 @@ VideoDevice_L1_SkipTestCaseList_RPI["dsGetFRFMode_positive"] = "RPI doesn't supp
 VideoDevice_L1_SkipTestCaseList_RPI["dsGetFRFMode_negative"] = "RPI doesn't support dsGetFRFMode REFPLTV-2562"
 VideoDevice_L1_SkipTestCaseList_RPI["dsSetDFC_negative"] = "RPI doesn't support dsSetDFC REFPLTV-2577"
 VideoDevice_L1_SkipTestCaseList_RPI["dsGetDFC_positive"] = "RPI doesn't support dsGetDFC REFPLTV-2577"
+# COMMON CHANGE: VideoDevice_L2_List / VideoDevice_L2_SkipTestCaseList entries below drive
+# VTS_dsVideoDevice_L2_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 VideoDevice_L2_List = []
 VideoDevice_L2_SkipTestCaseList = {}
 VideoDevice_L2_SkipTestCaseList_RPI = {}
@@ -73,10 +130,16 @@ VideoDevice_L2_SkipTestCaseList_RPI["GetSupportedVideoCodingFormats"] = "RPI doe
 VideoDevice_L2_SkipTestCaseList_RPI["SetAndGetDFC"] = "RPI doesn't support dsSetDFC REFPLTV-2577"
 VideoDevice_L2_SkipTestCaseList_RPI["GetVideoCodecInfo"] = "RPI doesn't support dsGetVideoCodecInfo REFPLTV-2536"
 
-VideoPort_binaryConfig = "Source_4K_VideoPort.yaml"
+VideoPort_SOURCE_binaryConfig = "Source_4K_VideoPort.yaml"
+VideoPort_SINK_binaryConfig = "Sink_4K_VideoPort.yaml"
+# COMMON CHANGE: VideoPort_L1_List / VideoPort_L1_SkipTestCaseList entries below drive
+# VTS_dsVideoPort_L1_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 VideoPort_L1_List = []
 VideoPort_L1_SkipTestCaseList = {}
 VideoPort_L1_SkipTestCaseList_RPI = {}
+VideoPort_L1_SkipTestCaseList_RPI["dsEnableHDCP_pos"] = "RPI doesn't support HDCP enabling https://forums.raspberrypi.com/viewtopic.php?t=278193"
 VideoPort_L1_SkipTestCaseList_RPI["dsGetHDCPProtocol_pos"] = "RPI doesn't support dsGetHDCPProtocol REFPLTV-2542"
 VideoPort_L1_SkipTestCaseList_RPI["GetHDCPReceiverProtocol_pos"] = "RPI doesn't support dsGetHDCPReceiverProtocol REFPLTV-2542"
 VideoPort_L1_SkipTestCaseList_RPI["GetHDCPCurrentProtocol_pos"] = "RPI doesn't support dsGetHDCPCurrentProtocol REFPLTV-2542"
@@ -97,6 +160,10 @@ VideoPort_L1_SkipTestCaseList_RPI["dsSetForceHDRMode_pos"] = "RPI doesn't suppor
 VideoPort_L1_SkipTestCaseList_RPI["dsColorDepthCapb_pos"] = "RPI doesn't support dsColorDepthCapabilities"
 VideoPort_L1_SkipTestCaseList_RPI["dsGetPreferredColorDepth_pos"] = "RPI doesn't support dsGetPreferredColorDepth"
 VideoPort_L1_SkipTestCaseList_RPI["dsSetPreferredColorDepth_pos"] = "RPI doesn't support dsSetPreferredColorDepth"
+# COMMON CHANGE: VideoPort_L2_List / VideoPort_L2_SkipTestCaseList entries below drive
+# VTS_dsVideoPort_L2_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 VideoPort_L2_List = []
 VideoPort_L2_SkipTestCaseList = {}
 VideoPort_L2_SkipTestCaseList_RPI = {}
@@ -112,41 +179,103 @@ VideoPort_L2_SkipTestCaseList_RPI["GetHDRCapabilities"] = "RPI doesn't support G
 VideoPort_L2_SkipTestCaseList_RPI["GetHDCPStatus"] = "RPI doesn't support GetHDCPStatus REFPLTV-2542"
 VideoPort_L2_SkipTestCaseList_RPI["VerifyHDCPProtocolStatus"] = "RPI doesn't support HDCPProtocolStatus"
 
-Host_binaryConfig = "Source_HostSettings.yaml"
+Host_SOURCE_binaryConfig = "Source_HostSettings.yaml"
+Host_SINK_binaryConfig = "Sink_HostSettings.yaml"
+# COMMON CHANGE: Host_L1_List / Host_L1_SkipTestCaseList entries below drive
+# VTS_dsHost_L1_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 Host_L1_List = []
 Host_L1_SkipTestCaseList = {}
 Host_L1_SkipTestCaseList_RPI = {}
 Host_L1_SkipTestCaseList_RPI["dsGetHostEDID_L1_positive"] =  "Not applicable for RPI - REFPLTV-2571"
 Host_L1_advanced_List = []
+# COMMON CHANGE: Host_L2_List entries below drive VTS_dsHost_L2_test.py and
+# apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 Host_L2_List = []
 
-Audio_binaryConfig = "Source_AudioSettings.yaml"
+Audio_SOURCE_binaryConfig = "Source_AudioSettings.yaml"
+Audio_SINK_binaryConfig = "Sink_AudioSettings.yaml"
+# COMMON CHANGE: Audio_L1_List / Audio_L1_SkipTestCaseList entries below drive
+# VTS_dsAudio_L1_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 Audio_L1_List = []
 Audio_L1_SkipTestCaseList = {}
 Audio_L1_SkipTestCaseList_RPI = {}
+# COMMON CHANGE: Audio_L2_List / Audio_L2_SkipTestCaseList entries below drive
+# VTS_dsAudio_L2_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 Audio_L2_List = []
 Audio_L2_SkipTestCaseList = {}
 Audio_L2_SkipTestCaseList_RPI = {}
 Audio_L2_SkipTestCaseList_RPI["SetAndGetStereoMode"] = "Not applicable for RPI REFPLTV-2543"
 
-Display_binaryConfig ="Source_4K_Display.yaml"
+Display_SOURCE_binaryConfig = "Source_4K_Display.yaml"
+Display_SINK_binaryConfig = "Sink_4K_Display.yaml"
+# COMMON CHANGE: Display_L1_List / Display_L1_SkipTestCaseList entries below drive
+# VTS_dsDisplay_L1_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 Display_L1_List = []
+# COMMON CHANGE: Display_L2_List / Display_L2_SkipTestCaseList entries below drive
+# VTS_dsDisplay_L2_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 Display_L2_List = []
+Display_L1_SkipTestCaseList = {}
+Display_L1_SkipTestCaseList_RPI = {}
+Display_L1_SkipTestCaseList_RPI["dsGetAVIContentType_pos"] = "Not applicable for RPI REFPLTV-3004"
+Display_L1_SkipTestCaseList_RPI["dsGetAVIContentType_neg"] = "Not applicable for RPI REFPLTV-3004"
+Display_L1_SkipTestCaseList_RPI["dsSetAVIContentType_pos"] = "Not applicable for RPI REFPLTV-3004"
+Display_L1_SkipTestCaseList_RPI["dsSetAVIContentType_neg"] = "Not applicable for RPI REFPLTV-3004"
+Display_L1_SkipTestCaseList_RPI["dsGetAVIScanInfo_pos"] = "Not applicable for RPI REFPLTV-3004"
+Display_L1_SkipTestCaseList_RPI["dsGetAVIScanInfo_neg"] = "Not applicable for RPI REFPLTV-3004"
+Display_L1_SkipTestCaseList_RPI["dsSetAVIScanInfo_pos"] = "Not applicable for RPI REFPLTV-3004"
+Display_L1_SkipTestCaseList_RPI["dsSetAVIScanInfo_neg"] = "Not applicable for RPI REFPLTV-3004"
+Display_L1_SkipTestCaseList_RPI["dsGetAllmEnabled_pos"] = "Not applicable for RPI REFPLTV-3004"
+Display_L1_SkipTestCaseList_RPI["dsGetAllmEnabled_neg"] = "Not applicable for RPI REFPLTV-3004"
+Display_L1_SkipTestCaseList_RPI["dsSetAllmEnabled_pos"] = "Not applicable for RPI REFPLTV-3004"
+Display_L1_SkipTestCaseList_RPI["dsSetAllmEnabled_neg"] = "Not applicable for RPI REFPLTV-3004"
+Display_L2_SkipTestCaseList = {}
+Display_L2_SkipTestCaseList_RPI = {}
+Display_L2_SkipTestCaseList_RPI["SetAndGetAVIContentType_src"] = "Not applicable for RPI REFPLTV-3004"
+
 
 # RMF Audio Capture HAL test Configurations
 rmfAudioCapture_basePath = "rmf_audio_capture/"
 rmfAudioCapture_binaryName = "hal_test_rmfAudioCapture"
 rmfAudioCapture_binaryConfig = "rmfAudioCaptureAuxNotSupported.yaml"
+# COMMON CHANGE: rmfAudioCapture_L1_List drives VTS_rmfAudioCapture_L1_test.py
+# and applies to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 rmfAudioCapture_L1_List = []
+# COMMON CHANGE: rmfAudioCapture_L2_List drives VTS_rmfAudioCapture_L2_test.py
+# and applies to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 rmfAudioCapture_L2_List = []
 
 # HDMICEC HAL test configurations
 HDMICEC_basePath = "hdmi_cec/"
 HDMICEC_binaryName = "hal_test_RCECHal"
-HDMICEC_binaryConfig = "source_hdmiCEC.yml"
+HDMICEC_SOURCE_binaryConfig = "source_hdmiCEC.yml"
+HDMICEC_SINK_binaryConfig = "sink_hdmiCEC.yml"
+# COMMON CHANGE: HDMICEC_L1_List / HDMICEC_L1_SkipTestCaseList entries below drive
+# VTS_HDMICEC_L1_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 HDMICEC_L1_List = []
 HDMICEC_L1_SkipTestCaseList = {}
 HDMICEC_L1_SkipTestCaseList_RPI = {}
+# COMMON CHANGE: HDMICEC_L2_List / HDMICEC_L2_SkipTestCaseList entries below drive
+# VTS_HDMICEC_L2_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 HDMICEC_L2_List = []
 HDMICEC_L2_SkipTestCaseList = {}
 HDMICEC_L2_SkipTestCaseList_RPI = {}
@@ -154,19 +283,34 @@ HDMICEC_L2_SkipTestCaseList_RPI = {}
 # PowerManager HAL test configurations
 PowerManager_basePath = "power_manager/"
 PowerManager_binaryName = "hal_test_iarmmgrs-power-hal"
-PowerManager_binaryConfig = "source_powerManager.yaml"
+PowerManager_SOURCE_binaryConfig = "source_powerManager.yaml"
+PowerManager_SINK_binaryConfig = "sink_powerManager.yaml"
+# COMMON CHANGE: PowerManager_L1_List / PowerManager_L1_SkipTestCaseList entries below drive
+# VTS_PowerManager_L1_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 PowerManager_L1_List = []
+# COMMON CHANGE: PowerManager_L2_List / PowerManager_L2_SkipTestCaseList entries below drive
+# VTS_PowerManager_L2_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 PowerManager_L2_List = []
 PowerManager_L1_SkipTestCaseList = {}
-PowerManager_L1_SkipTestCaseList["PLAT_SetPowerState_pos"] ="Testcase includes setting DUT to power state OFF"
 PowerManager_L2_SkipTestCaseList = {}
-PowerManager_L2_SkipTestCaseList["L2_SetAndGetPowerState"] = "Testcase includes setting DUT to power state OFF"
 
 # DeepSleep HAL test configurations
 DeepSleep_basePath = "deepsleep_manager/"
 DeepSleep_binaryName = "hal_test_iarmmgrs-deepsleep-hal"
-DeepSleep_binaryConfig = "deepsleepmanagerExtendedEnumsNotSupported.yaml"
+DeepSleep_binaryConfig = "deepsleepmanagerWakeUpSources.yaml"
+# COMMON CHANGE: DeepSleep_L1_List / DeepSleep_L1_SkipTestCaseList entries below drive
+# VTS_DeepSleep_L1_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 DeepSleep_L1_List = []
+# COMMON CHANGE: DeepSleep_L2_List / DeepSleep_L2_SkipTestCaseList entries below drive
+# VTS_DeepSleep_L2_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
 DeepSleep_L2_List = []
 DeepSleep_L1_SkipTestCaseList = {}
 DeepSleep_L1_SkipTestCaseList_RPI = {}
