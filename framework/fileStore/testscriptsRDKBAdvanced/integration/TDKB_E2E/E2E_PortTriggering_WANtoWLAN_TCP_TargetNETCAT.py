@@ -131,7 +131,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                     print("[TEST EXECUTION RESULT] : FAILURE")
 
                 # Assign SSID, password and interface
-                tdkbE2EUtility.ssid_name = tdkE2EUtility.ssid_2ghz_name
+                tdkbE2EUtility.ssid_name = tdkbE2EUtility.ssid_2ghz_name
                 tdkbE2EUtility.ssid_pwd = tdkbE2EUtility.ssid_2ghz_pwd
                 tdkbE2EUtility.wlan_interface = tdkbE2EUtility.wlan_2ghz_interface
         else:
