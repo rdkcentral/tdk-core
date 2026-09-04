@@ -11,11 +11,11 @@ RDKV_CERT_AVS_PersistentStore
    - [PersistentStore_Delete_Namespace](#persistentstore_delete_namespace)
    - [PersistentStore_Get_Storage_Size](#persistentstore_get_storage_size)
    - [PersistentStore_Flush_Cache](#persistentstore_flush_cache)
-   - [PersistentStore_Check_On_Value_Changed_Event](#persistentstore_check_on_value_changed_event)
+   - [PersistentStore_On_Value_Changed_Event](#persistentstore_on_value_changed_event)
    - [PersistentStore_Set_And_Get_Storage_Limits](#persistentstore_set_and_get_storage_limits)
-   - [PersistentStore_Check_Set_And_Get_Empty_Storage_Limits](#persistentstore_check_set_and_get_empty_storage_limits)
-   - [PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Key_Operations](#persistentstore_verify_setvalue_and_getvalue_api_with_empty_key_operations)
-   - [PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Namespce_Operations](#persistentstore_verify_setvalue_and_getvalue_api_with_empty_namespce_operations)
+   - [PersistentStore_Set_And_Get_Empty_Storage_Limits](#persistentstore_set_and_get_empty_storage_limits)
+   - [PersistentStore_SetValue_And_GetValue_API_with_Empty_Key_Operations](#persistentstore_setvalue_and_getvalue_api_with_empty_key_operations)
+   - [PersistentStore_SetValue_And_GetValue_API_with_Empty_Namespce_Operations](#persistentstore_setvalue_and_getvalue_api_with_empty_namespce_operations)
    - [PersistentStore_GetStorage_NamespaceLimit_For_DeletedNamespace](#persistentstore_getstorage_namespacelimit_for_deletednamespace)
    - [PersistentStore_ActivateDeactivate_Event_Test](#persistentstore_activatedeactivate_event_test)
 4. [Plugin Post-conditions](#plugin-post-conditions)
@@ -145,9 +145,9 @@ flushes the database cache
 
 ---
 
-<a id="persistentstore_check_on_value_changed_event"></a>
+<a id="persistentstore_on_value_changed_event"></a>
 ### TestCase Name
-PersistentStore_Check_On_Value_Changed_Event
+PersistentStore_On_Value_Changed_Event
 
 ### TestCase ID
 PS_06
@@ -189,9 +189,9 @@ Set and get storage limits for available namespaces
 
 ---
 
-<a id="persistentstore_check_set_and_get_empty_storage_limits"></a>
+<a id="persistentstore_set_and_get_empty_storage_limits"></a>
 ### TestCase Name
-PersistentStore_Check_Set_And_Get_Empty_Storage_Limits
+PersistentStore_Set_And_Get_Empty_Storage_Limits
 
 ### TestCase ID
 PS_08
@@ -208,9 +208,9 @@ Verify persistent store handles empty, sets and retrieves storage namespace limi
 
 ---
 
-<a id="persistentstore_verify_setvalue_and_getvalue_api_with_empty_key_operations"></a>
+<a id="persistentstore_setvalue_and_getvalue_api_with_empty_key_operations"></a>
 ### TestCase Name
-PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Key_Operations
+PersistentStore_SetValue_And_GetValue_API_with_Empty_Key_Operations
 
 ### TestCase ID
 PS_09
@@ -227,9 +227,9 @@ Verify persistent store handles empty key, set and get operations across namespa
 
 ---
 
-<a id="persistentstore_verify_setvalue_and_getvalue_api_with_empty_namespce_operations"></a>
+<a id="persistentstore_setvalue_and_getvalue_api_with_empty_namespce_operations"></a>
 ### TestCase Name
-PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Namespce_Operations
+PersistentStore_SetValue_And_GetValue_API_with_Empty_Namespce_Operations
 
 ### TestCase ID
 PS_10

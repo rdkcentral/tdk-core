@@ -69,8 +69,10 @@ if "SUCCESS" in result.upper():
             print("Screenshot capture result : ", screenshot)
             if screenshot != "FAILURE":
                 print("SUCCESS : Screenshot captured successfully")
+                tdkTestObj.setResultStatus("SUCCESS")
             else:
                 print("FAILURE : Failed to capture screenshot")
+                tdkTestObj.setResultStatus("FAILURE")
         else:
             tdkTestObj.setResultStatus("FAILURE")
     else:

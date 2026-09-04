@@ -19,11 +19,11 @@
 
 import tdklib
 import time
+import sys
+from io import StringIO
 import StabilityTestUtility
 from StabilityTestUtility import *
 import PerformanceTestVariables
-from web_socket_util import *
-import rdkv_performancelib
 from datetime import datetime, UTC
 
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
@@ -34,7 +34,6 @@ port = <port>
 obj.configureTestCase(ip,port,'RDKV_CERT_PVS_AppManager_TimeTo_CloseApp')
 
 expectedResult = "SUCCESS"
-Summ_list = []
 
 # Load module
 result = obj.getLoadModuleResult()
@@ -46,122 +45,104 @@ if expectedResult in result.upper():
     status = "SUCCESS"
 
     # Ensure plugins active
-    plugins_list = ["org.rdk.DownloadManager", "org.rdk.PackageManagerRDKEMS", "org.rdk.AppManager"]
-    plugin_status_needed = {"org.rdk.DownloadManager":"activated","org.rdk.PackageManagerRDKEMS":"activated","org.rdk.AppManager":"activated"}
-
-    curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj,plugins_list)
-
+    essential_plugins = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]
+    plugin_status_needed = {p: "activated" for p in essential_plugins}
+    
+    # Suppress stdout for utility function calls
+    old_stdout = sys.stdout
+    sys.stdout = StringIO()
+    
+    curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj, essential_plugins)
+    
+    # Restore stdout
+    sys.stdout = old_stdout
+    
     if curr_plugins_status_dict != plugin_status_needed:
-        status = StabilityTestUtility.set_plugins_status(obj,plugin_status_needed)
+        status = StabilityTestUtility.set_plugins_status(obj, plugin_status_needed)
         time.sleep(10)
 
     if status == "SUCCESS":
-
+        print("[SUCCESS] AppManager plugins activated")
+        
         app_bundle_name = PerformanceTestVariables.google_bundle
         app_name = app_bundle_name.split('+')[0]
-        print(app_name)
         app_download_url = PerformanceTestVariables.app_download_url
-
+        
+        print(f"[INFO] App to close: {app_name}")
+        
         # Install + Launch
-        status = rdkservice_install_launch_app(obj,app_bundle_name,app_name,app_download_url,launch=True)
-
+        print("\n[INFO] Installing and launching app")
+        status = rdkservice_install_launch_app(obj, app_bundle_name, app_name, app_download_url, launch=True)
+        
         if status == "SUCCESS":
-
-            print("\nRegistering lifecycle events")
-
-            thunder_port = rdkv_performancelib.devicePort
-
-            event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 9,"method": "org.rdk.AppManager.1.register","params": {"event": "onAppLifecycleStateChanged", "id": "client.events.1" }}'],"/jsonrpc",False)
-
-            time.sleep(3)
-
-            print(f"\nClosing {app_name}")
-
-            # Start time
-            start_time = datetime.now(UTC)
-
-            #Close using your lib function
+            print("[SUCCESS] App launched successfully")
+            
+            print(f"\n[INFO] Closing app {app_name}")
+            
+            # Close app using test step
             tdkTestObj = obj.createTestStep('rdkservice_close_app')
             tdkTestObj.addParameter("app_id", app_name)
             tdkTestObj.executeTestCase(expectedResult)
+            
             if tdkTestObj.getResult() != "SUCCESS":
-                print("Failed to send close command")
+                print("[FAILURE] Failed to send close command")
+                tdkTestObj.setResultStatus("FAILURE")
+                status = "FAILURE"
             else:
-                print("App closed successfully")
+                print("[INFO] Close command sent, waiting for app to close")
+                
+                # Start time capture
+                start_time = datetime.now(UTC)
                 time.sleep(10)  # allow cleanup
-                continue_count = 0
-                closed = False
-
-                while True:
-                    if continue_count > 120:
-                        print("Timeout waiting for close event")
-                        break
-
-                    if len(event_listener.getEventsBuffer()) == 0:
-                        time.sleep(1)
-                        continue_count += 1
-                        continue
-
-                    event = event_listener.getEventsBuffer().pop(0)
-                    print("\nEvent:", event)
-
-                    if app_name in event and "APP_STATE_DESTROYED" in event:
-                        print("Received close event")
-                        closed = True
-                        break
-
-                if closed:
-
-                    close_time_str = str(event).split("$$$")[0]
-
-                    end_time = datetime.strptime(close_time_str, "%H:%M:%S.%f")
-                    start_time_dt = datetime.strptime(str(start_time.time()), "%H:%M:%S.%f")
-
-                    time_taken = end_time - start_time_dt
-                    time_taken_ms = time_taken.total_seconds() * 1000
-
-                    print("\nTime taken to close app: {} ms".format(time_taken_ms))
-
-                    # Threshold
-                    conf_file, file_status = getConfigFileName(obj.realpath)
-
+                end_time = datetime.now(UTC)
+                
+                # Calculate close time
+                close_time_ms = (end_time - start_time).total_seconds() * 1000
+                
+                if close_time_ms > 0:
+                    print(f"[SUCCESS] Time taken to close app: {close_time_ms} ms")
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    
+                    # Validate against threshold
+                    print(f"\n[INFO] Validating close time against threshold")
+                    
+                    # Suppress stdout for utility function calls
+                    old_stdout = sys.stdout
+                    sys.stdout = StringIO()
+                    
+                    conf_file, _ = getConfigFileName(obj.realpath)
                     config_status, close_threshold = getDeviceConfigKeyValue(conf_file, "APPMANAGER_CLOSE_THRESHOLD_VALUE")
-
+                    offset_status, offset = getDeviceConfigKeyValue(conf_file, "THRESHOLD_OFFSET")
+                    
+                    # Restore stdout
+                    sys.stdout = old_stdout
+                    
                     if not close_threshold:
-                        print("Close threshold not found, using default (2000 ms)")
                         close_threshold = "2000"
-
-                    config_status, offset = getDeviceConfigKeyValue(conf_file, "THRESHOLD_OFFSET")
-
                     if not offset:
                         offset = "500"
-
+                    
                     threshold = int(close_threshold)
                     offset_val = int(offset)
-
-                    Summ_list.append(f"CLOSE_THRESHOLD : {threshold} ms")
-                    Summ_list.append(f"OFFSET : {offset_val} ms")
-                    Summ_list.append(f"Time taken : {time_taken_ms} ms")
-
-                    if 0 < int(time_taken_ms) < (threshold + offset_val):
-                        print("\nClose time within threshold")
-                        obj.setTestResult("SUCCESS")
+                    threshold_max = threshold + offset_val
+                    
+                    print(f"Threshold: {threshold} ms")
+                    print(f"Offset: {offset_val} ms")
+                    print(f"Max allowed: {threshold_max} ms")
+                    
+                    if 0 < close_time_ms < threshold_max:
+                        print(f"\n[SUCCESS] Close time is within expected range")
                     else:
-                        print("\nClose time exceeded threshold")
-                        obj.setTestResult("FAILURE")
-
-                    getSummary(Summ_list, obj)
-
-
+                        print(f"\n[FAILURE] Close time exceeds threshold")
+                        tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print("Failed to receive close event")
-                    obj.setTestResult("FAILURE")
-
-            event_listener.disconnect()
-
+                    print(f"[ERROR] Invalid close time: {close_time_ms} ms")
+                    tdkTestObj.setResultStatus("FAILURE")
+                    status = "FAILURE"
 
         else:
-            print("Install/Launch failed")
+            print("[FAILURE] Install/Launch failed")
+            tdkTestObj.setResultStatus("FAILURE")
 
     obj.unloadModule("rdkv_performance")
 

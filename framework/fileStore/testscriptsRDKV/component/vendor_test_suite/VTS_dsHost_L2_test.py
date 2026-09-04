@@ -113,7 +113,7 @@ if "SUCCESS" in result.upper():
     #Set binary name
     binaryName = DeviceSettings_binaryName
     #Set TestCase Config
-    binaryConfig = Host_binaryConfig
+    binaryConfig = Host_SOURCE_binaryConfig if "SOURCE" in DEVICE_TYPE.upper() else Host_SINK_binaryConfig
     #Set basepath of test
     basePath = VTS_Binary_basePath + DeviceSettings_basePath
     testCaseList = Host_L2_List
@@ -129,25 +129,25 @@ if "SUCCESS" in result.upper():
         print("Got sshPort from config file : ", sshPort)
     except:
         sshPort = 22
-    checkSoCID_command = fr"[ -f {hostConfigFile} ] && sed -n '/socID:[[:space:]]*$/c\empty' {hostConfigFile} || echo 'File not found'"
+    checkSoCID_command = r'grep -q "Raspberry Pi 4" /proc/cpuinfo 2>/dev/null && echo "rpi4" || { [ -d /proc/brcm ] && echo "bcm"; }'
     print("checkSoCID_command : " , checkSoCID_command)
-    output = ssh_and_execute (sshMethod, ip, username, password, checkSoCID_command, sshPort).splitlines()[-1]
+    output = executeSingleCommand(ip, username, password, checkSoCID_command, sshPort).splitlines()[-1]
     print("checkSoCID_command output : ",output)
-    if "empty" in output:
-        print("SoC ID must be updated for this device")
-        boxtype = obj.getDeviceBoxType();
-        if ("RPI-Client" in boxtype):
+    if "rpi4" in output or "bcm" in output:
+        if "rpi4" in output:
             getSoCID_command = "cat /sys/firmware/devicetree/base/serial-number"
-            socIDFromDUT = ssh_and_execute (sshMethod, ip, username, password, getSoCID_command).splitlines()[-1]
-            print("getSoCID_command output : ", socIDFromDUT)
-            if socIDFromDUT:
-                updateSoCID_command = fr"sed -i 's/socID:[[:space:]]*$/socID: \"{socIDFromDUT}\"/' {hostConfigFile}"
-                print("updateSoCID_command : ", updateSoCID_command)
-                output = ssh_and_execute (sshMethod, ip, username, password, updateSoCID_command)
-                print("Updated socID in config file")
-            else:
-                print("ERROR : Unable to obtain socIDFromDUT")
-                socIDerror = True
+        else:
+            getSoCID_command = "otpgetchipid | grep OTP_ID | cut -d ':' -f2 | tr -d ' '"
+        socIDFromDUT = ssh_and_execute (sshMethod, ip, username, password, getSoCID_command).splitlines()[-1]
+        print("getSoCID_command output : ", socIDFromDUT)
+        if socIDFromDUT:
+            updateSoCID_command = fr"sed -i 's/socID:[[:space:]]*$/socID: \"{socIDFromDUT}\"/' {hostConfigFile}"
+            print("updateSoCID_command : ", updateSoCID_command)
+            output = ssh_and_execute (sshMethod, ip, username, password, updateSoCID_command)
+            print("Updated socID in config file")
+        else:
+            print("ERROR : Unable to obtain socIDFromDUT")
+            socIDerror = True
 
     try:
         if testList and not socIDerror:
@@ -156,7 +156,7 @@ if "SUCCESS" in result.upper():
             print("####################################################################################")
 
             binaryPath = "cd " + basePath + " ; ./" + binaryName + " -p " + binaryConfig
-            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList)
+            executionSummary = runTest(binaryPath, module, plugin_name, testList, testCaseList, binaryConfig=binaryConfig)
     
             executePostRequisites()
    
