@@ -61,6 +61,7 @@ RDKV_CERT_AVS_System
    - [System_Invalid_Set_Power_State](#system_invalid_set_power_state)
    - [System_Invalid_TimeZone_ErrorValidation](#system_invalid_timezone_errorvalidation)
    - [System_Invalid_Key_ErrorMessage](#system_invalid_key_errormessage)
+   - [System_GetPlatformConfiguration_Invalid_Query](#system_getplatformconfiguration_invalid_query)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -1245,6 +1246,24 @@ Validate error message with invalid key in deviceInfo api
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get device info | Invoke getDeviceInfo on org.rdk.System with params: "INVALID"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getDeviceInfo", "params": {"params": "INVALID"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getDeviceInfo` returns an error response with `success: false` for the invalid key `"INVALID"`  |
+
+---
+
+<a id="system_getplatformconfiguration_invalid_query"></a>
+### TestCase Name
+System_GetPlatformConfiguration_Invalid_Query
+
+### TestCase ID
+SYS_56
+
+### TestCase Objective
+Validates negative scenario for getPlatformConfiguration with invalid query value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get platform configuration with invalid query | Invoke getPlatformConfiguration on org.rdk.System with query: "INVALID.QUERY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "INVALID.QUERY"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getPlatformConfiguration` returns an error response with `success: false` for the invalid query `"INVALID.QUERY"`  |
 
 ## Plugin Post-conditions
 
