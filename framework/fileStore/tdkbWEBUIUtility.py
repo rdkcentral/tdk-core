@@ -230,9 +230,9 @@ def openLocalWebUI(GridUrl,tdkTestObj,LoginStatus):
         options.headless = True
         driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url,options=options)
         driver.get(GridUrl);
-        #Uncomment below line and comment next line if UI page has changed
-        #checkUI = driver.find_element_by_xpath("/html/body/div[1]/div[3]/h1").text
-        checkUI = driver.find_element_by_xpath("/html/body/div[1]/div[3]/div[3]/h1").text
+        #Comment below line and uncomment next line if UI page has changed
+        checkUI = driver.find_element_by_xpath("/html/body/div[1]/div[3]/h1").text
+        #checkUI = driver.find_element_by_xpath("/html/body/div[1]/div[3]/div[3]/h1").text
         if "Gateway > Login" == checkUI:
             tdkTestObj.setResultStatus("SUCCESS");
             print("SUCCESS: Successfully opened the xfinity UI page\n")
