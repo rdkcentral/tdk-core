@@ -46,7 +46,7 @@
     </pluginPreRequisite>
 
     <!-- getDeviceInfo API is deprecated, the corresponding test cases have been commented-->
-    <!--testCase testCaseId="WH_01" testCaseName= "WareHouse_Get_STB_Device_Info"  desc="Gets all STB device info">
+    <!--testCase testCaseId="WH_01" testCaseName= "Warehouse_Get_STB_Device_Info"  desc="Gets all STB device info">
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="WAREHOUSE_NA_TESTS" useMethodTag="warehouse_na_tests" arguments="deviceinfo"/>
         <testStep testStepId="1" name="Get_STB_DeviceInfo" method="Get_DeviceInfo" >
             <resultGeneration useMethodTag="warehouse_get_device_info" />
@@ -54,7 +54,7 @@
     </testCase-->
 
     <!-- setFrontPanelState API is deprecated, the corresponding test cases have been commented-->
-    <!--testCase testCaseId="WH_02" testCaseName="WareHouse_Set_Front_Panel_State_None" desc="Sets the front panel state to None" >
+    <!--testCase testCaseId="WH_02" testCaseName="Warehouse_Set_Front_Panel_State_None" desc="Sets the front panel state to None" >
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="WAREHOUSE_NA_TESTS" useMethodTag="warehouse_na_tests" arguments="frontpanel"/>
         <testStep testStepId="1" name="Set_FrontPanel_State" method="Set_FrontPanel_State">
             <params>
@@ -64,7 +64,7 @@
         </testStep>
     </testCase>
 
-    <testCase testCaseId="WH_03" testCaseName="WareHouse_Set_Front_Panel_State_Download_In_Progress" desc="Sets the front panel state to DOWNLOAD IN PROGRESS" >
+    <testCase testCaseId="WH_03" testCaseName="Warehouse_Set_Front_Panel_State_Download_In_Progress" desc="Sets the front panel state to DOWNLOAD IN PROGRESS" >
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="WAREHOUSE_NA_TESTS" useMethodTag="warehouse_na_tests" arguments="frontpanel"/>
         <testStep testStepId="1" name="Set_FrontPanel_State" method="Set_FrontPanel_State">
             <params>
@@ -74,7 +74,7 @@
         </testStep>
     </testCase>
 
-    <testCase testCaseId="WH_04" testCaseName="WareHouse_Set_Front_Panel_State_Download_Failed" desc="Sets the front panel state to DOWNLOAD FAILED" >
+    <testCase testCaseId="WH_04" testCaseName="Warehouse_Set_Front_Panel_State_Download_Failed" desc="Sets the front panel state to DOWNLOAD FAILED" >
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="WAREHOUSE_NA_TESTS" useMethodTag="warehouse_na_tests" arguments="frontpanel"/>
         <testStep testStepId="1" name="Set_FrontPanel_State" method="Set_FrontPanel_State">
             <params>
@@ -84,7 +84,7 @@
         </testStep>
     </testCase>
 
-    <testCase testCaseId="WH_05" testCaseName="WareHouse_Set_Front_Panel_State_Download_Invalid" desc="Sets the front panel state to invalid value" >
+    <testCase testCaseId="WH_05" testCaseName="Warehouse_Set_Front_Panel_State_Download_Invalid" desc="Sets the front panel state to invalid value" >
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="WAREHOUSE_NA_TESTS" useMethodTag="warehouse_na_tests" arguments="frontpanel"/>
         <testStep testStepId="1" name="Set_FrontPanel_State" method="Set_FrontPanel_State">
             <params>
@@ -94,21 +94,21 @@
         </testStep>
     </testCase-->
 
-    <testCase testCaseId="WH_01" testCaseName="WareHouse_Light_Reset" desc="Performs a light reset of application data">
+    <testCase testCaseId="WH_01" testCaseName="Warehouse_Light_Reset" desc="Performs a light reset of application data">
         <testCaseInfo testCaseType="direct" />
         <testStep testStepId="1" name="Light_Reset" method="Light_Reset" >
             <resultGeneration useMethodTag="warehouse_validate_reset" />
         </testStep>
     </testCase>
 
-    <testCase testCaseId="WH_02" testCaseName="WareHouse_Check_Is_Clean" desc="Checks locations where customer data may be stored">
+    <testCase testCaseId="WH_02" testCaseName="Warehouse_Is_Clean" desc="Checks locations where customer data may be stored">
         <testCaseInfo testCaseType="direct" />
         <testStep testStepId="1" name="Is_Clean" method="Is_clean" >
             <resultGeneration useMethodTag="warehouse_check_isclean" />
         </testStep>
     </testCase>
 
-    <testCase testCaseId="WH_03" testCaseName="WareHouse_Reset_Device" desc="Resets the STB to the warehouse state">
+    <testCase testCaseId="WH_03" testCaseName="Warehouse_Reset_Device" desc="Resets the STB to the warehouse state">
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="WAREHOUSE_NA_TESTS" useMethodTag="warehouse_na_tests" arguments="reset"/>
         <testStep testStepId="1" name="Reset_Device" method="Reset_Device">
             <resultGeneration useMethodTag="warehouse_validate_reset" />
@@ -118,7 +118,7 @@
         </testStep>
     </testCase>
 
-    <testCase testCaseId="WH_04" testCaseName="WareHouse_Internal_Reset" desc="Invokes the internal reset script, which reboots the Warehouse service">
+    <testCase testCaseId="WH_04" testCaseName="Warehouse_Internal_Reset" desc="Invokes the internal reset script, which reboots the Warehouse service">
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="WAREHOUSE_NA_TESTS" useMethodTag="warehouse_na_tests" arguments="reset"/>
         <testStep testStepId="1" name="Internal_Reset" method="Internal_Reset">
             <params>
@@ -131,7 +131,7 @@
         </testStep>
     </testCase>
 
-    <testCase testCaseId="WH_05" testCaseName="WareHouse_Check_Event_On_Device_Reset" desc="Checks if event is received on device reset">
+    <testCase testCaseId="WH_05" testCaseName="Warehouse_Event_On_Device_Reset" desc="Checks if event is received on device reset">
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="WAREHOUSE_NA_TESTS" useMethodTag="warehouse_na_tests" arguments="reset"/>
         <testStep testStepId="1" name="Reset_Device" method="Reset_Device">
             <params>
@@ -211,7 +211,7 @@
 
     <!-- setFrontPanelState API is deprecated, the corresponding test cases have been commented-->
     <!--- Test case 12 -->
-    <!--testCase testCaseId="WH_12" testCaseName="WareHouse_Set_Front_Panel_State_EmptyValue" desc="Sets the front panel state to EmptyValue" >
+    <!--testCase testCaseId="WH_12" testCaseName="Warehouse_Set_Front_Panel_State_EmptyValue" desc="Sets the front panel state to EmptyValue" >
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="WAREHOUSE_NA_TESTS" useMethodTag="warehouse_na_tests" arguments="frontpanel"/>
         <testStep testStepId="1" name="Set_FrontPanel_State_EmptyValue" method="Set_FrontPanel_State">
             <resultGeneration useMethodTag="warehouse_negative_error_message_validation" expectedValues="incorrect state" />
