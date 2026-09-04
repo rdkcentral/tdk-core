@@ -188,9 +188,14 @@ if expectedResult in (result.upper() and pre_condition_status):
                     result_dict_list = testUsingWebInspect(obj,webkit_console_socket,result_dict_list);
                     webkit_console_socket.disconnect()
                 time.sleep(5)
-                cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
-                json.dump(cpu_mem_info_dict,json_file)
-                json_file.close()
+
+                if result_dict_list != []:
+                    cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
+                    json.dump(cpu_mem_info_dict,json_file)
+                    json_file.close()
+                else:
+                    print("\n No CPU and memory information collected")
+                    tdkTestObj.setResultStatus("FAILURE")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
                 print("Failed to install or launch app")
@@ -204,6 +209,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         result = tdkTestObj.getResult()
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
+            print("App terminated successfully")
         else:
             tdkTestObj.setResultStatus("FAILURE")
             print("Unable to terminate the app")

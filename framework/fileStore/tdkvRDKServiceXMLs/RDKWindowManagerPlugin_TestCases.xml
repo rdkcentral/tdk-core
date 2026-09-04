@@ -695,7 +695,7 @@
             <params>
                 <param tag="clientId" usePreviousResult="true" Id="1" useMethodTag="appmanager_get_previous_appinstance_id"/>
             </params>
-            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+            <resultGeneration useMethodTag="rwm_get_zorder"/>
         </testStep>
     </testCase>
 
@@ -893,6 +893,29 @@
         </testStep>
         <testStep testStepId="2" name="Check_On_Screenshot_Complete_Event" event="Event_On_Screenshot_Complete" action="eventListener" delay="120">
             <resultGeneration useMethodTag="rwm_check_on_screenshot_complete_event"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case L2_06 -->
+    <testCase testCaseId="RWM_L2_06" testCaseName="RDKWindowManager_Start_Stop_VNC_Server" desc="Checks whether the VNC server starts and stops correctly">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Start_VNC_Server" method="Start_VNC_Server">
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="VNC_Server_Start_Log_Validation" action="externalFnCall" delay="3">
+            <resultGeneration useMethodTag="vnc_server_log_validation" expectedValues="VNC server started successfully"/>
+        </testStep>
+        <testStep testStepId="3" name="Check_VNC_Service_Availability" action="externalFnCall">
+            <resultGeneration useMethodTag="vnc_server_availability_check" arguments="5900"/>
+        </testStep>
+        <testStep testStepId="4" name="Stop_VNC_Server" method="Stop_VNC_Server">
+            <resultGeneration useMethodTag="rwm_null_result_validation"/>
+        </testStep>
+        <testStep testStepId="5" name="VNC_Server_Stop_Log_Validation" action="externalFnCall" delay="3">
+            <resultGeneration useMethodTag="vnc_server_log_validation" expectedValues="VNC server stopped successfully"/>
+        </testStep>
+        <testStep testStepId="6" name="Check_VNC_Service_Unavailability" action="externalFnCall">
+            <resultGeneration useMethodTag="vnc_server_availability_check" arguments="5900,unavailability"/>
         </testStep>
     </testCase>
 

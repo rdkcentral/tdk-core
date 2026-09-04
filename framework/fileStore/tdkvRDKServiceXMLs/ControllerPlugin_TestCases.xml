@@ -595,7 +595,7 @@
         <params>
           <param tag="value" value="" indexOnly="true" />
         </params>
-        <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="Could not access requested service"/>
       </testStep>
      </testCase>
      <testCase testCaseId="Controller_22" testCaseName="Controller_Set_DeviceInfo_Plugin_Unavailable_And_Activate"  desc="To make deviceinfo plugin unavailable and validates the error message on activating the plugin">
