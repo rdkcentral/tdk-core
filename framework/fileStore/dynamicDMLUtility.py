@@ -135,6 +135,21 @@ def get_NumberOfEntries(path, json_config_filename):
             key_in_json = key_in_json + "."
             get_full_dm_list(key_in_json, number_of_entries, DML_name, loop_number, config, dm_list, sourceFileTable)
 
+    #Remove the table instances that need to be skipped, also add an additional instance to even out
+    #Used for handling SSID and AccessPoint indices
+    if config[number_of_entries_key].get("skipTableInstances") is not None:
+        instanceToSkip = config[number_of_entries_key].get("skipTableInstances")
+        instanceToAdd = str(int(number_of_entries) + 1)
+        #Match string
+        stringToMatch = "." + instanceToSkip[0] + "."
+        stringToReplace = "." + instanceToAdd + "."
+
+        for dm in dm_list:
+            if stringToMatch in dm:
+                replacedDM = re.sub(stringToMatch, stringToReplace, dm)
+                dm_list.remove(dm)
+                dm_list.append(replacedDM)
+
     return dm_list
 
 # create_xml_tags_from_json
@@ -163,6 +178,9 @@ def create_xml_tags_from_json(new_parameter, name, json_config_filename):
                     elif isinstance(values, list):
                         value = ", ".join(values)
 
+                    else:
+                        value = values
+
                     if value:
                         new_tag.text = value
 
@@ -178,6 +196,17 @@ def create_xml_tags_from_json(new_parameter, name, json_config_filename):
                             comment = ET.Comment("expected value of the param")
                         elif tag == "persistentSet":
                             comment = ET.Comment("whether set value will be retained and set should be followed by a get or not")
+                        elif tag == "skipGet":
+                            comment = ET.Comment("skip get operation for this parameter")
+                        elif tag == "onlyGetInstances":
+                            stringToMatch = "." + value + "."
+                            if stringToMatch not in name:
+                                new_tag = ET.Element("skipGet")
+                                comment = ET.Comment("skip get operation for this parameter")
+                                value = "yes"
+                            else:
+                                comment = "None"
+
                         else:
                             comment = "None"
 
@@ -687,7 +716,6 @@ def process_config_file(config_file_path, temp_component_name, rbusobj, temp_con
             flags = values.get("flags", [""])
             if flags == [""] or not any(flags):
                 secondary_config[key] = values
-
             else:
                 tdkTestObj = rbusobj.createTestStep("RBUS_GetElementInfo")
                 tdkTestObj.addParameter("pathName",key)
@@ -1206,7 +1234,26 @@ def performPreReq(tr181Obj, rbusobj, path_to_runtime_config):
             parameter_names = get_NumberOfEntries(DML_param, secondary_config_name)
             if parameter_names:
                 for parameter_name in parameter_names:
-                    temp_config[parameter_name] = values.copy()
+                    if values.get("skipSetInstances") is not None:
+                        matchFound = False
+                        for instance in values.get("skipSetInstances"):
+                            stringToMatch = "." + instance + "."
+                            if stringToMatch in parameter_name:
+                                matchFound = True
+                                break
+                        if not matchFound:
+                            temp_config[parameter_name] = values.copy()
+                    elif values.get("skipGetInstances") is not None:
+                        matchFound = False
+                        for instance in values.get("skipGetInstances"):
+                            stringToMatch = "." + instance + "."
+                            if stringToMatch in parameter_name:
+                                matchFound = True
+                                break
+                        if not matchFound:
+                            temp_config[parameter_name] = values.copy()
+                    else:
+                        temp_config[parameter_name] = values.copy()
 
     with open(temp_config_name, 'w') as file:
         file.write(format_json(temp_config))

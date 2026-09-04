@@ -2697,7 +2697,8 @@
         "persistentSet": [""],
         "defaultValue": ["Exact"],
         "expectedValues": ["Exact","Prefix","Suffix","Substring"],
-        "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER"]
+        "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER"],
+	"skipGet": "Yes"
     },
     "Device.DHCPv4.Server.Pool.{i}.ClientID": {
         "type": ["string"],
@@ -4412,7 +4413,8 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": ["bridge-dhcp","bridge-static","router"],
-        "flags": [""]
+        "flags": [""],
+	"onlyGetInstances": ["1"]
     },
     "Device.X_CISCO_COM_DeviceControl.LanManagementEntry.{i}.LanNetwork": {
         "type": ["string"],

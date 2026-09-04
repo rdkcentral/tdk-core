@@ -7,7 +7,7 @@ RDKV_CERT_AVS_DownloadManager
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
    - [DownloadManager_Download_ValidParameters](#downloadmanager_download_validparameters)
-   - [DownloadManager_GetStorageDetails_Functionality](#downloadmanager_getstoragedetails_functionality)
+   - [DownloadManager_GetStorageDetails_UnknownMethod_Error](#downloadmanager_getstoragedetails_unknownmethod_error)
    - [DownloadManager_Cancel_EmptyParameters](#downloadmanager_cancel_emptyparameters)
    - [DownloadManager_Delete_EmptyFileLocator](#downloadmanager_delete_emptyfilelocator)
    - [DownloadManager_Delete_InvalidFileLocator](#downloadmanager_delete_invalidfilelocator)
@@ -89,23 +89,21 @@ Verify that the download method works correctly with valid parameters
 
 ---
 
-<a id="downloadmanager_getstoragedetails_functionality"></a>
+<a id="downloadmanager_getstoragedetails_unknownmethod_error"></a>
 ### TestCase Name
-DownloadManager_GetStorageDetails_Functionality
+DownloadManager_GetStorageDetails_UnknownMethod_Error
 
 ### TestCase ID
 DM_02
 
 ### TestCase Objective
-Verify that the getStorageDetails method functions correctly
+Verify that the getStorageDetails method returns unknown method error when called with valid parameters
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get download storage details | Invoke getStorageDetails on org.rdk.DownloadManager with type: "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>", id: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.getStorageDetails", "params": {"type": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>", "id": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that storage details are returned with valid non-empty values |
-| 2 | Uninstall package from device | Invoke uninstall on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 3 | Verify uninstalled package | Invoke listPackages on org.rdk.AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the package is successfully uninstalled |
+| 1 | Get storage details | Invoke getStorageDetails on org.rdk.DownloadManager with type: "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>", id: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.getStorageDetails", "params": {"type": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>", "id": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Unknown method.` |
 
 ---
 
