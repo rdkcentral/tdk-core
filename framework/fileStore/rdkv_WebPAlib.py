@@ -282,7 +282,7 @@ def webpa_get(paramName,WEBPA_URL,AUTH_TOKEN):
             else:
                 data_type_field = data["parameters"][0]["dataType"]
                 print("Data Type : ", data_type_field)
-                print("\nSUCCESS : Value feild is not empty\n")
+                print("\nSUCCESS : Value field is not empty\n")
 
         else:
             print("\nFAILURE : Failed to get the device credentials")
