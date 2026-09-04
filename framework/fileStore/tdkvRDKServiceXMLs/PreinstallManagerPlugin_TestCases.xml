@@ -62,25 +62,25 @@
         </prerequisite>
 
         <!-- PluginPreRequisite 3 -->
-        <prerequisite requisiteId="3" requisiteName="Activate_PackageManagerRDKEMS_Plugin">
+        <prerequisite requisiteId="3" requisiteName="Activate_AppPackageManager_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
-                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                    <param tag="plugin" value="org.rdk.AppPackageManager" indexOnly="true"/>
                 </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS"/>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppPackageManager"/>
             </testStep>
             <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppPackageManager"/>
                 <params>
-                    <param tag="callsign" value="org.rdk.PackageManagerRDKEMS"/>
+                    <param tag="callsign" value="org.rdk.AppPackageManager"/>
                 </params>
             </testStep>
             <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PackageManagerRDKEMS"/>
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.AppPackageManager"/>
                 <params>
-                    <param tag="plugin" value="org.rdk.PackageManagerRDKEMS" indexOnly="true"/>
+                    <param tag="plugin" value="org.rdk.AppPackageManager" indexOnly="true"/>
                 </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PackageManagerRDKEMS" expectedValues="activated"/>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.AppPackageManager" expectedValues="activated"/>
             </testStep>
         </prerequisite>
         
@@ -253,7 +253,8 @@
     </testCase>
 
     <!-- TestCases 12 -->
-    <testCase testCaseId="PIM_12" testCaseName="Preinstall_Check_On_AppInstallationStatus_Event_StartPreInstall_True" desc="Check onAppInstallationStatus event behavior when startPreinstall is called with true">
+    <!-- onAppInstallationStatus event has been deprecated, the corresponding test case has been commented out -->
+    <!--testCase testCaseId="PIM_12" testCaseName="PreinstallManager_On_AppInstallationStatus_Event_StartPreInstall_True" desc="Check onAppInstallationStatus event behavior when startPreinstall is called with true">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="StartPreInstall_ForceInstall_True" method="StartPreInstall">
             <params>
@@ -264,10 +265,11 @@
         <testStep testStepId="2" name="Check_On_AppInstallationStatus_Event" event="Event_On_AppInstallationStatus" action="eventListener" delay ="60">
             <resultGeneration useMethodTag="preinstallmanager_app_installation_status_event_validation"/>
         </testStep>
-    </testCase>
+    </testCase-->
 
     <!-- TestCases 13 -->
-    <testCase testCaseId="PIM_13" testCaseName="Preinstall_Check_On_AppInstallationStatus_Event_StartPreInstall_False" desc="Check onAppInstallationStatus event behavior when startPreinstall is called with false">
+    <!-- onAppInstallationStatus event has been deprecated, the corresponding test case has been commented out -->
+    <!--testCase testCaseId="PIM_13" testCaseName="PreinstallManager_On_AppInstallationStatus_Event_StartPreInstall_False" desc="Check onAppInstallationStatus event behavior when startPreinstall is called with false">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Preinstall_Apps">
@@ -292,5 +294,5 @@
         <testStep testStepId="2" name="Check_On_AppInstallationStatus_Event" event="Event_On_AppInstallationStatus" action="eventListener" delay ="60">
             <resultGeneration useMethodTag="preinstallmanager_app_installation_status_event_validation" arguments="check_empty_event"/>
         </testStep>
-    </testCase>
+    </testCase-->
 </testPlugin>

@@ -6,31 +6,31 @@ RDKV_CERT_AVS_Display_Info
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [DisplayInfo_GET_audiopassthrough](#displayinfo_get_audiopassthrough)
-   - [DisplayInfo_GET_HDMI_Connected](#displayinfo_get_hdmi_connected)
-   - [DisplayInfo_GET_resolution_width](#displayinfo_get_resolution_width)
-   - [DisplayInfo_GET_resolution_height](#displayinfo_get_resolution_height)
-   - [DisplayInfo_GET_vertical_frequency](#displayinfo_get_vertical_frequency)
-   - [DisplayInfo_GET_HDCP_protocol_version](#displayinfo_get_hdcp_protocol_version)
-   - [DisplayInfo_GET_portname](#displayinfo_get_portname)
+   - [DisplayInfo_Get_audiopassthrough](#displayinfo_get_audiopassthrough)
+   - [DisplayInfo_Get_HDMI_Connected](#displayinfo_get_hdmi_connected)
+   - [DisplayInfo_Get_resolution_width](#displayinfo_get_resolution_width)
+   - [DisplayInfo_Get_resolution_height](#displayinfo_get_resolution_height)
+   - [DisplayInfo_Get_vertical_frequency](#displayinfo_get_vertical_frequency)
+   - [DisplayInfo_Get_HDCP_protocol_version](#displayinfo_get_hdcp_protocol_version)
+   - [DisplayInfo_Get_portname](#displayinfo_get_portname)
    - [DisplayInfo_Get_EDID_DATA](#displayinfo_get_edid_data)
    - [DisplayInfo_ActivateDeactivate_STRESS](#displayinfo_activatedeactivate_stress)
-   - [DisplayInfo_GET_HDR_Formats_TV](#displayinfo_get_hdr_formats_tv)
-   - [DisplayInfo_GET_HDR_Formats_STB](#displayinfo_get_hdr_formats_stb)
-   - [DisplayInfo_GET_HDR_Format_In_Use](#displayinfo_get_hdr_format_in_use)
+   - [DisplayInfo_Get_HDR_Formats_TV](#displayinfo_get_hdr_formats_tv)
+   - [DisplayInfo_Get_HDR_Formats_STB](#displayinfo_get_hdr_formats_stb)
+   - [DisplayInfo_Get_HDR_Format_In_Use](#displayinfo_get_hdr_format_in_use)
    - [DisplayInfo_Get_Total_GPU_RAM](#displayinfo_get_total_gpu_ram)
    - [DisplayInfo_Get_Free_GPU_RAM](#displayinfo_get_free_gpu_ram)
    - [DisplayInfo_Get_Widthincentimeters](#displayinfo_get_widthincentimeters)
    - [DisplayInfo_Get_Heightincentimeters](#displayinfo_get_heightincentimeters)
-   - [DisplayInfo_Check_Resolution_PostChange_Event](#displayinfo_check_resolution_postchange_event)
-   - [DisplayInfo_Check_HDMI_Connection_Status_Without_TV](#displayinfo_check_hdmi_connection_status_without_tv)
-   - [DisplayInfo_GET_Color_Space](#displayinfo_get_color_space)
+   - [DisplayInfo_Resolution_PostChange_Event](#displayinfo_resolution_postchange_event)
+   - [DisplayInfo_Get_HDMI_Connection_Status_Without_TV](#displayinfo_get_hdmi_connection_status_without_tv)
+   - [DisplayInfo_Get_Color_Space](#displayinfo_get_color_space)
    - [DisplayInfo_Get_Colour_Depth](#displayinfo_get_colour_depth)
    - [DisplayInfo_Get_Quantization_Range](#displayinfo_get_quantization_range)
    - [DisplayInfo_Get_Colorimetry](#displayinfo_get_colorimetry)
    - [DisplayInfo_Get_EOTF](#displayinfo_get_eotf)
    - [DisplayInfo_ActivateDeactivate_Event_Test](#displayinfo_activatedeactivate_event_test)
-   - [DisplayInfo_Check_Resolution_PreChange_Event](#displayinfo_check_resolution_prechange_event)
+   - [DisplayInfo_Resolution_PreChange_Event](#displayinfo_resolution_prechange_event)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -75,7 +75,7 @@ accessible via JSON-RPC under the callsign `DisplayInfo` (version 1)
 
 <a id="displayinfo_get_audiopassthrough"></a>
 ### TestCase Name
-DisplayInfo_GET_audiopassthrough
+DisplayInfo_Get_audiopassthrough
 
 ### TestCase ID
 DISP_01
@@ -101,7 +101,7 @@ Read isaudioPassthrough property on HDMI.
 
 <a id="displayinfo_get_hdmi_connected"></a>
 ### TestCase Name
-DisplayInfo_GET_HDMI_Connected
+DisplayInfo_Get_HDMI_Connected
 
 ### TestCase ID
 DISP_02
@@ -119,7 +119,7 @@ Is HDMI connected.
 
 <a id="displayinfo_get_resolution_width"></a>
 ### TestCase Name
-DisplayInfo_GET_resolution_width
+DisplayInfo_Get_resolution_width
 
 ### TestCase ID
 DISP_03
@@ -139,7 +139,7 @@ Get width of the current resolution.
 
 <a id="displayinfo_get_resolution_height"></a>
 ### TestCase Name
-DisplayInfo_GET_resolution_height
+DisplayInfo_Get_resolution_height
 
 ### TestCase ID
 DISP_04
@@ -159,7 +159,7 @@ Get height of the current resolution.
 
 <a id="displayinfo_get_vertical_frequency"></a>
 ### TestCase Name
-DisplayInfo_GET_vertical_frequency
+DisplayInfo_Get_vertical_frequency
 
 ### TestCase ID
 DISP_05
@@ -185,7 +185,7 @@ Get Vertical frequency.
 
 <a id="displayinfo_get_hdcp_protocol_version"></a>
 ### TestCase Name
-DisplayInfo_GET_HDCP_protocol_version
+DisplayInfo_Get_HDCP_protocol_version
 
 ### TestCase ID
 DISP_06
@@ -211,7 +211,7 @@ Get HDCP version.
 
 <a id="displayinfo_get_portname"></a>
 ### TestCase Name
-DisplayInfo_GET_portname
+DisplayInfo_Get_portname
 
 ### TestCase ID
 DISP_07
@@ -305,7 +305,7 @@ Activates and deactivates the plugin
 
 <a id="displayinfo_get_hdr_formats_tv"></a>
 ### TestCase Name
-DisplayInfo_GET_HDR_Formats_TV
+DisplayInfo_Get_HDR_Formats_TV
 
 ### TestCase ID
 DISP_10
@@ -331,7 +331,7 @@ Gets the HDR formats supported by TV
 
 <a id="displayinfo_get_hdr_formats_stb"></a>
 ### TestCase Name
-DisplayInfo_GET_HDR_Formats_STB
+DisplayInfo_Get_HDR_Formats_STB
 
 ### TestCase ID
 DISP_11
@@ -357,7 +357,7 @@ Gets the HDR formats supported by STB
 
 <a id="displayinfo_get_hdr_format_in_use"></a>
 ### TestCase Name
-DisplayInfo_GET_HDR_Format_In_Use
+DisplayInfo_Get_HDR_Format_In_Use
 
 ### TestCase ID
 DISP_12
@@ -485,9 +485,9 @@ Gets the vertical size in centimeters
 
 ---
 
-<a id="displayinfo_check_resolution_postchange_event"></a>
+<a id="displayinfo_resolution_postchange_event"></a>
 ### TestCase Name
-DisplayInfo_Check_Resolution_PostChange_Event
+DisplayInfo_Resolution_PostChange_Event
 
 ### TestCase ID
 DISP_17
@@ -510,9 +510,9 @@ Checks for the Resolution Post Change event
 
 ---
 
-<a id="displayinfo_check_hdmi_connection_status_without_tv"></a>
+<a id="displayinfo_get_hdmi_connection_status_without_tv"></a>
 ### TestCase Name
-DisplayInfo_Check_HDMI_Connection_Status_Without_TV
+DisplayInfo_Get_HDMI_Connection_Status_Without_TV
 
 ### TestCase ID
 DISP_18
@@ -538,7 +538,7 @@ Checks the HDMI connection status when TV is not connected
 
 <a id="displayinfo_get_color_space"></a>
 ### TestCase Name
-DisplayInfo_GET_Color_Space
+DisplayInfo_Get_Color_Space
 
 ### TestCase ID
 DISP_19
@@ -699,9 +699,9 @@ Validates statechange event on activating/deactivating the plugin
 
 ---
 
-<a id="displayinfo_check_resolution_prechange_event"></a>
+<a id="displayinfo_resolution_prechange_event"></a>
 ### TestCase Name
-DisplayInfo_Check_Resolution_PreChange_Event
+DisplayInfo_Resolution_PreChange_Event
 
 ### TestCase ID
 DISP_25

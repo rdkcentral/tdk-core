@@ -6,32 +6,32 @@ RDKV_CERT_AVS_Controller
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [Start_Discovery](#start_discovery)
-   - [Get_Subsystems_Status](#get_subsystems_status)
-   - [Get_Process_Info](#get_process_info)
-   - [Get_Environment_Variables](#get_environment_variables)
-   - [Get_Active_Connections_Info](#get_active_connections_info)
-   - [Get_All_Plugins_Status](#get_all_plugins_status)
-   - [Get_DeviceInfo_Configuration](#get_deviceinfo_configuration)
-   - [Store_Configuration](#store_configuration)
-   - [Delete_Directory_Contents](#delete_directory_contents)
-   - [Check_Plugins_State](#check_plugins_state)
-   - [Verify_WPE_Process_Status](#verify_wpe_process_status)
-   - [Check_StateChange_And_All_Events_For_DeviceInfo_plugin](#check_statechange_and_all_events_for_deviceinfo_plugin)
-   - [Set_DeviceInfo_Plugin_Unavailable](#set_deviceinfo_plugin_unavailable)
-   - [Set_Device_Info_Plugin_Unavailable_In_Activated_State](#set_device_info_plugin_unavailable_in_activated_state)
-   - [Set_DeviceInfo_Unavailable_And_Query_Plugin](#set_deviceinfo_unavailable_and_query_plugin)
-   - [Set_Controller_Plugin_Unavailable](#set_controller_plugin_unavailable)
-   - [Activate_Deactivate_Controller_Plugin](#activate_deactivate_controller_plugin)
-   - [Check_Invalid_Environment_Variable_Response](#check_invalid_environment_variable_response)
-   - [Deactivate_DeviceInfo_And_Check_API_Response](#deactivate_deviceinfo_and_check_api_response)
-   - [Give_Empty_Path_To_Delete_Directory_Contents](#give_empty_path_to_delete_directory_contents)
+   - [Controller_Start_Discovery](#controller_start_discovery)
+   - [Controller_Get_Subsystems_Status](#controller_get_subsystems_status)
+   - [Controller_Get_Process_Info](#controller_get_process_info)
+   - [Controller_Get_Environment_Variables](#controller_get_environment_variables)
+   - [Controller_Get_Active_Connections_Info](#controller_get_active_connections_info)
+   - [Controller_Get_All_Plugins_Status](#controller_get_all_plugins_status)
+   - [Controller_Get_DeviceInfo_Configuration](#controller_get_deviceinfo_configuration)
+   - [Controller_Store_Configuration](#controller_store_configuration)
+   - [Controller_Delete_Directory_Contents](#controller_delete_directory_contents)
+   - [Controller_Get_Plugins_State](#controller_get_plugins_state)
+   - [Controller_Get_WPE_Process_Status](#controller_get_wpe_process_status)
+   - [Controller_StateChange_And_All_Events_For_DeviceInfo_plugin](#controller_statechange_and_all_events_for_deviceinfo_plugin)
+   - [Controller_Set_DeviceInfo_Plugin_Unavailable](#controller_set_deviceinfo_plugin_unavailable)
+   - [Controller_Set_Device_Info_Plugin_Unavailable_In_Activated_State](#controller_set_device_info_plugin_unavailable_in_activated_state)
+   - [Controller_Set_DeviceInfo_Unavailable_And_Query_Plugin](#controller_set_deviceinfo_unavailable_and_query_plugin)
+   - [Controller_Set_Controller_Plugin_Unavailable](#controller_set_controller_plugin_unavailable)
+   - [Controller_Activate_Deactivate_Controller_Plugin](#controller_activate_deactivate_controller_plugin)
+   - [Controller_Invalid_Environment_Variable_Response](#controller_invalid_environment_variable_response)
+   - [Controller_Deactivate_DeviceInfo_And_API_Response](#controller_deactivate_deviceinfo_and_api_response)
+   - [Controller_Give_Empty_Path_To_Delete_Directory_Contents](#controller_give_empty_path_to_delete_directory_contents)
    - [Controller_Configuration_With_Empty_Value](#controller_configuration_with_empty_value)
-   - [Set_DeviceInfo_Plugin_Unavailable_And_Activate](#set_deviceinfo_plugin_unavailable_and_activate)
-   - [Activate_Invalid_callsign](#activate_invalid_callsign)
-   - [Activate_Empty_callsign](#activate_empty_callsign)
-   - [Deactivate_Invalid_callsign](#deactivate_invalid_callsign)
-   - [Deactivate_empty_callsign](#deactivate_empty_callsign)
+   - [Controller_Set_DeviceInfo_Plugin_Unavailable_And_Activate](#controller_set_deviceinfo_plugin_unavailable_and_activate)
+   - [Controller_Activate_Invalid_callsign](#controller_activate_invalid_callsign)
+   - [Controller_Activate_Empty_callsign](#controller_activate_empty_callsign)
+   - [Controller_Deactivate_Invalid_callsign](#controller_deactivate_invalid_callsign)
+   - [Controller_Deactivate_empty_callsign](#controller_deactivate_empty_callsign)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -67,9 +67,9 @@ accessible via JSON-RPC under the callsign `Controller` (version 1)
 | 4 | Configure WPE processes list | `WPE_PROCESSES_LIST` must be set to the WPE processes to check the status | The `WPE_PROCESSES_LIST` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
-<a id="start_discovery"></a>
+<a id="controller_start_discovery"></a>
 ### TestCase Name
-Start_Discovery
+Controller_Start_Discovery
 
 ### TestCase ID
 Controller_01
@@ -86,9 +86,9 @@ Starts the network discovery
 
 ---
 
-<a id="get_subsystems_status"></a>
+<a id="controller_get_subsystems_status"></a>
 ### TestCase Name
-Get_Subsystems_Status
+Controller_Get_Subsystems_Status
 
 ### TestCase ID
 Controller_02
@@ -104,9 +104,9 @@ Status of the subsystems
 
 ---
 
-<a id="get_process_info"></a>
+<a id="controller_get_process_info"></a>
 ### TestCase Name
-Get_Process_Info
+Controller_Get_Process_Info
 
 ### TestCase ID
 Controller_03
@@ -122,9 +122,9 @@ Gives information about the framework process
 
 ---
 
-<a id="get_environment_variables"></a>
+<a id="controller_get_environment_variables"></a>
 ### TestCase Name
-Get_Environment_Variables
+Controller_Get_Environment_Variables
 
 ### TestCase ID
 Controller_04
@@ -140,9 +140,9 @@ Gets the value of the environment variables
 
 ---
 
-<a id="get_active_connections_info"></a>
+<a id="controller_get_active_connections_info"></a>
 ### TestCase Name
-Get_Active_Connections_Info
+Controller_Get_Active_Connections_Info
 
 ### TestCase ID
 Controller_05
@@ -158,9 +158,9 @@ Gives information about the framework process
 
 ---
 
-<a id="get_all_plugins_status"></a>
+<a id="controller_get_all_plugins_status"></a>
 ### TestCase Name
-Get_All_Plugins_Status
+Controller_Get_All_Plugins_Status
 
 ### TestCase ID
 Controller_06
@@ -176,9 +176,9 @@ Gets the plugin current status
 
 ---
 
-<a id="get_deviceinfo_configuration"></a>
+<a id="controller_get_deviceinfo_configuration"></a>
 ### TestCase Name
-Get_DeviceInfo_Configuration
+Controller_Get_DeviceInfo_Configuration
 
 ### TestCase ID
 Controller_07
@@ -194,9 +194,9 @@ Gets the configuration of DeviceInfo plugin
 
 ---
 
-<a id="store_configuration"></a>
+<a id="controller_store_configuration"></a>
 ### TestCase Name
-Store_Configuration
+Controller_Store_Configuration
 
 ### TestCase ID
 Controller_08
@@ -212,9 +212,9 @@ Stores the configuration
 
 ---
 
-<a id="delete_directory_contents"></a>
+<a id="controller_delete_directory_contents"></a>
 ### TestCase Name
-Delete_Directory_Contents
+Controller_Delete_Directory_Contents
 
 ### TestCase ID
 Controller_09
@@ -240,9 +240,9 @@ Removes contents of a directory from the persistent storage
 
 ---
 
-<a id="check_plugins_state"></a>
+<a id="controller_get_plugins_state"></a>
 ### TestCase Name
-Check_Plugins_State
+Controller_Get_Plugins_State
 
 ### TestCase ID
 Controller_10
@@ -259,9 +259,9 @@ Checks the plugin status
 
 ---
 
-<a id="verify_wpe_process_status"></a>
+<a id="controller_get_wpe_process_status"></a>
 ### TestCase Name
-Verify_WPE_Process_Status
+Controller_Get_WPE_Process_Status
 
 ### TestCase ID
 Controller_11
@@ -277,9 +277,9 @@ Checks whether WPE Process is running or not
 
 ---
 
-<a id="check_statechange_and_all_events_for_deviceinfo_plugin"></a>
+<a id="controller_statechange_and_all_events_for_deviceinfo_plugin"></a>
 ### TestCase Name
-Check_StateChange_And_All_Events_For_DeviceInfo_plugin
+Controller_StateChange_And_All_Events_For_DeviceInfo_plugin
 
 ### TestCase ID
 Controller_12
@@ -312,9 +312,9 @@ Checks the StateChange and All Events by activating and deactivating the DeviceI
 
 ---
 
-<a id="set_deviceinfo_plugin_unavailable"></a>
+<a id="controller_set_deviceinfo_plugin_unavailable"></a>
 ### TestCase Name
-Set_DeviceInfo_Plugin_Unavailable
+Controller_Set_DeviceInfo_Plugin_Unavailable
 
 ### TestCase ID
 Controller_13
@@ -359,9 +359,9 @@ Checks whether able to make DeviceInfo plugin unavailable
 
 ---
 
-<a id="set_device_info_plugin_unavailable_in_activated_state"></a>
+<a id="controller_set_device_info_plugin_unavailable_in_activated_state"></a>
 ### TestCase Name
-Set_Device_Info_Plugin_Unavailable_In_Activated_State
+Controller_Set_Device_Info_Plugin_Unavailable_In_Activated_State
 
 ### TestCase ID
 Controller_14
@@ -398,9 +398,9 @@ Checks whether able to make the plugin unavailable in activated state
 
 ---
 
-<a id="set_deviceinfo_unavailable_and_query_plugin"></a>
+<a id="controller_set_deviceinfo_unavailable_and_query_plugin"></a>
 ### TestCase Name
-Set_DeviceInfo_Unavailable_And_Query_Plugin
+Controller_Set_DeviceInfo_Unavailable_And_Query_Plugin
 
 ### TestCase ID
 Controller_15
@@ -445,9 +445,9 @@ Queries the DeviceInfo plugin APIs after setting it as unavailable
 
 ---
 
-<a id="set_controller_plugin_unavailable"></a>
+<a id="controller_set_controller_plugin_unavailable"></a>
 ### TestCase Name
-Set_Controller_Plugin_Unavailable
+Controller_Set_Controller_Plugin_Unavailable
 
 ### TestCase ID
 Controller_16
@@ -463,9 +463,9 @@ Sets the controller plugin as unavailable and validate the error message
 
 ---
 
-<a id="activate_deactivate_controller_plugin"></a>
+<a id="controller_activate_deactivate_controller_plugin"></a>
 ### TestCase Name
-Activate_Deactivate_Controller_Plugin
+Controller_Activate_Deactivate_Controller_Plugin
 
 ### TestCase ID
 Controller_17
@@ -482,9 +482,9 @@ Activates/Deactivates the controller plugin and validates the error code
 
 ---
 
-<a id="check_invalid_environment_variable_response"></a>
+<a id="controller_invalid_environment_variable_response"></a>
 ### TestCase Name
-Check_Invalid_Environment_Variable_Response
+Controller_Invalid_Environment_Variable_Response
 
 ### TestCase ID
 Controller_18
@@ -500,9 +500,9 @@ Passes the invalid environment variable and validates the error code
 
 ---
 
-<a id="deactivate_deviceinfo_and_check_api_response"></a>
+<a id="controller_deactivate_deviceinfo_and_api_response"></a>
 ### TestCase Name
-Deactivate_DeviceInfo_And_Check_API_Response
+Controller_Deactivate_DeviceInfo_And_API_Response
 
 ### TestCase ID
 Controller_19
@@ -532,9 +532,9 @@ Queries the DeviceInfo plugin APIs after deactivated it
 
 ---
 
-<a id="give_empty_path_to_delete_directory_contents"></a>
+<a id="controller_give_empty_path_to_delete_directory_contents"></a>
 ### TestCase Name
-Give_Empty_Path_To_Delete_Directory_Contents
+Controller_Give_Empty_Path_To_Delete_Directory_Contents
 
 ### TestCase ID
 Controller_20
@@ -564,13 +564,13 @@ Check if able to get the error message when querying configuration for empty val
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get plugin configuration | Invoke configuration on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.configuration"}' http://127.0.0.1:9998/jsonrpc` | API returns error `ERROR_UNKNOWN_KEY` / error code `22` must be configured: no plugin callsign specified in the request |
+| 1 | Get plugin configuration | Invoke configuration on Controller<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.configuration"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Could not access requested service` |
 
 ---
 
-<a id="set_deviceinfo_plugin_unavailable_and_activate"></a>
+<a id="controller_set_deviceinfo_plugin_unavailable_and_activate"></a>
 ### TestCase Name
-Set_DeviceInfo_Plugin_Unavailable_And_Activate
+Controller_Set_DeviceInfo_Plugin_Unavailable_And_Activate
 
 ### TestCase ID
 Controller_22
@@ -616,9 +616,9 @@ To make deviceinfo plugin unavailable and validates the error message on activat
 
 ---
 
-<a id="activate_invalid_callsign"></a>
+<a id="controller_activate_invalid_callsign"></a>
 ### TestCase Name
-Activate_Invalid_callsign
+Controller_Activate_Invalid_callsign
 
 ### TestCase ID
 Controller_23
@@ -634,9 +634,9 @@ Validate error message by activating with invalid callsign
 
 ---
 
-<a id="activate_empty_callsign"></a>
+<a id="controller_activate_empty_callsign"></a>
 ### TestCase Name
-Activate_Empty_callsign
+Controller_Activate_Empty_callsign
 
 ### TestCase ID
 Controller_24
@@ -652,9 +652,9 @@ Validate error message by activating with empty callsign
 
 ---
 
-<a id="deactivate_invalid_callsign"></a>
+<a id="controller_deactivate_invalid_callsign"></a>
 ### TestCase Name
-Deactivate_Invalid_callsign
+Controller_Deactivate_Invalid_callsign
 
 ### TestCase ID
 Controller_25
@@ -670,9 +670,9 @@ Validate error message by deactivating with invalid callsign
 
 ---
 
-<a id="deactivate_empty_callsign"></a>
+<a id="controller_deactivate_empty_callsign"></a>
 ### TestCase Name
-Deactivate_empty_callsign
+Controller_Deactivate_empty_callsign
 
 ### TestCase ID
 Controller_26
