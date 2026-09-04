@@ -80,7 +80,7 @@
         "flags": [""]
     },
     "Device.X_RDK_Ethernet.Link.{i}.MACAddrOffSet": {
-        "type": ["unsignedInt"],
+        "type": ["int"],
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],

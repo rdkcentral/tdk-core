@@ -65,7 +65,7 @@ MTA=["eRT.com.cisco.spvtg.ccsp.mta"]
 VLANMANAGER=["eRT.com.cisco.spvtg.ccsp.vlanmanager"]
 
 # Components under Telemetry module
-TELEMETRY=["ccspinterface"]
+TELEMETRY=["telemetry2_0"]
 
 # Components under Inter Device Manager module
 IDM=["IDM_RBUS"]
