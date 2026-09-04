@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+<p>This test passes if it does not crash.</p>
+<script>
+  onload = () => {
+      try {
+          for (let i = 0; i < 20; i++) {
+              new AudioContext().createChannelSplitter();
+              console.log(`Success: Creating ChannelSplitter node ${i + 1} did not crash.`);
+          }
+      } catch (error) {
+          console.error('Failure: Creating ChannelSplitter nodes crashed.', error);
+      }
+  };
+</script>
+</body>
+</html>

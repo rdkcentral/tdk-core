@@ -194,7 +194,11 @@ def rdkv_basic_sanity_createAndVerifyDisplay(DISPLAY_NAME):
         print("Pre-check getApps response: {}".format(pre_check_result))
         apps_raw = pre_check_result.get("result", "[]")
         if isinstance(apps_raw, str):
-            apps_list = json.loads(apps_raw)
+            apps_raw = apps_raw.strip()
+            if not apps_raw:
+                apps_list = []
+            else:
+                apps_list = json.loads(apps_raw)
         else:
             apps_list = apps_raw
         if DISPLAY_NAME in apps_list:
@@ -322,8 +326,9 @@ def rdkv_basic_sanity_wifiConnect(ssid, passphrase, security):
     wifiUtil.setThunderPort(int(devicePort))
     wifiUtil.wifi_state_event_received = False
     wifiUtil.wifi_state_data = {}
+    verification_event = "WIFI_STATE_CONNECTED"
 
-    connect_thread = threading.Thread(target=wifiUtil.startWiFiConnectEventListener, args=(deviceIP,))
+    connect_thread = threading.Thread(target=wifiUtil.startWiFiConnectEventListener, args=(deviceIP,verification_event))
     connect_thread.daemon = True
     connect_thread.start()
     time.sleep(2)
@@ -333,7 +338,7 @@ def rdkv_basic_sanity_wifiConnect(ssid, passphrase, security):
             wifiUtil.ws_connect_instance.close()
         return "FAILURE: WiFiConnect did not return success=true"
 
-    print("INFO: Waiting for onWiFiStateChange event (max {}s)...".format(wifiUtil.CONNECT_TIMEOUT))
+    print("INFO: Waiting for onWiFiStateChange event {} (max {}s)...".format(verification_event,wifiUtil.CONNECT_TIMEOUT))
     elapsed = 0
     while elapsed < wifiUtil.CONNECT_TIMEOUT:
         if wifiUtil.wifi_state_event_received:
@@ -349,7 +354,7 @@ def rdkv_basic_sanity_wifiConnect(ssid, passphrase, security):
         print("SUCCESS: onWiFiStateChange event received")
         return "SUCCESS"
     else:
-        return "FAILURE: onWiFiStateChange event not received within {}s".format(wifiUtil.CONNECT_TIMEOUT)
+        return "FAILURE: onWiFiStateChange event {} not received within {}s".format(verification_event,wifiUtil.CONNECT_TIMEOUT)
 
 #-------------------------------------------------------------------
 # WIFI VERIFY CONNECTION: GET CONNECTED SSID AND COMPARE
@@ -380,10 +385,10 @@ def rdkv_basic_sanity_wifiVerifyConnectedSSID(expectedSSID):
 def rdkv_basic_sanity_wifiDisconnect():
     wifiUtil.setThunderPort(int(devicePort))
     if wifiUtil.disconnectFromWiFi(deviceIP):
-        print("SUCCESS: WiFiDisconnect returned success=true")
+        print("SUCCESS: WiFi Disconnected successfully")
         return "SUCCESS"
     else:
-        return "FAILURE: WiFiDisconnect did not return success=true"
+        return "FAILURE: WiFi Disconnection not successful"
 
 #-------------------------------------------------------------------
 # HDMI CONNECTION CHECK: GET CONNECTED VIDEO DISPLAYS AND VERIFY HDMI
@@ -555,7 +560,7 @@ _reboot_ws_instance = None
 # SYSTEM REBOOT EVENT LISTENER (WEBSOCKET, BACKGROUND THREAD)
 # Description  : Opens a WebSocket connection to the device's JSON-RPC
 #                endpoint and registers for the "onRebootRequest" event
-#                from System plugin. Runs in the background and 
+#                from System plugin. Runs in the background and
 #                updates the global state variables
 #                (_reboot_event_received, _reboot_event_reason) when the
 #                event is received.
