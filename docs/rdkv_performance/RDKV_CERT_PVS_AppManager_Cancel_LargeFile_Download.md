@@ -11,7 +11,7 @@ RDKV_CERT_PVS_AppManager_Cancel_LargeFile_Download
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that a large application download can be cancelled while in progress, that the cancellation status event contains the correct download information, and that deleting the cancelled package restores disk usage to its initial level.
+To validate that a large application download can be cancelled while in progress, that the cancellation status event contains the correct download information, that deleting the cancelled package restores disk usage to its initial level, and that resource usage remains within the expected limit after the package is deleted.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -20,7 +20,7 @@ To validate that a large application download can be cancelled while in progress
 | 1 | Configure the pre-execution reboot preference | Configure `PRE_REQ_REBOOT_PVS` as Yes to reboot the device before test execution, or as No to skip the reboot. | The device reboot preference should be configured according to the test environment requirements. |
 | 2 | Confirm the required device plugins are activated | Ensure that `org.rdk.DownloadManager`, `org.rdk.AppPackageManager`, `org.rdk.AppManager`, and `org.rdk.RDKWindowManager` are activated. Their status can be queried with `{"jsonrpc":"2.0","id":1,"method":"Controller.1.status@org.rdk.DownloadManager"}`, `{"jsonrpc":"2.0","id":1,"method":"Controller.1.status@org.rdk.AppPackageManager"}`, `{"jsonrpc":"2.0","id":1,"method":"Controller.1.status@org.rdk.AppManager"}`, and `{"jsonrpc":"2.0","id":1,"method":"Controller.1.status@org.rdk.RDKWindowManager"}`. | All four plugins should report the `activated` state. |
 | 3 | Configure package storage and SSH access | Configure `PACKAGEMANAGER_FILE_LOCATOR`, `SSH_METHOD`, `SSH_USERNAME`, and `SSH_PASSWORD` in the applicable device configuration file. | The package locator and complete SSH connection details should be available to the test. |
-| 4 | Provide a sufficiently large validation bundle | Configure `Large_Validation_File` and `app_download_url` with a reachable large application bundle and its hosting URL. `Large_Validation_File` can be any file of approximately 1 GB in size. | The bundle should be large enough to remain in progress when the progress check is performed. |
+| 4 | Provide a sufficiently large validation bundle | Configure `Large_Validation_File` and `app_download_url` with a reachable large application bundle and its hosting URL. `Large_Validation_File` can be any file of approximately 1 GB in size. Optionally, such a file can be created with `fallocate -l <size> <directory_path>/<file_name>`, where `<size>` is the desired file size, for example `1G`. | The bundle should be large enough to remain in progress when the progress check is performed. |
 | 5 | Configure resource usage limits | Configure the resource thresholds used by the resource usage validation operation. | The expected resource limits should be available for comparison after deletion of the package. |
 
 <a name="head.TestSteps"></a>
@@ -34,7 +34,7 @@ To validate that a large application download can be cancelled while in progress
 | 4 | Retrieve SSH connection details | Read the configured SSH method, device IP, username, and password from the device configuration for remote command execution. | Valid SSH method and credentials should be available. |
 | 5 | Measure initial package storage usage | Execute the following remote command against the package storage directory: `du -sk <file_locator>/CDL/ \| awk '{print $1}'`. | The initial package storage usage should be returned as a numeric value in KB. |
 | 6 | Subscribe to application download status events | Register for download status notifications at `/jsonrpc` using the following payload: `{"jsonrpc": "2.0","id": 2,"method": "org.rdk.DownloadManager.1.register","params": {"event": "onAppDownloadStatus", "id": "client.events.1" }}`. | The event subscription should be established successfully. |
-| 7 | Start downloading the large application bundle | Request the bundle download using `org.rdk.DownloadManager.1.download` with the configured URL and the `Large_Validation_File` name: `{"jsonrpc":"2.0","id":1,"method":"org.rdk.DownloadManager.1.download","params":{"url":"<app_download_url><Large_Validation_File>"}}`. | The download request should return success and a download ID. |
+| 7 | Start downloading the large application bundle | Request the bundle download using `org.rdk.DownloadManager.1.download` with the configured URL and the `Large_Validation_File` name: `{"jsonrpc":"2.0","id":1,"method":"org.rdk.DownloadManager.1.download","params":{"url":"<app_download_url>/<Large_Validation_File>"}}`. | The download request should return success and a download ID. |
 | 8 | Query the download progress | Query the download progress for the returned download ID using `{"jsonrpc":"2.0","id":1,"method":"org.rdk.DownloadManager.progress","params":{"downloadId":"<download_id>"}}`. | The progress request should return a numeric percentage greater than 0 and less than 100. |
 | 9 | Cancel the active download | Cancel the in-progress download using `{"jsonrpc":"2.0","id":1,"method":"org.rdk.DownloadManager.cancel","params":{"downloadId":"<download_id>"}}`. | The cancellation request should return success. |
 | 10 | Poll for the cancellation status event | Poll the subscribed event buffer for up to 120 seconds and retrieve the first available event. | An `onAppDownloadStatus` event should be received and should indicate `DOWNLOAD_FAILURE` for the cancelled download. |
@@ -48,7 +48,7 @@ To validate that a large application download can be cancelled while in progress
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 5 minutes
 

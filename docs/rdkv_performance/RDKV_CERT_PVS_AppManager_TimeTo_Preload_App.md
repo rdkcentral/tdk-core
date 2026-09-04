@@ -47,7 +47,7 @@ To validate that an installed application can be preloaded successfully and that
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 5 minutes
 

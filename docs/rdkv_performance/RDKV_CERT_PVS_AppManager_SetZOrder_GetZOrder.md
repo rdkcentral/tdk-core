@@ -11,7 +11,7 @@ RDKV_CERT_PVS_AppManager_SetZOrder_GetZOrder
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the z-order of an active application can be set through RDKWindowManager and that the returned z-order matches the requested value.
+To validate that the z-order of an active application can be set through RDKWindowManager, that the returned z-order matches the requested value, and that resource usage remains within the expected limit after setting and getting the z-order.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -47,7 +47,7 @@ To validate that the z-order of an active application can be set through RDKWind
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 5 minutes
 

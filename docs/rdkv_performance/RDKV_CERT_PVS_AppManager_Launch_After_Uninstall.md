@@ -11,7 +11,7 @@ RDKV_CERT_PVS_AppManager_Launch_After_Uninstall
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that an application can be installed and then uninstalled successfully, and that AppManager rejects a launch request after the application has been removed.
+To validate that an application can be installed and then uninstalled successfully, that AppManager rejects a launch request after the application has been removed, and that resource usage remains within the expected limit after the rejected launch attempt.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -44,7 +44,7 @@ To validate that an application can be installed and then uninstalled successful
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 5 minutes
 
