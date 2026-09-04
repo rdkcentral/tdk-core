@@ -6,14 +6,14 @@ RDKV_CERT_AVS_PlayerInfo
 1. [Objective](#objective)
 2. [Plugin Pre-conditions](#plugin-pre-conditions)
 3. [Test Cases](#test-cases)
-   - [PlayerInfo_Check_Audio_Codecs](#playerinfo_check_audio_codecs)
-   - [PlayerInfo_Check_Video_Codecs](#playerinfo_check_video_codecs)
-   - [PlayerInfo_Check_AudioEquivalence_Enabled](#playerinfo_check_audioequivalence_enabled)
-   - [PlayerInfo_Check_Dolby_Atmos_MetaData](#playerinfo_check_dolby_atmos_metadata)
-   - [PlayerInfo_Check_Dolby_Sound_mode](#playerinfo_check_dolby_sound_mode)
-   - [Enable_Disable_Audio_Atmos_Output](#enable_disable_audio_atmos_output)
-   - [SetAndGet_All_Supported_Resolutions](#setandget_all_supported_resolutions)
-   - [Check_Dolby_AudioMode_Changed_Event](#check_dolby_audiomode_changed_event)
+   - [PlayerInfo_Get_Audio_Codecs](#playerinfo_get_audio_codecs)
+   - [PlayerInfo_Get_Video_Codecs](#playerinfo_get_video_codecs)
+   - [PlayerInfo_Get_AudioEquivalence_Enabled](#playerinfo_get_audioequivalence_enabled)
+   - [PlayerInfo_Get_Dolby_Atmos_MetaData](#playerinfo_get_dolby_atmos_metadata)
+   - [PlayerInfo_Get_Dolby_Sound_mode](#playerinfo_get_dolby_sound_mode)
+   - [PlayerInfo_Enable_Disable_Audio_Atmos_Output](#playerinfo_enable_disable_audio_atmos_output)
+   - [PlayerInfo_SetAndGet_All_Supported_Resolutions](#playerinfo_setandget_all_supported_resolutions)
+   - [PlayerInfo_Dolby_AudioMode_Changed_Event](#playerinfo_dolby_audiomode_changed_event)
    - [PlayerInfo_ActivateDeactivate_Event_Test](#playerinfo_activatedeactivate_event_test)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
@@ -57,9 +57,9 @@ accessible via JSON-RPC under the callsign `PlayerInfo` (version 1)
 | 3 | Configure NA tests | `PLAYERINFO_NA_TESTS` must be set to the PlayerInfo test names to skip when not applicable on the DUT | The `PLAYERINFO_NA_TESTS` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
-<a id="playerinfo_check_audio_codecs"></a>
+<a id="playerinfo_get_audio_codecs"></a>
 ### TestCase Name
-PlayerInfo_Check_Audio_Codecs
+PlayerInfo_Get_Audio_Codecs
 
 ### TestCase ID
 PI_01
@@ -75,9 +75,9 @@ checks the audio codecs list
 
 ---
 
-<a id="playerinfo_check_video_codecs"></a>
+<a id="playerinfo_get_video_codecs"></a>
 ### TestCase Name
-PlayerInfo_Check_Video_Codecs
+PlayerInfo_Get_Video_Codecs
 
 ### TestCase ID
 PI_02
@@ -93,9 +93,9 @@ checks the video codecs list
 
 ---
 
-<a id="playerinfo_check_audioequivalence_enabled"></a>
+<a id="playerinfo_get_audioequivalence_enabled"></a>
 ### TestCase Name
-PlayerInfo_Check_AudioEquivalence_Enabled
+PlayerInfo_Get_AudioEquivalence_Enabled
 
 ### TestCase ID
 PI_03
@@ -111,9 +111,9 @@ Checks Loudness Equivalence in platform
 
 ---
 
-<a id="playerinfo_check_dolby_atmos_metadata"></a>
+<a id="playerinfo_get_dolby_atmos_metadata"></a>
 ### TestCase Name
-PlayerInfo_Check_Dolby_Atmos_MetaData
+PlayerInfo_Get_Dolby_Atmos_MetaData
 
 ### TestCase ID
 PI_04
@@ -129,9 +129,9 @@ Gets the Atmos capabilities of Sink
 
 ---
 
-<a id="playerinfo_check_dolby_sound_mode"></a>
+<a id="playerinfo_get_dolby_sound_mode"></a>
 ### TestCase Name
-PlayerInfo_Check_Dolby_Sound_mode
+PlayerInfo_Get_Dolby_Sound_mode
 
 ### TestCase ID
 PI_05
@@ -147,9 +147,9 @@ Checks the dolby sound mode
 
 ---
 
-<a id="enable_disable_audio_atmos_output"></a>
+<a id="playerinfo_enable_disable_audio_atmos_output"></a>
 ### TestCase Name
-Enable_Disable_Audio_Atmos_Output
+PlayerInfo_Enable_Disable_Audio_Atmos_Output
 
 ### TestCase ID
 PI_06
@@ -167,9 +167,9 @@ Check whether audio atmos output is possible to enable and disable
 
 ---
 
-<a id="setandget_all_supported_resolutions"></a>
+<a id="playerinfo_setandget_all_supported_resolutions"></a>
 ### TestCase Name
-SetAndGet_All_Supported_Resolutions
+PlayerInfo_SetAndGet_All_Supported_Resolutions
 
 ### TestCase ID
 PI_07
@@ -189,9 +189,9 @@ Set and get all the supported resolution by both TV and STB
 
 ---
 
-<a id="check_dolby_audiomode_changed_event"></a>
+<a id="playerinfo_dolby_audiomode_changed_event"></a>
 ### TestCase Name
-Check_Dolby_AudioMode_Changed_Event
+PlayerInfo_Dolby_AudioMode_Changed_Event
 
 ### TestCase ID
 PI_08

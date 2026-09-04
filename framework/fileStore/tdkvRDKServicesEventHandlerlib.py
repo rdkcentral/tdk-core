@@ -1260,8 +1260,8 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
-        # PackageManager Events response result parser steps
-        elif tag == "packagemanager_check_appinstallationstatus_event":
+        # AppPackageManager Events response result parser steps
+        elif tag == "app_packagemanager_check_appinstallationstatus_event":
             try:
                 if result:
                     package_id = json.loads(result[0]["jsonresponse"])[0]["packageId"]
@@ -1301,6 +1301,88 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        # PowerManager Events response result parser steps
+        elif tag == "powermanager_check_network_standby_changed_event":
+            try:
+                info["Test_Step_Status"] = "FAILURE"
+                for eventResult in result:
+                    enabled = eventResult.get("enabled")
+                    if enabled is not None:
+                        if expectedValues:
+                            if str(enabled).lower() == str(expectedValues[0]).lower():
+                                info = eventResult
+                                info["Test_Step_Status"] = "SUCCESS"
+                                break
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_check_power_mode_changed_event":
+            try:
+                info["Test_Step_Status"] = "FAILURE"
+                for eventResult in result:
+                    newState = str(eventResult.get("newState").upper())
+                    currentState = str(eventResult.get("currentState").upper())
+                    if newState and currentState:
+                        if expectedValues:
+                            if newState in [str(powerState).upper() for powerState in expectedValues]:
+                                info = eventResult
+                                info["Test_Step_Status"] = "SUCCESS"
+                                break
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_check_thermal_mode_changed_event":
+            try:
+                info["Test_Step_Status"] = "FAILURE"
+                for eventResult in result:
+                    currentThermalLevel = eventResult.get("currentThermalLevel")
+                    newThermalLevel = eventResult.get("newThermalLevel")
+                    currentTemperature = eventResult.get("currentTemperature")
+                    if currentThermalLevel is not None and newThermalLevel is not None and currentTemperature is not None:
+                        info = eventResult
+                        info["Test_Step_Status"] = "SUCCESS"
+                        break
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_check_reboot_begin_event":
+            try:
+                info["Test_Step_Status"] = "FAILURE"
+                for eventResult in result:
+                    rebootRequestor = str(eventResult.get("rebootRequestor")).lower()
+                    rebootReasonCustom = str(eventResult.get("rebootReasonCustom")).lower()
+                    rebootReasonOther = str(eventResult.get("rebootReasonOther")).lower()
+                    if rebootRequestor and rebootReasonCustom and rebootReasonOther:
+                        if expectedValues:
+                            if rebootRequestor == str(expectedValues[0]).lower() and rebootReasonCustom == str(expectedValues[1]).lower() and rebootReasonOther == str(expectedValues[2]).lower():
+                                info = eventResult
+                                info["Test_Step_Status"] = "SUCCESS"
+                                break
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "powermanager_check_power_mode_prechange_event":
+            try:
+                info["Test_Step_Status"] = "FAILURE"
+                for eventResult in result:
+                    newState = str(eventResult.get("newState")).upper()
+                    currentState = str(eventResult.get("currentState")).upper()
+                    transactionId = int(eventResult.get("transactionId"))
+                    stateChangeAfter = int(eventResult.get("stateChangeAfter"))
+                    if newState and currentState and transactionId is not None and stateChangeAfter is not None:
+                        if expectedValues:
+                            if newState in [str(powerState).upper() for powerState in expectedValues]:
+                                info = eventResult
+                                info["Test_Step_Status"] = "SUCCESS"
+                                break
             except Exception as e:
                 info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
