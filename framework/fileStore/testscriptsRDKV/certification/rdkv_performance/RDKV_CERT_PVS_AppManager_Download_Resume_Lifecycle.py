@@ -123,6 +123,17 @@ if expectedResult in result.upper():
                                     if isinstance(resumed_progress, (int, float)) and resumed_progress > paused_progress:
                                         print("Download pause and resume validated successfully")
                                         tdkTestObj.setResultStatus("SUCCESS")
+                                        print("\n Validating resource usage after download resume")
+                                        tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                                        tdkTestObj.executeTestCase(expectedResult)
+                                        resource_usage = tdkTestObj.getResultDetails()
+                                        result = tdkTestObj.getResult()
+                                        if expectedResult in result and resource_usage != "ERROR":
+                                            print("\n Resource usage is within the expected limit")
+                                            tdkTestObj.setResultStatus("SUCCESS")
+                                        else:
+                                            print("\n Error while validating resource usage")
+                                            tdkTestObj.setResultStatus("FAILURE")
                                     else:
                                         print("Download progress did not advance after resume, it stayed at %s percent" % resumed_progress)
                                         tdkTestObj.setResultStatus("FAILURE")

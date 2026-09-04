@@ -96,6 +96,17 @@ if expectedResult in result.upper():
                             if actual_zorder == requested_zorder:
                                 print("Successfully set and got the application z-order")
                                 tdkTestObj.setResultStatus("SUCCESS")
+                                print("Resource usage after setting and getting z-order will be validated next")
+                                tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                                tdkTestObj.executeTestCase(expectedResult)
+                                resource_usage = tdkTestObj.getResultDetails()
+                                result = tdkTestObj.getResult()
+                                if expectedResult in result and resource_usage != "ERROR":
+                                    print("\n Resource usage is within the expected limit")
+                                    tdkTestObj.setResultStatus("SUCCESS")
+                                else:
+                                    print("\n Error while validating resource usage")
+                                    tdkTestObj.setResultStatus("FAILURE")
                             else:
                                 print("Returned z-order does not match the requested z-order")
                                 tdkTestObj.setResultStatus("FAILURE")

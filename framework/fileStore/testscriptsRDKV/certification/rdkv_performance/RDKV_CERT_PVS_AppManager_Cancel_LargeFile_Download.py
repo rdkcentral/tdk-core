@@ -204,6 +204,17 @@ if expectedResult in result.upper():
                                                                 if final_used_memory <= initial_used_memory:
                                                                     print("Disk usage is back to the initial value after deletion of the package")
                                                                     tdkTestObj.setResultStatus("SUCCESS")
+                                                                    print("\n Validating resource usage after deletion of the package")
+                                                                    tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                                                                    tdkTestObj.executeTestCase(expectedResult)
+                                                                    resource_usage = tdkTestObj.getResultDetails()
+                                                                    result = tdkTestObj.getResult()
+                                                                    if expectedResult in result and resource_usage != "ERROR":
+                                                                        print("\n Resource usage is within the expected limit")
+                                                                        tdkTestObj.setResultStatus("SUCCESS")
+                                                                    else:
+                                                                        print("\n Error while validating resource usage")
+                                                                        tdkTestObj.setResultStatus("FAILURE")
                                                                 else:
                                                                     print(f"Disk usage is not back to the initial value after deletion of the package")
                                                                     tdkTestObj.setResultStatus("FAILURE")    

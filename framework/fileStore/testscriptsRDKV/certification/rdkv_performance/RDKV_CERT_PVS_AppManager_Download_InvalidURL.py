@@ -154,6 +154,17 @@ if expectedResult in result.upper():
                                             print("Verification passed: package not found on DUT")
                                             print("Successfully deleted the downloaded package from the device")
                                             tdkTestObj.setResultStatus("SUCCESS")
+                                            print("\n Validating resource usage after deletion of the package")
+                                            tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                                            tdkTestObj.executeTestCase(expectedResult)
+                                            resource_usage = tdkTestObj.getResultDetails()
+                                            result = tdkTestObj.getResult()
+                                            if expectedResult in result and resource_usage != "ERROR":
+                                                print("\n Resource usage is within the expected limit")
+                                                tdkTestObj.setResultStatus("SUCCESS")
+                                            else:
+                                                print("\n Error while validating resource usage")
+                                                tdkTestObj.setResultStatus("FAILURE")
                                         else:
                                             print("Verification failed: package still exists on DUT. ls output:\n", output)
                                             tdkTestObj.setResultStatus("FAILURE")

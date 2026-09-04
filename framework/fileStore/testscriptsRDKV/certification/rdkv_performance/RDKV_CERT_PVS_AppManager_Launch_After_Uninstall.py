@@ -73,10 +73,20 @@ if expectedResult in result.upper():
                 tdkTestObj.addParameter("app_name", app_name)
                 tdkTestObj.executeTestCase(expectedResult)
                 launch_result = tdkTestObj.getResult()
-
                 if launch_result != expectedResult:
                     print("Launch was rejected as expected")
                     tdkTestObj.setResultStatus("SUCCESS")
+                    print("\n Validating resource usage after attempting to launch the uninstalled application")
+                    tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                    tdkTestObj.executeTestCase(expectedResult)
+                    resource_usage = tdkTestObj.getResultDetails()
+                    result = tdkTestObj.getResult()
+                    if expectedResult in result and resource_usage != "ERROR":
+                        print("\n Resource usage is within the expected limit")
+                        tdkTestObj.setResultStatus("SUCCESS")
+                    else:
+                        print("\n Error while validating resource usage")
+                        tdkTestObj.setResultStatus("FAILURE")
                 else:
                     print("FAILURE: Uninstalled application launched successfully")
                     tdkTestObj.setResultStatus("FAILURE")
