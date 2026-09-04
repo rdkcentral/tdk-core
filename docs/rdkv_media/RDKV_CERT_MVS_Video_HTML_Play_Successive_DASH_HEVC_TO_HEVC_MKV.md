@@ -11,7 +11,7 @@ RDKV_CERT_MVS_Video_HTML_Play_Successive_DASH_HEVC_TO_HEVC_MKV
 
 <a name="head.Objective"></a>
 ## Objective
-To launch an HTML Player application and perform successive video playback of a DASH HEVC stream followed by a HEVC MKV stream and close the player. The test confirms that both streams playback successfully and gets the consolidated playback results.
+To launch an HTML Player application and perform successive video playback of a DASH HEVC stream followed by an HEVC MKV stream and close the player. The test confirms that both streams playback successfully and gets the consolidated playback results.
 
 <a name="head.Precondition"></a>
 ## Preconditions
