@@ -57,7 +57,7 @@ if expectedResult in result.upper():
 
         # Construct stream 1 URL
         appURL1    = MediaValidationVariables.html_dash_test_app_url
-        videoURL1  = MediaValidationVariables.video_src_url_dash 
+        videoURL1  = MediaValidationVariables.video_src_url_dash
         # Setting VideoPlayer Operations for Stream 1
         setOperation("close",MediaValidationVariables.close_interval)
         operations1 = getOperations()
