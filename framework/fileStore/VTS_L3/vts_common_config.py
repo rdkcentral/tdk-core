@@ -41,9 +41,13 @@ LOG_DIRECTORY = "./logs"
 CPE_PLATFORM = ""
 CPE_MODEL = "test"
 #Update device SoC inside quotes ex : "amlogic", "realtek", "broadcom"
-SOC_VENDOR = ""
+SOC_VENDOR = CPE_PLATFORM.lower()
 TARGET_DIRECTORY ="/VTS_Package/"
 
 #=====================STREAM====================================
 #Update stream server hosting streams
 STREAM_DOWNLOAD_PATH = ""
+
+#Platform specific player config
+PLATFORM_EXPORTS="""
+"""
