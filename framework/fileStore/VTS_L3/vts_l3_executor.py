@@ -38,6 +38,7 @@ from typing import Optional, List, Iterable
 from datetime import datetime
 from log_to_excel import *
 from vts_common_config import PLATFORM_EXPORTS
+from vts_common_config import STREAMS_HOST_SECONDARY_URL
 
 # ====================================
 # Dynamic target -> config module
@@ -876,13 +877,12 @@ def _run_shell_cmd(session, cmd, timeout=60, end_marker="__CMD_DONE__", drain_gr
     exit_status = int(match.group(1))
     return exit_status, output
 
-def get_stream_url(stream_name, index_url="https://vts-streams.rdkcentral.com/index.html"):
+def get_stream_url(stream_name, index_url):
     """
     Fetches the VTS streams index page and returns the full URL
     matching the given stream filename.
 
-    :param stream_name: The filename to search for, e.g.
-                         "vts_h265_2160p_hlg_60.0f_BT2020_yuv420p_60M_ac3_48k_6ch_512k_a1875_v3600_60sec.mp4"
+    :param stream_name: The filename to search for
     :param index_url: URL of the index.html to search (default: VTS streams dashboard)
     :return: Full matching URL as a string, or None if not found
     """
@@ -955,7 +955,7 @@ def _download_delete_streams(download, streams, remote_dir, device_ip, ssh_port,
 
             if download:
                 s = os.path.basename(s)
-                stream_present = get_stream_url(s)
+                stream_present = get_stream_url(s,STREAMS_HOST_SECONDARY_URL)
                 if stream_present:
                     stream_path = stream_present
                 else:
@@ -1779,9 +1779,6 @@ def main():
             normalized = get_normalized_streams_for_target(target, config)
             print(f"[streams-rename] Preview ({target}): {normalized}")
             rewrite_testsetup_yaml_streams_with_renames(target, config)
-    #if target in ALLOWED_DOWNLOAD_MODULES:
-    #        download_streams_for_target(target, config,use_sshpass=bool(getattr(config, "SSH_PASSWORD","")),allow_self_signed_tls=True, targetDirectory=testModule)
-    #        ensure_preserve_streams_cleanup_override(testModule, config)
     if target in ('dsVideoPort','dsAudio','rmfaudiocapture'):
             comment_download_calls_in_helper(target=target,base_path=config.BASE_PATH,enabled_targets=None,note_text="Skipping asset downloads on DUT for this run.")
 
@@ -1790,12 +1787,6 @@ def main():
     excel_sheet_path = target + "_" + unique_string + ".xlsx"
     print("Removing embedded characters from log file")
     subprocess.run(["sed", "-i", "-e", "s/\r//g", log_path],check=True)
-    #if target in ALLOWED_DOWNLOAD_MODULES:
-    #        # Remove only files (keep directory)
-    #        cleanup_streams_for_target(target=target,config=config,use_sshpass=bool(getattr(config, "SSH_PASSWORD", "")),
-    #                                         remove_dir=False,      # set True if you want to remove /opt/HAL/<target> entirely
-    #                                         dry_run=False,         # set True to preview without deleting
-    #                                         verbose=True,targetDirectory=testModule)
 
     excel_path = target + "_" + unique_string + ".xlsx"
     saved_path = process_log_to_excel(log_path, excel_path)
