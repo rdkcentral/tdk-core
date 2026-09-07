@@ -47,6 +47,7 @@ TARGET_DIRECTORY ="/VTS_Package/"
 #=====================STREAM====================================
 #Update stream server hosting streams
 STREAM_DOWNLOAD_PATH = ""
+STREAMS_HOST_SECONDARY_URL = ""
 
 #Platform specific player config
 PLATFORM_EXPORTS="""
