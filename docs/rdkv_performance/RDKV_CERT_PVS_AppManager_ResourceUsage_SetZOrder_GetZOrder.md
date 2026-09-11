@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_PERFORMANCE_108
 ## TestCase Name
-RDKV_CERT_PVS_AppManager_SetZOrder_GetZOrder
+RDKV_CERT_PVS_AppManager_ResourceUsage_SetZOrder_GetZOrder
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)

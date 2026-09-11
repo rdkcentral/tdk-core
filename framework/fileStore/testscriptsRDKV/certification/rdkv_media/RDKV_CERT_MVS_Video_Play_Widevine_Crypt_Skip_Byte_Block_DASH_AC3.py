@@ -16,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
+
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from rdkv_medialib import *
@@ -28,7 +29,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_media","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_MVS_Video_Play_Widevine_Cypt_Skip_Byte_Block_DASH_AAC')
+obj.configureTestCase(ip,port,'RDKV_CERT_MVS_Video_Play_Widevine_Crypt_Skip_Byte_Block_DASH_AC3')
 
 webkit_console_socket = None
 
@@ -61,7 +62,7 @@ if expectedResult in result.upper():
         conf_file,result = getDeviceConfigFile(obj.realpath)
         setDeviceConfigFile(conf_file)
         #appURL    = MediaValidationVariables.lightning_video_test_app_url
-        videoURL  = MediaValidationVariables.video_src_url_widevine_crypt_skip_block_dash_h264_aac
+        videoURL  = MediaValidationVariables.video_src_url_widevine_crypt_skip_block_dash_h264_ac3
         # Setting VideoPlayer Operations
         setOperation("close",MediaValidationVariables.close_interval)
         operations = getOperations()
@@ -69,20 +70,20 @@ if expectedResult in result.upper():
         setURLArgument("url",videoURL)
         setURLArgument("operations",operations)
         setURLArgument("autotest","true")
-        setURLArgument("drmconfigs",MediaValidationVariables.video_src_url_widevine_crypt_skip_block_dash_h264_aac_drmconfigs)
+        setURLArgument("drmconfigs",MediaValidationVariables.video_src_url_widevine_crypt_skip_block_dash_h264_ac3_drmconfigs)
         setURLArgument("type","dash")
         appArguments = getURLArguments()
 
         # Getting the complete test app URL for selected players
         video_test_urls = []
         test_counter = 0
-        players_list = str(MediaValidationVariables.codec_dash_aac).split(",")
+        players_list = str(MediaValidationVariables.codec_ac3).split(",")
         print("SELECTED PLAYERS: ", players_list)
         video_test_urls = getTestURLs(players_list,appArguments)
 
         #Example video test url
         #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/unifiedplayer/build/index.html?
-        #url=<video_aac_url>.mpd&drmconfigs=com.widevine(<license_url>)&operations=close(60)&autotest=true&type=dash
+        #url=<video_ac3_url>.mpd&drmconfigs=com.widevine(<license_url>)&operations=close(60)&autotest=true&type=dash
 
         # Setting the video test url in PersistentStore and launching the test app using AppManager
         for video_test_url in video_test_urls:
