@@ -246,7 +246,7 @@ Display_L2_SkipTestCaseList_RPI["SetAndGetAVIContentType_src"] = "Not applicable
 
 
 # RMF Audio Capture HAL test Configurations
-rmfAudioCapture_basePath = "rmf_audio_capture/"
+rmfAudioCapture_basePath = "rmfaudiocapture/"
 rmfAudioCapture_binaryName = "hal_test_rmfAudioCapture"
 rmfAudioCapture_binaryConfig = "rmfAudioCaptureAuxNotSupported.yaml"
 # COMMON CHANGE: rmfAudioCapture_L1_List drives VTS_rmfAudioCapture_L1_test.py
@@ -281,7 +281,7 @@ HDMICEC_L2_SkipTestCaseList = {}
 HDMICEC_L2_SkipTestCaseList_RPI = {}
 
 # PowerManager HAL test configurations
-PowerManager_basePath = "power_manager/"
+PowerManager_basePath = "power/"
 PowerManager_binaryName = "hal_test_iarmmgrs-power-hal"
 PowerManager_SOURCE_binaryConfig = "source_powerManager.yaml"
 PowerManager_SINK_binaryConfig = "sink_powerManager.yaml"
@@ -299,7 +299,7 @@ PowerManager_L1_SkipTestCaseList = {}
 PowerManager_L2_SkipTestCaseList = {}
 
 # DeepSleep HAL test configurations
-DeepSleep_basePath = "deepsleep_manager/"
+DeepSleep_basePath = "deepsleep/"
 DeepSleep_binaryName = "hal_test_iarmmgrs-deepsleep-hal"
 DeepSleep_binaryConfig = "deepsleepmanagerWakeUpSources.yaml"
 # COMMON CHANGE: DeepSleep_L1_List / DeepSleep_L1_SkipTestCaseList entries below drive
