@@ -33,7 +33,7 @@ To validate that Widevine DRM encrypted stream playback continues without interr
 | 12 | Configure Widevine DRM settings | Configure the DRM variable `video_src_url_widevine_dash_aac_drmconfigs` in `MediaValidationVariables.py` with the Widevine license server URL and required HTTP headers using the format: `com.widevine.alpha[<license_url>]\|headers[<header_name>:<header_value>]`. | The `video_src_url_widevine_dash_aac_drmconfigs` variable should be configured with valid Widevine DRM license server details. |
 | 13 | Check app installation status | Query the installed package list to check whether the Widevine player app is already installed on the device. | The installed app package list should be retrievable and the app installation status should be confirmed. |
 | 14 | Download app package if not installed | If the app is not already installed, download the app package from the configured download URL using the DownloadManager API. | The app package should be downloaded successfully if it was not already installed. |
-| 15 | Install app via PackageManager | Install the downloaded app package using the PackageManagerRDKEMS.install API with the appropriate `packageId` and file locator. | The app package should be installed successfully on the device. |
+| 15 | Install app via PackageManager | Install the downloaded app package using the AppPackageManager.install API with the appropriate `packageId` and file locator. | The app package should be installed successfully on the device. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
