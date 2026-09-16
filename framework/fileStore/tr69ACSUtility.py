@@ -836,7 +836,7 @@ def parseTR69ACSResponse(response,parameters,method):
 
 # revertPrerequisite()
 # Syntax      : revertPrerequisite(obj,initialValues,step)
-# Description : Function to revert Device Management server url and Tr69CertLocation modified during prerequisite
+# Description : Function to revert Device Management server url value modified during prerequisite
 # Parameters  : obj -  Object of tdk library
 #             : initialValues - List of initial values of DMs
 #             : step - Current test step count
@@ -844,21 +844,25 @@ def parseTR69ACSResponse(response,parameters,method):
 def revertPrerequisite(obj,initialValues,step):
     step=step+1
     expectedresult = "SUCCESS"
-    tdkTestObj_tr181 = obj.createTestStep("TDKB_TR181Stub_SetMultiple")
+
+    tdkTestObj_tr181 = obj.createTestStep('TDKB_TR181Stub_Set')
     if len(initialValues) == 3 and all(v is not None for v in initialValues):
-        #Reverting Device.ManagementServer.EnableCWMP calls StopCWMP which in turn cancels the port listening, hence removed it from revert function.
-        print("\nTEST STEP %d : Revert the values of Device Management server url and Tr69CertLocation modified during prerequisite check" %step)
-        print("EXPECTED RESULT %d : The Device Management server url and Tr69CertLocation TR069 Data models should be reverted successfully" %step)
-        tdkTestObj_tr181.addParameter("paramList","Device.ManagementServer.URL|%s|string|Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation|%s|string" %(initialValues[1],initialValues[2]))
+        #Reverting Device.ManagementServer.EnableCWMP calls StopCWMP which in turn cancels the port listening, hence removed from revert function.
+        #Reverting Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation to empty value doesn't add any value, hence removed from revert function.
+        print("\nTEST STEP %d : Revert the Device Management server url value modified during prerequisite check" %step)
+        print("EXPECTED RESULT %d : The Device Management server url value should be reverted successfully" %step)
+        tdkTestObj_tr181.addParameter("ParamName","Device.ManagementServer.URL")
+        tdkTestObj_tr181.addParameter("ParamValue",initialValues[1])
+        tdkTestObj_tr181.addParameter("Type","string")
         tdkTestObj_tr181.executeTestCase(expectedresult)
         actualresult = tdkTestObj_tr181.getResult()
         details = tdkTestObj_tr181.getResultDetails()
         if expectedresult in actualresult:
             tdkTestObj_tr181.setResultStatus("SUCCESS")
-            print(f"ACTUAL RESULT {step}: Reverted the Device Management server url and Tr69CertLocation values successfully")
+            print(f"ACTUAL RESULT {step}: Reverted the Device Management server url value successfully")
         else:
             tdkTestObj_tr181.setResultStatus("FAILURE")
-            print(f"ACTUAL RESULT {step}: Failed to revert the Device Management server url and Tr69CertLocation values.")
+            print(f"ACTUAL RESULT {step}: Failed to revert the Device Management server url value.")
     else:
         print("\n Required initial values of modified Tr69 configuration parameters are missing")
         tdkTestObj_tr181.setResultStatus("FAILURE")
