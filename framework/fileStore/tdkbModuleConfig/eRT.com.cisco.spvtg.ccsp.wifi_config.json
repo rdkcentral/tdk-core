@@ -159,8 +159,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-100:-30]"
-        ],
+        "expectedValues": ["[-100:-30]"],
         "flags": [""],
         "Set_type": "L2"
     },
@@ -214,8 +213,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[300:3600]"
-        ],
+        "expectedValues": ["[60:3600]"],
         "flags": [""],
         "Set_type": "L2"
     },
@@ -224,7 +222,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(5,3601)"],
+        "expectedValues": ["[5:3600]"],
         "flags": [""],
         "Set_type": "L2"
     },
@@ -514,8 +512,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[A-Z][A-Z][OI]"
-        ],
+        "expectedValues": ["[A-Z][A-Z][OI]"],
         "flags": [""],
         "Set_type": "L2",
         "set_value": {
@@ -654,6 +651,78 @@
     },
     "Device.WiFi.WiFiRestart.RSSMemory.Threshold2": {
         "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.CsiAnalytics": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.MultiAp_RFC": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.TCM.Open2G": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.TCM.Open5G": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.TCM.Open6G": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.TCM.Secure2G": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.TCM.Secure5G": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.TCM.Secure6G": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Xfi_Tel_Enable": {
+        "type": ["boolean"],
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],

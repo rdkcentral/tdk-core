@@ -230,7 +230,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(0,100)"],
+        "expectedValues": ["[:99]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.DeviceInfo.ProcessStatus.Process.{i}.CPUTime": {
@@ -364,7 +364,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(-1,2^31 - 1)"],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RDKB_WAN_MANAGER"]
     },
     "Device.Ethernet.Interface.{i}.CurrentBitRate": {
@@ -861,8 +861,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["1500"],
-        "expectedValues": ["[1:1540]"
-        ],
+        "expectedValues": ["[1:1540]"],
         "flags": ["ifndef FEATURE_RDKB_XDSL_PPP_MANAGER","ifdef _HUB4_PRODUCT_REQ_ | !FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.PPP.Interface.{i}.CurrentMRUSize": {
@@ -870,8 +869,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[1:1540]"
-        ],
+        "expectedValues": ["[1:1540]"],
         "flags": ["ifndef FEATURE_RDKB_XDSL_PPP_MANAGER","ifdef _HUB4_PRODUCT_REQ_ | !FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.PPP.Interface.{i}.ConnectionTrigger": {
@@ -903,8 +901,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[1:]"
-        ],
+        "expectedValues": ["[1:]"],
         "flags": ["ifndef FEATURE_RDKB_XDSL_PPP_MANAGER","ifdef _HUB4_PRODUCT_REQ_ | !FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.PPP.Interface.{i}.PPPoE.ACName": {
@@ -1158,7 +1155,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(64,65536)"],
+        "expectedValues": ["[64:65535]"],
         "flags": [""]
     },
     "Device.IP.Interface.{i}.Type": {
@@ -1808,8 +1805,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["-1"],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": [""]
     },
     "Device.Routing.Router.{i}.IPv4Forwarding.{i}.GatewayIPAddress": {
@@ -1833,8 +1829,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["-1"],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": [""]
     },
     "Device.Routing.Router.{i}.IPv4Forwarding.{i}.Origin": {
@@ -1897,8 +1892,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["-1"],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": [""]
     },
     "Device.Routing.Router.{i}.IPv6Forwarding.{i}.NextHop": {
@@ -1930,8 +1924,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["-1"],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": [""]
     },
     "Device.Routing.Router.{i}.IPv6Forwarding.{i}.ExpirationTime": {
@@ -2168,7 +2161,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": ["Static"],
-        "expectedValues": ["DHCPv4","DHCPv6","RouterAdvertisement","IPCP","Static"],
+        "expectedValues": ["DHCP","DHCPv4","DHCPv6","RouterAdvertisement","IPCP","Static"],
         "flags": [""]
     },
     "Device.DNS.Client.Server.{i}.X_CISCO_COM_Order": {
@@ -2252,7 +2245,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(0,65536)"],
+        "expectedValues": ["[0:65535]"],
         "flags": [""]
     },
     "Device.NAT.PortMapping.{i}.ExternalPortEndRange": {
@@ -2260,7 +2253,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["0"],
-        "expectedValues": ["range(0,65536)"],
+        "expectedValues": ["[0:65535]"],
         "flags": [""]
     },
     "Device.NAT.PortMapping.{i}.InternalPort": {
@@ -2268,7 +2261,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(0,65536)"],
+        "expectedValues": ["[0:65535]"],
         "flags": [""]
     },
     "Device.NAT.PortMapping.{i}.Protocol": {
@@ -2382,8 +2375,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[0:65535]"
-        ],
+        "expectedValues": ["[0:65535]"],
         "flags": [""]
     },
     "Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.TriggerPortEnd": {
@@ -2391,8 +2383,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[0:65535]"
-        ],
+        "expectedValues": ["[0:65535]"],
         "flags": [""]
     },
     "Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.ForwardProtocol": {
@@ -2408,8 +2399,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[0:65535]"
-        ],
+        "expectedValues": ["[0:65535]"],
         "flags": [""]
     },
     "Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.ForwardPortEnd": {
@@ -2417,8 +2407,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[0:65535]"
-        ],
+        "expectedValues": ["[0:65535]"],
         "flags": [""]
     },
     "Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.Description": {
@@ -2527,7 +2516,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": ["0"],
-        "expectedValues": ["range(-1,2^31 - 1)"],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER","ifndef FEATURE_RDKB_WAN_MANAGER"]
     },
     "Device.DHCPv4.Client.{i}.DHCPServer": {
@@ -2564,7 +2553,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(1,255)"],
+        "expectedValues": ["[1:254]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER","ifndef FEATURE_RDKB_WAN_MANAGER"]
     },
     "Device.DHCPv4.Client.{i}.SentOption.{i}.Value": {
@@ -2593,8 +2582,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[1:]"
-        ],
+        "expectedValues": ["[1:]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER","ifndef FEATURE_RDKB_WAN_MANAGER"]
     },
     "Device.DHCPv4.Client.{i}.ReqOption.{i}.Alias": {
@@ -2610,7 +2598,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(1,255)"],
+        "expectedValues": ["[1:254]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER","ifndef FEATURE_RDKB_WAN_MANAGER"]
     },
     "Device.DHCPv4.Client.{i}.ReqOption.{i}.Value": {
@@ -2663,8 +2651,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[1:]"
-        ],
+        "expectedValues": ["[1:]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER"]
     },
     "Device.DHCPv4.Server.Pool.{i}.Interface": {
@@ -2698,7 +2685,7 @@
         "defaultValue": ["Exact"],
         "expectedValues": ["Exact","Prefix","Suffix","Substring"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER"],
-	"skipGet": "Yes"
+        "skipGet": "Yes"
     },
     "Device.DHCPv4.Server.Pool.{i}.ClientID": {
         "type": ["string"],
@@ -2825,7 +2812,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["86400"],
-        "expectedValues": ["range(-1,2^31 - 1)"],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER"]
     },
     "Device.DHCPv4.Server.Pool.{i}.StaticAddressNumberOfEntries": {
@@ -2909,7 +2896,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(1,255)"],
+        "expectedValues": ["[1:254]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER"]
     },
     "Device.DHCPv4.Server.Pool.{i}.Option.{i}.Value": {
@@ -3026,7 +3013,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(0,256)"],
+        "expectedValues": ["[0:255]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER"]
     },
     "Device.DHCPv4.Server.Pool.{i}.Client.{i}.Option.{i}.Value": {
@@ -3119,7 +3106,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(-1,2^31 -1)"],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER","ifndef FEATURE_RDKB_WAN_MANAGER"]
     },
     "Device.DHCPv6.Client.{i}.SuggestedT2": {
@@ -3127,7 +3114,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(-1,2^31 -1)"],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER","ifndef FEATURE_RDKB_WAN_MANAGER"]
     },
     "Device.DHCPv6.Client.{i}.SupportedOptions": {
@@ -3203,7 +3190,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(0,65536)"],
+        "expectedValues": ["[0:65535]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER","ifndef FEATURE_RDKB_WAN_MANAGER"]
     },
     "Device.DHCPv6.Client.{i}.SentOption.{i}.Value": {
@@ -3226,7 +3213,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(0,65536)"],
+        "expectedValues": ["[0:65535]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER","ifndef FEATURE_RDKB_WAN_MANAGER"]
     },
     "Device.DHCPv6.Client.{i}.ReceivedOption.{i}.Value": {
@@ -3359,8 +3346,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[1:]"
-        ],
+        "expectedValues": ["[1:]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER"]
     },
     "Device.DHCPv6.Server.Pool.{i}.Interface": {
@@ -3512,7 +3498,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(0,65)"],
+        "expectedValues": ["[:64]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER"]
     },
     "Device.DHCPv6.Server.Pool.{i}.X_RDKCENTRAL-COM_DNSServersEnabled": {
@@ -3636,7 +3622,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(0,65536)"],
+        "expectedValues": ["[0:65535]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER"]
     },
     "Device.DHCPv6.Server.Pool.{i}.Client.{i}.Option.{i}.Value": {
@@ -3673,7 +3659,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(0,65536)"],
+        "expectedValues": ["[0:65535]"],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER"]
     },
     "Device.DHCPv6.Server.Pool.{i}.Option.{i}.Value": {
@@ -3807,7 +3793,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": ["ifdef COSA_FOR_BCI"]
+        "flags": ["ifdef COSA_FOR_BCI | _ONESTACK_PRODUCT_REQ_"]
     },
     "Device.X_CISCO_COM_DDNS.ServiceNumberOfEntries": {
         "ServiceNumberOfEntries": "",
@@ -4302,8 +4288,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[0:65535]"
-        ],
+        "expectedValues": ["[0:65535]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.X_CISCO_COM_Security.InternetAccess.AccessPolicy.{i}.BlockedApplication.{i}.EndPortNumber": {
@@ -4311,8 +4296,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[0:65535]"
-        ],
+        "expectedValues": ["[0:65535]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.X_CISCO_COM_Security.InternetAccess.AccessPolicy.{i}.BlockedApplication.{i}.Protocol": {
@@ -4412,9 +4396,9 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["bridge-dhcp","bridge-static","router"],
+        "expectedValues": ["bridge-dhcp","bridge-static","router","full-bridge-static"],
         "flags": [""],
-	"onlyGetInstances": ["1"]
+        "onlyGetInstances": ["1"]
     },
     "Device.X_CISCO_COM_DeviceControl.LanManagementEntry.{i}.LanNetwork": {
         "type": ["string"],
@@ -4615,7 +4599,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["0","1","2","3","4","5","6","7"],
+        "expectedValues": ["[0:7]"],
         "flags": [""]
     },
     "Device.Bridging.Bridge.{i}.Port.{i}.PriorityRegeneration": {
@@ -4623,7 +4607,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(0,8)"],
+        "expectedValues": ["[0:7]"],
         "flags": [""]
     },
     "Device.Bridging.Bridge.{i}.Port.{i}.PortState": {
@@ -4639,7 +4623,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["1"],
-        "expectedValues": ["range(1,4095)"],
+        "expectedValues": ["[1:4094]"],
         "flags": [""]
     },
     "Device.Bridging.Bridge.{i}.Port.{i}.AcceptableFrameTypes": {
@@ -4828,7 +4812,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(1,4095)"],
+        "expectedValues": ["[1:4094]"],
         "flags": [""]
     },
     "Device.Bridging.Bridge.{i}.VLANPortNumberOfEntries": {
@@ -4918,7 +4902,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": [""],
+        "expectedValues": ["[1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.Bridging.Filter.{i}.Interface": {
@@ -4934,7 +4918,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["0"],
-        "expectedValues": ["range(0,4095)"],
+        "expectedValues": ["[0:4094]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.Bridging.Filter.{i}.EthertypeFilterList": {
@@ -5155,7 +5139,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["600"],
-        "expectedValues": ["range(4,1801)"],
+        "expectedValues": ["[4:1800]"],
         "flags": [""]
     },
     "Device.RouterAdvertisement.InterfaceSetting.{i}.MinRtrAdvInterval": {
@@ -5163,7 +5147,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["200"],
-        "expectedValues": ["range(3,1351)"],
+        "expectedValues": ["[3:1350]"],
         "flags": [""]
     },
     "Device.RouterAdvertisement.InterfaceSetting.{i}.AdvDefaultLifetime": {
@@ -5171,7 +5155,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["1800"],
-        "expectedValues": ["range(0,65535)"],
+        "expectedValues": ["[1:65535]"],
         "flags": [""]
     },
     "Device.RouterAdvertisement.InterfaceSetting.{i}.AdvManagedFlag": {
@@ -5227,7 +5211,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["0"],
-        "expectedValues": ["range(0,3600001)"],
+        "expectedValues": ["[1:3600000]"],
         "flags": [""]
     },
     "Device.RouterAdvertisement.InterfaceSetting.{i}.AdvRetransTimer": {
@@ -5243,7 +5227,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["0"],
-        "expectedValues": ["range(0,256)"],
+        "expectedValues": ["[1:255]"],
         "flags": [""]
     },
     "Device.RouterAdvertisement.InterfaceSetting.{i}.OptionNumberOfEntries": {
@@ -5272,7 +5256,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(0,65536)"],
+        "expectedValues": ["[0:65535]"],
         "flags": [""]
     },
     "Device.RouterAdvertisement.InterfaceSetting.{i}.Option.{i}.Value": {
@@ -5418,7 +5402,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(0,33)"],
+        "expectedValues": ["[0:32]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.IPv6rd.InterfaceSetting.{i}.AddressSource": {
@@ -5938,7 +5922,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": ["ifdef FEATURE_HOTSPOT_SUPPORT"],
-        "flags": [""]
+        "flags": ["ifdef FEATURE_HOTSPOT_SUPPORT"]
     },
     "Device.X_COMCAST_COM_GRE.Interface.{i}.UseSequenceNumber": {
         "type": ["boolean"],
@@ -5963,8 +5947,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-2:63]"
-        ],
+        "expectedValues": ["[-2:63]"],
         "flags": ["ifdef FEATURE_HOTSPOT_SUPPORT"],
         "Set_type": "L2"
     },
@@ -5973,8 +5956,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[1:4094]"
-        ],
+        "expectedValues": ["[1:4094]"],
         "flags": ["ifdef FEATURE_HOTSPOT_SUPPORT"],
         "Set_type": "L2"
     },
@@ -6202,8 +6184,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-2:63]"
-        ],
+        "expectedValues": ["[-2:63]"],
         "flags": ["ifdef CONFIG_CISCO_HOTSPOT"],
         "Set_type": "L2"
     },
@@ -6434,8 +6415,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-200:0]"
-        ],
+        "expectedValues": ["[-200:0]"],
         "flags": ["ifdef CONFIG_CISCO_HOTSPOT"]
     },
     "Device.X_COMCAST-COM_GRE.Tunnel.{i}.SSID.{i}.AssociatedDevice.{i}.IPv4Address": {
@@ -6821,5 +6801,20 @@
         "defaultValue": [""],
         "expectedValues": [""],
         "flags": ["ifdef CONFIG_CISCO_TRUE_STATIC_IP"]
+    },
+    "Device.Time.Chrony.NTPServer.{i}.Settings": {
+        "type": ["string(128)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Time.Chrony.NTPServerNumberOfEntries": {
+        "NTPServerNumberOfEntries": "",
+        "table": "dynamicTable",
+        "flags": [""],
+        "addOperation": "No",
+        "removeOperation": "No"
     }
 }
