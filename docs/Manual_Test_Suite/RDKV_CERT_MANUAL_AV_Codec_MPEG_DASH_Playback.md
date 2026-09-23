@@ -31,7 +31,7 @@ To validate that MPEG-DASH adaptive streaming playback is functional on the DUT 
 | 10 | Configure MPEG-DASH stream URL | Configure the stream variable `video_src_url_mpeg` in `MediaValidationVariables.py` as `test_streams_base_path + "TDK_Asset_Sunrise_MPEGAV.mpeg"` to point to the MPEG-DASH test stream. | The `video_src_url_mpeg` variable should resolve to a valid, accessible stream location. |
 | 11 | Check app installation status | Query the installed package list to check whether the player app is already installed on the device. | The installed app package list should be retrievable and the app installation status should be confirmed. |
 | 12 | Download app package if not installed | If the app is not already installed, download the app package from the configured download URL using the DownloadManager API. | The app package should be downloaded successfully if it was not already installed. |
-| 13 | Install app via PackageManager | Install the downloaded app package using the PackageManagerRDKEMS.install API with the appropriate `packageId` and file locator. | The app package should be installed successfully on the device. |
+| 13 | Install app via PackageManager | Install the downloaded app package using the AppPackageManager.install API with the appropriate `packageId` and file locator. | The app package should be installed successfully on the device. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
