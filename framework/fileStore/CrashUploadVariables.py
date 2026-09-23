@@ -16,18 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
-COREDUMP_PATH_UNIT = "coredump-upload.path"
-COREDUMP_SERVICE_UNIT = "coredump-upload.service"
-MINIDUMPS_DIR = "/minidumps"
-RDKLOGS_DIR = "/rdklogs/logs"
-CORE_LOG_TXT = "/rdklogs/logs/core_log.txt"
+
+# Suite Specific Configuration
+
 CRASH_PORTAL_DM_PARAM = "Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.CrashPortal"
-DEFAULT_CRASH_PORTAL_URL = "https://ssr.ccp.xcal.tv/cgi-bin/upload_dump.cgi"
-LOCAL_SERVER_PORT = ""
-LOCAL_SERVER_IP = ""
-LOCAL_UPLOAD_URL = f"http://{LOCAL_SERVER_IP}:{LOCAL_SERVER_PORT}/upload"
-NON_CCSP_PROCESS = "fwupgrademanager"
-CCSP_PROCESS = "CcspLMLite"
-WAN_MANAGER_PROCESS = "wanmanager"
 ULIMIT_CMD = "ulimit -c unlimited"
 
