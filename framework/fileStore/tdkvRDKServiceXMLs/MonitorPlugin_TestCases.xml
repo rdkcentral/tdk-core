@@ -334,4 +334,282 @@
       <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
     </testStep>
   </testCase>
+
+  <testCase testCaseId="MN_07" testCaseName="Monitor_Reset_Statistics_Invalid_Callsign" desc="Verify resetstats with an invalid callsign">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Reset_Statistics_Invalid_Callsign" method="Reset_Statistics">
+      <params>
+        <param tag="callsign" value="InvalidService" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_08" testCaseName="Monitor_Reset_Statistics_Empty_Callsign" desc="Verify resetstats with an empty callsign">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Reset_Statistics_Empty_Callsign" method="Reset_Statistics">
+      <params>
+        <param tag="callsign" value="" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_09" testCaseName="Monitor_Reset_Statistics_Numeric_Callsign" desc="Verify resetstats with a numeric callsign">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Reset_Statistics_Numeric_Callsign" method="Numeric_Reset_Statistics">
+      <params>
+        <param tag="callsign" value="12345" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_10" testCaseName="Monitor_Reset_Statistics_Specialchar_Callsign" desc="Verify resetstats with a special-character callsign">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Reset_Statistics_Specialchar_Callsign" method="Reset_Statistics">
+      <params>
+        <param tag="callsign" value="()^*!" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_11" testCaseName="Monitor_Reset_Statistics_Without_Params" desc="Verify resetstats without the callsign parameter">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Reset_Statistics_Without_Params" method="Reset_Statistics">
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_12" testCaseName="Monitor_Restart_Limits_Invalid_Callsign" desc="Verify restartlimits with an invalid callsign">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Invalid_Callsign" method="Restart_Limits">
+      <params>
+        <param tag="callsign" value="InvalidService" />
+        <param tag="limit" value="3" />
+        <param tag="window" value="60" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_13" testCaseName="Monitor_Restart_Limits_Empty_Callsign" desc="Verify restartlimits with an empty callsign">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Empty_Callsign" method="Restart_Limits">
+      <params>
+        <param tag="callsign" value="" />
+        <param tag="limit" value="3" />
+        <param tag="window" value="60" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_14" testCaseName="Monitor_Restart_Limits_Numeric_Callsign" desc="Verify restartlimits with a numeric callsign">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Numeric_Callsign" method="Numeric_Callsign_Restart_Limits">
+      <params>
+        <param tag="callsign" value="12345" />
+        <param tag="limit" value="3" />
+        <param tag="window" value="60" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_15" testCaseName="Monitor_Restart_Limits_Specialchar_Callsign" desc="Verify restartlimits with a special-character callsign">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Specialchar_Callsign_System_Check" method="Restart_Limits">
+      <params>
+        <param tag="callsign" value="()^*!" />
+        <param tag="limit" value="3" />
+        <param tag="window" value="60" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_16" testCaseName="Monitor_Restart_Limits_Without_Callsign" desc="Verify restartlimits without the callsign parameter">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Without_Callsign" method="Restart_Limits">
+      <params>
+        <param tag="limit" value="3" />
+        <param tag="window" value="60" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_17" testCaseName="Monitor_Restart_Limits_Invalid_Limit" desc="Verify restartlimits with an invalid limit">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Invalid_Limit" method="String_Limit_Restart_Limits">
+      <params>
+        <param tag="callsign" value="org.rdk.NetworkManager" />
+        <param tag="limit" value="invalid" />
+        <param tag="window" value="60" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_18" testCaseName="Monitor_Restart_Limits_Empty_Limit" desc="Verify restartlimits with an empty limit">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Empty_Limit" method="String_Limit_Restart_Limits">
+      <params>
+        <param tag="callsign" value="org.rdk.NetworkManager" />
+        <param tag="limit" value="" />
+        <param tag="window" value="60" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_19" testCaseName="Monitor_Restart_Limits_Specialchar_Limit" desc="Verify restartlimits with a special-character limit">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Specialchar_Limit" method="String_Limit_Restart_Limits">
+      <params>
+        <param tag="callsign" value="org.rdk.NetworkManager" />
+        <param tag="limit" value="()^*!" />
+        <param tag="window" value="60" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_20" testCaseName="Monitor_Restart_Limits_Numeric_Negative_Limit" desc="Verify restartlimits with a numeric negative limit">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Numeric_Negative_Limit" method="Restart_Limits">
+      <params>
+        <param tag="callsign" value="org.rdk.NetworkManager" />
+        <param tag="limit" value="-1" />
+        <param tag="window" value="60" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_21" testCaseName="Monitor_Restart_Limits_Without_Limit" desc="Verify restartlimits without the limit parameter">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Without_Limit" method="String_Limit_Restart_Limits">
+      <params>
+        <param tag="callsign" value="org.rdk.NetworkManager" />
+        <param tag="window" value="60" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_22" testCaseName="Monitor_Restart_Limits_Invalid_Window" desc="Verify restartlimits with an invalid window">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Invalid_Window" method="String_Window_Restart_Limits">
+      <params>
+        <param tag="callsign" value="org.rdk.NetworkManager" />
+        <param tag="limit" value="3" />
+        <param tag="window" value="invalid" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_23" testCaseName="Monitor_Restart_Limits_Empty_Window" desc="Verify restartlimits with an empty window">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Empty_Window" method="String_Window_Restart_Limits">
+      <params>
+        <param tag="callsign" value="org.rdk.NetworkManager" />
+        <param tag="limit" value="3" />
+        <param tag="window" value="" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_24" testCaseName="Monitor_Restart_Limits_Numeric_Window" desc="Verify restartlimits with a negative numeric window boundary">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Numeric_Window" method="Restart_Limits">
+      <params>
+        <param tag="callsign" value="org.rdk.NetworkManager" />
+        <param tag="limit" value="3" />
+        <param tag="window" value="-1" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_25" testCaseName="Monitor_Restart_Limits_Specialchar_Window" desc="Verify restartlimits with a special-character window">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Specialchar_Window" method="String_Window_Restart_Limits">
+      <params>
+        <param tag="callsign" value="org.rdk.NetworkManager" />
+        <param tag="limit" value="3" />
+        <param tag="window" value="()^*!" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_26" testCaseName="Monitor_Restart_Limits_Without_Window" desc="Verify restartlimits without the window parameter">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Without_Window" method="String_Window_Restart_Limits">
+      <params>
+        <param tag="callsign" value="org.rdk.NetworkManager" />
+        <param tag="limit" value="3" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_27" testCaseName="Monitor_Restart_Limits_Without_Params" desc="Verify restartlimits without parameters">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Restart_Limits_Without_Params" method="Restart_Limits">
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_28" testCaseName="Monitor_Get_Status_Invalid_Callsign" desc="Verify status returns an empty result for an invalid callsign">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Get_Status_Invalid_Callsign" method="Get_Status">
+      <params>
+        <param tag="plugin" value="InvalidService" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_29" testCaseName="Monitor_Get_Status_Empty_Callsign" desc="Verify status returns an empty result for an empty callsign">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Get_Status_Empty_Callsign" method="Get_Status">
+      <params>
+        <param tag="plugin" value="" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_30" testCaseName="Monitor_Get_Status_Numeric_Callsign" desc="Verify status returns an empty result for a numeric callsign">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Get_Status_Numeric_Callsign" method="Get_Status">
+      <params>
+        <param tag="plugin" value="12345" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_31" testCaseName="Monitor_Get_Status_Specialchar_Callsign" desc="Verify status returns an empty result for a special-character callsign">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Get_Status_Specialchar_Callsign" method="Get_Status">
+      <params>
+        <param tag="plugin" value="()^*!" indexOnly="true" />
+      </params>
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
+
+  <testCase testCaseId="MN_32" testCaseName="Monitor_Get_Status_Without_Params" desc="Verify status returns an empty result without a callsign index">
+    <testCaseInfo testCaseType="direct" />
+    <testStep testStepId="1" name="Get_Status_Without_Params" method="Get_Status">
+      <resultGeneration useMethodTag="monitor_negative_scenario_validation" />
+    </testStep>
+  </testCase>
 </testPlugin>
