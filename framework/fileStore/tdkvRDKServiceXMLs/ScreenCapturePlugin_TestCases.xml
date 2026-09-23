@@ -13,11 +13,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-
 <testPlugin pluginName="ScreenCapture" pluginVersion="1">
-
         <pluginPreRequisite>
-          <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+          <prerequisite requisiteId="1" requisiteName="Activate_ScreenCapture_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
                   <param tag="plugin" value="org.rdk.ScreenCapture" indexOnly="true" />
@@ -42,9 +40,9 @@
           <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
             <event pluginName="ScreenCapture" eventName="Event_Upload_Complete" />
           </prerequisite>
-
         </pluginPreRequisite>
 
+        <!-- Test case 01 -->
         <testCase testCaseId="SC_01" testCaseName="ScreenCapture_Upload_Screen_Invalid_Url" desc="Check screen upload with invalid url">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
@@ -54,6 +52,7 @@
             </testStep>
         </testCase>
 
+        <!-- Test case 02 -->
         <testCase testCaseId="SC_02" testCaseName="ScreenCapture_Upload_Screen" desc="Uploads the screenshot">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
@@ -63,6 +62,7 @@
             </testStep>
         </testCase>
 
+        <!-- Test case 03 -->
         <testCase testCaseId="SC_03" testCaseName="ScreenCapture_Upload_Complete_Event" desc="Upload screen and receive uploadComplete Event">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
@@ -75,6 +75,7 @@
             </testStep>
         </testCase>
 
+        <!-- Test case 04 -->
         <testCase testCaseId="SC_04" testCaseName="ScreenCapture_Upload_Complete_Event_Invalid_Url" desc="Uploads screen and checks if uploadComplete Event is received for invalid url">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
@@ -87,6 +88,7 @@
             </testStep>
         </testCase>
 
+        <!-- Test case 05 -->
         <testCase testCaseId="SC_05" testCaseName="ScreenCapture_CallGUID" desc="Upload screen and check GUID in  uploadComplete Event">
             <testStep testStepId="1" name="Upload_Screen_Capture" method="Upload_Screen_Capture" >
                 <params>
@@ -99,5 +101,23 @@
               <resultGeneration useMethodTag="screencapture_check_upload_complete_event" arguments="check_status_and_callguid" expectedValues="True,screenshot"/>
             </testStep>
         </testCase>
-</testPlugin>
 
+        <!-- Test case 06 -->
+        <testCase testCaseId="SC_06" testCaseName="ScreenCapture_Upload_Empty_Url" desc="Verify uploadScreenCapture rejects an empty url">
+          <testCaseInfo testCaseType="direct"/>
+          <testStep testStepId="1" name="Upload_Screen_Empty_Url" method="Upload_Screen_Capture">
+            <params>
+              <param tag="url" value=""/>
+            </params>
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+          </testStep>
+        </testCase>
+
+        <!-- Test case 07 -->
+        <testCase testCaseId="SC_07" testCaseName="ScreenCapture_Upload_Without_Url" desc="Verify uploadScreenCapture rejects a request without a url">
+          <testCaseInfo testCaseType="direct"/>
+          <testStep testStepId="1" name="Upload_Screen_Without_Url" method="Upload_Screen_Capture">
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+          </testStep>
+        </testCase>
+</testPlugin>
