@@ -2100,13 +2100,14 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_current_output_settings":
-            info["colorSpace"] = result.get('colorSpace')
-            info["colorDepth"] = result.get('colorDepth')
-            info["matrixCoefficients"] = result.get('matrixCoefficients')
-            info["videoEOTF"] = result.get('videoEOTF')
-            if str(result.get("success")).lower() == "true" and result.get('colorSpace') in [0,1,2,3,4,5] and result.get('matrixCoefficients') in [0,1,2,3,4,5,6,7] :
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
+            try:
+                info = checkAndGetAllResultInfo(result)
+                if result.get('colorSpace') in [0,1,2,3,4,5] and result.get('matrixCoefficients') in [0,1,2,3,4,5,6,7] :
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_active_input":
