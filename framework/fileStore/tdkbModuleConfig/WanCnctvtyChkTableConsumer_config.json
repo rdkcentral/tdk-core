@@ -39,5 +39,14 @@
         "argsType": [""],
         "rangeArgs": [""],
         "flags": [""]
+    },
+    "Device.Diagnostics.X_RDK_DNSInternet.Enable": {
+        "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
     }
 }
