@@ -91,7 +91,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(-1,2^31 - 1)"],
+        "expectedValues": ["[-1:]"],
         "flags": [""]
     },
     "Device.Hosts.Host.{i}.X_CISCO_COM_ActiveTime": {
@@ -304,8 +304,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.XHosts.XHost.{i}.X_CISCO_COM_ActiveTime": {
@@ -448,5 +447,52 @@
         "defaultValue": [""],
         "expectedValues": [""],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
+    },
+    "Device.Hosts.Host.{i}.MloLink.{i}.X_RDK-AssociatedDevice": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.MloLink.{i}.X_RDK-Layer1Interface": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.MloLink.{i}.X_RDK-RSSI": {
+        "type": ["int"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.MloLinkNumberOfEntries": {
+        "MloLinkNumberOfEntries": "",
+        "table": "staticTable",
+        "flags": [""],
+        "addOperation": "No",
+        "removeOperation": "No"
+    },
+    "Device.Hosts.Host.{i}.X_RDK-MldClient": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Hosts.Host.{i}.X_RDK-MloLinkNumberofEntries": {
+        "type": ["unsignedInt"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
     }
 }

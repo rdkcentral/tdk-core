@@ -1,11 +1,11 @@
 {
-    "Device.LAN.Bridge.{i}.": {
+    "Device.LAN.Bridge.{i}": {
         "NumberOfEntries": "",
         "elementType": ["RBUS_ELEMENT_TYPE_TABLE"],
         "table": "rbus_AddDelete",
         "addOperation": "Yes",
         "removeOperation": "Yes",
-        "flags": [""]
+        "flags": ["ifdef AMENITIES_NETWORK_ENABLED"]
     },
     "Device.LAN.Bridge.{i}.VapName": {
         "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
@@ -14,7 +14,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": [""]
+        "flags": ["ifdef AMENITIES_NETWORK_ENABLED"]
     },
     "Device.LAN.Bridge.{i}.Name": {
         "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
@@ -23,7 +23,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": [""]
+        "flags": ["ifdef AMENITIES_NETWORK_ENABLED"]
     },
     "Device.LAN.Bridge.{i}.WiFiInterfaces": {
         "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
@@ -32,6 +32,6 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": [""]
+        "flags": ["ifdef AMENITIES_NETWORK_ENABLED"]
     }
 }

@@ -227,5 +227,13 @@
         "set_value": {
             "SET": "Interface_1"
         }
+    },
+    "Device.X_RDK_Ethernet.VLANTermination.{i}.UntaggedVlanType": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["MacvlanPrivate","MacvlanVepa","MacvlanBridge","MacvlanPassthru","MacvlanSource","VlanTag0","Bridge","Tagged"],
+        "flags": [""]
     }
 }

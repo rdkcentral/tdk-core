@@ -107,11 +107,11 @@
     },
     "Device.Ethernet.Interface.{i}.Upstream": {
         "type": ["boolean"],
-        "writable": ["false"],
+        "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": ["true","false"],
-        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER","ifdef FEATURE_RDKB_WAN_UPSTREAM"]
     },
     "Device.Ethernet.Interface.{i}.MACAddress": {
         "type": ["string"],
@@ -126,7 +126,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(-1,2^31 - 1)"],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
     },
     "Device.Ethernet.Interface.{i}.CurrentBitRate": {

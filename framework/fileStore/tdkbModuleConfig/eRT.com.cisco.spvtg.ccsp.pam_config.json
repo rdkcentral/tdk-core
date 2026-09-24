@@ -648,11 +648,11 @@
     },
     "Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.PartnerId": {
         "type": ["string"],
-        "writable": ["true"],
+        "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": [""]
+        "flags": ["ifndef BCI"]
     },
     "Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation": {
         "type": ["string"],
@@ -889,11 +889,11 @@
     },
     "Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.RDKB_UIBranding.WiFiPersonalization.Support": {
         "type": ["boolean"],
-        "writable": ["false"],
+        "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": [""]
+        "flags": ["ifndef BCI"]
     },
     "Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.RDKB_UIBranding.WiFiPersonalization.PartnerHelpLink": {
         "type": ["string"],
@@ -1294,7 +1294,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": ["ifdef BCI | COSA_FOR_BCI"]
+        "flags": ["ifdef BCI | COSA_FOR_BCI | _ONESTACK_PRODUCT_REQ_"]
     },
     "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.EnableMultiProfileXDNS": {
         "type": ["boolean"],
@@ -1302,7 +1302,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": ["ifdef BCI | COSA_FOR_BCI"]
+        "flags": ["ifdef BCI | COSA_FOR_BCI | ONESTACK_PRODUCT_REQ"]
     },
     "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.RDKLowQueueRebootThreshold": {
         "type": ["int"],
@@ -2182,8 +2182,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["120"],
-        "expectedValues": ["[1:365]"
-        ],
+        "expectedValues": ["[1:365]"],
         "flags": [""],
         "Set_type": "L2"
     },
@@ -2193,7 +2192,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": ["ifdef _XB6_PRODUCT_REQ_ | _XB7_PRODUCT_REQ_ | _SCER11BEL_PRODUCT_REQ_"]
+        "flags": ["ifdef _XB6_PRODUCT_REQ_ | _XB7_PRODUCT_REQ_ | _SCER11BEL_PRODUCT_REQ_ | _SCXF11BFL_PRODUCT_REQ_"]
     },
     "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.NFC.Enable": {
         "type": ["boolean"],
@@ -2273,7 +2272,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": ["ifndef BCI"]
+        "flags": [""]
     },
     "Device.DeviceInfo.X_RDKCENTRAL-COM.DhcpServDetectEnable": {
         "type": ["boolean"],
@@ -2328,7 +2327,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(0,101)"],
+        "expectedValues": ["[:100]"],
         "flags": [""]
     },
     "Device.DeviceInfo.ProcessStatus.ProcessNumberOfEntries": {
@@ -2360,8 +2359,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[300:3600]"
-        ],
+        "expectedValues": ["[60:3600]"],
         "flags": [""],
         "Set_type": "L2"
     },
@@ -2370,8 +2368,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[5:3600]"
-        ],
+        "expectedValues": ["[5:3600]"],
         "flags": [""],
         "Set_type": "L2"
     },
@@ -2412,8 +2409,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[0-9A-F]{6}"
-        ],
+        "expectedValues": ["[0-9A-F]{6}"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.GatewayInfo.ProductClass": {
@@ -2851,8 +2847,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[5:2147483647]"
-        ],
+        "expectedValues": ["[5:2147483647]"],
         "flags": [""]
     },
     "Device.Routing.RIP.X_CISCO_COM_DefaultMetric": {
@@ -3688,7 +3683,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": ["ifdef BCI"]
+        "flags": ["ifdef BCI | _ONESTACK_PRODUCT_REQ_"]
     },
     "Device.X_CISCO_COM_Security.Firewall.WanPingEnableV6": {
         "type": ["boolean"],
@@ -3696,7 +3691,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": ["ifdef BCI"]
+        "flags": ["ifdef BCI | _ONESTACK_PRODUCT_REQ_"]
     },
     "Device.X_CISCO_COM_Security.Firewall.TrueStaticIpEnable": {
         "type": ["boolean"],
@@ -3704,7 +3699,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": ["ifdef BCI"]
+        "flags": ["ifdef BCI | _ONESTACK_PRODUCT_REQ_"]
     },
     "Device.X_CISCO_COM_Security.InternetAccess.NumberOfPolicies": {
         "type": ["unsignedInt"],
@@ -3952,7 +3947,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": ["ifdef BCI"]
+        "flags": ["ifdef BCI | _ONESTACK_PRODUCT_REQ_"]
     },
     "Device.X_CISCO_COM_DeviceControl.NameServer1": {
         "type": ["string"],
@@ -3960,7 +3955,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": ["ifdef BCI"]
+        "flags": ["ifdef BCI | _ONESTACK_PRODUCT_REQ_"]
     },
     "Device.X_CISCO_COM_DeviceControl.NameServer2": {
         "type": ["string"],
@@ -3968,7 +3963,7 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": ["ifdef BCI"]
+        "flags": ["ifdef BCI | _ONESTACK_PRODUCT_REQ_"]
     },
     "Device.X_CISCO_COM_DeviceControl.ReleaseWan": {
         "type": ["boolean"],
@@ -4071,8 +4066,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.X_CISCO_COM_DeviceControl.WebAccessLevel.HomeUser_RfCM_Level": {
@@ -4080,8 +4074,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.X_CISCO_COM_DeviceControl.WebAccessLevel.HomeUser_Mta_Level": {
@@ -4089,8 +4082,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION","ifndef NO_MTA_FEATURE_SUPPORT"]
     },
     "Device.X_CISCO_COM_DeviceControl.WebAccessLevel.HomeUser_WanRG_Level": {
@@ -4098,8 +4090,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.X_CISCO_COM_DeviceControl.WebAccessLevel.CusAdmin_Lan_Level": {
@@ -4107,8 +4098,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.X_CISCO_COM_DeviceControl.WebAccessLevel.CusAdmin_RfCM_Level": {
@@ -4116,8 +4106,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.X_CISCO_COM_DeviceControl.WebAccessLevel.CusAdmin_Mta_Level": {
@@ -4125,8 +4114,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION","ifndef NO_MTA_FEATURE_SUPPORT"]
     },
     "Device.X_CISCO_COM_DeviceControl.WebAccessLevel.CusAdmin_WanRG_Level": {
@@ -4134,8 +4122,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.X_CISCO_COM_DeviceControl.WebAccessLevel.AdvUser_Lan_Level": {
@@ -4143,8 +4130,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.X_CISCO_COM_DeviceControl.WebAccessLevel.AdvUser_RfCM_Level": {
@@ -4152,8 +4138,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.X_CISCO_COM_DeviceControl.WebAccessLevel.AdvUser_Mta_Level": {
@@ -4161,8 +4146,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION","ifndef NO_MTA_FEATURE_SUPPORT"]
     },
     "Device.X_CISCO_COM_DeviceControl.WebAccessLevel.AdvUser_WanRG_Level": {
@@ -4170,8 +4154,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[-1:]"
-        ],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifndef FEATURE_RESOURCE_OPTIMIZATION"]
     },
     "Device.Bridging.MaxBridgeEntries": {
@@ -4696,6 +4679,174 @@
     },
     "Device.X_RDKCENTRAL-COM_Xcalibur.Client.xconfCheckNowReboot": {
         "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.MemoryStatus.X_RDKCENTRAL-COM_MemCompTargetUptime": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.MemoryStatus.X_RDKCENTRAL-COM_MemFragThreshold": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.MemoryStatus.X_RDKCENTRAL-COM_RunMemFragSelfheal": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_FwDwld_AvlMem_RsrvThreshold": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_FwDwld_ImageProcMemPercent": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RDKDownloadManager.PackageExpiryTime": {
+        "type": ["int"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Cron.RdkLogger.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Cron.SelfHeal.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.MEMSWAP.DiskSize": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.MEMSWAP.StatsInterval": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.MEMSWAP.Tunables.PageCluster": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.MEMSWAP.Tunables.Swappiness": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.MEMSWAP.Tunables.WatermarkScaleFactor": {
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.STAGE.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.meminsight.Trigger": {
+        "type": ["string(8)"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.DeviceMode": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef _ONESTACK_PRODUCT_REQ_"]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_xOpsDeviceMgmt.RPC.RebootDevice": {
+        "type": ["string"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Firewall.RDK_NFTable.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef NFT_ENABLE"]
+    },
+    "Device.Firewall.RDK_NFTable.Status": {
+        "type": ["string"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": ["Disabled","Enabled","Error_IPv4","Error_IPv6","Error_Both_Ipv4_IPv6","Error_Other"],
+        "flags": ["ifdef NFT_ENABLE"]
+    },
+    "Device.Time.Chrony.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.Time.Chrony.Makestep": {
+        "type": ["string(32)"],
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
