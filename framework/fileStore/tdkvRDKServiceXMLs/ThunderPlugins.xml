@@ -52,11 +52,14 @@
             <expectedValues>null</expectedValues>
         </method>
         <method name="Delete_Directory_Contents" api="delete" type="method" desc="Removes contents of a directory from the persistent storage">
+            <params>
+                <param tag="path" defaultValue="null" type="string"/>
+            </params>
             <expectedValues>null</expectedValues>
         </method>
         <method name="Configuration" api="configuration" type="property" desc="Provides access to the configuration object of a service">
             <expectedValues>null</expectedValues>
-        </method>
+	</method>
         <method name="Unavailable" api="unavailable" type="method" desc="Sets a plugin unavailable for interaction" >
             <params>
                 <param tag="callsign" defaultValue="null"/>
@@ -68,11 +71,55 @@
                 <param tag="configuration" defaultValue="null" />
             </params>
             <expectedValues>null</expectedValues>
+    	</method>
+        <method name="Suspend_Plugin" api="suspend" type="method" desc="Suspends a plugin">
+            <params>
+                <param tag="callsign" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Resume_Plugin" api="resume" type="method" desc="Resumes a plugin">
+            <params>
+                <param tag="callsign" defaultValue="null" type="string"/>
+            </params>
+        </method>
+	    <method name="Numeric_Callsign_Activate_Plugin" api="activate" type="method" desc="Activates a plugin with numeric callsign">
+            <params>
+                <param tag="callsign" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_Callsign_Deactivate_Plugin" api="deactivate" type="method" desc="deactivates a plugin with numeric callsign">
+            <params>
+                <param tag="callsign" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_Callsign_Resume_Plugin" api="resume" type="method" desc="Resumes a plugin with numeric callsign">
+            <params>
+                <param tag="callsign" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_Callsign_Suspend_Plugin" api="suspend" type="method" desc="Suspends a plugin with numeric callsign">
+            <params>
+                <param tag="callsign" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_Callsign_Unavailable" api="unavailable" type="method" desc="Sets a plugin unavailable for interaction with numeric callsign">
+            <params>
+                <param tag="callsign" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="String_TTL_Start_Discovery" api="startdiscovery" type="method" desc="Starts the network discovery process with string ttl">
+            <params>
+                <param tag="ttl" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Path_Delete_Directory_Contents" api="delete" type="method" desc="Removes contents of a directory from the persistent storage with numeric path">
+            <params>
+                <param tag="path" defaultValue="null" type="int"/>
+            </params>
         </method>
         <event name="Event_Controller_State_Changed" eventName="statechange" eventId="client.events.1" type="event" desc="Signals a plugin state change" />
         <event name="Event_Controller_All" eventName="all" eventId="client.events.1" type="event" desc="Signals each and every event in the system" />
     </plugin>
-
 
     <!-- DeviceInfo Plugin Information -->
     <plugin pluginName="DeviceInfo" serviceName="DeviceInfo" serviceVersion="1">
@@ -424,29 +471,29 @@
 
     <!-- System Plugin Information -->
     <plugin pluginName="System" serviceName="org.rdk.System" serviceVersion="1">
-        <method name="Get_Device_Info" api="getDeviceInfo" type="method" desc="Gives device details"/>
-        <method name="Get_Serial_No"  api="getSerialNumber" type="method" desc="Gives device serial number"/>
-        <method name="Get_System_Version"  api="getSystemVersions" type="method" desc="Gives system version details"/>
-        <method name="Get_System_Uptime"  api="requestSystemUptime" type="method" desc="Gives system uptime"/>
-        <method name="Get_Core_Temperature"  api="getCoreTemperature" type="method" desc="Gives core temperature of the device"/>
-        <method name="Get_Milestones"  api="getMilestones" type="method" desc="Gives list of milestones"/>
-        <method name="Get_XConf_Params"  api="getXconfParams" type="method" desc="Gives Xconf configuration of the device"/>
-        <method name="Get_RFC_Config" api="getRFCConfig" type="method" desc="Gets RFC configurations" >
+        <method name="Get_Device_Info" api="getDeviceInfo" type="method" desc="Gives device details" />
+        <method name="Get_Serial_No" api="getSerialNumber" type="method" desc="Gives device serial number" />
+        <method name="Get_System_Version" api="getSystemVersions" type="method" desc="Gives system version details" />
+        <method name="Get_System_Uptime" api="requestSystemUptime" type="method" desc="Gives system uptime" />
+        <method name="Get_Core_Temperature" api="getCoreTemperature" type="method" desc="Gives core temperature of the device" />
+        <method name="Get_Milestones" api="getMilestones" type="method" desc="Gives list of milestones" />
+        <method name="Get_XConf_Params" api="getXconfParams" type="method" desc="Gives Xconf configuration of the device" />
+        <method name="Get_RFC_Config" api="getRFCConfig" type="method" desc="Gets RFC configurations">
             <params>
                 <param tag="rfcList" defaultValue="null" type="list" />
             </params>
         </method>
-        <method name="Get_GZ_Enable_Status"  api="isGzEnabled" type="method" desc="Gives GZ enabled status">
+        <method name="Get_GZ_Enable_Status" api="isGzEnabled" type="method" desc="Gives GZ enabled status">
             <expectedValues>True,False</expectedValues>
         </method>
-        <method name="Set_GZ_Enable_Status"  api="setGzEnabled" type="method" desc="Sets GZ enabled status " >
+        <method name="Set_GZ_Enable_Status" api="setGzEnabled" type="method" desc="Sets GZ enabled status">
             <params>
                 <param tag="enabled" defaultValue="null" type="bool" />
             </params>
-    	</method>
-		<method name="Delete_Persistent_Path"  api="deletePersistentPath" type="method" desc="Deletes the persistent path" >
+        </method>
+        <method name="Delete_Persistent_Path" api="deletePersistentPath" type="method" desc="Deletes the persistent path">
             <params>
-                <param tag="callsign"  type="string" defaultValue="null" />
+                <param tag="callsign" type="string" defaultValue="null" />
                 <param tag="type" type="string" defaultValue="null" />
             </params>
         </method>
@@ -454,53 +501,53 @@
         <method name="Set_Temperature_Thresholds" api="setTemperatureThresholds" type="method" desc="Sets temperature thresholds">
             <params paramKey="Thresholds" paramType="userGenerate" useMethodTag="system_set_thresholds_params">
                 <param tag="WARN" defaultValue="null" />
-                <param tag="MAX"  defaultValue="null" />
+                <param tag="MAX" defaultValue="null" />
             </params>
         </method>
-        <method name="Cache_Contains" api="cacheContains" type="method" desc="Checks if key is present in cache" >
+        <method name="Cache_Contains" api="cacheContains" type="method" desc="Checks if key is present in cache">
             <params>
                 <param tag="key" defaultValue="sampleKey" />
             </params>
         </method>
-        <method name="Get_Cache_Value" api="getCachedValue" type="method" desc="Get value of the key in cache" >
+        <method name="Get_Cache_Value" api="getCachedValue" type="method" desc="Get value of the key in cache">
             <params>
                 <param tag="key" defaultValue="sampleKey" />
             </params>
             <expectedValues>sampleKey,100.23</expectedValues>
         </method>
-        <method name="Set_Cache_Value" api="setCachedValue" type="method" desc="Set value of the key in cache" >
+        <method name="Set_Cache_Value" api="setCachedValue" type="method" desc="Set value of the key in cache">
             <params>
-                <param tag="key"   defaultValue="sampleKey" />
+                <param tag="key" defaultValue="sampleKey" />
                 <param tag="value" defaultValue="100.23" type="float" />
             </params>
         </method>
-        <method name="Remove_Cache_Key" api="removeCacheKey" type="method" desc="Remove key from cache" >
+        <method name="Remove_Cache_Key" api="removeCacheKey" type="method" desc="Remove key from cache">
             <params>
                 <param tag="key" defaultValue="sampleKey" />
             </params>
         </method>
-        <method name="Get_State_Info" api="getStateInfo" type="method" desc="Query device state information of various properties" >
+        <method name="Get_State_Info" api="getStateInfo" type="method" desc="Query device state information of various properties">
             <params>
                 <param tag="param" defaultValue="null" />
             </params>
         </method>
         <method name="Get_TimeZone_DST" api="getTimeZoneDST" type="method" desc="Get configured time zone" />
-        <method name="Set_TimeZone_DST" api="setTimeZoneDST" type="method" desc="Set configured time zone" >
+        <method name="Set_TimeZone_DST" api="setTimeZoneDST" type="method" desc="Set configured time zone">
             <params>
                 <param tag="timeZone" defaultValue="UTC-5" />
             </params>
         </method>
         <method name="Get_Available_StandBy_Modes" api="getAvailableStandbyModes" type="method" desc="Get available standby modes" />
-        <method name="Get_Preferred_StandBy_Mode" api="getPreferredStandbyMode" type="method" desc="Get preferred standby mode" >
+        <method name="Get_Preferred_StandBy_Mode" api="getPreferredStandbyMode" type="method" desc="Get preferred standby mode">
             <expectedValues>LIGHT_SLEEP,DEEP_SLEEP</expectedValues>
         </method>
-        <method name="Set_Preferred_StandBy_Mode" api="setPreferredStandbyMode" type="method" desc="Set preferred standby mode" >
+        <method name="Set_Preferred_StandBy_Mode" api="setPreferredStandbyMode" type="method" desc="Set preferred standby mode">
             <params>
                 <param tag="standbyMode" defaultValue="null" />
             </params>
         </method>
-        <method name="Get_Mode" api="getMode" type="method" desc="Gets currently set mode" >
-                <expectedValues>NORMAL,EAS,WAREHOUSE</expectedValues>
+        <method name="Get_Mode" api="getMode" type="method" desc="Gets currently set mode">
+            <expectedValues>NORMAL,EAS,WAREHOUSE</expectedValues>
         </method>
         <method name="Set_Mode" api="setMode" type="method" desc="Set mode for specific duration">
             <params paramKey="modeInfo">
@@ -508,22 +555,22 @@
                 <param tag="duration" defaultValue="10" type="int" />
             </params>
         </method>
-        <method name="Get_Power_State" api="getPowerState" type="method" desc="Get power state" >
+        <method name="Get_Power_State" api="getPowerState" type="method" desc="Get power state">
             <expectedValues>STANDBY,DEEP_SLEEP,LIGHT_SLEEP,ON</expectedValues>
-    	</method>
+        </method>
         <method name="Set_Power_State" api="setPowerState" type="method" desc="Set power state">
             <params>
-                <param tag="powerState"    defaultValue="STANDBY" />
+                <param tag="powerState" defaultValue="STANDBY" />
                 <param tag="standbyReason" defaultValue="APIUnitTest" />
             </params>
         </method>
-        <method name="Has_Reboot_BeenRequested" api="hasRebootBeenRequested" type="method" desc="Check whether a reboot has been requested." >
+        <method name="Has_Reboot_BeenRequested" api="hasRebootBeenRequested" type="method" desc="Check whether a reboot has been requested.">
             <expectedValues>true,false</expectedValues>
         </method>
-        <method name="Query_MocaStatus" api="queryMocaStatus" type="method" desc="Check whether Moca is enabled" >
+        <method name="Query_MocaStatus" api="queryMocaStatus" type="method" desc="Check whether Moca is enabled">
             <expectedValues>true,false</expectedValues>
         </method>
-        <method name="Enable_Moca" api="enableMoca" type="method" desc="Enables or disables Moca support for the platform" >
+        <method name="Enable_Moca" api="enableMoca" type="method" desc="Enables or disables Moca support for the platform">
             <expectedValues>true,false</expectedValues>
         </method>
         <method name="Clear_Last_DeepSleep_Reason" api="clearLastDeepSleepReason" type="method" desc="Clear the last deep sleep reason." />
@@ -531,29 +578,27 @@
         <method name="Get_PreviousReboot_Info" api="getPreviousRebootInfo" type="method" desc="Retrieve basic information about a reboot" />
         <method name="Get_PreviousReboot_Info2" api="getPreviousRebootInfo2" type="method" desc="Retrieve detailed information about a reboot" />
         <method name="Get_PreviousReboot_Reason" api="getPreviousRebootReason" type="method" desc="Retrieve the last reboot reason." />
-
-        <method name="Get_MacAddress" api="getMacAddresses" type="method" desc="Retrieve the mac addresses." >
+        <method name="Get_MacAddress" api="getMacAddresses" type="method" desc="Retrieve the mac addresses.">
             <params>
                 <param tag="GUID" defaultValue="61734787891723481" type="int" />
             </params>
-
             <expectedValues>true,false</expectedValues>
         </method>
-        <method name="Get_OptOut_Telemetry_Status" api="isOptOutTelemetry" type="method" desc="Checks the telemetry opt-out status" >
+        <method name="Get_OptOut_Telemetry_Status" api="isOptOutTelemetry" type="method" desc="Checks the telemetry opt-out status">
             <expectedValues>True,False</expectedValues>
         </method>
-        <method name="Set_OptOut_Telemetry_Status" api="setOptOutTelemetry" type="method" desc="Sets the telemetry opt-out status" >
+        <method name="Set_OptOut_Telemetry_Status" api="setOptOutTelemetry" type="method" desc="Sets the telemetry opt-out status">
             <params>
                 <param tag="Opt-Out" type="bool" />
             </params>
         </method>
-        <method name="Get_Over-Temperature_Grace_Interval" api="getOvertempGraceInterval" type="method" desc="Returns the over-temperature grace interval value"/>
-        <method name="Set_Over-Temperature_Grace_Interval" api="setOvertempGraceInterval" type="method" desc="Sets the over-temperature grace interval value" >
+        <method name="Get_Over-Temperature_Grace_Interval" api="getOvertempGraceInterval" type="method" desc="Returns the over-temperature grace interval value" />
+        <method name="Set_Over-Temperature_Grace_Interval" api="setOvertempGraceInterval" type="method" desc="Sets the over-temperature grace interval value">
             <params>
                 <param tag="graceInterval" defaultValue="null" />
             </params>
         </method>
-        <method name="Get_Platform_Configuration" api="getPlatformConfiguration" type="method" desc="Returns the supported features and device/account info" >
+        <method name="Get_Platform_Configuration" api="getPlatformConfiguration" type="method" desc="Returns the supported features and device/account info">
             <params>
                 <param tag="query" defaultValue="null" />
             </params>
@@ -564,39 +609,132 @@
         <method name="Get_Power_State_Before_Reboot" api="getPowerStateBeforeReboot" type="method" desc="Gets the power state before reboot" />
         <method name="Get_Power_State_Is_Managed_By_Device" api="getPowerStateIsManagedByDevice" type="method" desc="Checks whether the power state is managed by the device" />
         <method name="Get_Time_Zones" api="getTimeZones" type="method" desc="Gets the available timezones from the system's time zone database" />
-        <method name="Get_Network_Standby_Mode" api="getNetworkStandbyMode" type="method" desc="Returns the network standby mode of the device" >
+        <method name="Get_Network_Standby_Mode" api="getNetworkStandbyMode" type="method" desc="Returns the network standby mode of the device">
             <expectedValues>True,False</expectedValues>
         </method>
-        <method name="Set_Network_Standby_Mode" api="setNetworkStandbyMode" type="method" desc="Enables or disables the network standby mode of the device" >
+        <method name="Set_Network_Standby_Mode" api="setNetworkStandbyMode" type="method" desc="Enables or disables the network standby mode of the device">
             <params>
                 <param tag="nwStandby" type="bool" />
             </params>
         </method>
         <method name="System_Get_Friendly_Name" api="getFriendlyName" type="method" desc="Returns the friendly name set by setFriendlyName API or default value" />
-        <method name="System_Set_Friendly_Name" api="setFriendlyName" type="method" desc="Sets the friendly name of the device" >
+        <method name="System_Set_Friendly_Name" api="setFriendlyName" type="method" desc="Sets the friendly name of the device">
             <params>
-               <param tag="friendlyName" defaultValue="null" />
+                <param tag="friendlyName" defaultValue="null" />
             </params>
         </method>
-	<method name="System_Get_Territory" api="getTerritory" type="method" desc="Gets the configured system territory and region. " />
-        <method name="System_Set_Territory" api="setTerritory" type="method" desc="Sets the system territory and region" >
+        <method name="System_Get_Territory" api="getTerritory" type="method" desc="Gets the configured system territory and region." />
+        <method name="System_Set_Territory" api="setTerritory" type="method" desc="Sets the system territory and region">
             <params>
-               <param tag="territory" defaultValue="null" />
-               <param tag="region" defaultValue="null" />
+                <param tag="territory" defaultValue="null" />
+                <param tag="region" defaultValue="null" />
             </params>
         </method>
-	<method name="System_Get_Mfg_Serial_Number" api="getMfgSerialNumber" type="method" desc="Gets the manufacturing serial number" />
-	<event name="Event_MacAddresses_Retreived" eventName="onMacAddressesRetreived" eventId="client.events.1" type="event" desc="MacAddressesRetreived" />
+        <method name="System_Get_Mfg_Serial_Number" api="getMfgSerialNumber" type="method" desc="Gets the manufacturing serial number" />
+        <method name="Set_Boot_Loader_Splash_Screen" api="setBootLoaderSplashScreen" type="method" desc="Install or update the BootLoader Splash Screens">
+            <params>
+                <param tag="path" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Path_Set_Boot_Loader_Splash_Screen" api="setBootLoaderSplashScreen" type="method" desc="Install or update the BootLoader Splash Screens with numeric path">
+            <params>
+                <param tag="path" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Set_Wakeup_Src_Configuration" api="setWakeupSrcConfiguration" type="method" desc="Sets the wakeup source configuration for the input powerState">
+            <params>
+                <param tag="wakeupSources" type="list" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Get_FSR_Flag" api="getFSRFlag" type="method" desc="Get the FSR flag from the emmc raw area" />
+        <method name="Set_FSR_Flag" api="setFSRFlag" type="method" desc="Set the FSR flag into the emmc raw area">
+            <params>
+                <param tag="fsrFlag" type="bool" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Set_Migration_Status" api="setMigrationStatus" type="method" desc="Sets the tr181 MigrationStatus parameter">
+            <params>
+                <param tag="status" type="string" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Get_Migration_Status" api="getMigrationStatus" type="method" desc="Gets the Migration Status of the device" />
+        <method name="Set_Blocklist_Flag" api="setBlocklistFlag" type="method" desc="Updates the Blocklist flag">
+            <params>
+                <param tag="blocklist" type="bool" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Get_Blocklist_Flag" api="getBlocklistFlag" type="method" desc="Gets the Blocklist flag" />
+        <method name="String_Duration_Set_Mode" api="setMode" type="method" desc="Set mode for specific duration with string type">
+            <params paramKey="modeInfo">
+                <param tag="mode" defaultValue="NORMAL" />
+                <param tag="duration" defaultValue="10" type="string" />
+            </params>
+        </method>
+        <method name="Numeric_Mode_Set_Mode" api="setMode" type="method" desc="Set mode for specific duration with numeric type">
+            <params paramKey="modeInfo">
+                <param tag="mode" defaultValue="null" type="int"/>
+                <param tag="duration" defaultValue="10" type="int" />
+            </params>
+        </method>
+        <method name="String_OptOut_Telemetry" api="setOptOutTelemetry" type="method" desc="Sets the telemetry opt-out status with string type">
+            <params>
+                <param tag="Opt-Out" type="string" />
+            </params>
+        </method>
+        <method name="Numeric_OptOut_Telemetry" api="setOptOutTelemetry" type="method" desc="Sets the telemetry opt-out status with numeric type">
+            <params>
+                <param tag="Opt-Out" type="int" />
+            </params>
+        </method>
+         <method name="Numeric_Query_GetPlatform_Configuration" api="getPlatformConfiguration" type="method" desc="Gets the platform configuration with numeric query">
+            <params>
+                <param tag="query" defaultValue="null" type="int" />
+            </params>
+        </method>
+        <method name="Numeric_PowerState_SetPowerState" api="setPowerState" type="method" desc="Set power state with numeric type">
+            <params>
+                <param tag="powerState" defaultValue="null" type="int" />
+                <param tag="standbyReason" defaultValue="APIUnitTest" type="string" />
+            </params>
+        </method>
+        <method name="Numeric_TimeZoneDST_SetTimeZoneDST" api="setTimeZoneDST" type="method" desc="Set configured time zone with numeric type">
+            <params>
+                <param tag="timeZone" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_Terrirtory_Region_Set_Territory" api="setTerritory" type="method" desc="Sets the system territory and region with numeric type">
+            <params>
+                <param tag="territory" defaultValue="null" type="int"/>
+                <param tag="region" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_Region_Set_Territory" api="setTerritory" type="method" desc="Sets the system territory and region with numeric type">
+            <params>
+                <param tag="territory" defaultValue="null" type="string"/>
+                <param tag="region" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_Territory_Set_Territory" api="setTerritory" type="method" desc="Sets the system territory and region with numeric type">
+            <params>
+                <param tag="territory" defaultValue="null" type="int"/>
+                <param tag="region" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Get_RFC_Config" api="getRFCConfig" type="method" desc="Gets the RFC configuration with numeric type">
+            <params paramType="userGenerate" useMethodTag="system_get_rfc_config_params">
+                <param tag="rfcList" type="int" />
+            </params>
+        </method>
+        <event name="Event_MacAddresses_Retreived" eventName="onMacAddressesRetreived" eventId="client.events.1" type="event" desc="MacAddressesRetreived" />
         <event name="Event_PowerState_Changed" eventName="onSystemPowerStateChanged" eventId="client.events.1" type="event" desc="power state changed event" />
         <event name="Event_SystemMode_Changed" eventName="onSystemModeChanged" eventId="client.events.1" type="event" desc="Fires on system mode changed event" />
-	<event name="Event_Temperature_Threshold_Changed" eventName="onTemperatureThresholdChanged" eventId="client.events.1" type="event" desc="Fires on temperature threshold change" />
-	<event name="Event_Reboot_Request" eventName="onRebootRequest" eventId="client.events.1" type="event" desc="Fires on reboot request" />
+        <event name="Event_Temperature_Threshold_Changed" eventName="onTemperatureThresholdChanged" eventId="client.events.1" type="event" desc="Fires on temperature threshold change" />
+        <event name="Event_Reboot_Request" eventName="onRebootRequest" eventId="client.events.1" type="event" desc="Fires on reboot request" />
         <event name="Event_On_Network_Standby_Mode_Changed" eventName="onNetworkStandbyModeChanged" eventId="client.events.1" type="event" desc="Triggered when the network standby mode setting changes" />
         <event name="Event_On_TimeZoneDST_Changed" eventName="onTimeZoneDSTChanged" eventId="client.events.1" type="event" desc="Triggered when device timezone changed" />
-	<event name="Event_On_Friendly_Name_Changed" eventName="onFriendlyNameChanged" eventId="client.events.1" type="event" desc="Triggered when the device friendly name change" />
-	<event name="Event_On_Territory_Changed" eventName="onTerritoryChanged" eventId="client.events.1" type="event" desc="Triggered when the device territory changed" />
+        <event name="Event_On_Friendly_Name_Changed" eventName="onFriendlyNameChanged" eventId="client.events.1" type="event" desc="Triggered when the device friendly name change" />
+        <event name="Event_On_Territory_Changed" eventName="onTerritoryChanged" eventId="client.events.1" type="event" desc="Triggered when the device territory changed" />
     </plugin>
-
 
     <!-- Cobalt Plugin Information -->
     <plugin pluginName="Cobalt" serviceName="Cobalt" serviceVersion="1">
@@ -635,7 +773,6 @@
         <event name="Event_Cobalt_Closure" eventName="closure" eventId="client.events.1" type="event" desc="Triggered when app requests to close its window" />
     </plugin>
 
-
     <!-- DeviceDiagnostics Plugin Information -->
     <plugin pluginName="DeviceDiagnostics" serviceName="org.rdk.DeviceDiagnostics" serviceVersion="1">
         <method name="Get_Configuration" api="getConfiguration" type="method" desc="Gets the values associated with the corresponding property names" >
@@ -644,6 +781,11 @@
             </params>
         </method>
         <method name="Get_AVDecoder_Status" api="getAVDecoderStatus" type="method" desc="Gets the most active status of audio/video decoder/pipeline"/>
+        <method name="Numeric_Names_Get_Configuration" api="getConfiguration" type="method" desc="Gets the values associated with the integer value corresponding to the property names">
+            <params paramType="userGenerate" useMethodTag="devicediagnostics_get_configuration_params">
+                <param tag="names" defaultValue="null" type="int" />
+            </params>
+        </method>
         <event name="Event_OnAVDecoder_Status_Changed" eventName="onAVDecoderStatusChanged" eventId="client.events.1" type="event" desc="Triggered when the most active status of audio/video decoder/pipeline changes"/>
     </plugin>
 
@@ -653,7 +795,6 @@
         <method name="Get_STB_Supported_HDCP_Version" api="getSettopHDCPSupport" type="method" desc="Returns which version of HDCP is supported by the STB"/>
     </plugin>
 
-
     <!-- User Preferences Plugin Information -->
     <plugin pluginName="UserPreferences" serviceName="org.rdk.UserPreferences" serviceVersion="1">
         <method name="Get_UI_Language" api="getUILanguage" type="method" desc="Gets the user preferred UI language" />
@@ -662,8 +803,12 @@
                 <param tag="ui_language" defaultValue="null" />
             </params>
         </method>
+        <method name="Numeric_Set_UI_Language" api="setUILanguage" type="method" desc="Sets the user preferred UI language with a numeric value" >
+            <params>
+                <param tag="ui_language" defaultValue="null" type="int"/>
+            </params>
+        </method>
     </plugin>
-
 
     <!-- RDK Shell Plugin Information -->
     <plugin pluginName="RDKShell" serviceName="org.rdk.RDKShell" serviceVersion="1">
@@ -1066,13 +1211,12 @@
         <event name="Event_On_Will_Destroy" eventName="onWillDestroy" eventId="client.events.1" type="event" desc="Triggered when an application is set to be destroyed" />
     </plugin>
 
-
     <!-- DisplayInfo Plugin Information -->
     <plugin pluginName="DisplayInfo" serviceName="DisplayInfo" serviceVersion="1">
         <method name="DisplayInfo_GetEDID" api="edid" type="method" desc="Provides TV's Extended Display Identification Data" >
-                <params>
-                        <param tag="length" defaultValue="null" type="int"/>
-                </params>
+            <params>
+                <param tag="length" defaultValue="null" type="int"/>
+            </params>
         </method>
         <method name="DisplayInfo_Isaudiopassthrough" api="isaudiopassthrough" type="property" desc="Read isaudioPassthrough property on HDMI." >
             <expectedValues>True,False</expectedValues>
@@ -1099,15 +1243,32 @@
         <method name="Get_Total_GPU_RAM" api="totalgpuram" type="property" desc="Gets the total GPU DRAM memory in bytes"/>
         <method name="Get_Free_GPU_RAM" api="freegpuram" type="property" desc="Gets the free GPU DRAM memory in bytes"/>
         <method name="Get_Width_In_Centimeters" api="widthincentimeters" type="property" desc="Gets the horizontal size in centimeters"/>
-	<method name="Get_Height_In_Centimeters" api="heightincentimeters" type="property" desc="Gets the vertical size in centimeters"/>
+	    <method name="Get_Height_In_Centimeters" api="heightincentimeters" type="property" desc="Gets the vertical size in centimeters"/>
         <method name="Get_Color_Space" api="colorspace" type="property" desc="Provides access to the display color space"/>
         <method name="Get_Colour_Depth" api="colourdepth" type="property" desc="Provides access to the display colour depth"/>
         <method name="Get_Quantization_Range" api="quantizationrange" type="property" desc="Provides access to the display quantization range"/>
         <method name="Get_Colorimetry" api="colorimetry" type="property" desc="Provides access to the display colorimetry"/>
         <method name="Get_EOTF" api="eotf" type="property" desc="Provides access to the display Electro Optical Transfer Function"/>
+        <method name="String_Length_EDID" api="edid" type="method" desc="Provides the length of the EDID with a string value">
+            <params>
+                <param tag="length" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="DisplayInfo_SetHDCPProtection" api="hdcpprotection" type="method" desc="Set HDCP protection used for transmission">
+            <params>
+                <param tag="value" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Value_SetHDCPProtection" api="hdcpprotection" type="method" desc="Set HDCP protection used for transmission with a numeric value">
+            <params>
+                <param tag="value" defaultValue="null" type="int"/>
+            </params>
+        </method>
+	<method name="DisplayInfo_Get_FrameRate" api="frameRate" type="method" desc="Provides access to Framerate">
+	    <expectedValues>FRAMERATE_UNKNOWN,FRAMERATE_23_976,FRAMERATE_24,FRAMERATE_25,FRAMERATE_29_97,FRAMERATE_30,FRAMERATE_47_952,FRAMERATE_48,FRAMERATE_50,FRAMERATE_59_94,FRAMERATE_60,FRAMERATE_119_88,FRAMERATE_120,FRAMERATE_144</expectedValues>
+	</method>
 	<event name="Event_Pre_Post_Resolution_Change" eventName="updated" eventId="client.events.1" type="event" desc="Fires on changing the resolution"/>
     </plugin>
-
 
     <!-- ActivityMonitor Plugin Information -->
     <plugin pluginName="ActivityMonitor" serviceName="org.rdk.ActivityMonitor" serviceVersion="1">
@@ -1281,13 +1442,16 @@
         <event name="Event_On_Error" eventName="onError" eventId="client.events.1" type="event" desc="Indicates unexpected Wifi error occurs" />
     </plugin>
 
-
     <!-- Bluetooth Plugin Information -->
     <plugin pluginName="Bluetooth" serviceName="org.rdk.Bluetooth" serviceVersion="1">
         <method name="Enable_Stack" api="enable" type="method" desc="Enables the Bluetooth stack"/>
         <method name="Disable_Stack" api="disable" type="method" desc="Disables the Bluetooth stack"/>
         <method name="Get_Name" api="getName" type="method" desc="Provides name of the device as seen by other Bluetooth devices"/>
-        <method name="Set_Name" api="setName" type="method" desc="Sets the name of this device as seen by other Bluetooth devices"/>
+        <method name="Set_Name" api="setName" type="method" desc="Sets the name of the bluetooth device">
+            <params>
+                <param tag="ssid" defaultValue="null" type="string" />
+            </params>
+        </method>
         <method name="Is_Discoverable" api="isDiscoverable" type="method" desc="Provides discoverable status of the device">
             <expectedValues>True,False</expectedValues>
         </method>
@@ -1336,11 +1500,207 @@
         <method name="Get_Connected_Devices" api="getConnectedDevices" type="method" desc="Returns a list of connected devices to this device" />
         <method name="Get_Paired_Devices" api="getPairedDevices" type="method" desc="Returns a list of devices that have paired with this device" />
         <method name="Get_API_Version_Number" api="getApiVersionNumber" type="method" desc="Provides the current API version number" />
-        <event name="Event_On_Discovered_Device" eventName="onDiscoveredDevice" eventId="client.events.1" type="event" desc="Gives discovered Bluetooth devices" />
+        <method name="Numeric_Set_Name" api="setName" type="method" desc="Sets the name of the bluetooth device with a numeric value">
+            <params>
+                <param tag="name" defaultValue="null" type="int" />
+            </params>
+        </method>
+        <method name="String_Timeout_Set_Discoverable" api="setDiscoverable" type="method" desc="Sets the discoverable status of the device with non-numeric timeout">
+            <params>
+                <param tag="discoverable" defaultValue="true" type="bool" />
+                <param tag="timeout" defaultValue="10" type="string" />
+            </params>
+        </method>
+        <method name="String_Discoverable_Set_Discoverable" api="setDiscoverable" type="method" desc="Sets the discoverable status of the device with non-boolean discoverable">
+            <params>
+                <param tag="discoverable" defaultValue="true" type="string" />
+                <param tag="timeout" defaultValue="10" type="int" />
+            </params>
+        </method>
+        <method name="Numeric_Discoverable_Only" api="setDiscoverable" type="method" desc="Sets the discoverable status of the device with numeric discoverable">
+            <params>
+                <param tag="discoverable" defaultValue="12345" type="int" />
+                <param tag="timeout" defaultValue="10" type="int" />
+            </params>
+        </method>
+        <method name="String_Discoverable_Timeout" api="setDiscoverable" type="method" desc="Sets the discoverable status of the device with non-numeric timeout and discoverable">
+            <params>
+                <param tag="discoverable" defaultValue="true" type="string" />
+                <param tag="timeout" defaultValue="10" type="string" />
+            </params>
+        </method>
+        <method name="String_Timeout_Start_Scan" api="startScan" type="method" desc="Searches for available Bluetooth devices with non-numeric timeout">
+            <params>
+                <param tag="timeout" defaultValue="30" type="string" />
+                <param tag="profile" defaultValue="LOUDSPEAKER" type="string" />
+            </params>
+        </method>
+        <method name="Numeric_Start_Scan" api="startScan" type="method" desc="Searches for available Bluetooth devices">
+            <params>
+                <param tag="timeout" defaultValue="30" type="int" />
+                <param tag="profile" defaultValue="12345" type="int" />
+            </params>
+        </method>
+        <method name="Numeric_DeviceType_Disconnect" api="disconnect" type="method" desc="Disconnects the given device from this device with numeric deviceType">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+                <param tag="deviceType" defaultValue="12345" type="int" />
+            </params>
+        </method>
+        <method name="Numeric_Disconnect" api="disconnect" type="method" desc="Disconnects the given device from this device">
+            <params>
+                <param tag="deviceID" defaultValue="12345" type="int"/>
+                <param tag="deviceType" defaultValue="TV" type="string" />
+            </params>
+        </method>
+        <method name="Numeric_Unpair" api="unpair" type="method" desc="Unpairs the given device with this device">
+            <params>
+                <param tag="deviceID" defaultValue="12345" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_Get_Device_Info" api="getDeviceInfo" type="method" desc="Returns the device info of the given device ID">
+            <params>
+                <param tag="deviceID" defaultValue="12345" type="int"/>
+            </params>
+        </method>
+        <method name="Get_Audio_Info" api="getAudioInfo" type="method" desc="Provides information on the currently playing audio from an external source">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Get_Audio_Info" api="getAudioInfo" type="method" desc="Provides information on the currently playing audio from an external source">
+            <params>
+                <param tag="deviceID" defaultValue="12345" type="int"/>
+            </params>
+        </method>
+        <method name="Respond_To_Event" api="respondToEvent" type="method" desc="Responds to a client Bluetooth request-time event">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+                <param tag="eventType" defaultValue="onPairingRequest" type="string"/>
+                <param tag="responseValue" defaultValue="ACCEPTED" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Respond_To_Event" api="respondToEvent" type="method" desc="Responds to a client Bluetooth request-time event">
+            <params>
+                <param tag="deviceID" defaultValue="12345" type="int"/>
+                <param tag="eventType" defaultValue="onPairingRequest" type="string"/>
+                <param tag="responseValue" defaultValue="ACCEPTED" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_EventType_Respond_To_Event" api="respondToEvent" type="method" desc="Responds to a client Bluetooth request-time event with numeric eventType">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+                <param tag="eventType" defaultValue="12345" type="int"/>
+                <param tag="responseValue" defaultValue="ACCEPTED" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_ResponseValue_Respond_To_Event" api="respondToEvent" type="method" desc="Responds to a client Bluetooth request-time event with numeric responseValue">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+                <param tag="eventType" defaultValue="onPairingRequest" type="string"/>
+                <param tag="responseValue" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Send_Audio_Playback_Command" api="sendAudioPlaybackCommand" type="method" desc="Provides control over the connected source">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+                <param tag="command" defaultValue="PLAY" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Send_Audio_Playback_Command" api="sendAudioPlaybackCommand" type="method" desc="Provides control over the connected source">
+            <params>
+                <param tag="deviceID" defaultValue="12345" type="int"/>
+                <param tag="command" defaultValue="PLAY" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Command_Send_Audio_Playback_Command" api="sendAudioPlaybackCommand" type="method" desc="Provides control over the connected source with numeric command">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+                <param tag="command" defaultValue="12345" type="int"/>
+            </params>
+        </method>
+        <method name="Set_Audio_Stream" api="setAudioStream" type="method" desc="Sets the primary or secondary audio-out to the given Bluetooth device">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+                <param tag="audioStreamName" defaultValue="PRIMARY" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Set_Audio_Stream" api="setAudioStream" type="method" desc="Sets the primary or secondary audio-out to the given Bluetooth device">
+            <params>
+                <param tag="deviceID" defaultValue="12345" type="int"/>
+                <param tag="audioStreamName" defaultValue="PRIMARY" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_AudioStreamName_Set_Audio_Stream" api="setAudioStream" type="method" desc="Sets the audio-out to the given Bluetooth device with numeric audioStreamName">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+                <param tag="audioStreamName" defaultValue="12345" type="int"/>
+            </params>
+        </method>
+        <method name="Get_Device_Volume_Mute_Info" api="getDeviceVolumeMuteInfo" type="method" desc="Gets the volume information of the given Bluetooth device ID">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+                <param tag="deviceProfile" defaultValue="SMARTPHONE" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Get_Device_Volume_Mute_Info" api="getDeviceVolumeMuteInfo" type="method" desc="Gets the volume information of the given Bluetooth device ID">
+            <params>
+                <param tag="deviceID" defaultValue="12345" type="int"/>
+                <param tag="deviceProfile" defaultValue="SMARTPHONE" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_DeviceProfile_Get_Device_Volume_Mute_Info" api="getDeviceVolumeMuteInfo" type="method" desc="Gets the volume information of the given Bluetooth device ID with numeric deviceProfile">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+                <param tag="deviceProfile" defaultValue="12345" type="int"/>
+            </params>
+        </method>
+        <method name="Set_Device_Volume_Mute_Info" api="setDeviceVolumeMuteInfo" type="method" desc="Sets the volume of the connected Bluetooth device ID">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+                <param tag="deviceProfile" defaultValue="LOUDSPEAKER" type="string"/>
+                <param tag="volume" defaultValue="50" type="string"/>
+                <param tag="mute" defaultValue="0" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Set_Device_Volume_Mute_Info" api="setDeviceVolumeMuteInfo" type="method" desc="Sets the volume of the connected Bluetooth device ID">
+            <params>
+                <param tag="deviceID" defaultValue="12345" type="int"/>
+                <param tag="deviceProfile" defaultValue="LOUDSPEAKER" type="string"/>
+                <param tag="volume" defaultValue="50" type="string"/>
+                <param tag="mute" defaultValue="0" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Pair" api="pair" type="method" desc="Pairs the given device with this device with numeric deviceID">
+            <params>
+                <param tag="deviceID" defaultValue="12345" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_Connect" api="connect" type="method" desc="Connects to the given Bluetooth device with numeric deviceID">
+            <params>
+                <param tag="deviceID" defaultValue="12345" type="int"/>
+                <param tag="deviceType" defaultValue="LOUDSPEAKER" type="string"/>
+                <param tag="profile" defaultValue="LOUDSPEAKER" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_DeviceType_Connect" api="connect" type="method" desc="Connects to the given Bluetooth device with numeric deviceType">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+                <param tag="deviceType" defaultValue="12345" type="int"/>
+                <param tag="profile" defaultValue="LOUDSPEAKER" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Profile_Connect" api="connect" type="method" desc="Connects to the given Bluetooth device with numeric profile">
+            <params>
+                <param tag="deviceID" defaultValue="null" type="string"/>
+                <param tag="deviceType" defaultValue="LOUDSPEAKER" type="string"/>
+                <param tag="profile" defaultValue="12345" type="int"/>
+            </params>
+        </method>
+        <event name="Event_On_Discovered_Device" eventName="onDiscoveredDevice" eventId="client.events.1" type="event" desc="Gives discovered bluetooth devices" />
         <event name="Event_On_Status_Changed" eventName="onStatusChanged" eventId="client.events.1" type="event" desc="Gives status change information" />
         <event name="Event_On_Request_Failed" eventName="onRequestFailed" eventId="client.events.1" type="event" desc="Indicates on request failed" />
     </plugin>
-
 
     <!-- Warehouse Plugin Information -->
     <plugin pluginName="Warehouse" serviceName="org.rdk.Warehouse" serviceVersion="1">
@@ -1363,9 +1723,36 @@
                 <param tag="passPhrase" defaultValue="true" type="string" />
             </params>
         </method>
+        <method name="String_Is_clean" api="isClean" type="method" desc="Checks locations where customer data may be stored with string age">
+            <params>
+                <param tag="age" defaultValue="null" type="string" />
+            </params>
+        </method>
+        <method name="String_SuppressReboot_Reset_Device" api="resetDevice" type="method" desc="Resets the STB with string suppressReboot">
+            <params>
+                <param tag="suppressReboot" defaultValue="true" type="string" />
+                <param tag="resetType" defaultValue="null" type="string" />
+            </params>
+        </method>
+        <method name="Numeric_ResetType_Reset_Device" api="resetDevice" type="method" desc="Resets the STB with numeric resetType">
+            <params>
+                <param tag="suppressReboot" defaultValue="true" type="bool" />
+                <param tag="resetType" defaultValue="null" type="int" />
+            </params>
+        </method>
+        <method name="Numeric_Internal_Reset" api="internalReset" type="method" desc="Invokes the internal reset script with numeric passPhrase">
+            <params>
+                <param tag="passPhrase" defaultValue="12345" type="int" />
+            </params>
+        </method>
+        <method name="Numeric_SuppressReboot_Reset_Device" api="resetDevice" type="method" desc="Resets the STB with numeric suppressReboot">
+            <params>
+                <param tag="suppressReboot" defaultValue="null" type="int" />
+                <param tag="resetType" defaultValue="null" type="string" />
+            </params>
+        </method>
         <event name="Event_Reset_Done" eventName="resetDone" eventId="client.events.1" type="event" desc="Notifies about the status of the warehouse reset operation" />
     </plugin>
-
 
     <!-- LoggingPreferences Plugin Information -->
     <plugin pluginName="LoggingPreferences" serviceName="org.rdk.LoggingPreferences" serviceVersion="1">
@@ -1839,6 +2226,39 @@
             <expectedValues>null</expectedValues>
         </method>
         <method name="Get_Status" api="status"  type="property" desc="Provides access to the service statistics" />
+        <method name="Numeric_Reset_Statistics" api="resetstats" type="method" desc="Resets memory and process statistics for a single service watched by the Monitor">
+            <params>
+                <param tag="callsign" defaultValue="null" type="int" />
+            </params>
+        </method>
+        <method name="Numeric_Callsign_Restart_Limits"  api="restartlimits" type="method" desc="Sets new restart limits for a service with a numeric callsign">
+            <params paramType="userGenerate" useMethodTag="monitor_get_restart_params" >
+                <param tag="callsign" defaultValue="null" type="int" />
+                <param tag="limit" defaultValue="null" type="int" />
+                <param tag="window" defaultValue="null" type="int" />
+            </params>
+        </method>
+        <method name="String_Limit_Restart_Limits"  api="restartlimits" type="method" desc="Sets new restart limits for a service with a string limit">
+            <params paramType="userGenerate" useMethodTag="monitor_get_restart_params" >
+                <param tag="callsign" defaultValue="null" type="string" />
+                <param tag="limit" defaultValue="null" type="string" />
+                <param tag="window" defaultValue="null" type="int" />
+            </params>
+        </method>
+        <method name="String_Window_Restart_Limits"  api="restartlimits" type="method" desc="Sets new restart limits for a service with a string window">
+            <params paramType="userGenerate" useMethodTag="monitor_get_restart_params" >
+                <param tag="callsign" defaultValue="null" type="string" />
+                <param tag="limit" defaultValue="null" type="int" />
+                <param tag="window" defaultValue="null" type="string" />
+            </params>
+        </method>
+        <method name="String_Limit_Window_Restart_Limits"  api="restartlimits" type="method" desc="Sets new restart limits for a service with a string limit and window">
+            <params paramType="userGenerate" useMethodTag="monitor_get_restart_params" >
+                <param tag="callsign" defaultValue="null" type="string" />
+                <param tag="limit" defaultValue="null" type="string" />
+                <param tag="window" defaultValue="null" type="string" />
+            </params>
+        </method>
     </plugin>
 
     <!-- ScreenCapture Plugin Information -->
@@ -1957,11 +2377,34 @@
         <method name="Get_Dolby_Atmos_MetaData" api="dolby_atmosmetadata" type="method" desc="Atmos capabilities of Sink" />
         <method name="Get_Dolby_SoundMode" api="dolby_soundmode" type="method" desc="Gets the dolby sound mode" />
         <method name="Set_Atmos_Output" api="dolby_enableatmosoutput" type="method" desc="Enables Atmos Audio Output" >
-            <params paramType="directBool" >
-                <param tag="enable"  />
+            <params paramType="directBool">
+		<param tag="enable"/>
+	    </params>
+	</method>
+	<method name="Get_Dolby_Mode" api="dolby_mode" type="method" desc="Gets the dolby mode">
+            <expectedValues>DIGITAL_PCM,DIGITAL_PLUS,DIGITAL_AC3,AUTO,DIGITAL_PASSTHROUGH,MS12</expectedValues>
+        </method>
+        <method name="Set_Dolby_Mode" api="dolby_mode" type="method" desc="Sets the dolby mode" >
+            <params>
+                <param tag="mode" type="string" defaultValue="null" />
+            </params>
+	</method>
+	<method name="Numeric_Dolby_Mode" api="dolby_mode" type="method" desc="Sends a numeric value for the dolby mode">
+            <params>
+                <param tag="mode" type="int" defaultValue="null" />
+            </params>
+	</method>
+	<method name="String_Set_Atmos_Output" api="dolby_enableatmosoutput" type="method" desc="Sends the enable param as a string">
+            <params>
+                <param tag="enable" type="string" defaultValue="null" />
             </params>
         </method>
-        <event name="Event_AudioMode_Changed" eventName="dolby_audiomodechanged" eventId="client.events.1" type="event" desc="Notifies audio mode changed event" />
+        <method name="Numeric_Set_Atmos_Output" api="dolby_enableatmosoutput" type="method" desc="Sends the enable param as a numeric value">
+            <params>
+                <param tag="enable" type="int" defaultValue="null" />
+            </params>
+        </method>
+	<event name="Event_AudioMode_Changed" eventName="dolby_audiomodechanged" eventId="client.events.1" type="event" desc="Notifies audio mode changed event" />
     </plugin>
   
     <!-- PersistentStore Plugin Information -->
@@ -1999,18 +2442,150 @@
         <method name="Get_Namespaces" api="getNamespaces" type="method" desc="Gets the available namespaces" />
         <method name="Get_Storage_Size" api="getStorageSize" type="method" desc="Returns the size occupied by each namespace" />
         <method name="Flush_Cache" api="flushCache" type="method" desc="flushes the database cache" />
-	<method name="Set_Namespace_Storagelimit" api="setNamespaceStorageLimit" type="method" desc="Sets the storage limit for a given namespace">
-	    <params>
+	    <method name="Set_Namespace_Storagelimit" api="setNamespaceStorageLimit" type="method" desc="Sets the storage limit for a given namespace">
+	        <params>
                <param tag="namespace" defaultValue="null"/>
                <param tag="storageLimit" type="int"/>
             </params>
         </method>	
-	<method name="Get_Namespace_Storagelimit" api="getNamespaceStorageLimit" type="method" desc="Returns the storage limit for a given namespace">
-	    <params>
+	    <method name="Get_Namespace_Storagelimit" api="getNamespaceStorageLimit" type="method" desc="Returns the storage limit for a given namespace">
+	        <params>
                <param tag="namespace" defaultValue="null"/>
             </params>
         </method>
-	<event name="Event_On_Value_Changed" eventName="onValueChanged" eventId="client.events.1" type="event" desc="Triggered whenever any of the values stored are changed using setValue" />
+        <method name="Scope_Set_Value" api="setValue" type="method" desc="Sets the value of the key for given the namespace with the invalid scope">
+            <params>
+                <param tag="namespace" type="string" defaultValue="null"/>
+                <param tag="key" type="string" defaultValue="null"/>
+                <param tag="value" type="string" defaultValue="null"/>
+                <param tag="scope" type="string" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Numeric_Scope_Set_Value" api="setValue" type="method" desc="Sets the value of the key for given the namespace with the numeric scope">
+            <params>
+                <param tag="namespace" type="string" defaultValue="null"/>
+                <param tag="key" type="string" defaultValue="null"/>
+                <param tag="value" type="string" defaultValue="null"/>
+                <param tag="scope" type="int" defaultValue="null" />
+            </params>
+        </method>
+        <method name="String_TTL_Set_Value" api="setValue" type="method" desc="Sets the value of the key for given the namespace with the invalid TTL">
+            <params>
+                <param tag="namespace" type="string" defaultValue="null"/>
+                <param tag="key" type="string" defaultValue="null"/>
+                <param tag="value" type="string" defaultValue="null"/>
+                <param tag="scope" type="string" defaultValue="null" />
+                <param tag="ttl" type="string" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Numeric_TTL_Set_Value" api="setValue" type="method" desc="Sets the value of the key for given the namespace with the numeric TTL">
+            <params>
+                <param tag="namespace" type="string" defaultValue="null"/>
+                <param tag="key" type="string" defaultValue="null"/>
+                <param tag="value" type="string" defaultValue="null"/>
+                <param tag="scope" type="string" defaultValue="null" />
+                <param tag="ttl" type="int" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Scope_Get_Value" api="getValue" type="method" desc="Gets the value of the key for given namespace with the invalid scope">
+            <params>
+                <param tag="namespace" type="string" defaultValue="null" />
+                <param tag="key" type="string" defaultValue="null" />
+                <param tag="scope" type="string" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Numeric_Scope_Get_Value" api="getValue" type="method" desc="Gets the value of the key for given namespace with the numeric scope">
+            <params>
+                <param tag="namespace" type="string" defaultValue="null" />
+                <param tag="key" type="string" defaultValue="null" />
+                <param tag="scope" type="int" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Scope_Get_Keys" api="getKeys" type="method" desc="Gets the keys list for given namespace with the invalid scope">
+            <params>
+                <param tag="namespace" type="string" defaultValue="null" />
+                <param tag="scope" type="string" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Numeric_Scope_Get_Keys" api="getKeys" type="method" desc="Gets the keys list for given namespace with the numeric scope">
+            <params>
+                <param tag="namespace" type="string" defaultValue="null" />
+                <param tag="scope" type="int" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Scope_Delete_Key" api="deleteKey" type="method" desc="Deletes the key for given namespace with the invalid scope">
+            <params>
+                <param tag="namespace" type="string" defaultValue="null" />
+                <param tag="key" type="string" defaultValue="null" />
+                <param tag="scope" type="string" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Numeric_Scope_Delete_Key" api="deleteKey" type="method" desc="Deletes the key for given namespace with the numeric scope">
+            <params>
+                <param tag="namespace" type="string" defaultValue="null" />
+                <param tag="key" type="string" defaultValue="null" />
+                <param tag="scope" type="int" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Scope_Delete_Namespace" api="deleteNamespace" type="method" desc="Deletes the given Namespace with the invalid scope">
+            <params>
+                <param tag="namespace" type="string" defaultValue="null"/>
+                <param tag="scope" type="string" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Numeric_Scope_Delete_Namespace" api="deleteNamespace" type="method" desc="Deletes the given Namespace with the numeric scope">
+            <params>
+                <param tag="namespace" type="string" defaultValue="null"/>
+                <param tag="scope" type="int" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Scope_Get_Namespaces" api="getNamespaces" type="method" desc="Gets the available namespaces with the invalid scope">
+            <params>
+               <param tag="scope" type="string" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Numeric_Scope_Get_Namespaces" api="getNamespaces" type="method" desc="Gets the available namespaces with the numeric scope">
+            <params>
+               <param tag="scope" type="int" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Scope_Get_Storage_Size" api="getStorageSizes" type="method" desc="Returns the size occupied by each namespace with the invalid scope">
+            <params>
+               <param tag="scope" type="string" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Numeric_Scope_Get_Storage_Size" api="getStorageSizes" type="method" desc="Returns the size occupied by each namespace with the numeric scope">
+            <params>
+               <param tag="scope" type="int" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Scope_Set_Namespace_Storagelimit" api="setNamespaceStorageLimit" type="method" desc="Sets the storage limit for a given namespace with the invalid scope">
+	        <params>
+                <param tag="namespace" type="string" defaultValue="null"/>
+               <param tag="storageLimit" type="int"/>
+                <param tag="scope" type="string" defaultValue="null" />
+            </params>
+	</method>
+        <method name="Numeric_Scope_Set_Namespace_Storagelimit" api="setNamespaceStorageLimit" type="method" desc="Sets the storage limit for a given namespace with the numeric scope">
+            <params>
+                <param tag="namespace" type="string" defaultValue="null"/>
+               <param tag="storageLimit" type="int"/>
+                <param tag="scope" type="int" defaultValue="null" />
+            </params>
+        </method>
+	    <method name="Scope_Get_Namespace_Storagelimit" api="getNamespaceStorageLimit" type="method" desc="Returns the storage limit for a given namespace with the invalid scope">
+	        <params>
+                <param tag="namespace" type="string" defaultValue="null"/>
+                <param tag="scope" type="string" defaultValue="null" />
+            </params>
+        </method>
+	    <method name="Numeric_Scope_Get_Namespace_Storagelimit" api="getNamespaceStorageLimit" type="method" desc="Returns the storage limit for a given namespace with the numeric scope">
+	        <params>
+                <param tag="namespace" type="string" defaultValue="null"/>
+                <param tag="scope" type="int" defaultValue="null" />
+            </params>
+        </method>
+	    <event name="Event_On_Value_Changed" eventName="onValueChanged" eventId="client.events.1" type="event" desc="Triggered whenever any of the values stored are changed using setValue" />
     </plugin>
 
     <!-- TextToSpeech Plugin Information -->
@@ -2476,6 +3051,46 @@
                 <param tag="enabled" defaultValue="null" type="bool" />
             </params>
         </method>
+        <method name="Numeric_Type_Message_Controls" api="enable" type="method" desc="Sends the type param as a numeric value">
+            <params>
+                <param tag="type" defaultValue="null" type="int"/>
+                <param tag="category" defaultValue="null" type="string"/>
+                <param tag="module" defaultValue="null" type="string"/>
+                <param tag="enabled" defaultValue="null" type="bool"/>
+            </params>
+        </method>
+        <method name="Numeric_Category_Message_Controls" api="enable" type="method" desc="Sends the category param as a numeric value">
+            <params>
+                <param tag="type" defaultValue="null" type="string"/>
+                <param tag="category" defaultValue="null" type="int"/>
+                <param tag="module" defaultValue="null" type="string"/>
+                <param tag="enabled" defaultValue="null" type="bool"/>
+            </params>
+        </method>
+        <method name="Numeric_Module_Message_Controls" api="enable" type="method" desc="Sends the module param as a numeric value">
+            <params>
+                <param tag="type" defaultValue="null" type="string"/>
+                <param tag="category" defaultValue="null" type="string"/>
+                <param tag="module" defaultValue="null" type="string"/>
+                <param tag="enabled" defaultValue="null" type="bool"/>
+            </params>
+        </method>
+        <method name="String_Enable_Message_Controls" api="enable" type="method" desc="Sends the enabled param as a string">
+            <params>
+                <param tag="type" defaultValue="null" type="string"/>
+                <param tag="category" defaultValue="null" type="string"/>
+                <param tag="module" defaultValue="null" type="string"/>
+                <param tag="enabled" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Enable_Message_Controls" api="enable" type="method" desc="Sends the enabled param as a numeric value">
+            <params>
+                <param tag="type" defaultValue="null" type="string"/>
+                <param tag="category" defaultValue="null" type="string"/>
+                <param tag="module" defaultValue="null" type="string"/>
+                <param tag="enabled" defaultValue="null" type="int"/>
+            </params>
+        </method>
     </plugin>
 
     <!-- Usb Access Plugin Information -->
@@ -2509,7 +3124,7 @@
 
     <!-- HdmiCecSource Plugin Information -->
     <plugin pluginName="HdmiCecSource" serviceName="org.rdk.HdmiCecSource" serviceVersion="1">
-	<!-- Method Definitions -->    
+	<!-- Method Definitions -->
 	<method name="HdmiCecSource_Get_Enabled" api="getEnabled" type="method" desc="Returns if CEC is enabled">
             <expectedValues>True,False</expectedValues>
         </method>
@@ -2519,26 +3134,26 @@
             </params>
         </method>
         <method name="HdmiCecSource_Get_Vendor_ID" api="getVendorId" type="method" desc="Gets the current vendor ID used by host device"/>
-	<method name="HdmiCecSource_Set_Vendor_ID" api="setVendorId" type="method" desc="Sets the vendor ID of the application">
+	    <method name="HdmiCecSource_Set_Vendor_ID" api="setVendorId" type="method" desc="Sets the vendor ID of the application">
             <params>
                 <param tag="vendorid" type="string"/>
             </params>
         </method>
-	<method name="HdmiCecSource_Get_Active_Source_Status" api="getActiveSourceStatus" type="method" desc="Gets the active source status of the device">
+	    <method name="HdmiCecSource_Get_Active_Source_Status" api="getActiveSourceStatus" type="method" desc="Gets the active source status of the device">
             <expectedValues>True,False</expectedValues>
         </method>
         <method name="HdmiCecSource_Get_OSD_Name" api="getOSDName" type="method" desc="Gets the OSD name used by host device"/>
-	<method name="HdmiCecSource_Set_OSD_Name" api="setOSDName" type="method" desc="Sets the OSD name of the application">
+	    <method name="HdmiCecSource_Set_OSD_Name" api="setOSDName" type="method" desc="Sets the OSD name of the application">
             <params>
                 <param tag="name" type="string"/>
             </params>
         </method>
-	<method name="HdmiCecSource_Set_OSD_Name_Negative" api="setOSDName" type="method" desc="Sets negative value as the OSD name of the application">
+	    <method name="HdmiCecSource_Set_OSD_Name_Negative" api="setOSDName" type="method" desc="Sets negative value as the OSD name of the application">
             <params>
                 <param tag="name" type="int"/>
             </params>
         </method>
-	<method name="HdmiCecSource_Get_OTP_Enabled" api="getOTPEnabled" type="method" desc="Returns HDMI-CEC OTP option enabled status">
+	    <method name="HdmiCecSource_Get_OTP_Enabled" api="getOTPEnabled" type="method" desc="Returns HDMI-CEC OTP option enabled status">
             <expectedValues>True,False</expectedValues>
         </method>
         <method name="HdmiCecSource_Set_OTP_Enabled" api="setOTPEnabled" type="method" desc="Enables or disables HDMI-CEC OTP option">
@@ -2555,6 +3170,31 @@
     	</method>
 	<method name="HdmiCecSource_Send_Standby_Message" api="sendStandbyMessage" type="method" desc="Sends a CEC Standby message to the logical address of the device"/>
 	<method name="HdmiCecSource_Perform_OTP_Action" api="performOTPAction" type="method" desc="Turns on the TV and takes back the input to the device"/>	
+        <method name="HdmiCecSource_String_Set_Enabled" api="setEnabled" type="method" desc="Sends the enabled param as a string">
+            <params>
+                <param tag="enabled" type="string" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="HdmiCecSource_Numeric_Set_Enabled" api="setEnabled" type="method" desc="Sends the enabled param as a numeric value">
+            <params>
+                <param tag="enabled" type="int" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="HdmiCecSource_String_Set_OTP_Enabled" api="setOTPEnabled" type="method" desc="Sends the enabled param as a string">
+            <params>
+                <param tag="enabled" type="string" defaultValue="null"/>
+            </params>
+	</method>
+        <method name="HdmiCecSource_Numeric_Set_OTP_Enabled" api="setOTPEnabled" type="method" desc="Sends the enabled param as a numeric value">
+            <params>
+                <param tag="enabled" type="int" defaultValue="null"/>
+            </params>
+	</method>
+        <method name="HdmiCecSource_Numeric_Set_Vendor_ID" api="setVendorId" type="method" desc="Sets the vendor ID as a numeric value">
+            <params>
+                <param tag="vendorid" type="int"/>
+            </params>
+	</method> 
 
 	<!-- Event Definitions -->
 	<event name="Event_On_Device_Info_Updated" eventName="onDeviceInfoUpdated" eventId="client.events.1" type="event" desc="Triggered when device system information is updated (vendorID, osdName)" />
@@ -2597,12 +3237,12 @@
             </params>
             <expectedValues>True,False</expectedValues>
         </method>
-	<method name="NetworkManager_Get_Interface_State_Negative" api="GetInterfaceState" type="method" desc="Gets the current Status of the specified interface">
+	    <method name="NetworkManager_Get_Interface_State_Negative" api="GetInterfaceState" type="method" desc="Gets the current Status of the specified interface">
             <params>
                 <param tag="interface" type="string"/>
             </params>
         </method>
-	<method name="NetworkManager_Set_Interface_State" api="SetInterfaceState" type="method" desc="Enable or disable the specified interface">
+	    <method name="NetworkManager_Set_Interface_State" api="SetInterfaceState" type="method" desc="Enable or disable the specified interface">
             <params>
                 <param tag="interface" type="string"/>
                 <param tag="enabled" type="bool"/>
@@ -2614,37 +3254,37 @@
                 <param tag="enabled"/>
             </params>
         </method>
-	<method name="NetworkManager_Start_Wifi_Scan" api="StartWiFiScan" type="method" desc="Initiates WiFi scanning">
+	    <method name="NetworkManager_Start_Wifi_Scan" api="StartWiFiScan" type="method" desc="Initiates WiFi scanning">
             <params>
                 <param tag="frequency"/>
                 <param tag="ssids" type="list"/>
             </params>
         </method>
-	<method name="NetworkManager_Stop_Wifi_Scan" api="StopWiFiScan" type="method" desc="Stops WiFi scanning"/>
-	<method name="NetworkManager_Get_IPSettings" api="GetIPSettings" type="method" desc="Gets the IP setting for the given interface">
+	    <method name="NetworkManager_Stop_Wifi_Scan" api="StopWiFiScan" type="method" desc="Stops WiFi scanning"/>
+	    <method name="NetworkManager_Get_IPSettings" api="GetIPSettings" type="method" desc="Gets the IP setting for the given interface">
             <params>
                 <param tag="interface" type="string"/>
                 <param tag="ipversion" type="string"/>
             </params>
         </method>
-	<method name="NetworkManager_Wifi_Connect" api="WiFiConnect" type="method" desc="Initiates request to connect to the specified SSID with the given passphrase">
+	    <method name="NetworkManager_Wifi_Connect" api="WiFiConnect" type="method" desc="Initiates request to connect to the specified SSID with the given passphrase">
             <params>
 		<param tag="ssid" type="string"/>
 		<param tag="passphrase" type="string"/>
                 <param tag="security" type="int"/>
             </params>
         </method>
-	<method name="NetworkManager_Wifi_DisConnect" api="WiFiDisconnect" type="method" desc="Disconnects from the currently connected SSID"/>
-	<method name="NetworkManager_Get_Connected_SSID" api="GetConnectedSSID" type="method" desc="Returns the connected SSID information"/>
-	<method name="NetworkManager_Get_Supported_Security_Modes" api="GetSupportedSecurityModes" type="method" desc="Returns the wifi security modes that the device supports"/>
-	<method name="NetworkManager_Get_Stun_Endpoint" api="GetStunEndpoint" type="method" desc="Get the STUN endpoint that is used to identify public IP of the device"/>
-	<method name="NetworkManager_Set_Stun_Endpoint" api="SetStunEndpoint" type="method" desc="Set the STUN endpoint to be used to identify public IP of the device">
+	    <method name="NetworkManager_Wifi_DisConnect" api="WiFiDisconnect" type="method" desc="Disconnects from the currently connected SSID"/>
+	    <method name="NetworkManager_Get_Connected_SSID" api="GetConnectedSSID" type="method" desc="Returns the connected SSID information"/>
+	    <method name="NetworkManager_Get_Supported_Security_Modes" api="GetSupportedSecurityModes" type="method" desc="Returns the wifi security modes that the device supports"/>
+	    <method name="NetworkManager_Get_Stun_Endpoint" api="GetStunEndpoint" type="method" desc="Get the STUN endpoint that is used to identify public IP of the device"/>
+	    <method name="NetworkManager_Set_Stun_Endpoint" api="SetStunEndpoint" type="method" desc="Set the STUN endpoint to be used to identify public IP of the device">
             <params>
                 <param tag="endpoint" type="string"/>
                 <param tag="port" type="int"/>
             </params>
     	</method>
-	<method name="NetworkManager_Set_Primary_Interface" api="SetPrimaryInterface" type="method" desc="Sets the primary/default interface for the device">
+	    <method name="NetworkManager_Set_Primary_Interface" api="SetPrimaryInterface" type="method" desc="Sets the primary/default interface for the device">
             <params>
                 <param tag="interface" type="string"/>
             </params>
@@ -2654,9 +3294,9 @@
                 <param tag="interval" type="int"/>
             </params>
         </method>
-	<method name="NetworkManager_Remove_Known_SSID" api="RemoveKnownSSID" type="method" desc="Remove given SSID from saved SSIDs list" />
+	    <method name="NetworkManager_Remove_Known_SSID" api="RemoveKnownSSID" type="method" desc="Remove given SSID from saved SSIDs list" />
         <method name="NetworkManager_Stop_Connectivity_Monitoring" api="StopConnectivityMonitoring" type="method" desc="Stops the connectivity monitoring" />
-	<method name="NetworkManager_Get_Connectivity_Test_Endpoints" api="GetConnectivityTestEndpoints" type="method" desc="Gets currently used test endpoints" />
+	    <method name="NetworkManager_Get_Connectivity_Test_Endpoints" api="GetConnectivityTestEndpoints" type="method" desc="Gets currently used test endpoints" />
         <method name="NetworkManager_Set_Connectivity_Test_Endpoints" api="SetConnectivityTestEndpoints" type="method" desc="sets the list of endpoints">
             <params>
                 <param tag="endpoints"  defaultValue="null" type="list"/>
@@ -2670,27 +3310,27 @@
                 <param tag="level" defaultValue="null" type="int"/>
             </params>
     	</method>
-	<method name="NetworkManager_Get_Wifi_State" api="GetWifiState" type="method" desc="Returns the current Wifi State" >
+	    <method name="NetworkManager_Get_Wifi_State" api="GetWifiState" type="method" desc="Returns the current Wifi State" >
             <expectedValues>WIFI_STATE_UNINSTALLED,WIFI_STATE_DISABLED,WIFI_STATE_DISCONNECTED,WIFI_STATE_PAIRING,WIFI_STATE_CONNECTING,WIFI_STATE_CONNECTED,WIFI_STATE_SSID_NOT_FOUND,WIFI_STATE_SSID_CHANGED,WIFI_STATE_CONNECTION_LOST,WIFI_STATE_CONNECTION_FAILED,WIFI_STATE_CONNECTION_INTERRUPTED,WIFI_STATE_INVALID_CREDENTIALS,WIFI_STATE_AUTHENTICATION_FAILED,WIFI_STATE_ERROR</expectedValues>
     	</method>
-	<method name="NetworkManager_Get_Known_SSID" api="GetKnownSSIDs" type="method" desc="Gets list of saved SSIDs. This method returns all the SSIDs that are saved as array"/>
-	<method name="NetworkManager_AddToKnownSSIDs" api="AddToKnownSSIDs"  type="method" desc="Saves the SSID, passphrase, and security mode for upcoming and future sessions">
+	    <method name="NetworkManager_Get_Known_SSID" api="GetKnownSSIDs" type="method" desc="Gets list of saved SSIDs. This method returns all the SSIDs that are saved as array"/>
+	    <method name="NetworkManager_AddToKnownSSIDs" api="AddToKnownSSIDs"  type="method" desc="Saves the SSID, passphrase, and security mode for upcoming and future sessions">
             <params>
-		<param tag="ssid" type="string"/>
-		<param tag="passphrase" type="string"/>
-		<param tag="security" type="int"/>
+		        <param tag="ssid" type="string"/>
+		        <param tag="passphrase" type="string"/>
+		        <param tag="security" type="int"/>
             </params>
     	</method>
-	<method name="NetworkManager_SetIPSettings" api="SetIPSettings"  type="method" desc="Sets the IP settings for the given interface">
+	    <method name="NetworkManager_SetIPSettings" api="SetIPSettings"  type="method" desc="Sets the IP settings for the given interface">
             <params>
                 <param tag="interface" type="string"/>
                 <param tag="ipversion" type="string"/>
-		<param tag="autoconfig" type="bool"/>
-		<param tag="ipaddress" type="string"/>
-		<param tag="prefix" type="int"/>
-		<param tag="gateway" type="string"/>
-		<param tag="primarydns" type="string"/>
-		<param tag="secondarydns" type="string"/>
+		        <param tag="autoconfig" type="bool"/>
+		        <param tag="ipaddress" type="string"/>
+		        <param tag="prefix" type="int"/>
+		        <param tag="gateway" type="string"/>
+		        <param tag="primarydns" type="string"/>
+		        <param tag="secondarydns" type="string"/>
             </params>
         </method>
         <method name="NetworkManager_ConnectToKnownSSID" api="ConnectToKnownSSID" type="method" desc="Connects to the specified known SSID">
@@ -2703,99 +3343,176 @@
                 <param tag="hostname" type="string"/>
             </params>
         </method>
+        <method name="NetworkManager_String_Set_Log_Level" api="SetLogLevel" type="method" desc="Sends the level param as a string for negative testing">
+            <params>
+                <param tag="level" type="string" defaultValue="null"/>
+            </params>
+	</method>
+        <method name="NetworkManager_Numeric_Interface_State" api="SetInterfaceState" type="method" desc="Enable or disable the specified interface with a numeric identifier">
+            <params>
+                <param tag="interface" type="int"/>
+                <param tag="enabled" type="bool"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Numeric_Enabled_Interface" api="SetInterfaceState" type="method" desc="Enable or disable the specified interface with a numeric identifier">
+            <params>
+                <param tag="interface" type="string"/>
+                <param tag="enabled" type="int"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Numeric_Get_Interface_State" api="GetInterfaceState" type="method" desc="Get the current status of the specified interface with a numeric value">
+            <params>
+                <param tag="interface" type="int"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Numeric_Interface_Get_IPSettings" api="GetIPSettings" type="method" desc="Gets the IP setting with a numeric interface identifier">
+            <params>
+                <param tag="interface" type="int"/>
+                <param tag="ipversion" type="string"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Numeric_IpVersion_Get_IPSettings" api="GetIPSettings" type="method" desc="Gets the IP setting with a numeric ipversion identifier">
+            <params>
+                <param tag="interface" type="string"/>
+                <param tag="ipversion" type="int"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Numeric_IsConnectedToInternet" api="IsConnectedToInternet" type="method" desc="Seeks whether the device has internet connectivity with a numeric ipversion">
+            <params>
+                <param tag="ipversion" type="int"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Numeric_Get_Public_IP" api="GetPublicIP" type="method" desc="Gets the public IP Address of the device with a numeric ipversion">
+            <params>
+                <param tag="ipversion" type="int"/>
+            </params>
+        </method>
+        <method name="NetworkManager_AddToKnownSSIDs_Negative" api="AddToKnownSSIDs"  type="method" desc="Sends the security param as a raw uncoerced value for negative testing">
+            <params>
+		<param tag="ssid" type="string"/>
+		<param tag="passphrase" type="string"/>
+		<param tag="security" type="string"/>
+            </params>
+	</method>
+        <method name="NetworkManager_Wifi_Connect_Negative" api="WiFiConnect" type="method" desc="Sends the security param as a raw uncoerced value for negative testing">
+            <params>
+		<param tag="ssid" type="string"/>
+		<param tag="passphrase" type="string"/>
+                <param tag="security" type="string"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Negative_Start_WPS" api="StartWPS" type="method" desc="Initiates a connection using Wifi Protected Setup (WPS)">
+            <params>
+		<param tag="method" type="string"/>
+		<param tag="pin" type="string"/>
+            </params>
+	</method>
+        <method name="NetworkManager_Ping_Negative" api="Ping" type="method" desc="Pings the specified endpoint ">
+            <params>
+                <param tag="endpoint" type="string"/>
+                <param tag="ipversion" type="string"/>
+                <param tag="count" type="string"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Trace_Negative" api="Trace" type="method" desc="Traces the specified endpoint with the specified number of packets using traceroute">
+            <params>
+                <param tag="endpoint" type="string"/>
+                <param tag="ipversion" type="string"/>
+                <param tag="packets" type="string"/>
+            </params>
+        </method>
 
-	
-	<!-- Event Definitions -->
-	<event name="Event_On_Interface_StateChange" eventName="onInterfaceStateChange" eventId="client.events.1" type="event" desc="Triggered when an interface state is changed"/>
-	<event name="Event_On_AvailableSSIDs" eventName="onAvailableSSIDs" eventId="client.events.1" type="event" desc="Triggered when scan completes or when scan cancelled"/>
-	<event name="Event_On_WiFiStateChange" eventName="onWiFiStateChange" eventId="client.events.1" type="event" desc="Triggered when WIFI connection state get changed"/>
+	    <!-- Event Definitions -->
+	    <event name="Event_On_Interface_StateChange" eventName="onInterfaceStateChange" eventId="client.events.1" type="event" desc="Triggered when an interface state is changed"/>
+	    <event name="Event_On_AvailableSSIDs" eventName="onAvailableSSIDs" eventId="client.events.1" type="event" desc="Triggered when scan completes or when scan cancelled"/>
+	    <event name="Event_On_WiFiStateChange" eventName="onWiFiStateChange" eventId="client.events.1" type="event" desc="Triggered when WIFI connection state get changed"/>
     </plugin>
 
     <!-- MaintenanceManager Plugin Information -->
     <plugin pluginName="MaintenanceManager" serviceName="org.rdk.MaintenanceManager" serviceVersion="1">
         <!-- Method Definitions -->
-	<method name="MaintenanceManager_Get_MaintenanceActivity_Status" api="getMaintenanceActivityStatus" type="method" desc="Gets the maintenance activity status details"/>
-	<method name="MaintenanceManager_Get_Maintenance_StartTime" api="getMaintenanceStartTime" type="method" desc="Gets the scheduled maintenance start time"/>
-	<method name="MaintenanceManager_Get_Maintenance_Mode" api="getMaintenanceMode" type="method" desc="Gets the current maintenance mode and software upgrade opt-out mode which are stored in the persistent location"/>
-	<method name="MaintenanceManager_Set_Maintenance_Mode" api="setMaintenanceMode" type="method" desc="Sets the maintenance mode and software upgrade opt-out mode">
-	    <params>
+	    <method name="MaintenanceManager_Get_MaintenanceActivity_Status" api="getMaintenanceActivityStatus" type="method" desc="Gets the maintenance activity status details"/>
+	    <method name="MaintenanceManager_Get_Maintenance_StartTime" api="getMaintenanceStartTime" type="method" desc="Gets the scheduled maintenance start time"/>
+	    <method name="MaintenanceManager_Get_Maintenance_Mode" api="getMaintenanceMode" type="method" desc="Gets the current maintenance mode and software upgrade opt-out mode which are stored in the persistent location"/>
+	    <method name="MaintenanceManager_Set_Maintenance_Mode" api="setMaintenanceMode" type="method" desc="Sets the maintenance mode and software upgrade opt-out mode">
+	        <params>
                 <param tag="maintenanceMode" type="string"/>
                 <param tag="optOut" type="string"/>
             </params>
         </method>
-	<method name="MaintenanceManager_Set_Maintenance_Mode_Negative_MaintenanceMode" api="setMaintenanceMode" type="method" desc="Sets negative values to the maintenance mode and software upgrade opt-out mode">
-	    <params>
+	    <method name="MaintenanceManager_Set_Maintenance_Mode_Negative_MaintenanceMode" api="setMaintenanceMode" type="method" desc="Sets negative values to the maintenance mode and software upgrade opt-out mode">
+	        <params>
                 <param tag="maintenanceMode" type="int"/>
                 <param tag="optOut" type="string"/>
             </params>
         </method>
-	<method name="MaintenanceManager_Set_Maintenance_Mode_Negative_OptOut" api="setMaintenanceMode" type="method" desc="Sets negative values to the maintenance mode and software upgrade opt-out mode">
+	    <method name="MaintenanceManager_Set_Maintenance_Mode_Negative_OptOut" api="setMaintenanceMode" type="method" desc="Sets negative values to the maintenance mode and software upgrade opt-out mode">
             <params>
                 <param tag="maintenanceMode" type="string"/>
                 <param tag="optOut" type="int"/>
             </params>
         </method>
-	<method name="MaintenanceManager_Start_Maintenance" api="startMaintenance" type="method" desc="Starts maintenance activities"/>
-	<method name="MaintenanceManager_Stop_Maintenance" api="stopMaintenance" type="method" desc="Stops maintenance activities"/>
+	    <method name="MaintenanceManager_Start_Maintenance" api="startMaintenance" type="method" desc="Starts maintenance activities"/>
+	    <method name="MaintenanceManager_Stop_Maintenance" api="stopMaintenance" type="method" desc="Stops maintenance activities"/>
 	
-	<!-- Event Definitions -->
+	    <!-- Event Definitions -->
         <event name="Event_On_Maintenance_StatusChange" eventName="onMaintenanceStatusChange" eventId="client.events.1" type="event" desc="Triggered when the maintenance manager status changes"/>
     </plugin>
 
     <!-- RemoteControl Plugin Information -->
     <plugin pluginName="RemoteControl" serviceName="org.rdk.RemoteControl" serviceVersion="1">
         <!-- Method Definitions -->
-	<method name="RemoteControl_Get_ApiVersionNumber" api="getApiVersionNumber" type="method" desc="Gets the current API version number"/>
-	<method name="RemoteControl_Get_NetStatus" api="getNetStatus" type="method" desc="Returns the status information provided by the last onStatus event for the specified network">
-		<params>
-                	<param tag="netType" type="int"/>
-            	</params>
-	</method>
-	<method name="RemoteControl_ConfigureWakeupKeys" api="configureWakeupKeys" type="method" desc="Configures which keys on the remote will wake the target from deepsleep">
-                <params>
-			<param tag="netType" type="int"/>
-			<param tag="wakeupConfig" type="string"/>
-			<param tag="customKeys" type="string"/>
-                </params>
-	</method>
-	<method name="RemoteControl_Get_LastKeypress_Source" api="getLastKeypressSource" type="method" desc="Returns last key press source data">
-                <params>
-                        <param tag="netType" type="int"/>
-                </params>
-	</method>
-	<method name="RemoteControl_Find_MyRemote" api="findMyRemote" type="method" desc="Returns the most recently used remote to beep">
-                <params>
-			<param tag="netType" type="int"/>
-			<param tag="level" type="string"/>
-                </params>
+	    <method name="RemoteControl_Get_ApiVersionNumber" api="getApiVersionNumber" type="method" desc="Gets the current API version number"/>
+	    <method name="RemoteControl_Get_NetStatus" api="getNetStatus" type="method" desc="Returns the status information provided by the last onStatus event for the specified network">
+		    <params>
+                <param tag="netType" type="int"/>
+            </params>
+	    </method>
+	    <method name="RemoteControl_ConfigureWakeupKeys" api="configureWakeupKeys" type="method" desc="Configures which keys on the remote will wake the target from deepsleep">
+            <params>
+			    <param tag="netType" type="int"/>
+			    <param tag="wakeupConfig" type="string"/>
+			    <param tag="customKeys" type="string"/>
+            </params>
+	    </method>
+	    <method name="RemoteControl_Get_LastKeypress_Source" api="getLastKeypressSource" type="method" desc="Returns last key press source data">
+            <params>
+                <param tag="netType" type="int"/>
+            </params>
+	    </method>
+	    <method name="RemoteControl_Find_MyRemote" api="findMyRemote" type="method" desc="Returns the most recently used remote to beep">
+            <params>
+			    <param tag="netType" type="int"/>
+			    <param tag="level" type="string"/>
+            </params>
         </method>
-	<method name="RemoteControl_FactoryReset" api="factoryReset" type="method" desc="Returns all paired and connected remotes to factory reset"/>
-	<method name="RemoteControl_Get_NetStatus_Negative" api="getNetStatus" type="method" desc="Returns the status information provided by the last onStatus event for the specified network">
-                <params>
-                        <param tag="netType"/>
-                </params>
-	</method>
-	<method name="RemoteControl_Get_IRDBManufacturers_Negative" api="getIRDBManufacturers" type="method" desc="Returns a list of manufacturer names based on the specified input parameters">
-                <params>
-			<param tag="netType"/>
-			<param tag="avDevType" type="string"/>
-			<param tag="manufacturer" type="string"/>
-                </params>
-	</method>
-	<method name="RemoteControl_Get_IRDBModels_Negative" api="getIRDBModels" type="method" desc="Returns a list of model names based on the specified input parameters">
-                <params>
-                        <param tag="netType"/>
-                        <param tag="avDevType" type="string"/>
-			<param tag="manufacturer" type="string"/>
-			<param tag="model" type="string"/>
-                </params>
-	</method>
-	<method name="RemoteControl_ConfigureWakeupKeys_Negative" api="configureWakeupKeys" type="method" desc="Configures which keys on the remote will wake the target from deepsleep">
-                <params>
-                        <param tag="netType"/>
-                        <param tag="wakeupConfig" type="string"/>
-                        <param tag="customKeys" type="string"/>
-                </params>
+	    <method name="RemoteControl_FactoryReset" api="factoryReset" type="method" desc="Returns all paired and connected remotes to factory reset"/>
+	    <method name="RemoteControl_Get_NetStatus_Negative" api="getNetStatus" type="method" desc="Returns the status information provided by the last onStatus event for the specified network">
+            <params>
+                <param tag="netType"/>
+            </params>
+	    </method>
+	    <method name="RemoteControl_Get_IRDBManufacturers_Negative" api="getIRDBManufacturers" type="method" desc="Returns a list of manufacturer names based on the specified input parameters">
+            <params>
+			    <param tag="netType"/>
+			    <param tag="avDevType" type="string"/>
+			    <param tag="manufacturer" type="string"/>
+            </params>
+	    </method>
+	    <method name="RemoteControl_Get_IRDBModels_Negative" api="getIRDBModels" type="method" desc="Returns a list of model names based on the specified input parameters">
+            <params>
+                <param tag="netType"/>
+                <param tag="avDevType" type="string"/>
+			    <param tag="manufacturer" type="string"/>
+			    <param tag="model" type="string"/>
+            </params>
+	    </method>
+	    <method name="RemoteControl_ConfigureWakeupKeys_Negative" api="configureWakeupKeys" type="method" desc="Configures which keys on the remote will wake the target from deepsleep">
+            <params>
+                <param tag="netType"/>
+                <param tag="wakeupConfig" type="string"/>
+                <param tag="customKeys" type="string"/>
+            </params>
         </method>
     </plugin>
 
@@ -2818,6 +3535,69 @@
         <method name="MiracastService_setLogging" api="setLogging" type="method" desc="Enable/Disable/Reduce the Logging level for Miracast">
             <params>
                 <param tag="level" type="string"/>
+            </params>
+        </method>
+        <method name="MiracastService_String_SetEnable" api="setEnable" type="method" desc="To enable/disable the miracast feature with a string parameter">
+            <params>
+                <param tag="enabled" type="string"/>
+            </params>
+        </method>
+        <method name="MiracastService_Numeric_SetEnable" api="setEnable" type="method" desc="To enable/disable the miracast feature with a numeric parameter">
+            <params>
+                <param tag="enabled" type="int"/>
+            </params>
+        </method>
+        <method name="MiracastService_Numeric_Accept_Client_Connection" api="acceptClientConnection" type="method" desc="To accept /reject new client connection requests for the miracast feature with a numeric parameter">
+            <params>
+                <param tag="requestStatus" type="int"/>
+            </params>
+        </method>
+        <method name="MiracastService_setP2PBackendDiscovery" api="setP2PBackendDiscovery" type="method" desc="Sets the status of the miracastService backend discovery">
+            <params>
+                <param tag="enabled" type="bool"/>
+            </params>
+        </method>
+        <method name="MiracastService_String_SetP2PBackendDiscovery" api="setP2PBackendDiscovery" type="method" desc="Sets the status of the miracastService backend discovery with a string parameter">
+            <params>
+                <param tag="enabled" type="string"/>
+            </params>
+        </method>
+        <method name="MiracastService_Numeric_SetP2PBackendDiscovery" api="setP2PBackendDiscovery" type="method" desc="Sets the status of the miracastService backend discovery with a numeric parameter">
+            <params>
+                <param tag="enabled" type="int"/>
+            </params>
+        </method>
+        <method name="MiracastService_stopClientConnection" api="stopClientConnection" type="method" desc="To abort the ongoing connection after accepted connection request">
+            <params>
+                <param tag="mac" type="string"/>
+                <param tag="name" type="string"/>
+            </params>
+        </method>
+        <method name="MiracastService_Numeric_StopClientConnection" api="stopClientConnection" type="method" desc="To abort the ongoing connection after accepted connection request with a numeric parameter">
+            <params>
+                <param tag="mac" type="int"/>
+                <param tag="name" type="string"/>
+            </params>
+        </method>
+        <method name="MiracastService_updatePlayerState" api="updatePlayerState" type="method" desc="Update the miracast player state to the miracast service plugin">
+            <params>
+                <param tag="mac" type="string"/>
+                <param tag="state" type="string"/>
+                <param tag="reason_code" type="int"/>
+            </params>
+        </method>
+        <method name="MiracastService_Numeric_updatePlayerState" api="updatePlayerState" type="method" desc="Update the miracast player state to the miracast service plugin with a numeric parameter">
+            <params>
+                <param tag="mac" type="int"/>
+                <param tag="state" type="string"/>
+                <param tag="reason_code" type="int"/>
+            </params>
+        </method>
+        <method name="MiracastService_Negative_updatePlayerState" api="updatePlayerState" type="method" desc="Update the miracast player state to the miracast service plugin with negative test parameters">
+            <params>
+                <param tag="mac" type="string"/>
+                <param tag="state" type="string"/>
+                <param tag="reason_code" type="string"/>
             </params>
         </method>
     </plugin>
