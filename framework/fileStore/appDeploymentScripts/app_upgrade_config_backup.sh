@@ -55,9 +55,9 @@ destination_dir_performance_validation="/opt/tomcat/webapps/tdkservice/fileStore
 backup_file_stability_validation="$backup_dir/StabilityTestVariables.py"
 source_file_stability_validation="/opt/tomcat/webapps/tdkservice/fileStore/StabilityTestVariables.py"
 destination_dir_stability_validation="/opt/tomcat/webapps/tdkservice/fileStore/"
-backup_file_ipchange_validation="$backup_dir/IPChangeDetectionVariables.py"
-source_file_ipchange_validation="/opt/tomcat/webapps/tdkservice/fileStore/IPChangeDetectionVariables.py"
-destination_dir_ipchange_validation=
+backup_file_vts_validation="$backup_dir/VTSTestVariables.py"
+source_file_vts_validation="/opt/tomcat/webapps/tdkservice/fileStore/VTSTestVariables.py"
+destination_dir_vts_validation="/opt/tomcat/webapps/tdkservice/fileStore/"
 
 process_and_compare_backup_files() {
     local backup_file=$1
@@ -132,71 +132,155 @@ process_and_compare_backup_python_files() {
         return
     fi
 
-    # Read source file into a map
-    declare -A source_values
+    # Collect source keys so backup-only keys can be inserted at their backup position.
+    declare -A source_keys
     while IFS= read -r line || [[ -n $line ]]; do
-        if [[ -n "$line" && $line != \#* && "$line" == *"="* ]]; then
-            key=$(echo "$line" | cut -d '=' -f 1 | xargs)
-            value=$(echo "$line" | cut -d '=' -f 2- | xargs)
-            if [[ -n "$key" && -n "$value" ]]; then
-                source_values["$key"]="$value"
-            fi
+        if [[ "$line" =~ ^[[:space:]]*([a-zA-Z_][a-zA-Z0-9_]*)[[:space:]]*= ]]; then
+            source_keys["${BASH_REMATCH[1]}"]=1
         fi
     done < "$source_file"
 
-    # Prepare the temporary file for the updated content
-    local tmp_file=$(mktemp)
-
-    # Process the backup file line by line and preserve its structure
-    declare -A processed_keys
+    # Read complete values from the backup, including multiline lists.
+    declare -A backup_values
+    declare -A backup_keys
+    backup_key_order=()
+    active_key=""
+    active_value=""
+    active_closing_character=""
     while IFS= read -r line || [[ -n $line ]]; do
-        if [[ -z "$line" ]]; then
-            echo "" >> "$tmp_file"  # Preserve blank lines
-        elif [[ $line == \#* ]]; then
-            echo "$line" >> "$tmp_file"  # Preserve comments
-        else
-            key=$(echo "$line" | cut -d '=' -f 1 | xargs)
-            if [[ -n "$key" && -n "${source_values[$key]}" && -z "${processed_keys[$key]}" ]]; then
-                value="${source_values[$key]}"
-                # Handle quoting and numeric checks
-                if [[ $value =~ ^[0-9]+$ ]]; then
-                    # Do not add quotes for numeric values
-                    value="$value"
-                elif [[ $value == *"+"* ]]; then
-                    value=$(echo "$value" | sed -E 's/([^ ]+)\s*\+\s*([^"]+)/\1 + "\2"/')
-                elif [[ $value != \"*\" ]]; then
-                    value="\"$value\""
-                fi
-                echo "$key = $value" >> "$tmp_file"
-                unset source_values["$key"]
-                processed_keys["$key"]=1
-            else
-                echo "$line" >> "$tmp_file"
+        if [[ -n "$active_key" ]]; then
+            active_value+=$'\n'"$line"
+            if [[ "$line" =~ ^[[:space:]]*"$active_closing_character"[[:space:]]*,?[[:space:]]*$ ]]; then
+                backup_values["$active_key"]="$active_value"
+                active_key=""
+                active_value=""
+                active_closing_character=""
+            fi
+            continue
+        fi
+
+        if [[ "$line" =~ ^[[:space:]]*([a-zA-Z_][a-zA-Z0-9_]*)[[:space:]]*=(.*)$ ]]; then
+            key="${BASH_REMATCH[1]}"
+            value="${BASH_REMATCH[2]}"
+            value="${value#"${value%%[![:space:]]*}"}"
+            value="${value%"${value##*[![:space:]]}"}"
+            backup_values["$key"]="$value"
+
+            if [[ -z "${backup_keys[$key]+x}" ]]; then
+                backup_keys["$key"]=1
+                backup_key_order+=("$key")
+            fi
+
+            case "${value:0:1}" in
+                '[') active_closing_character=']' ;;
+                '{') active_closing_character='}' ;;
+                '(') active_closing_character=')' ;;
+                *) active_closing_character="" ;;
+            esac
+            if [[ -n "$active_closing_character" && ! "$value" =~ "$active_closing_character"[[:space:]]*,?[[:space:]]*$ ]]; then
+                active_key="$key"
+                active_value="$value"
             fi
         fi
     done < "$backup_file"
 
-    # Add remaining keys from the source file
-    for key in "${!source_values[@]}"; do
-        value="${source_values[$key]}"
-        if [[ $value =~ ^[0-9]+$ ]]; then
-            value="$value"
-        elif [[ $value == *"+"* ]]; then
-            value=$(echo "$value" | sed -E 's/([^ ]+)\s*\+\s*([^"]+)/\1 + "\2"/')
-        elif [[ $value != \"*\" ]]; then
-            value="\"$value\""
+    # Group backup-only keys after the nearest preceding key shared by both files.
+    # Keys before the first shared key are emitted before the first source assignment.
+    declare -A backup_only_after
+    backup_only_before=""
+    previous_shared_key=""
+    for key in "${backup_key_order[@]}"; do
+        if [[ -n "${source_keys[$key]+x}" ]]; then
+            previous_shared_key="$key"
+        elif [[ -n "$previous_shared_key" ]]; then
+            backup_only_after["$previous_shared_key"]+="$key"$'\n'
+        else
+            backup_only_before+="$key"$'\n'
         fi
-        echo "$key = $value" >> "$tmp_file"
     done
 
-    # Replace the backup file with the updated content
-    mv "$tmp_file" "$backup_file"
+    write_backup_only_keys() {
+        local keys=$1
+        local backup_only_key
+        while IFS= read -r backup_only_key; do
+            [[ -z "$backup_only_key" ]] && continue
+            printf '%s = %s\n' "$backup_only_key" "${backup_values[$backup_only_key]}" >> "$tmp_file"
+        done <<< "$keys"
+    }
 
-    # Copy the updated file to the destination directory
-    cp "$backup_file" "$destination_dir"
+    # Prepare the temporary file for the updated content
+    local tmp_file=$(mktemp)
+    local first_source_assignment=true
 
-    echo "Updated backup file: $backup_file" | tee -a "$log_file"
-    echo "Copied to destination: $destination_dir" | tee -a "$log_file"
+    # Process the deployed source file and apply values from the backup.
+    active_key=""
+    active_source_block=""
+    active_closing_character=""
+    while IFS= read -r line || [[ -n $line ]]; do
+        if [[ -n "$active_key" ]]; then
+            active_source_block+=$'\n'"$line"
+            if [[ "$line" =~ ^[[:space:]]*"$active_closing_character"[[:space:]]*,?[[:space:]]*$ ]]; then
+                # Multi-line source blocks are never empty, so the source (upgrade default) always wins.
+                printf '%s\n' "$active_source_block" >> "$tmp_file"
+                write_backup_only_keys "${backup_only_after[$active_key]-}"
+                active_key=""
+                active_source_block=""
+                active_closing_character=""
+            fi
+        elif [[ -z "$line" ]]; then
+            echo "" >> "$tmp_file"  # Preserve blank lines
+        elif [[ $line == \#* ]]; then
+            echo "$line" >> "$tmp_file"  # Preserve comments
+        elif [[ "$line" =~ ^[[:space:]]*([a-zA-Z_][a-zA-Z0-9_]*)[[:space:]]*=(.*)$ ]]; then
+            key="${BASH_REMATCH[1]}"
+            value="${BASH_REMATCH[2]}"
+            if [[ "$first_source_assignment" == true ]]; then
+                write_backup_only_keys "$backup_only_before"
+                first_source_assignment=false
+            fi
+            case "${value#"${value%%[![:space:]]*}"}" in
+                '['*) active_closing_character=']' ;;
+                '{'*) active_closing_character='}' ;;
+                '('*) active_closing_character=')' ;;
+                *) active_closing_character="" ;;
+            esac
+            if [[ -n "$active_closing_character" && ! "$value" =~ "$active_closing_character"[[:space:]]*,?[[:space:]]*$ ]]; then
+                active_key="$key"
+                active_source_block="$line"
+            else
+                # Source (upgrade default) wins; use backup only when the source value is empty.
+                trimmed_value="${value#"${value%%[![:space:]]*}"}"
+                trimmed_value="${trimmed_value%"${trimmed_value##*[![:space:]]}"}"
+                # Blank values and empty literals ("", '', [], {}, ()) count as empty.
+                case "$trimmed_value" in
+                    ""|'""'|"''"|"[]"|"{}"|"()") source_value_empty=true ;;
+                    *) source_value_empty=false ;;
+                esac
+                if [[ "$source_value_empty" == true && -n "${backup_values[$key]+x}" ]]; then
+                    printf '%s = %s\n' "$key" "${backup_values[$key]}" >> "$tmp_file"
+                else
+                    printf '%s\n' "$line" >> "$tmp_file"
+                fi
+            fi
+            if [[ -z "$active_key" ]]; then
+                write_backup_only_keys "${backup_only_after[$key]-}"
+            fi
+        else
+            echo "$line" >> "$tmp_file"
+        fi
+    done < "$source_file"
+
+    # If the source has no assignments, retain backup-only keys after its content.
+    if [[ "$first_source_assignment" == true ]]; then
+        write_backup_only_keys "$backup_only_before"
+    fi
+
+    # Restore the merged content without modifying the backup archive.
+    cp "$tmp_file" "$destination_dir/$(basename "$backup_file")"
+    rm -f "$tmp_file"
+
+    echo "Preserved backup file: $backup_file" | tee -a "$log_file"
+    echo "Restored file to: $destination_dir" | tee -a "$log_file"
 }
 
 process_all_pythons() {
@@ -241,7 +325,7 @@ process_all_pythons "$backup_file_browser_validation" "$source_file_browser_vali
 process_all_pythons "$backup_file_media_validation" "$source_file_media_validation" "$destination_dir_media_validation" &
 process_all_pythons "$backup_file_performance_validation" "$source_file_performance_validation" "$destination_dir_performance_validation" &
 process_all_pythons "$backup_file_stability_validation" "$source_file_stability_validation" "$destination_dir_stability_validation" &
-process_all_pythons "$backup_file_ipchange_validation" "$source_file_ipchange_validation" "$destination_dir_ipchange_validation" &
+process_all_pythons "$backup_file_vts_validation" "$source_file_vts_validation" "$destination_dir_vts_validation" &
 
 # Wait for all background processes to complete
 wait
