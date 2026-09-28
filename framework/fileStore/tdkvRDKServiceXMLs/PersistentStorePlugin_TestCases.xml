@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+PersistentStore_GetNamespaceStorageLimit_Special_Scope<?xml version="1.0" encoding="UTF-8"?>
 <!--
  If not stated otherwise in this file or this component's Licenses.txt file the
  following copyright and licenses apply:
@@ -14,322 +14,843 @@
  limitations under the License.
 -->
 <testPlugin pluginName="PersistentStore" pluginVersion="1">
-        <pluginPreRequisite>
-          <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+    <pluginPreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Activate_PersistentStore_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
-                  <param tag="plugin" value="org.rdk.PersistentStore" indexOnly="true" />
+                    <param tag="plugin" value="org.rdk.PersistentStore" indexOnly="true" />
                 </params>
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PersistentStore" />
             </testStep>
-            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
                 <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PersistentStore" />
                 <params>
-                  <param tag="callsign" value="org.rdk.PersistentStore" />
-                </params>
-            </testStep>
-            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PersistentStore" />
-                <params>
-                  <param tag="plugin" value="org.rdk.PersistentStore" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PersistentStore" expectedValues="activated"/>
-            </testStep>
-          </prerequisite>
-          <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false" >
-		  <event pluginName="PersistentStore" eventName="Event_On_Value_Changed" />
-		  <event pluginName="Controller" eventName="Event_Controller_State_Changed"/>
-          </prerequisite>
-        </pluginPreRequisite>
-
-        <testCase testCaseId="PS_01" testCaseName="PersistentStore_Set_and_Get_Value"  desc="Sets and gets the particular key value">
-            <testCaseInfo testCaseType="loop" />
-            <testStep testStepId="1" name="check_set_value" testStepType="loop" >
-               <subtestStep subtestStepId="1" name="Set_Value" method="Set_Value">
-                  <params>
-                    <param tag="namespace" value="Namespace_1"/>
-                    <param tag="key" value="Key_1" />
-                    <param tag="value" value="Value_1,Value_2,Value_3" iteration="true" />
-                  </params>
-                  <resultGeneration useMethodTag="persistentstore_check_set_operation" />
-               </subtestStep>
-               <subtestStep subtestStepId="2" name="Get_Value" method="Get_Value">
-                  <params>
-                    <param tag="namespace" value="Namespace_1"/>
-                    <param tag="key" value="Key_1"  />
-                  </params>
-                  <resultGeneration useMethodTag="persistentstore_check_value">
-                     <expectedValues useIterableValue="true" />
-                  </resultGeneration>
-               </subtestStep>
-            </testStep>
-        </testCase>
-
-        <testCase testCaseId="PS_02" testCaseName="PersistentStore_Delete_Key"  desc="Deletes the key">
-            <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Set_Value" method="Set_Value">
-                <params>
-                  <param tag="namespace" value="Namespace_1"/>
-                  <param tag="key" value="Key_2" />
-                  <param tag="value" value="Value_2" />
-                </params>
-                <resultGeneration useMethodTag="persistentstore_check_set_operation" />
-            </testStep>
-            <testStep testStepId="2" name="Get_Keys" method="Get_Keys">
-                <params>
-                  <param tag="namespace" value="Namespace_1"/>
-                </params>
-                <resultGeneration useMethodTag="persistentstore_get_keys" arguments="check_if_exists" expectedValues="Key_2"/>
-            </testStep>
-            <testStep testStepId="3" name="Delete_Key" method="Delete_Key">
-                <params>
-                  <param tag="namespace" value="Namespace_1"/>
-                  <param tag="key" value="Key_2"  />
-                </params>
-                <resultGeneration useMethodTag="persistentstore_check_set_operation" />
-            </testStep>
-            <testStep testStepId="4" name="Get_Keys" method="Get_Keys">
-                <params>
-                  <param tag="namespace" value="Namespace_1"/>
-                </params>
-                <resultGeneration useMethodTag="persistentstore_get_keys" arguments="check_not_exists" expectedValues="Key_2"/>
-            </testStep>
-        </testCase>
-
-        <testCase testCaseId="PS_03" testCaseName="PersistentStore_Delete_Namespace"  desc="Deletes the Namespace">
-            <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Set_Value" method="Set_Value">
-                <params>
-                  <param tag="namespace" value="Namespace_2"/>
-                  <param tag="key" value="Key_1" />
-                  <param tag="value" value="Value_1" />
-                </params>
-                <resultGeneration useMethodTag="persistentstore_check_set_operation" />
-            </testStep>
-            <testStep testStepId="2" name="Get_Namespaces" method="Get_Namespaces">
-                <resultGeneration useMethodTag="persistentstore_get_namespaces" arguments="check_if_exists" expectedValues="Namespace_2"/>
-            </testStep>
-            <testStep testStepId="3" name="Delete_Namespace" method="Delete_Namespace" >
-                <params>
-                  <param tag="namespace" value="Namespace_2"/>
-                </params>
-                <resultGeneration useMethodTag="persistentstore_check_set_operation" />
-            </testStep>
-            <testStep testStepId="4" name="Get_Namespaces" method="Get_Namespaces">
-                <resultGeneration useMethodTag="persistentstore_get_namespaces" arguments="check_not_exists" expectedValues="Namespace_2"/>
-            </testStep>
-        </testCase>
-
-        <testCase testCaseId="PS_04" testCaseName="PersistentStore_Get_Storage_Size"  desc="Gets the storage size of the available namespaces ">
-            <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Get_Namespaces" method="Get_Namespaces">
-                <resultGeneration useMethodTag="persistentstore_get_namespaces" arguments="none"/>
-            </testStep>
-            <testStep testStepId="2" name="Get_Storage_Size" method="Get_Storage_Size" >
-                <resultGeneration useMethodTag="persistentstore_get_storage_size" />
-            </testStep>
-        </testCase>
-   
-        <testCase testCaseId="PS_05" testCaseName="PersistentStore_Flush_Cache"  desc="flushes the database cache" >
-            <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Flush_Cache" method="Flush_Cache" >
-                <resultGeneration useMethodTag="persistentstore_check_set_operation" />
-            </testStep>
-        </testCase>     
-
-        <testCase testCaseId="PS_06" testCaseName="PersistentStore_On_Value_Changed_Event"  desc="Sets and gets the particular key value">
-            <testCaseInfo testCaseType="loop" />
-            <testStep testStepId="1" name="check_set_value" testStepType="loop" >
-               <subtestStep subtestStepId="1" name="Set_Value" method="Set_Value">
-                  <params>
-                    <param tag="namespace" value="Namespace_3"/>
-                    <param tag="key" value="Key_1" />
-                    <param tag="value" value="Value_1,Value_2,Value_3" iteration="true" />
-                  </params>
-                  <resultGeneration useMethodTag="persistentstore_check_set_operation" />
-               </subtestStep>
-               <subtestStep subtestStepId="2" name="Get_Value" method="Get_Value">
-                  <params>
-                    <param tag="namespace" value="Namespace_3"/>
-                    <param tag="key" value="Key_1"  />
-                  </params>
-                  <resultGeneration useMethodTag="persistentstore_check_value">
-                     <expectedValues useIterableValue="true" />
-                  </resultGeneration>
-               </subtestStep>
-               <subtestStep subtestStepId="3" name="Check_On_Value_Changed_Event" event="Event_On_Value_Changed" action="eventListener" delay="2">
-                  <resultGeneration useMethodTag="persistentstore_check_on_value_changed_event" >
-                     <expectedValues value="namespace_3,key_1" useIterableValue="true" />
-                  </resultGeneration>
-               </subtestStep>
-            </testStep>
-    	</testCase>
-	
-	<!-- Test case 07 -->
-	<testCase testCaseId="PS_07" testCaseName="PersistentStore_Set_And_Get_Storage_Limits"  desc="Set and get storage limits for available namespaces ">
-            <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Get_Namespaces" method="Get_Namespaces" saveResult="true">
-                <resultGeneration useMethodTag="persistentstore_get_namespaces" arguments="none"/>
-	    </testStep>
-	    <testStep testStepId="2" name="Delete_Namespace" method="Delete_Namespace" >
-		<conditionalExecution enable="true" Id="1" useMethodTag="persistentstore_get_previous_namespace"/>
-		<params>
-                  <param tag="namespace" value="username"/>
-                </params>
-                <resultGeneration useMethodTag="persistentstore_check_set_operation" />
-            </testStep>
-	    <testStep testStepId="3" name="Set_Namespace_Storagelimit" method="Set_Namespace_Storagelimit" >
-                <params>
-		     <param tag="namespace" value="username"/>
-		     <param tag="storageLimit" value="20"/>
-                </params>
-	    </testStep>
-	    <testStep testStepId="4" name="Get_Namespace_Storagelimit" method="Get_Namespace_Storagelimit" >
-                <params>
-                     <param tag="namespace" value="username"/>
-                </params>
-                <resultGeneration useMethodTag="persistentstore_get_namespace_storagelimit" expectedValues="20"/>
-	    </testStep>
-	    <testStep testStepId="5" name="Delete_Namespace" method="Delete_Namespace" >
-                <params>
-                  <param tag="namespace" value="username"/>
-                </params>
-                <resultGeneration useMethodTag="persistentstore_check_set_operation" />
-            </testStep>
-	</testCase>
-
-	<!-- Test case 08 -->
-	<testCase testCaseId="PS_08" testCaseName="PersistentStore_Set_And_Get_Empty_Storage_Limits"  desc="Verify persistent store handles empty, sets and retrieves storage namespace limits">
-            <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Set_Namespace_Storagelimit" method="Set_Namespace_Storagelimit" >
-                <params>
-                     <param tag="namespace" value=""/>
-                     <param tag="storageLimit" value="20"/>
-                </params>
-		<resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_INVALID_INPUT_LENGTH" arguments="check_message"/>
-            </testStep>
-            <testStep testStepId="2" name="Get_Namespace_Storagelimit" method="Get_Namespace_Storagelimit" >
-                <params>
-                     <param tag="namespace" value=""/>
-                </params>
-		<resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_NOT_EXIST" arguments="check_message"/>
-            </testStep>
-        </testCase>
-
-	<!-- Test case 09 -->
-        <testCase testCaseId="PS_09" testCaseName="PersistentStore_SetValue_And_GetValue_API_with_Empty_Key_Operations"  desc="Verify persistent store handles empty key, set and get operations across namespaces">
-            <testCaseInfo testCaseType="direct" />
-	    <testStep testStepId="1" name="Set_Value" method="Set_Value">
-                  <params>
-                    <param tag="namespace" value="username"/>
-                    <param tag="key" value="" />
-                    <param tag="value" value="user" />
-                  </params>
-                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_INVALID_INPUT_LENGTH" arguments="check_message"/>
-            </testStep>
-	    <testStep testStepId="2" name="Get_Value" method="Get_Value">
-                  <params>
-                    <param tag="namespace" value="username"/>
-                    <param tag="key" value=""  />
-                  </params>
-                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
-            </testStep>
-        </testCase>
-
-	<!-- Test case 10 -->
-        <testCase testCaseId="PS_10" testCaseName="PersistentStore_SetValue_And_GetValue_API_with_Empty_Namespce_Operations"  desc="Verify persistent store handles empty namespace, set and get operations">
-            <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Set_Value" method="Set_Value">
-                  <params>
-                    <param tag="namespace" value=""/>
-                    <param tag="key" value="username" />
-                    <param tag="value" value="user" />
-                  </params>
-                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_INVALID_INPUT_LENGTH" arguments="check_message"/>
-            </testStep>
-            <testStep testStepId="2" name="Get_Value" method="Get_Value">
-                  <params>
-                    <param tag="namespace" value=""/>
-                    <param tag="key" value="username"  />
-                  </params>
-                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_NOT_EXIST" arguments="check_message"/>
-            </testStep>
-        </testCase>
-
-	<!-- Test case 11 -->
-        <testCase testCaseId="PS_11" testCaseName="PersistentStore_GetStorage_NamespaceLimit_For_DeletedNamespace"  desc="Verify that attempting to retrieve the storage namespace limit for a namespace that has already been deleted results in an appropriate error or indication, such as a null response or a specific error message">
-            <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Get_Namespaces" method="Get_Namespaces" saveResult="true">
-                <resultGeneration useMethodTag="persistentstore_get_namespaces" arguments="none"/>
-            </testStep>
-            <testStep testStepId="2" name="Delete_Namespace" method="Delete_Namespace" >
-                <conditionalExecution enable="true" Id="1" useMethodTag="persistentstore_get_previous_namespace"/>
-                <params>
-                  <param tag="namespace" value="username"/>
-                </params>
-                <resultGeneration useMethodTag="persistentstore_check_set_operation" />
-            </testStep>
-            <testStep testStepId="3" name="Get_Namespace_Storagelimit" method="Get_Namespace_Storagelimit" >
-                <params>
-                     <param tag="namespace" value="username"/>
-                </params>
-                <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_NOT_EXIST" arguments="check_message"/>
-	    </testStep>
-	</testCase>
-	
-	<!-- Test case 12 -->
-	<testCase testCaseId="PS_12" testCaseName="PersistentStore_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
-            <testCaseInfo testCaseType="direct" />
-            <testCasePreRequisite>
-                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
-                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                     <params>
-                       <param tag="plugin" value="org.rdk.PersistentStore" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PersistentStore" />
-                   </testStep>
-                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PersistentStore" />
-                     <params>
-                       <param tag="callsign" value="org.rdk.PersistentStore" />
-                     </params>
-                   </testStep>
-                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PersistentStore" />
-                     <params>
-                       <param tag="plugin" value="org.rdk.PersistentStore" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PersistentStore" expectedValues="activated"/>
-                   </testStep>
-                </prerequisite>
-            </testCasePreRequisite>
-            <testStep testStepId="1" name="Deactivate_PersistentStore_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
-                  <params>
-                    <param tag="callsign"  value="org.rdk.PersistentStore" />
-                  </params>
-            </testStep>
-            <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
-              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.persistentstore,deactivated,requested"/>
-            </testStep>
-            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                 <params>
-                     <param tag="plugin" value="org.rdk.PersistentStore" indexOnly="true" />
-                 </params>
-                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PersistentStore" expectedValues="deactivated"/>
-            </testStep>
-            <testStep testStepId="4" name="Activate_org.rdk.PersistentStore_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
-                  <params>
                     <param tag="callsign" value="org.rdk.PersistentStore" />
-                  </params>
+                </params>
             </testStep>
-            <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
-              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.persistentstore,activated,requested"/>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PersistentStore" />
+                <params>
+                    <param tag="plugin" value="org.rdk.PersistentStore" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PersistentStore" expectedValues="activated" />
             </testStep>
-            <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
-                 <params>
-                     <param tag="plugin" value="org.rdk.PersistentStore" indexOnly="true" />
-                 </params>
-                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PersistentStore" expectedValues="activated"/>
-            </testStep>
-        </testCase>
+        </prerequisite>
+
+        <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+            <event pluginName="PersistentStore" eventName="Event_On_Value_Changed" />
+            <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
+        </prerequisite>
+    </pluginPreRequisite>
+
+    <testCase testCaseId="PS_01" testCaseName="PersistentStore_Set_and_Get_Value" desc="Sets and gets the particular key value">
+        <testCaseInfo testCaseType="loop" />
+        <testStep testStepId="1" name="check_set_value" testStepType="loop">
+            <subtestStep subtestStepId="1" name="Set_Value" method="Set_Value">
+                <params>
+                    <param tag="namespace" value="Namespace_1" />
+                    <param tag="key" value="Key_1" />
+                    <param tag="value" value="Value_1,Value_2,Value_3" iteration="true" />
+                </params>
+                <resultGeneration useMethodTag="persistentstore_check_set_operation" />
+            </subtestStep>
+            <subtestStep subtestStepId="2" name="Get_Value" method="Get_Value">
+                <params>
+                    <param tag="namespace" value="Namespace_1" />
+                    <param tag="key" value="Key_1" />
+                </params>
+                <resultGeneration useMethodTag="persistentstore_check_value">
+                    <expectedValues useIterableValue="true" />
+                </resultGeneration>
+            </subtestStep>
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_02" testCaseName="PersistentStore_Delete_Key" desc="Deletes the key">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value" method="Set_Value">
+            <params>
+                <param tag="namespace" value="Namespace_1" />
+                <param tag="key" value="Key_2" />
+                <param tag="value" value="Value_2" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_check_set_operation" />
+        </testStep>
+        <testStep testStepId="2" name="Get_Keys" method="Get_Keys">
+            <params>
+                <param tag="namespace" value="Namespace_1" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_get_keys" arguments="check_if_exists" expectedValues="Key_2" />
+        </testStep>
+        <testStep testStepId="3" name="Delete_Key" method="Delete_Key">
+            <params>
+                <param tag="namespace" value="Namespace_1" />
+                <param tag="key" value="Key_2" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_check_set_operation" />
+        </testStep>
+        <testStep testStepId="4" name="Get_Keys" method="Get_Keys">
+            <params>
+                <param tag="namespace" value="Namespace_1" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_get_keys" arguments="check_not_exists" expectedValues="Key_2" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_03" testCaseName="PersistentStore_Delete_Namespace" desc="Deletes the Namespace">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value" method="Set_Value">
+            <params>
+                <param tag="namespace" value="Namespace_2" />
+                <param tag="key" value="Key_1" />
+                <param tag="value" value="Value_1" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_check_set_operation" />
+        </testStep>
+        <testStep testStepId="2" name="Get_Namespaces" method="Get_Namespaces">
+            <resultGeneration useMethodTag="persistentstore_get_namespaces" arguments="check_if_exists" expectedValues="Namespace_2" />
+        </testStep>
+        <testStep testStepId="3" name="Delete_Namespace" method="Delete_Namespace">
+            <params>
+                <param tag="namespace" value="Namespace_2" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_check_set_operation" />
+        </testStep>
+        <testStep testStepId="4" name="Get_Namespaces" method="Get_Namespaces">
+            <resultGeneration useMethodTag="persistentstore_get_namespaces" arguments="check_not_exists" expectedValues="Namespace_2" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_04" testCaseName="PersistentStore_Get_Storage_Size" desc="Gets the storage size of the available namespaces">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Namespaces" method="Get_Namespaces">
+            <resultGeneration useMethodTag="persistentstore_get_namespaces" arguments="none" />
+        </testStep>
+        <testStep testStepId="2" name="Get_Storage_Size" method="Get_Storage_Size">
+            <resultGeneration useMethodTag="persistentstore_get_storage_size" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_05" testCaseName="PersistentStore_Flush_Cache" desc="flushes the database cache">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Flush_Cache" method="Flush_Cache">
+            <resultGeneration useMethodTag="persistentstore_check_set_operation" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_06" testCaseName="PersistentStore_On_Value_Changed_Event" desc="Sets and gets the particular key value">
+        <testCaseInfo testCaseType="loop" />
+        <testStep testStepId="1" name="check_set_value" testStepType="loop">
+            <subtestStep subtestStepId="1" name="Set_Value" method="Set_Value">
+                <params>
+                    <param tag="namespace" value="Namespace_3" />
+                    <param tag="key" value="Key_1" />
+                    <param tag="value" value="Value_1,Value_2,Value_3" iteration="true" />
+                </params>
+                <resultGeneration useMethodTag="persistentstore_check_set_operation" />
+            </subtestStep>
+            <subtestStep subtestStepId="2" name="Get_Value" method="Get_Value">
+                <params>
+                    <param tag="namespace" value="Namespace_3" />
+                    <param tag="key" value="Key_1" />
+                </params>
+                <resultGeneration useMethodTag="persistentstore_check_value">
+                    <expectedValues useIterableValue="true" />
+                </resultGeneration>
+            </subtestStep>
+            <subtestStep subtestStepId="3" name="Check_On_Value_Changed_Event" event="Event_On_Value_Changed" action="eventListener" delay="2">
+                <resultGeneration useMethodTag="persistentstore_check_on_value_changed_event">
+                    <expectedValues value="namespace_3,key_1" useIterableValue="true" />
+                </resultGeneration>
+            </subtestStep>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 07 -->
+    <testCase testCaseId="PS_07" testCaseName="PersistentStore_Set_And_Get_Storage_Limits" desc="Set and get storage limits for available namespaces">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Namespaces" method="Get_Namespaces" saveResult="true">
+            <resultGeneration useMethodTag="persistentstore_get_namespaces" arguments="none" />
+        </testStep>
+        <testStep testStepId="2" name="Delete_Namespace" method="Delete_Namespace">
+            <conditionalExecution enable="true" Id="1" useMethodTag="persistentstore_get_previous_namespace" />
+            <params>
+                <param tag="namespace" value="username" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_check_set_operation" />
+        </testStep>
+        <testStep testStepId="3" name="Set_Namespace_Storagelimit" method="Set_Namespace_Storagelimit">
+            <params>
+                <param tag="namespace" value="username" />
+                <param tag="storageLimit" value="20" />
+            </params>
+        </testStep>
+        <testStep testStepId="4" name="Get_Namespace_Storagelimit" method="Get_Namespace_Storagelimit">
+            <params>
+                <param tag="namespace" value="username" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_get_namespace_storagelimit" expectedValues="20" />
+        </testStep>
+        <testStep testStepId="5" name="Delete_Namespace" method="Delete_Namespace">
+            <params>
+                <param tag="namespace" value="username" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_check_set_operation" />
+        </testStep>
+    </testCase>
+
+    <!-- Test case 08 -->
+    <testCase testCaseId="PS_08" testCaseName="PersistentStore_Set_And_Get_Empty_Storage_Limits" desc="Verify persistent store handles empty, sets and retrieves storage namespace limits">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Namespace_Storagelimit" method="Set_Namespace_Storagelimit">
+            <params>
+                <param tag="namespace" value="" />
+                <param tag="storageLimit" value="20" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_INVALID_INPUT_LENGTH" arguments="check_message" />
+        </testStep>
+        <testStep testStepId="2" name="Get_Namespace_Storagelimit" method="Get_Namespace_Storagelimit">
+            <params>
+                <param tag="namespace" value="" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_NOT_EXIST" arguments="check_message" />
+        </testStep>
+    </testCase>
+
+    <!-- Test case 09 -->
+    <testCase testCaseId="PS_09" testCaseName="PersistentStore_SetValue_And_GetValue_API_with_Empty_Key_Operations" desc="Verify persistent store handles empty key, set and get operations across namespaces">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value" method="Set_Value">
+            <params>
+                <param tag="namespace" value="username" />
+                <param tag="key" value="" />
+                <param tag="value" value="user" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_INVALID_INPUT_LENGTH" arguments="check_message" />
+        </testStep>
+        <testStep testStepId="2" name="Get_Value" method="Get_Value">
+            <params>
+                <param tag="namespace" value="username" />
+                <param tag="key" value="" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message" />
+        </testStep>
+    </testCase>
+
+    <!-- Test case 10 -->
+    <testCase testCaseId="PS_10" testCaseName="PersistentStore_SetValue_And_GetValue_API_with_Empty_Namespce_Operations" desc="Verify persistent store handles empty namespace, set and get operations">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value" method="Set_Value">
+            <params>
+                <param tag="namespace" value="" />
+                <param tag="key" value="username" />
+                <param tag="value" value="user" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_INVALID_INPUT_LENGTH" arguments="check_message" />
+        </testStep>
+        <testStep testStepId="2" name="Get_Value" method="Get_Value">
+            <params>
+                <param tag="namespace" value="" />
+                <param tag="key" value="username" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_NOT_EXIST" arguments="check_message" />
+        </testStep>
+    </testCase>
+
+    <!-- Test case 11 -->
+    <testCase testCaseId="PS_11" testCaseName="PersistentStore_GetStorage_NamespaceLimit_For_DeletedNamespace" desc="Verify that attempting to retrieve the storage namespace limit for a namespace that has already been deleted results in an appropriate error or indication, such as a null response or a specific error message">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Namespaces" method="Get_Namespaces" saveResult="true">
+            <resultGeneration useMethodTag="persistentstore_get_namespaces" arguments="none" />
+        </testStep>
+        <testStep testStepId="2" name="Delete_Namespace" method="Delete_Namespace">
+            <conditionalExecution enable="true" Id="1" useMethodTag="persistentstore_get_previous_namespace" />
+            <params>
+                <param tag="namespace" value="username" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_check_set_operation" />
+        </testStep>
+        <testStep testStepId="3" name="Get_Namespace_Storagelimit" method="Get_Namespace_Storagelimit">
+            <params>
+                <param tag="namespace" value="username" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_NOT_EXIST" arguments="check_message" />
+        </testStep>
+    </testCase>
+
+    <!-- Test case 12 -->
+    <testCase testCaseId="PS_12" testCaseName="PersistentStore_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+        <testCaseInfo testCaseType="direct" />
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+                <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                    <params>
+                        <param tag="plugin" value="org.rdk.PersistentStore" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PersistentStore" />
+                </testStep>
+                <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PersistentStore" />
+                    <params>
+                        <param tag="callsign" value="org.rdk.PersistentStore" />
+                    </params>
+                </testStep>
+                <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.PersistentStore" />
+                    <params>
+                        <param tag="plugin" value="org.rdk.PersistentStore" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PersistentStore" expectedValues="activated" />
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+        <testStep testStepId="1" name="Deactivate_PersistentStore_Plugin" method="Deactivate_Plugin" pluginName="Controller">
+            <params>
+                <param tag="callsign" value="org.rdk.PersistentStore" />
+            </params>
+        </testStep>
+        <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+            <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.persistentstore,deactivated,requested" />
+        </testStep>
+        <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+            <params>
+                <param tag="plugin" value="org.rdk.PersistentStore" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PersistentStore" expectedValues="deactivated" />
+        </testStep>
+        <testStep testStepId="4" name="Activate_org.rdk.PersistentStore_Plugin" method="Activate_Plugin" pluginName="Controller" delay="1">
+            <params>
+                <param tag="callsign" value="org.rdk.PersistentStore" />
+            </params>
+        </testStep>
+        <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+            <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.persistentstore,activated,requested" />
+        </testStep>
+        <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes">
+            <params>
+                <param tag="plugin" value="org.rdk.PersistentStore" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.PersistentStore" expectedValues="activated" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_13" testCaseName="PersistentStore_SetValue_Invalid_Scope" desc="Set value rejects an invalid scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value_Invalid_Scope" method="Scope_Set_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="value" value="Scope_Value" />
+                <param tag="scope" value="invalid_scope" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_INVALID_INPUT_LENGTH" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_14" testCaseName="PersistentStore_SetValue_Empty_Scope" desc="Set value rejects an empty scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value_Empty_Scope" method="Scope_Set_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="value" value="Scope_Value" />
+                <param tag="scope" value="" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_INVALID_INPUT_LENGTH" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_15" testCaseName="PersistentStore_SetValue_Numeric_Scope" desc="Set value rejects a numeric scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value_Numeric_Scope" method="Numeric_Scope_Set_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="value" value="Scope_Value" />
+                <param tag="scope" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_INVALID_INPUT_LENGTH" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_16" testCaseName="PersistentStore_SetValue_Special_Scope" desc="Set value rejects special characters in scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value_Special_Scope" method="Scope_Set_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="value" value="Scope_Value" />
+                <param tag="scope" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_INVALID_INPUT_LENGTH" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_17" testCaseName="PersistentStore_SetValue_Invalid_TTL" desc="Set value rejects an invalid TTL">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value_Invalid_TTL" method="String_TTL_Set_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="value" value="Scope_Value" />
+                <param tag="scope" value="device" />
+                <param tag="ttl" value="invalid_ttl" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_INVALID_INPUT_LENGTH" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_18" testCaseName="PersistentStore_SetValue_Empty_TTL" desc="Set value rejects an empty TTL">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value_Empty_TTL" method="String_TTL_Set_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="value" value="Scope_Value" />
+                <param tag="scope" value="device" />
+                <param tag="ttl" value="" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_19" testCaseName="PersistentStore_SetValue_Negative_TTL" desc="Set value rejects a negative TTL">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value_Negative_TTL" method="Numeric_TTL_Set_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="value" value="Scope_Value" />
+                <param tag="scope" value="device" />
+                <param tag="ttl" value="-1" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_20" testCaseName="PersistentStore_SetValue_Special_TTL" desc="Set value rejects special characters in TTL">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value_Special_TTL" method="String_TTL_Set_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="value" value="Scope_Value" />
+                <param tag="scope" value="device" />
+                <param tag="ttl" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_INVALID_INPUT_LENGTH" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_21" testCaseName="PersistentStore_SetValue_Account_Invalid_TTL" desc="Set value rejects an invalid TTL">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value_Account_Invalid_TTL" method="String_TTL_Set_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="value" value="Scope_Value" />
+                <param tag="scope" value="account" />
+                <param tag="ttl" value="invalid_ttl" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_INVALID_INPUT_LENGTH" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_22" testCaseName="PersistentStore_SetValue_Account_Empty_TTL" desc="Set value rejects an empty TTL">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value_Account_Empty_TTL" method="String_TTL_Set_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="value" value="Scope_Value" />
+                <param tag="scope" value="account" />
+                <param tag="ttl" value="" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_23" testCaseName="PersistentStore_SetValue_Account_Negative_TTL" desc="Set value rejects a negative TTL">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value_Account_Negative_TTL" method="Numeric_TTL_Set_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="value" value="Scope_Value" />
+                <param tag="scope" value="account" />
+                <param tag="ttl" value="-1" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_24" testCaseName="PersistentStore_SetValue_Account_Special_TTL" desc="Set value rejects special characters in TTL">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Value_Account_Special_TTL" method="String_TTL_Set_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="value" value="Scope_Value" />
+                <param tag="scope" value="account" />
+                <param tag="ttl" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_INVALID_INPUT_LENGTH" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_25" testCaseName="PersistentStore_GetValue_Invalid_Scope" desc="GetValue rejects an invalid scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Value_Invalid_Scope" method="Scope_Get_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="scope" value="invalid_scope" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_NOT_EXIST" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_26" testCaseName="PersistentStore_GetValue_Empty_Scope" desc="GetValue rejects an empty scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Value_Empty_Scope" method="Scope_Get_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="scope" value="" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_NOT_EXIST" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_27" testCaseName="PersistentStore_GetValue_Numeric_Scope" desc="GetValue rejects a numeric scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Value_Numeric_Scope" method="Numeric_Scope_Get_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="scope" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_NOT_EXIST" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_28" testCaseName="PersistentStore_GetValue_Special_Scope" desc="GetValue rejects special characters in scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Value_Special_Scope" method="Scope_Get_Value">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="scope" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_NOT_EXIST" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_29" testCaseName="PersistentStore_GetKeys_Invalid_Scope" desc="GetKeys rejects an invalid scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Keys_Invalid_Scope" method="Scope_Get_Keys">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="scope" value="invalid_scope" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_30" testCaseName="PersistentStore_GetKeys_Empty_Scope" desc="GetKeys rejects an empty scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Keys_Empty_Scope" method="Scope_Get_Keys">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="scope" value="" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_31" testCaseName="PersistentStore_GetKeys_Numeric_Scope" desc="GetKeys rejects a numeric scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Keys_Numeric_Scope" method="Numeric_Scope_Get_Keys">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="scope" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_32" testCaseName="PersistentStore_GetKeys_Special_Scope" desc="GetKeys rejects special characters in scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Keys_Special_Scope" method="Scope_Get_Keys">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="scope" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_33" testCaseName="PersistentStore_DeleteKey_Invalid_Scope" desc="DeleteKey rejects an invalid scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Delete_Key_Invalid_Scope" method="Scope_Delete_Key">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="scope" value="invalid_scope" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_34" testCaseName="PersistentStore_DeleteKey_Empty_Scope" desc="DeleteKey rejects an empty scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Delete_Key_Empty_Scope" method="Scope_Delete_Key">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="scope" value="" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_35" testCaseName="PersistentStore_DeleteKey_Numeric_Scope" desc="DeleteKey rejects a numeric scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Delete_Key_Numeric_Scope" method="Numeric_Scope_Delete_Key">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="scope" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_36" testCaseName="PersistentStore_DeleteKey_Special_Scope" desc="DeleteKey rejects special characters in scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Delete_Key_Special_Scope" method="Scope_Delete_Key">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="key" value="Scope_Key" />
+                <param tag="scope" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_37" testCaseName="PersistentStore_DeleteNamespace_Invalid_Scope" desc="DeleteNamespace rejects an invalid scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Delete_Namespace_Invalid_Scope" method="Scope_Delete_Namespace">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="scope" value="invalid_scope" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_38" testCaseName="PersistentStore_DeleteNamespace_Empty_Scope" desc="DeleteNamespace rejects an empty scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Delete_Namespace_Empty_Scope" method="Scope_Delete_Namespace">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="scope" value="" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_39" testCaseName="PersistentStore_DeleteNamespace_Numeric_Scope" desc="DeleteNamespace rejects a numeric scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Delete_Namespace_Numeric_Scope" method="Numeric_Scope_Delete_Namespace">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="scope" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_40" testCaseName="PersistentStore_DeleteNamespace_Special_Scope" desc="DeleteNamespace rejects special characters in scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Delete_Namespace_Special_Scope" method="Scope_Delete_Namespace">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="scope" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_41" testCaseName="PersistentStore_GetNamespaces_Invalid_Scope" desc="GetNamespaces rejects an invalid scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Namespaces_Invalid_Scope" method="Scope_Get_Namespaces">
+            <params>
+                <param tag="scope" value="invalid_scope" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_42" testCaseName="PersistentStore_GetNamespaces_Empty_Scope" desc="GetNamespaces rejects an empty scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Namespaces_Empty_Scope" method="Scope_Get_Namespaces">
+            <params>
+                <param tag="scope" value="" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_43" testCaseName="PersistentStore_GetNamespaces_Numeric_Scope" desc="GetNamespaces rejects a numeric scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Namespaces_Numeric_Scope" method="Numeric_Scope_Get_Namespaces">
+            <params>
+                <param tag="scope" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_44" testCaseName="PersistentStore_GetNamespaces_Special_Scope" desc="GetNamespaces rejects special characters in scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Namespaces_Special_Scope" method="Scope_Get_Namespaces">
+            <params>
+                <param tag="scope" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_45" testCaseName="PersistentStore_GetStorageSize_Invalid_Scope" desc="GetStorageSizes rejects an invalid scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Storage_Size_Invalid_Scope" method="Scope_Get_Storage_Size">
+            <params>
+                <param tag="scope" value="invalid_scope" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_46" testCaseName="PersistentStore_GetStorageSize_Empty_Scope" desc="GetStorageSizes rejects an empty scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Storage_Size_Empty_Scope" method="Scope_Get_Storage_Size">
+            <params>
+                <param tag="scope" value="" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_47" testCaseName="PersistentStore_GetStorageSize_Numeric_Scope" desc="GetStorageSizes rejects a numeric scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Storage_Size_Numeric_Scope" method="Numeric_Scope_Get_Storage_Size">
+            <params>
+                <param tag="scope" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_48" testCaseName="PersistentStore_GetStorageSize_Special_Scope" desc="GetStorageSizes rejects special characters in scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Storage_Size_Special_Scope" method="Scope_Get_Storage_Size">
+            <params>
+                <param tag="scope" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_49" testCaseName="PersistentStore_SetNamespaceStorageLimit_Invalid_Scope" desc="setNamespaceStorageLimit rejects an invalid scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Storage_Limit_Invalid_Scope" method="Scope_Set_Namespace_Storagelimit">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="storageLimit" value="20" />
+                <param tag="scope" value="invalid_scope" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_INVALID_INPUT_LENGTH" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_50" testCaseName="PersistentStore_SetNamespaceStorageLimit_Empty_Scope" desc="setNamespaceStorageLimit rejects an empty scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Storage_Limit_Empty_Scope" method="Scope_Set_Namespace_Storagelimit">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="storageLimit" value="20" />
+                <param tag="scope" value="" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_INVALID_INPUT_LENGTH" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_51" testCaseName="PersistentStore_SetNamespaceStorageLimit_Numeric_Scope" desc="setNamespaceStorageLimit rejects a numeric scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Storage_Limit_Numeric_Scope" method="Numeric_Scope_Set_Namespace_Storagelimit">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="storageLimit" value="20" />
+                <param tag="scope" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_INVALID_INPUT_LENGTH" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_52" testCaseName="PersistentStore_SetNamespaceStorageLimit_Special_Scope" desc="setNamespaceStorageLimit rejects special characters in scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Storage_Limit_Special_Scope" method="Scope_Set_Namespace_Storagelimit">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="storageLimit" value="20" />
+                <param tag="scope" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_INVALID_INPUT_LENGTH" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_53" testCaseName="PersistentStore_GetNamespaceStorageLimit_Invalid_Scope" desc="getNamespaceStorageLimit rejects an invalid scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Storage_Limit_Invalid_Scope" method="Scope_Get_Namespace_Storagelimit">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="scope" value="invalid_scope" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_NOT_EXIST" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_54" testCaseName="PersistentStore_GetNamespaceStorageLimit_Empty_Scope" desc="getNamespaceStorageLimit rejects an empty scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Storage_Limit_Empty_Scope" method="Scope_Get_Namespace_Storagelimit">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="scope" value="" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_NOT_EXIST" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_55" testCaseName="PersistentStore_GetNamespaceStorageLimit_Numeric_Scope" desc="getNamespaceStorageLimit rejects a numeric scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Storage_Limit_Numeric_Scope" method="Numeric_Scope_Get_Namespace_Storagelimit">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="scope" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_NOT_EXIST" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="PS_56" testCaseName="PersistentStore_GetNamespaceStorageLimit_Special_Scope" desc="getNamespaceStorageLimit rejects special characters in scope">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Storage_Limit_Special_Scope" method="Scope_Get_Namespace_Storagelimit">
+            <params>
+                <param tag="namespace" value="Scope_Namespace" />
+                <param tag="scope" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="persistentstore_negative_scenario_validation" expectedValues="ERROR_NOT_EXIST" />
+        </testStep>
+    </testCase>
 </testPlugin>
