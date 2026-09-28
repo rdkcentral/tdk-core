@@ -62,6 +62,53 @@ RDKV_CERT_AVS_System
    - [System_Invalid_TimeZone_ErrorValidation](#system_invalid_timezone_errorvalidation)
    - [System_Invalid_Key_ErrorMessage](#system_invalid_key_errormessage)
    - [System_GetPlatformConfiguration_Invalid_Query](#system_getplatformconfiguration_invalid_query)
+   - [System_GetPlatformConfiguration_Invalid_Query](#system_getplatformconfiguration_invalid_query-2)
+   - [System_GetPlatformConfiguration_Empty_Query](#system_getplatformconfiguration_empty_query)
+   - [System_GetPlatformConfiguration_Numeric_Query](#system_getplatformconfiguration_numeric_query)
+   - [System_GetPlatformConfiguration_Special_Chars_Query](#system_getplatformconfiguration_special_chars_query)
+   - [System_GetPlatformConfiguration_Without_Params](#system_getplatformconfiguration_without_params)
+   - [System_GetRFCConfig_Invalid_RFCList_Value](#system_getrfcconfig_invalid_rfclist_value)
+   - [System_GetRFCConfig_Numeric_RFCList_Value](#system_getrfcconfig_numeric_rfclist_value)
+   - [System_GetRFCConfig_Special_Chars_RFCList_Value](#system_getrfcconfig_special_chars_rfclist_value)
+   - [System_GetRFCConfig_Without_Params](#system_getrfcconfig_without_params)
+   - [System_SetMode_Empty_Mode](#system_setmode_empty_mode)
+   - [System_SetMode_Numeric_Mode](#system_setmode_numeric_mode)
+   - [System_SetMode_Special_Chars_Mode](#system_setmode_special_chars_mode)
+   - [System_SetMode_Invalid_Duration](#system_setmode_invalid_duration)
+   - [System_SetMode_Empty_Duration](#system_setmode_empty_duration)
+   - [System_SetMode_Numeric_Duration](#system_setmode_numeric_duration)
+   - [System_SetMode_Special_Chars_Duration](#system_setmode_special_chars_duration)
+   - [System_SetMode_Without_Params](#system_setmode_without_params)
+   - [System_SetOptOutTelemetry_Invalid_Value](#system_setoptouttelemetry_invalid_value)
+   - [System_SetOptOutTelemetry_Empty_Value](#system_setoptouttelemetry_empty_value)
+   - [System_SetOptOutTelemetry_Numeric_Value](#system_setoptouttelemetry_numeric_value)
+   - [System_SetOptOutTelemetry_Special_Chars_Value](#system_setoptouttelemetry_special_chars_value)
+   - [System_SetOptOutTelemetry_Without_Params](#system_setoptouttelemetry_without_params)
+   - [System_SetPowerState_Empty_PowerState](#system_setpowerstate_empty_powerstate)
+   - [System_SetPowerState_Numeric_PowerState](#system_setpowerstate_numeric_powerstate)
+   - [System_SetPowerState_Special_Chars_PowerState](#system_setpowerstate_special_chars_powerstate)
+   - [System_SetPowerState_Without_Params](#system_setpowerstate_without_params)
+   - [System_SetFriendlyName_Without_Params](#system_setfriendlyname_without_params)
+   - [System_SetBootLoaderSplashScreen_Valid_Path](#system_setbootloadersplashscreen_valid_path)
+   - [System_SetBootLoaderSplashScreen_Invalid_Path](#system_setbootloadersplashscreen_invalid_path)
+   - [System_SetBootLoaderSplashScreen_Empty_Path](#system_setbootloadersplashscreen_empty_path)
+   - [System_SetBootLoaderSplashScreen_Numeric_Path](#system_setbootloadersplashscreen_numeric_path)
+   - [System_SetBootLoaderSplashScreen_Special_Chars_Path](#system_setbootloadersplashscreen_special_chars_path)
+   - [System_SetBootLoaderSplashScreen_Without_Params](#system_setbootloadersplashscreen_without_params)
+   - [System_SetTimeZoneDST_Invalid_TimeZone](#system_settimezonedst_invalid_timezone)
+   - [System_SetTimeZoneDST_Numeric_TimeZone](#system_settimezonedst_numeric_timezone)
+   - [System_SetTimeZoneDST_Special_Chars_TimeZone](#system_settimezonedst_special_chars_timezone)
+   - [System_SetTimeZoneDST_Without_Params](#system_settimezonedst_without_params)
+   - [System_SetFSRFlag_Toggle](#system_setfsrflag_toggle)
+   - [System_SetMigrationStatus_Valid_Status](#system_setmigrationstatus_valid_status)
+   - [System_SetBlocklistFlag_Toggle](#system_setblocklistflag_toggle)
+   - [System_Set_Special_Chars_Territory_And_Region](#system_set_special_chars_territory_and_region)
+   - [System_Set_Special_Chars_Territory_And_Valid_Region](#system_set_special_chars_territory_and_valid_region)
+   - [System_Set_Valid_Territory_And_Special_Chars_Region](#system_set_valid_territory_and_special_chars_region)
+   - [System_Set_Numeric_Territory_And_Region](#system_set_numeric_territory_and_region)
+   - [System_Set_Numeric_Territory_And_Valid_Region](#system_set_numeric_territory_and_valid_region)
+   - [System_Set_Valid_Territory_And_Numeric_Region](#system_set_valid_territory_and_numeric_region)
+   - [System_Set_Territory_Without_Territory_Param](#system_set_territory_without_territory_param)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -114,6 +161,7 @@ accessible via JSON-RPC under the callsign `org.rdk.System` (version 1)
 | 14 | Configure firmware filename | `FIRMWARE_FILENAME` must be set to the target firmware image filename for the XCONF upgrade test | The `FIRMWARE_FILENAME` value should be correctly configured in the device-specific config file |
 | 15 | Configure firmware location | `FIRMWARE_LOCATION` must be set to the base URL of the server hosting the firmware image | The `FIRMWARE_LOCATION` value should be correctly configured in the device-specific config file |
 | 16 | Configure firmware version | `FIRMWARE_VERSION` must be set to the target firmware version expected after the XCONF upgrade | The `FIRMWARE_VERSION` value should be correctly configured in the device-specific config file |
+| 17 | Configure splash screen path | `SYSTEM_SPLASH_SCREEN_PATH` must be set to the splash screen image file path on the DUT | The `SYSTEM_SPLASH_SCREEN_PATH` value should be correctly configured in the device-specific config file |
 ## Test Cases
 
 <a id="system_get_estb_mac"></a>
@@ -1264,6 +1312,855 @@ Validates negative scenario for getPlatformConfiguration with invalid query valu
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Get platform configuration with invalid query | Invoke getPlatformConfiguration on org.rdk.System with query: "INVALID.QUERY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "INVALID.QUERY"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getPlatformConfiguration` returns an error response with `success: false` for the invalid query `"INVALID.QUERY"`  |
+
+---
+
+<a id="system_getplatformconfiguration_invalid_query-2"></a>
+### TestCase Name
+System_GetPlatformConfiguration_Invalid_Query
+
+### TestCase ID
+SYS_57
+
+### TestCase Objective
+Validates negative scenario for getPlatformConfiguration with invalid query value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get platform configuration with invalid query | Invoke getPlatformConfiguration on org.rdk.System with query: "INVALID.QUERY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "INVALID.QUERY"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getPlatformConfiguration` returns an error response with `success: false` for the invalid query value `"INVALID.QUERY"` |
+
+---
+
+<a id="system_getplatformconfiguration_empty_query"></a>
+### TestCase Name
+System_GetPlatformConfiguration_Empty_Query
+
+### TestCase ID
+SYS_58
+
+### TestCase Objective
+Validates negative scenario for getPlatformConfiguration with empty query value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get platform configuration with empty query | Invoke getPlatformConfiguration on org.rdk.System with query: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getPlatformConfiguration` returns an error response with `success: false` for the empty query value |
+
+---
+
+<a id="system_getplatformconfiguration_numeric_query"></a>
+### TestCase Name
+System_GetPlatformConfiguration_Numeric_Query
+
+### TestCase ID
+SYS_59
+
+### TestCase Objective
+Validates negative scenario for getPlatformConfiguration with numeric query value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get platform configuration with numeric query | Invoke getPlatformConfiguration on org.rdk.System with query: 123<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": 123}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getPlatformConfiguration` returns an error response with `success: false` for the numeric query value `123` |
+
+---
+
+<a id="system_getplatformconfiguration_special_chars_query"></a>
+### TestCase Name
+System_GetPlatformConfiguration_Special_Chars_Query
+
+### TestCase ID
+SYS_60
+
+### TestCase Objective
+Validates negative scenario for getPlatformConfiguration with special characters query value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get platform configuration with special characters query | Invoke getPlatformConfiguration on org.rdk.System with query: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getPlatformConfiguration` returns an error response with `success: false` for the special characters query value `"()^*!"` |
+
+---
+
+<a id="system_getplatformconfiguration_without_params"></a>
+### TestCase Name
+System_GetPlatformConfiguration_Without_Params
+
+### TestCase ID
+SYS_61
+
+### TestCase Objective
+Validates negative scenario for getPlatformConfiguration with no query parameter
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get platform configuration without parameters | Invoke getPlatformConfiguration on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration"}' http://127.0.0.1:9998/jsonrpc` | Verify that `getPlatformConfiguration` returns an error response with `success: false` when the `query` parameter is not provided |
+
+---
+
+<a id="system_getrfcconfig_invalid_rfclist_value"></a>
+### TestCase Name
+System_GetRFCConfig_Invalid_RFCList_Value
+
+### TestCase ID
+SYS_62
+
+### TestCase Objective
+Validates negative scenario for getRFCConfig with invalid rfcList value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get RFC config with invalid rfcList | Invoke getRFCConfig on org.rdk.System with rfcList: "INVALID_RFC_PARAM"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getRFCConfig", "params": {"rfcList": "INVALID_RFC_PARAM"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getRFCConfig` returns an error response with `success: false` for the invalid rfcList value `"INVALID_RFC_PARAM"` |
+
+---
+
+<a id="system_getrfcconfig_numeric_rfclist_value"></a>
+### TestCase Name
+System_GetRFCConfig_Numeric_RFCList_Value
+
+### TestCase ID
+SYS_63
+
+### TestCase Objective
+Validates negative scenario for getRFCConfig with numeric rfcList value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get RFC config with numeric rfcList | Invoke getRFCConfig on org.rdk.System with rfcList: 123<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getRFCConfig", "params": {"rfcList": 123}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getRFCConfig` returns an error response with `success: false` for the numeric rfcList value `123` |
+
+---
+
+<a id="system_getrfcconfig_special_chars_rfclist_value"></a>
+### TestCase Name
+System_GetRFCConfig_Special_Chars_RFCList_Value
+
+### TestCase ID
+SYS_64
+
+### TestCase Objective
+Validates negative scenario for getRFCConfig with special characters rfcList value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get RFC config with special characters rfcList | Invoke getRFCConfig on org.rdk.System with rfcList: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getRFCConfig", "params": {"rfcList": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getRFCConfig` returns an error response with `success: false` for the special characters rfcList value `"()^*!"` |
+
+---
+
+<a id="system_getrfcconfig_without_params"></a>
+### TestCase Name
+System_GetRFCConfig_Without_Params
+
+### TestCase ID
+SYS_65
+
+### TestCase Objective
+Validates negative scenario for getRFCConfig with no rfcList parameter
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get RFC config without parameters | Invoke getRFCConfig on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getRFCConfig"}' http://127.0.0.1:9998/jsonrpc` | Verify that `getRFCConfig` returns an error response with `success: false` when the `rfcList` parameter is not provided |
+
+---
+
+<a id="system_setmode_empty_mode"></a>
+### TestCase Name
+System_SetMode_Empty_Mode
+
+### TestCase ID
+SYS_66
+
+### TestCase Objective
+Validates negative scenario for setMode with empty mode value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set mode with empty mode value | Invoke setMode on org.rdk.System with mode: "", duration: 0<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"mode": "", "duration": 0}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setMode` returns an error response with `success: false` for the empty mode value |
+
+---
+
+<a id="system_setmode_numeric_mode"></a>
+### TestCase Name
+System_SetMode_Numeric_Mode
+
+### TestCase ID
+SYS_67
+
+### TestCase Objective
+Validates negative scenario for setMode with numeric mode value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set mode with numeric mode value | Invoke setMode on org.rdk.System with mode: 123, duration: 0<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"mode": 123, "duration": 0}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setMode` returns an error response with `success: false` for the numeric mode value `123` |
+
+---
+
+<a id="system_setmode_special_chars_mode"></a>
+### TestCase Name
+System_SetMode_Special_Chars_Mode
+
+### TestCase ID
+SYS_68
+
+### TestCase Objective
+Validates negative scenario for setMode with special characters mode value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set mode with special characters mode value | Invoke setMode on org.rdk.System with mode: "()^*!", duration: 0<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"mode": "()^*!", "duration": 0}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setMode` returns an error response with `success: false` for the special characters mode value `"()^*!"` |
+
+---
+
+<a id="system_setmode_invalid_duration"></a>
+### TestCase Name
+System_SetMode_Invalid_Duration
+
+### TestCase ID
+SYS_69
+
+### TestCase Objective
+Validates negative scenario for setMode with invalid duration value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set mode with invalid duration value | Invoke setMode on org.rdk.System with mode: "NORMAL", duration: "INVALID_DURATION"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"mode": "NORMAL", "duration": "INVALID_DURATION"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setMode` returns an error response with `success: false` for the invalid duration value `"INVALID_DURATION"` |
+
+---
+
+<a id="system_setmode_empty_duration"></a>
+### TestCase Name
+System_SetMode_Empty_Duration
+
+### TestCase ID
+SYS_70
+
+### TestCase Objective
+Validates negative scenario for setMode with empty duration value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set mode with empty duration value | Invoke setMode on org.rdk.System with mode: "NORMAL", duration: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"mode": "NORMAL", "duration": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setMode` returns an error response with `success: false` for the empty duration value |
+
+---
+
+<a id="system_setmode_numeric_duration"></a>
+### TestCase Name
+System_SetMode_Numeric_Duration
+
+### TestCase ID
+SYS_71
+
+### TestCase Objective
+Validates negative scenario for setMode with numeric duration value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set mode with numeric duration value | Invoke setMode on org.rdk.System with mode: "NORMAL", duration: 123<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"mode": "NORMAL", "duration": 123}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setMode` returns an error response with `success: false` for the numeric duration value `123` |
+
+---
+
+<a id="system_setmode_special_chars_duration"></a>
+### TestCase Name
+System_SetMode_Special_Chars_Duration
+
+### TestCase ID
+SYS_72
+
+### TestCase Objective
+Validates negative scenario for setMode with special characters duration value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set mode with special characters duration value | Invoke setMode on org.rdk.System with mode: "NORMAL", duration: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"mode": "NORMAL", "duration": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setMode` returns an error response with `success: false` for the special characters duration value `"()^*!"` |
+
+---
+
+<a id="system_setmode_without_params"></a>
+### TestCase Name
+System_SetMode_Without_Params
+
+### TestCase ID
+SYS_73
+
+### TestCase Objective
+Validates negative scenario for setMode with no parameters
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set mode without parameters | Invoke setMode on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode"}' http://127.0.0.1:9998/jsonrpc` | Verify that `setMode` returns an error response with `success: false` when the `mode` and `duration` parameters are not provided |
+
+---
+
+<a id="system_setoptouttelemetry_invalid_value"></a>
+### TestCase Name
+System_SetOptOutTelemetry_Invalid_Value
+
+### TestCase ID
+SYS_74
+
+### TestCase Objective
+Validates negative scenario for setOptOutTelemetry with invalid string value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set OptOut telemetry with invalid value | Invoke setOptOutTelemetry on org.rdk.System with Opt-Out: "INVALID"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setOptOutTelemetry", "params": {"Opt-Out": "INVALID"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setOptOutTelemetry` returns an error response with `success: false` for the invalid Opt-Out value `"INVALID"` |
+
+---
+
+<a id="system_setoptouttelemetry_empty_value"></a>
+### TestCase Name
+System_SetOptOutTelemetry_Empty_Value
+
+### TestCase ID
+SYS_75
+
+### TestCase Objective
+Validates negative scenario for setOptOutTelemetry with empty value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set OptOut telemetry with empty value | Invoke setOptOutTelemetry on org.rdk.System with Opt-Out: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setOptOutTelemetry", "params": {"Opt-Out": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setOptOutTelemetry` returns an error response with `success: false` for the empty Opt-Out value |
+
+---
+
+<a id="system_setoptouttelemetry_numeric_value"></a>
+### TestCase Name
+System_SetOptOutTelemetry_Numeric_Value
+
+### TestCase ID
+SYS_76
+
+### TestCase Objective
+Validates negative scenario for setOptOutTelemetry with numeric value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set OptOut telemetry with numeric value | Invoke setOptOutTelemetry on org.rdk.System with Opt-Out: 123<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setOptOutTelemetry", "params": {"Opt-Out": 123}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setOptOutTelemetry` returns an error response with `success: false` for the numeric Opt-Out value `123` |
+
+---
+
+<a id="system_setoptouttelemetry_special_chars_value"></a>
+### TestCase Name
+System_SetOptOutTelemetry_Special_Chars_Value
+
+### TestCase ID
+SYS_77
+
+### TestCase Objective
+Validates negative scenario for setOptOutTelemetry with special characters value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set OptOut telemetry with special characters value | Invoke setOptOutTelemetry on org.rdk.System with Opt-Out: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setOptOutTelemetry", "params": {"Opt-Out": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setOptOutTelemetry` returns an error response with `success: false` for the special characters Opt-Out value `"()^*!"` |
+
+---
+
+<a id="system_setoptouttelemetry_without_params"></a>
+### TestCase Name
+System_SetOptOutTelemetry_Without_Params
+
+### TestCase ID
+SYS_78
+
+### TestCase Objective
+Validates negative scenario for setOptOutTelemetry with no parameters
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set OptOut telemetry without parameters | Invoke setOptOutTelemetry on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setOptOutTelemetry"}' http://127.0.0.1:9998/jsonrpc` | Verify that `setOptOutTelemetry` returns an error response with `success: false` when the `Opt-Out` parameter is not provided |
+
+---
+
+<a id="system_setpowerstate_empty_powerstate"></a>
+### TestCase Name
+System_SetPowerState_Empty_PowerState
+
+### TestCase ID
+SYS_79
+
+### TestCase Objective
+Validates negative scenario for setPowerState with empty powerState value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set power state with empty powerState value | Invoke setPowerState on org.rdk.System with powerState: "", standbyReason: "APIUnitTest"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"powerState": "", "standbyReason": "APIUnitTest"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setPowerState` returns an error response with `success: false` for the empty powerState value |
+
+---
+
+<a id="system_setpowerstate_numeric_powerstate"></a>
+### TestCase Name
+System_SetPowerState_Numeric_PowerState
+
+### TestCase ID
+SYS_80
+
+### TestCase Objective
+Validates negative scenario for setPowerState with numeric powerState value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set power state with numeric powerState value | Invoke setPowerState on org.rdk.System with powerState: 123, standbyReason: "APIUnitTest"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"powerState": 123, "standbyReason": "APIUnitTest"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setPowerState` returns an error response with `success: false` for the numeric powerState value `123` |
+
+---
+
+<a id="system_setpowerstate_special_chars_powerstate"></a>
+### TestCase Name
+System_SetPowerState_Special_Chars_PowerState
+
+### TestCase ID
+SYS_81
+
+### TestCase Objective
+Validates negative scenario for setPowerState with special characters powerState value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set power state with special characters powerState value | Invoke setPowerState on org.rdk.System with powerState: "()^*!", standbyReason: "APIUnitTest"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"powerState": "()^*!", "standbyReason": "APIUnitTest"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setPowerState` returns an error response with `success: false` for the special characters powerState value `"()^*!"` |
+
+---
+
+<a id="system_setpowerstate_without_params"></a>
+### TestCase Name
+System_SetPowerState_Without_Params
+
+### TestCase ID
+SYS_82
+
+### TestCase Objective
+Validates negative scenario for setPowerState with no parameters
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set power state without parameters | Invoke setPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that `setPowerState` returns an error response with `success: false` when the `powerState` parameter is not provided |
+
+---
+
+<a id="system_setfriendlyname_without_params"></a>
+### TestCase Name
+System_SetFriendlyName_Without_Params
+
+### TestCase ID
+SYS_83
+
+### TestCase Objective
+Validates negative scenario for setFriendlyName with no parameters
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set friendly name without parameters | Invoke setFriendlyName on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setFriendlyName"}' http://127.0.0.1:9998/jsonrpc` | Verify that `setFriendlyName` returns an error response with `success: false` when the `friendlyName` parameter is not provided |
+
+---
+
+<a id="system_setbootloadersplashscreen_valid_path"></a>
+### TestCase Name
+System_SetBootLoaderSplashScreen_Valid_Path
+
+### TestCase ID
+SYS_84
+
+### TestCase Objective
+Sets the boot loader splash screen with a valid path
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set boot loader splash screen | *(Executed only if the DUT supports the `SplashScreenPath` feature listed in `SYSTEM_DEVICE_FEATURES`)*<br>Invoke setBootLoaderSplashScreen on org.rdk.System with path: "<SYSTEM_SPLASH_SCREEN_PATH>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setBootLoaderSplashScreen", "params": {"path": "<SYSTEM_SPLASH_SCREEN_PATH>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the boot loader splash screen is set successfully (`success` : `true`) |
+
+---
+
+<a id="system_setbootloadersplashscreen_invalid_path"></a>
+### TestCase Name
+System_SetBootLoaderSplashScreen_Invalid_Path
+
+### TestCase ID
+SYS_85
+
+### TestCase Objective
+Validates negative scenario for setBootLoaderSplashScreen with invalid path value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set boot loader splash screen with invalid path | Invoke setBootLoaderSplashScreen on org.rdk.System with path: "/invalid/nonexistent/splash.osd"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setBootLoaderSplashScreen", "params": {"path": "/invalid/nonexistent/splash.osd"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setBootLoaderSplashScreen` returns an error response with `success: false` for the invalid path value `"/invalid/nonexistent/splash.osd"` |
+
+---
+
+<a id="system_setbootloadersplashscreen_empty_path"></a>
+### TestCase Name
+System_SetBootLoaderSplashScreen_Empty_Path
+
+### TestCase ID
+SYS_86
+
+### TestCase Objective
+Validates negative scenario for setBootLoaderSplashScreen with empty path value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set boot loader splash screen with empty path | Invoke setBootLoaderSplashScreen on org.rdk.System with path: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setBootLoaderSplashScreen", "params": {"path": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setBootLoaderSplashScreen` returns an error response with `success: false` for the empty path value |
+
+---
+
+<a id="system_setbootloadersplashscreen_numeric_path"></a>
+### TestCase Name
+System_SetBootLoaderSplashScreen_Numeric_Path
+
+### TestCase ID
+SYS_87
+
+### TestCase Objective
+Validates negative scenario for setBootLoaderSplashScreen with numeric path value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set boot loader splash screen with numeric path | Invoke setBootLoaderSplashScreen on org.rdk.System with path: 123<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setBootLoaderSplashScreen", "params": {"path": 123}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setBootLoaderSplashScreen` returns an error response with `success: false` for the numeric path value `123` |
+
+---
+
+<a id="system_setbootloadersplashscreen_special_chars_path"></a>
+### TestCase Name
+System_SetBootLoaderSplashScreen_Special_Chars_Path
+
+### TestCase ID
+SYS_88
+
+### TestCase Objective
+Validates negative scenario for setBootLoaderSplashScreen with special characters path value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set boot loader splash screen with special characters path | Invoke setBootLoaderSplashScreen on org.rdk.System with path: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setBootLoaderSplashScreen", "params": {"path": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setBootLoaderSplashScreen` returns an error response with `success: false` for the special characters path value `"()^*!"` |
+
+---
+
+<a id="system_setbootloadersplashscreen_without_params"></a>
+### TestCase Name
+System_SetBootLoaderSplashScreen_Without_Params
+
+### TestCase ID
+SYS_89
+
+### TestCase Objective
+Validates negative scenario for setBootLoaderSplashScreen with no path parameter
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set boot loader splash screen without parameters | Invoke setBootLoaderSplashScreen on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setBootLoaderSplashScreen"}' http://127.0.0.1:9998/jsonrpc` | Verify that `setBootLoaderSplashScreen` returns an error response with `success: false` when the `path` parameter is not provided |
+
+---
+
+<a id="system_settimezonedst_invalid_timezone"></a>
+### TestCase Name
+System_SetTimeZoneDST_Invalid_TimeZone
+
+### TestCase ID
+SYS_90
+
+### TestCase Objective
+Validates negative scenario for setTimeZoneDST with invalid timeZone value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set TimeZone DST with invalid timeZone | Invoke setTimeZoneDST on org.rdk.System with timeZone: "Invalid/TimeZone"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTimeZoneDST", "params": {"timeZone": "Invalid/TimeZone"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setTimeZoneDST` returns an error response with `success: false` for the invalid timeZone value `"Invalid/TimeZone"` |
+
+---
+
+<a id="system_settimezonedst_numeric_timezone"></a>
+### TestCase Name
+System_SetTimeZoneDST_Numeric_TimeZone
+
+### TestCase ID
+SYS_91
+
+### TestCase Objective
+Validates negative scenario for setTimeZoneDST with numeric timeZone value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set TimeZone DST with numeric timeZone | Invoke setTimeZoneDST on org.rdk.System with timeZone: 123<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTimeZoneDST", "params": {"timeZone": 123}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setTimeZoneDST` returns an error response with `success: false` for the numeric timeZone value `123` |
+
+---
+
+<a id="system_settimezonedst_special_chars_timezone"></a>
+### TestCase Name
+System_SetTimeZoneDST_Special_Chars_TimeZone
+
+### TestCase ID
+SYS_92
+
+### TestCase Objective
+Validates negative scenario for setTimeZoneDST with special characters timeZone value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set TimeZone DST with special characters timeZone | Invoke setTimeZoneDST on org.rdk.System with timeZone: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTimeZoneDST", "params": {"timeZone": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setTimeZoneDST` returns an error response with `success: false` for the special characters timeZone value `"()^*!"` |
+
+---
+
+<a id="system_settimezonedst_without_params"></a>
+### TestCase Name
+System_SetTimeZoneDST_Without_Params
+
+### TestCase ID
+SYS_93
+
+### TestCase Objective
+Validates negative scenario for setTimeZoneDST with no timeZone parameter
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set TimeZone DST without parameters | Invoke setTimeZoneDST on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTimeZoneDST"}' http://127.0.0.1:9998/jsonrpc` | Verify that `setTimeZoneDST` returns an error response with `success: false` when the `timeZone` parameter is not provided |
+
+---
+
+<a id="system_setfsrflag_toggle"></a>
+### TestCase Name
+System_SetFSRFlag_Toggle
+
+### TestCase ID
+SYS_94
+
+### TestCase Objective
+Reads current FSR flag value and sets it to the opposite value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get FSR flag | Invoke getFSRFlag on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getFSRFlag"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current FSR flag is returned as `true` or `false` and saved as the baseline for toggle |
+| 2 | Set FSR flag | *(Toggles the `fsrFlag` value from Step 1: if Step 1 returned `true`, sets `false`; if `false`, sets `true`)*<br>Invoke setFSRFlag on org.rdk.System with fsrFlag: <toggled_value_from_step_1><br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setFSRFlag", "params": {"fsrFlag": <toggled_value_from_step_1>}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the FSR flag is set successfully (`success` : `true`) |
+
+---
+
+<a id="system_setmigrationstatus_valid_status"></a>
+### TestCase Name
+System_SetMigrationStatus_Valid_Status
+
+### TestCase ID
+SYS_95
+
+### TestCase Objective
+Sets the migration status with a valid status value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set migration status | Invoke setMigrationStatus on org.rdk.System with status: "NOT_STARTED"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMigrationStatus", "params": {"status": "NOT_STARTED"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the migration status is set successfully (`success` : `true`) |
+| 2 | Get migration status | Invoke getMigrationStatus on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getMigrationStatus"}' http://127.0.0.1:9998/jsonrpc` | Verify that the migration status returned is `"NOT_STARTED"`, confirming the value was set correctly |
+
+---
+
+<a id="system_setblocklistflag_toggle"></a>
+### TestCase Name
+System_SetBlocklistFlag_Toggle
+
+### TestCase ID
+SYS_96
+
+### TestCase Objective
+Reads current blocklist flag value and sets it to the opposite value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get blocklist flag | Invoke getBlocklistFlag on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getBlocklistFlag"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current blocklist flag is returned as `true` or `false` and saved as the baseline for toggle |
+| 2 | Set blocklist flag | *(Toggles the `blocklist` value from Step 1: if Step 1 returned `true`, sets `false`; if `false`, sets `true`)*<br>Invoke setBlocklistFlag on org.rdk.System with blocklist: <toggled_value_from_step_1><br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setBlocklistFlag", "params": {"blocklist": <toggled_value_from_step_1>}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the blocklist flag is set successfully (`success` : `true`) |
+
+---
+
+<a id="system_set_special_chars_territory_and_region"></a>
+### TestCase Name
+System_Set_Special_Chars_Territory_And_Region
+
+### TestCase ID
+SYS_97
+
+### TestCase Objective
+Sets special characters territory and region
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | System set special characters territory and region | Invoke setTerritory on org.rdk.System with territory: "()^*!", region: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "()^*!", "region": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="system_set_special_chars_territory_and_valid_region"></a>
+### TestCase Name
+System_Set_Special_Chars_Territory_And_Valid_Region
+
+### TestCase ID
+SYS_98
+
+### TestCase Objective
+Sets special characters territory with valid region
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | System set special characters territory and valid region | Invoke setTerritory on org.rdk.System with territory: "()^*!", region: "US-AS"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "()^*!", "region": "US-AS"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="system_set_valid_territory_and_special_chars_region"></a>
+### TestCase Name
+System_Set_Valid_Territory_And_Special_Chars_Region
+
+### TestCase ID
+SYS_99
+
+### TestCase Objective
+Sets valid territory with special characters region
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | System set valid territory and special characters region | Invoke setTerritory on org.rdk.System with territory: "CHN", region: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "CHN", "region": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="system_set_numeric_territory_and_region"></a>
+### TestCase Name
+System_Set_Numeric_Territory_And_Region
+
+### TestCase ID
+SYS_100
+
+### TestCase Objective
+Sets numeric territory and region
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | System set numeric territory and region | Invoke setTerritory on org.rdk.System with territory: 123, region: 123<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": 123, "region": 123}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="system_set_numeric_territory_and_valid_region"></a>
+### TestCase Name
+System_Set_Numeric_Territory_And_Valid_Region
+
+### TestCase ID
+SYS_101
+
+### TestCase Objective
+Sets numeric territory with valid region
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | System set numeric territory and valid region | Invoke setTerritory on org.rdk.System with territory: 123, region: "US-AS"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": 123, "region": "US-AS"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="system_set_valid_territory_and_numeric_region"></a>
+### TestCase Name
+System_Set_Valid_Territory_And_Numeric_Region
+
+### TestCase ID
+SYS_102
+
+### TestCase Objective
+Sets valid territory with numeric region
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | System set valid territory and numeric region | Invoke setTerritory on org.rdk.System with territory: "CHN", region: 123<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "CHN", "region": 123}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="system_set_territory_without_territory_param"></a>
+### TestCase Name
+System_Set_Territory_Without_Territory_Param
+
+### TestCase ID
+SYS_103
+
+### TestCase Objective
+Sets territory API with territory parameter omitted, only region provided
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | System set territory without territory parameter | Invoke setTerritory on org.rdk.System with region: "US-AS"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"region": "US-AS"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `invalid territory name` |
 
 ## Plugin Post-conditions
 

@@ -1623,4 +1623,522 @@
       <resultGeneration useMethodTag="system_check_negative_scenario"/>
     </testStep>
   </testCase>
+
+  <!-- Test case 57 -->
+  <testCase testCaseId="SYS_57" testCaseName="System_GetPlatformConfiguration_Invalid_Query" desc="Validates negative scenario for getPlatformConfiguration with invalid query value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Platform_Configuration_Invalid_Query" method="Get_Platform_Configuration">
+      <params>
+        <param tag="query" value="INVALID.QUERY" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 58 -->
+  <testCase testCaseId="SYS_58" testCaseName="System_GetPlatformConfiguration_Empty_Query" desc="Validates negative scenario for getPlatformConfiguration with empty query value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Platform_Configuration_Empty_Query" method="Get_Platform_Configuration">
+      <params>
+        <param tag="query" value="" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 59 -->
+  <testCase testCaseId="SYS_59" testCaseName="System_GetPlatformConfiguration_Numeric_Query" desc="Validates negative scenario for getPlatformConfiguration with numeric query value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Platform_Configuration_Numeric_Query" method="Numeric_Query_GetPlatform_Configuration">
+      <params>
+        <param tag="query" value="123" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 60 -->
+  <testCase testCaseId="SYS_60" testCaseName="System_GetPlatformConfiguration_Special_Chars_Query" desc="Validates negative scenario for getPlatformConfiguration with special characters query value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Platform_Configuration_Special_Chars_Query" method="Get_Platform_Configuration">
+      <params>
+        <param tag="query" value="()^*!" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 61 -->
+  <testCase testCaseId="SYS_61" testCaseName="System_GetPlatformConfiguration_Without_Params" desc="Validates negative scenario for getPlatformConfiguration with no query parameter">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Platform_Configuration_No_Params" method="Get_Platform_Configuration">
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 62 -->
+  <testCase testCaseId="SYS_62" testCaseName="System_GetRFCConfig_Invalid_RFCList_Value" desc="Validates negative scenario for getRFCConfig with invalid rfcList value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_RFC_Config_Invalid_Value" method="Get_RFC_Config">
+      <params>
+        <param tag="rfcList" value="INVALID_RFC_PARAM" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 63 -->
+  <testCase testCaseId="SYS_63" testCaseName="System_GetRFCConfig_Numeric_RFCList_Value" desc="Validates negative scenario for getRFCConfig with numeric rfcList value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_RFC_Config_Numeric_Value" method="Numeric_Get_RFC_Config">
+      <params>
+        <param tag="rfcList" value="123" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 64 -->
+  <testCase testCaseId="SYS_64" testCaseName="System_GetRFCConfig_Special_Chars_RFCList_Value" desc="Validates negative scenario for getRFCConfig with special characters rfcList value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_RFC_Config_Special_Chars" method="Get_RFC_Config">
+      <params>
+        <param tag="rfcList" value="()^*!" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 65 -->
+  <testCase testCaseId="SYS_65" testCaseName="System_GetRFCConfig_Without_Params" desc="Validates negative scenario for getRFCConfig with no rfcList parameter">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_RFC_Config_No_Params" method="Get_RFC_Config">
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 66 -->
+  <testCase testCaseId="SYS_66" testCaseName="System_SetMode_Empty_Mode" desc="Validates negative scenario for setMode with empty mode value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Mode_Empty" method="Set_Mode">
+      <params>
+        <param tag="mode" value="" />
+        <param tag="duration" value="0" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 67 -->
+  <testCase testCaseId="SYS_67" testCaseName="System_SetMode_Numeric_Mode" desc="Validates negative scenario for setMode with numeric mode value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Mode_Numeric" method="Numeric_Mode_Set_Mode">
+      <params>
+        <param tag="mode" value="123" />
+        <param tag="duration" value="0" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 68 -->
+  <testCase testCaseId="SYS_68" testCaseName="System_SetMode_Special_Chars_Mode" desc="Validates negative scenario for setMode with special characters mode value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Mode_Special_Chars" method="Set_Mode">
+      <params>
+        <param tag="mode" value="()^*!" />
+        <param tag="duration" value="0" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 69 -->
+  <testCase testCaseId="SYS_69" testCaseName="System_SetMode_Invalid_Duration" desc="Validates negative scenario for setMode with invalid duration value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Mode_Invalid_Duration" method="String_Duration_Set_Mode">
+      <params>
+        <param tag="mode" value="NORMAL" />
+        <param tag="duration" value="INVALID_DURATION" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 70 -->
+  <testCase testCaseId="SYS_70" testCaseName="System_SetMode_Empty_Duration" desc="Validates negative scenario for setMode with empty duration value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Mode_Empty_Duration" method="String_Duration_Set_Mode">
+      <params>
+        <param tag="mode" value="NORMAL" />
+        <param tag="duration" value="" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 71 -->
+  <testCase testCaseId="SYS_71" testCaseName="System_SetMode_Numeric_Duration" desc="Validates negative scenario for setMode with numeric duration value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Mode_Numeric_Duration" method="Set_Mode">
+      <params>
+        <param tag="mode" value="NORMAL" />
+        <param tag="duration" value="123" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 72 -->
+  <testCase testCaseId="SYS_72" testCaseName="System_SetMode_Special_Chars_Duration" desc="Validates negative scenario for setMode with special characters duration value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Mode_Special_Chars_Duration" method="String_Duration_Set_Mode">
+      <params>
+        <param tag="mode" value="NORMAL" />
+        <param tag="duration" value="()^*!" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 73 -->
+  <testCase testCaseId="SYS_73" testCaseName="System_SetMode_Without_Params" desc="Validates negative scenario for setMode with no parameters">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Mode_No_Params" method="String_Duration_Set_Mode">
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 74 -->
+  <testCase testCaseId="SYS_74" testCaseName="System_SetOptOutTelemetry_Invalid_Value" desc="Validates negative scenario for setOptOutTelemetry with invalid string value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_OptOut_Telemetry_Invalid" method="String_OptOut_Telemetry">
+      <params>
+        <param tag="Opt-Out" value="INVALID" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 75 -->
+  <testCase testCaseId="SYS_75" testCaseName="System_SetOptOutTelemetry_Empty_Value" desc="Validates negative scenario for setOptOutTelemetry with empty value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_OptOut_Telemetry_Empty" method="String_OptOut_Telemetry">
+      <params>
+        <param tag="Opt-Out" value="" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 76 -->
+  <testCase testCaseId="SYS_76" testCaseName="System_SetOptOutTelemetry_Numeric_Value" desc="Validates negative scenario for setOptOutTelemetry with numeric value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_OptOut_Telemetry_Numeric" method="Numeric_OptOut_Telemetry">
+      <params>
+        <param tag="Opt-Out" value="123" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 77 -->
+  <testCase testCaseId="SYS_77" testCaseName="System_SetOptOutTelemetry_Special_Chars_Value" desc="Validates negative scenario for setOptOutTelemetry with special characters value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_OptOut_Telemetry_Special_Chars" method="String_OptOut_Telemetry">
+      <params>
+        <param tag="Opt-Out" value="()^*!" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 78 -->
+  <testCase testCaseId="SYS_78" testCaseName="System_SetOptOutTelemetry_Without_Params" desc="Validates negative scenario for setOptOutTelemetry with no parameters">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_OptOut_Telemetry_No_Params" method="Set_OptOut_Telemetry_Status">
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 79 -->
+  <testCase testCaseId="SYS_79" testCaseName="System_SetPowerState_Empty_PowerState" desc="Validates negative scenario for setPowerState with empty powerState value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Power_State_Empty" method="Set_Power_State">
+      <params>
+        <param tag="powerState" value="" />
+        <param tag="standbyReason" value="APIUnitTest" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 80 -->
+  <testCase testCaseId="SYS_80" testCaseName="System_SetPowerState_Numeric_PowerState" desc="Validates negative scenario for setPowerState with numeric powerState value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Power_State_Numeric" method="Numeric_PowerState_SetPowerState">
+      <params>
+        <param tag="powerState" value="123" />
+        <param tag="standbyReason" value="APIUnitTest" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 81 -->
+  <testCase testCaseId="SYS_81" testCaseName="System_SetPowerState_Special_Chars_PowerState" desc="Validates negative scenario for setPowerState with special characters powerState value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Power_State_Special_Chars" method="Set_Power_State">
+      <params>
+        <param tag="powerState" value="()^*!" />
+        <param tag="standbyReason" value="APIUnitTest" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 82 -->
+  <testCase testCaseId="SYS_82" testCaseName="System_SetPowerState_Without_Params" desc="Validates negative scenario for setPowerState with no parameters">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Power_State_No_Params" method="Set_Power_State">
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 83 -->
+  <testCase testCaseId="SYS_83" testCaseName="System_SetFriendlyName_Without_Params" desc="Validates negative scenario for setFriendlyName with no parameters">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Friendly_Name_No_Params" method="System_Set_Friendly_Name">
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 84 -->
+  <testCase testCaseId="SYS_84" testCaseName="System_SetBootLoaderSplashScreen_Valid_Path" desc="Sets the boot loader splash screen with a valid path">
+    <testCaseInfo testCaseType="direct" configurableTest="true" testKey="SYSTEM_DEVICE_FEATURES" useMethodTag="system_check_feature_applicability" arguments="SplashScreenPath"/>
+    <testStep testStepId="1" name="Set_Boot_Loader_Splash_Screen" method="Set_Boot_Loader_Splash_Screen">
+      <params>
+        <param tag="path" useConfigFile="true" key="SYSTEM_SPLASH_SCREEN_PATH" />
+      </params>
+      <resultGeneration useMethodTag="system_check_set_operation"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 85 -->
+  <testCase testCaseId="SYS_85" testCaseName="System_SetBootLoaderSplashScreen_Invalid_Path" desc="Validates negative scenario for setBootLoaderSplashScreen with invalid path value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Boot_Loader_Splash_Screen_Invalid" method="Set_Boot_Loader_Splash_Screen">
+      <params>
+        <param tag="path" value="/invalid/nonexistent/splash.osd" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 86 -->
+  <testCase testCaseId="SYS_86" testCaseName="System_SetBootLoaderSplashScreen_Empty_Path" desc="Validates negative scenario for setBootLoaderSplashScreen with empty path value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Boot_Loader_Splash_Screen_Empty" method="Set_Boot_Loader_Splash_Screen">
+      <params>
+        <param tag="path" value="" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 87 -->
+  <testCase testCaseId="SYS_87" testCaseName="System_SetBootLoaderSplashScreen_Numeric_Path" desc="Validates negative scenario for setBootLoaderSplashScreen with numeric path value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Boot_Loader_Splash_Screen_Numeric" method="Numeric_Path_Set_Boot_Loader_Splash_Screen">
+      <params>
+        <param tag="path" value="123" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 88 -->
+  <testCase testCaseId="SYS_88" testCaseName="System_SetBootLoaderSplashScreen_Special_Chars_Path" desc="Validates negative scenario for setBootLoaderSplashScreen with special characters path value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Boot_Loader_Splash_Screen_Special_Chars" method="Set_Boot_Loader_Splash_Screen">
+      <params>
+        <param tag="path" value="()^*!" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 89 -->
+  <testCase testCaseId="SYS_89" testCaseName="System_SetBootLoaderSplashScreen_Without_Params" desc="Validates negative scenario for setBootLoaderSplashScreen with no path parameter">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Boot_Loader_Splash_Screen_No_Params" method="Set_Boot_Loader_Splash_Screen">
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 90 -->
+  <testCase testCaseId="SYS_90" testCaseName="System_SetTimeZoneDST_Invalid_TimeZone" desc="Validates negative scenario for setTimeZoneDST with invalid timeZone value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_TimeZone_DST_Invalid" method="Set_TimeZone_DST">
+      <params>
+        <param tag="timeZone" value="Invalid/TimeZone" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 91 -->
+  <testCase testCaseId="SYS_91" testCaseName="System_SetTimeZoneDST_Numeric_TimeZone" desc="Validates negative scenario for setTimeZoneDST with numeric timeZone value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_TimeZone_DST_Numeric" method="Numeric_TimeZoneDST_SetTimeZoneDST">
+      <params>
+        <param tag="timeZone" value="123" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 92 -->
+  <testCase testCaseId="SYS_92" testCaseName="System_SetTimeZoneDST_Special_Chars_TimeZone" desc="Validates negative scenario for setTimeZoneDST with special characters timeZone value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_TimeZone_DST_Special_Chars" method="Set_TimeZone_DST">
+      <params>
+        <param tag="timeZone" value="()^*!" />
+      </params>
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 93 -->
+  <testCase testCaseId="SYS_93" testCaseName="System_SetTimeZoneDST_Without_Params" desc="Validates negative scenario for setTimeZoneDST with no timeZone parameter">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_TimeZone_DST_No_Params" method="Set_TimeZone_DST">
+      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 94 -->
+  <testCase testCaseId="SYS_94" testCaseName="System_SetFSRFlag_Toggle" desc="Reads current FSR flag value and sets it to the opposite value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_FSR_Flag" method="Get_FSR_Flag" saveResult="true">
+      <resultGeneration useMethodTag="system_get_api_info"/>
+    </testStep>
+    <testStep testStepId="2" name="Set_FSR_Flag" method="Set_FSR_Flag">
+      <params>
+        <param tag="fsrFlag" usePreviousResult="true" Id="1" useMethodTag="system_toggle_fsr_flag"/>
+      </params>
+      <resultGeneration useMethodTag="system_check_set_operation"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 95 -->
+  <testCase testCaseId="SYS_95" testCaseName="System_SetMigrationStatus_Valid_Status" desc="Sets the migration status with a valid status value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Set_Migration_Status" method="Set_Migration_Status">
+      <params>
+        <param tag="status" value="NOT_STARTED" />
+      </params>
+      <resultGeneration useMethodTag="system_check_set_operation"/>
+    </testStep>
+    <testStep testStepId="2" name="Get_Migration_Status" method="Get_Migration_Status">
+      <resultGeneration useMethodTag="system_check_get_operation" expectedValues="NOT_STARTED"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 96 -->
+  <testCase testCaseId="SYS_96" testCaseName="System_SetBlocklistFlag_Toggle" desc="Reads current blocklist flag value and sets it to the opposite value">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="Get_Blocklist_Flag" method="Get_Blocklist_Flag" saveResult="true">
+      <resultGeneration useMethodTag="system_get_api_info"/>
+    </testStep>
+    <testStep testStepId="2" name="Set_Blocklist_Flag" method="Set_Blocklist_Flag">
+      <params>
+        <param tag="blocklist" usePreviousResult="true" Id="1" useMethodTag="system_toggle_blocklist_flag"/>
+      </params>
+      <resultGeneration useMethodTag="system_check_set_operation"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 97 -->
+  <testCase testCaseId="SYS_97" testCaseName="System_Set_Special_Chars_Territory_And_Region" desc="Sets special characters territory and region">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="System_Set_Territory" method="System_Set_Territory">
+      <params>
+        <param tag="territory" value="()^*!" />
+        <param tag="region" value="()^*!" />
+      </params>
+      <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+    </testStep>
+  </testCase>
+
+  <!-- Test case 98 -->
+  <testCase testCaseId="SYS_98" testCaseName="System_Set_Special_Chars_Territory_And_Valid_Region" desc="Sets special characters territory with valid region">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="System_Set_Territory" method="System_Set_Territory">
+      <params>
+        <param tag="territory" value="()^*!" />
+        <param tag="region" value="US-AS" />
+      </params>
+      <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+    </testStep>
+  </testCase>
+
+  <!-- Test case 99 -->
+  <testCase testCaseId="SYS_99" testCaseName="System_Set_Valid_Territory_And_Special_Chars_Region" desc="Sets valid territory with special characters region">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="System_Set_Territory" method="System_Set_Territory">
+      <params>
+        <param tag="territory" value="CHN" />
+        <param tag="region" value="()^*!" />
+      </params>
+      <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+    </testStep>
+  </testCase>
+
+  <!-- Test case 100 -->
+  <testCase testCaseId="SYS_100" testCaseName="System_Set_Numeric_Territory_And_Region" desc="Sets numeric territory and region">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="System_Set_Territory" method="Numeric_Terrirtory_Region_Set_Territory">
+      <params>
+        <param tag="territory" value="123" />
+        <param tag="region" value="123" />
+      </params>
+      <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+    </testStep>
+  </testCase>
+
+  <!-- Test case 101 -->
+  <testCase testCaseId="SYS_101" testCaseName="System_Set_Numeric_Territory_And_Valid_Region" desc="Sets numeric territory with valid region">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="System_Set_Territory" method="Numeric_Territory_Set_Territory">
+      <params>
+        <param tag="territory" value="123" />
+        <param tag="region" value="US-AS" />
+      </params>
+      <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
+    </testStep>
+  </testCase>
+
+  <!-- Test case 102 -->
+  <testCase testCaseId="SYS_102" testCaseName="System_Set_Valid_Territory_And_Numeric_Region" desc="Sets valid territory with numeric region">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="System_Set_Territory" method="Numeric_Region_Set_Territory">
+      <params>
+        <param tag="territory" value="CHN" />
+        <param tag="region" value="123" />
+      </params>
+      <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+    </testStep>
+  </testCase>
+
+  <!-- Test case 103 -->
+  <testCase testCaseId="SYS_103" testCaseName="System_Set_Territory_Without_Territory_Param" desc="Sets territory API with territory parameter omitted, only region provided">
+    <testCaseInfo testCaseType="direct"/>
+    <testStep testStepId="1" name="System_Set_Territory" method="System_Set_Territory">
+      <params>
+        <param tag="region" value="US-AS" />
+      </params>
+      <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory name"/>
+    </testStep>
+  </testCase>
 </testPlugin>
