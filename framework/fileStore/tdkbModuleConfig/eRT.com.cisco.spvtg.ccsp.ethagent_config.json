@@ -21,8 +21,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[0:65535]"
-        ],
+        "expectedValues": ["[0:65535]"],
         "flags": [""],
         "Set_type": "L2"
     },

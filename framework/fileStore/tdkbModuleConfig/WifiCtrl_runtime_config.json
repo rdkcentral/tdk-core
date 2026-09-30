@@ -197,5 +197,63 @@
         "defaultValue": [""],
         "expectedValues": [""],
         "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.InteropDetails": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.AccessPoint.{i}.Security.ConnectedRadiusEndpoint": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Ignite_Control.{i}.": {
+        "NumberOfEntries": "",
+        "elementType": ["bus_element_type_table"],
+        "table": "rbus_AddDelete",
+        "addOperation": "Yes",
+        "removeOperation": "Yes",
+        "flags": [""]
+    },
+    "Device.WiFi.Ignite_Control.{i}.MaxChutilThreshold": {
+        "elementType": ["bus_element_type_property"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Ignite_Control.{i}.MinChutilThreshold": {
+        "elementType": ["bus_element_type_property"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Ignite_Control.{i}.SNRDifference": {
+        "elementType": ["bus_element_type_property"],
+        "type": ["unsignedInt"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Ignite_Control.{i}.SNRThreshold": {
+        "elementType": ["bus_element_type_property"],
+        "type": [""],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
     }
 }

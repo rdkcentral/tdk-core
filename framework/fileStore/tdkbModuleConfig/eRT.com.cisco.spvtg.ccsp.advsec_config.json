@@ -12,8 +12,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": ["1440"],
-        "expectedValues": ["[60:2880]"
-        ],
+        "expectedValues": ["[60:2880]"],
         "flags": [""],
         "Set_type": "L2"
     },
@@ -199,8 +198,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[46:]"
-        ],
+        "expectedValues": ["[46:]"],
         "flags": [""],
         "Set_type": "L2"
     },
@@ -209,8 +207,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[200:10000]"
-        ],
+        "expectedValues": ["[200:10000]"],
         "flags": [""],
         "Set_type": "L2"
     },
@@ -219,8 +216,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["[200:10000]"
-        ],
+        "expectedValues": ["[200:10000]"],
         "flags": [""],
         "Set_type": "L2"
     },
@@ -391,6 +387,46 @@
     },
     "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvSecTCPTrackerFilterDevices.Enable": {
         "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvSecDNSECHBlocking.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvSecDoHBlocking.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.DeviceFingerPrintMLO.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef WIFI_DATA_COLLECTION & MLO_SUPPORTED"]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.NetworkIntelligence.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.NetworkIntelligence.MemoryLimit": {
+        "type": ["unsignedInt"],
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
