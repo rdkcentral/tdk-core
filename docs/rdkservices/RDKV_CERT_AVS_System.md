@@ -62,7 +62,7 @@ RDKV_CERT_AVS_System
    - [System_Invalid_TimeZone_ErrorValidation](#system_invalid_timezone_errorvalidation)
    - [System_Invalid_Key_ErrorMessage](#system_invalid_key_errormessage)
    - [System_GetPlatformConfiguration_Invalid_Query](#system_getplatformconfiguration_invalid_query)
-   - [System_GetPlatformConfiguration_Invalid_Query](#system_getplatformconfiguration_invalid_query-2)
+   - [System_Get_Boot_Type_Info](#system_get_boot_type_info)
    - [System_GetPlatformConfiguration_Empty_Query](#system_getplatformconfiguration_empty_query)
    - [System_GetPlatformConfiguration_Numeric_Query](#system_getplatformconfiguration_numeric_query)
    - [System_GetPlatformConfiguration_Special_Chars_Query](#system_getplatformconfiguration_special_chars_query)
@@ -76,7 +76,7 @@ RDKV_CERT_AVS_System
    - [System_SetMode_Special_Chars_Mode](#system_setmode_special_chars_mode)
    - [System_SetMode_Invalid_Duration](#system_setmode_invalid_duration)
    - [System_SetMode_Empty_Duration](#system_setmode_empty_duration)
-   - [System_SetMode_Numeric_Duration](#system_setmode_numeric_duration)
+   - [System_SetMode_Negative_Duration](#system_setmode_negative_duration)
    - [System_SetMode_Special_Chars_Duration](#system_setmode_special_chars_duration)
    - [System_SetMode_Without_Params](#system_setmode_without_params)
    - [System_SetOptOutTelemetry_Invalid_Value](#system_setoptouttelemetry_invalid_value)
@@ -1315,21 +1315,21 @@ Validates negative scenario for getPlatformConfiguration with invalid query valu
 
 ---
 
-<a id="system_getplatformconfiguration_invalid_query-2"></a>
+<a id="system_get_boot_type_info"></a>
 ### TestCase Name
-System_GetPlatformConfiguration_Invalid_Query
+System_Get_Boot_Type_Info
 
 ### TestCase ID
 SYS_57
 
 ### TestCase Objective
-Validates negative scenario for getPlatformConfiguration with invalid query value
+Gets the system boot type
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Get platform configuration with invalid query | Invoke getPlatformConfiguration on org.rdk.System with query: "INVALID.QUERY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPlatformConfiguration", "params": {"query": "INVALID.QUERY"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `getPlatformConfiguration` returns an error response with `success: false` for the invalid query value `"INVALID.QUERY"` |
+| 1 | Get boot type info | Invoke getBootTypeInfo on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getBootTypeInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify that the system boot type information is returned successfully |
 
 ---
 
@@ -1567,21 +1567,21 @@ Validates negative scenario for setMode with empty duration value
 
 ---
 
-<a id="system_setmode_numeric_duration"></a>
+<a id="system_setmode_negative_duration"></a>
 ### TestCase Name
-System_SetMode_Numeric_Duration
+System_SetMode_Negative_Duration
 
 ### TestCase ID
 SYS_71
 
 ### TestCase Objective
-Validates negative scenario for setMode with numeric duration value
+Validates negative scenario for setMode with negative duration value
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set mode with numeric duration value | Invoke setMode on org.rdk.System with mode: "NORMAL", duration: 123<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"mode": "NORMAL", "duration": 123}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setMode` returns an error response with `success: false` for the numeric duration value `123` |
+| 1 | Set mode with negative duration value | Invoke setMode on org.rdk.System with mode: "NORMAL", duration: -123<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setMode", "params": {"mode": "NORMAL", "duration": -123}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setMode` returns an error response with `success: false` for the negative duration value `-123` |
 
 ---
 
@@ -1815,7 +1815,7 @@ Sets the boot loader splash screen with a valid path
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set boot loader splash screen | *(Executed only if the DUT supports the `SplashScreenPath` feature listed in `SYSTEM_DEVICE_FEATURES`)*<br>Invoke setBootLoaderSplashScreen on org.rdk.System with path: "<SYSTEM_SPLASH_SCREEN_PATH>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setBootLoaderSplashScreen", "params": {"path": "<SYSTEM_SPLASH_SCREEN_PATH>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the boot loader splash screen is set successfully (`success` : `true`) |
+| 1 | Set boot loader splash screen | *(Executed only if the DUT supports the `SplashScreen` feature listed in `SYSTEM_DEVICE_FEATURES`)*<br>Invoke setBootLoaderSplashScreen on org.rdk.System with path: "<SYSTEM_SPLASH_SCREEN_PATH>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setBootLoaderSplashScreen", "params": {"path": "<SYSTEM_SPLASH_SCREEN_PATH>"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the boot loader splash screen is set successfully (`success` : `true`) |
 
 ---
 
@@ -1997,6 +1997,16 @@ Reads current FSR flag value and sets it to the opposite value
 | --- | --- | --- | --- |
 | 1 | Get FSR flag | Invoke getFSRFlag on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getFSRFlag"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current FSR flag is returned as `true` or `false` and saved as the baseline for toggle |
 | 2 | Set FSR flag | *(Toggles the `fsrFlag` value from Step 1: if Step 1 returned `true`, sets `false`; if `false`, sets `true`)*<br>Invoke setFSRFlag on org.rdk.System with fsrFlag: <toggled_value_from_step_1><br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setFSRFlag", "params": {"fsrFlag": <toggled_value_from_step_1>}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the FSR flag is set successfully (`success` : `true`) |
+| 3 | Check FSR flag | Invoke getFSRFlag on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getFSRFlag"}' http://127.0.0.1:9998/jsonrpc` | Expected`<toggled_value_from_step_1>` |
+
+### TestCase Post-condition
+
+#### Post-condition 1: Revert_FSR_Flag
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Restore FSR flag | Set FSR flag on org.rdk.System to `<original_value_from_step_1>`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setFSRFlag", "params": {"fsrFlag": <original_value_from_step_1>}}' http://127.0.0.1:9998/jsonrpc` | Verify that the original FSR flag value is restored successfully |
+| 2 | Verify restored FSR flag | Invoke getFSRFlag on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getFSRFlag"}' http://127.0.0.1:9998/jsonrpc` | Expected`<original_value_from_step_1>` |
 
 ---
 
@@ -2035,6 +2045,16 @@ Reads current blocklist flag value and sets it to the opposite value
 | --- | --- | --- | --- |
 | 1 | Get blocklist flag | Invoke getBlocklistFlag on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getBlocklistFlag"}' http://127.0.0.1:9998/jsonrpc` | Verify that the current blocklist flag is returned as `true` or `false` and saved as the baseline for toggle |
 | 2 | Set blocklist flag | *(Toggles the `blocklist` value from Step 1: if Step 1 returned `true`, sets `false`; if `false`, sets `true`)*<br>Invoke setBlocklistFlag on org.rdk.System with blocklist: <toggled_value_from_step_1><br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setBlocklistFlag", "params": {"blocklist": <toggled_value_from_step_1>}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the blocklist flag is set successfully (`success` : `true`) |
+| 3 | Check blocklist flag | Invoke getBlocklistFlag on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getBlocklistFlag"}' http://127.0.0.1:9998/jsonrpc` | Expected`<toggled_value_from_step_1>` |
+
+### TestCase Post-condition
+
+#### Post-condition 1: Revert_Blocklist_Flag
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Restore blocklist flag | Set blocklist flag on org.rdk.System to `<original_value_from_step_1>`<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setBlocklistFlag", "params": {"blocklist": <original_value_from_step_1>}}' http://127.0.0.1:9998/jsonrpc` | Verify that the original blocklist flag value is restored successfully |
+| 2 | Verify restored blocklist flag | Invoke getBlocklistFlag on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getBlocklistFlag"}' http://127.0.0.1:9998/jsonrpc` | Expected`<original_value_from_step_1>` |
 
 ---
 

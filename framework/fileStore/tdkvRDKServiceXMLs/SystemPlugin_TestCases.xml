@@ -1625,13 +1625,10 @@
   </testCase>
 
   <!-- Test case 57 -->
-  <testCase testCaseId="SYS_57" testCaseName="System_GetPlatformConfiguration_Invalid_Query" desc="Validates negative scenario for getPlatformConfiguration with invalid query value">
+  <testCase testCaseId="SYS_57" testCaseName="System_Get_Boot_Type_Info" desc="Gets the system boot type">
     <testCaseInfo testCaseType="direct"/>
-    <testStep testStepId="1" name="Get_Platform_Configuration_Invalid_Query" method="Get_Platform_Configuration">
-      <params>
-        <param tag="query" value="INVALID.QUERY" />
-      </params>
-      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+    <testStep testStepId="1" name="Get_Boot_Type_Info" method="Get_Boot_Type_Info">
+      <resultGeneration useMethodTag="system_check_boot_type"/>
     </testStep>
   </testCase>
 
@@ -1778,12 +1775,12 @@
   </testCase>
 
   <!-- Test case 71 -->
-  <testCase testCaseId="SYS_71" testCaseName="System_SetMode_Numeric_Duration" desc="Validates negative scenario for setMode with numeric duration value">
+  <testCase testCaseId="SYS_71" testCaseName="System_SetMode_Negative_Duration" desc="Validates negative scenario for setMode with negative duration value">
     <testCaseInfo testCaseType="direct"/>
-    <testStep testStepId="1" name="Set_Mode_Numeric_Duration" method="Set_Mode">
+    <testStep testStepId="1" name="Set_Mode_Negative_Duration" method="Set_Mode">
       <params>
         <param tag="mode" value="NORMAL" />
-        <param tag="duration" value="123" />
+        <param tag="duration" value="-123" />
       </params>
       <resultGeneration useMethodTag="system_check_negative_scenario"/>
     </testStep>
@@ -1915,7 +1912,7 @@
 
   <!-- Test case 84 -->
   <testCase testCaseId="SYS_84" testCaseName="System_SetBootLoaderSplashScreen_Valid_Path" desc="Sets the boot loader splash screen with a valid path">
-    <testCaseInfo testCaseType="direct" configurableTest="true" testKey="SYSTEM_DEVICE_FEATURES" useMethodTag="system_check_feature_applicability" arguments="SplashScreenPath"/>
+    <testCaseInfo testCaseType="direct" configurableTest="true" testKey="SYSTEM_DEVICE_FEATURES" useMethodTag="system_check_feature_applicability" arguments="SplashScreen"/>
     <testStep testStepId="1" name="Set_Boot_Loader_Splash_Screen" method="Set_Boot_Loader_Splash_Screen">
       <params>
         <param tag="path" useConfigFile="true" key="SYSTEM_SPLASH_SCREEN_PATH" />
@@ -2019,15 +2016,20 @@
 
   <!-- Test case 94 -->
   <testCase testCaseId="SYS_94" testCaseName="System_SetFSRFlag_Toggle" desc="Reads current FSR flag value and sets it to the opposite value">
-    <testCaseInfo testCaseType="direct"/>
-    <testStep testStepId="1" name="Get_FSR_Flag" method="Get_FSR_Flag" saveResult="true">
+    <testCaseInfo testCaseType="setandget" revert="true"/>
+    <testStep testStepId="1" name="Get_FSR_Flag" method="Get_FSR_Flag" saveResult="true" revertGet="yes">
       <resultGeneration useMethodTag="system_get_api_info"/>
     </testStep>
-    <testStep testStepId="2" name="Set_FSR_Flag" method="Set_FSR_Flag">
+    <testStep testStepId="2" name="Set_FSR_Flag" method="Set_FSR_Flag" revertSet="yes">
       <params>
-        <param tag="fsrFlag" usePreviousResult="true" Id="1" useMethodTag="system_toggle_fsr_flag"/>
+        <param tag="fsrFlag" usePreviousResult="true" Id="1" useMethodTag="system_toggle_fsr_flag" revertParam="yes"/>
       </params>
       <resultGeneration useMethodTag="system_check_set_operation"/>
+    </testStep>
+    <testStep testStepId="3" name="Check_FSR_Flag" method="Get_FSR_Flag" revertFlag="yes">
+      <resultGeneration useMethodTag="system_check_get_operation" arguments="check_fsr_flag">
+        <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_toggle_fsr_flag"/>
+      </resultGeneration>
     </testStep>
   </testCase>
 
@@ -2041,21 +2043,26 @@
       <resultGeneration useMethodTag="system_check_set_operation"/>
     </testStep>
     <testStep testStepId="2" name="Get_Migration_Status" method="Get_Migration_Status">
-      <resultGeneration useMethodTag="system_check_get_operation" expectedValues="NOT_STARTED"/>
+      <resultGeneration useMethodTag="system_check_get_operation" arguments="check_migration_status" expectedValues="NOT_STARTED"/>
     </testStep>
   </testCase>
 
   <!-- Test case 96 -->
   <testCase testCaseId="SYS_96" testCaseName="System_SetBlocklistFlag_Toggle" desc="Reads current blocklist flag value and sets it to the opposite value">
-    <testCaseInfo testCaseType="direct"/>
-    <testStep testStepId="1" name="Get_Blocklist_Flag" method="Get_Blocklist_Flag" saveResult="true">
+    <testCaseInfo testCaseType="setandget"  revert="true"/>
+    <testStep testStepId="1" name="Get_Blocklist_Flag" method="Get_Blocklist_Flag" saveResult="true" revertGet="yes">
       <resultGeneration useMethodTag="system_get_api_info"/>
     </testStep>
-    <testStep testStepId="2" name="Set_Blocklist_Flag" method="Set_Blocklist_Flag">
+    <testStep testStepId="2" name="Set_Blocklist_Flag" method="Set_Blocklist_Flag"  revertSet="yes">
       <params>
-        <param tag="blocklist" usePreviousResult="true" Id="1" useMethodTag="system_toggle_blocklist_flag"/>
+        <param tag="blocklist" usePreviousResult="true" Id="1" useMethodTag="system_toggle_blocklist_flag" revertParam="yes"/>
       </params>
       <resultGeneration useMethodTag="system_check_set_operation"/>
+    </testStep>
+    <testStep testStepId="3" name="Check_Blocklist_Flag" method="Get_Blocklist_Flag" revertFlag="yes">
+      <resultGeneration useMethodTag="system_check_get_operation" arguments="check_blocklist">
+        <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_toggle_blocklist_flag"/>
+      </resultGeneration>
     </testStep>
   </testCase>
 
@@ -2098,7 +2105,7 @@
   <!-- Test case 100 -->
   <testCase testCaseId="SYS_100" testCaseName="System_Set_Numeric_Territory_And_Region" desc="Sets numeric territory and region">
     <testCaseInfo testCaseType="direct"/>
-    <testStep testStepId="1" name="System_Set_Territory" method="Numeric_Terrirtory_Region_Set_Territory">
+    <testStep testStepId="1" name="System_Set_Territory" method="Numeric_Territory_Region_Set_Territory">
       <params>
         <param tag="territory" value="123" />
         <param tag="region" value="123" />

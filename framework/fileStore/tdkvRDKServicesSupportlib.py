@@ -1150,11 +1150,42 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "system_check_get_operation":
-            migrationStatus = result.get("migrationStatus")
-            info["migrationStatus"] = migrationStatus
-            if migrationStatus == expectedValues[0]:
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
+            try:
+                if len(arg) and arg[0] == "check_fsr_flag":
+                    fsrFlag = result.get("fsrFlag")
+                    info["fsrFlag"] = fsrFlag
+                    if str(fsrFlag).lower() == str(expectedValues[0]).lower():
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                elif len(arg) and arg[0] == "check_blocklist":
+                    blocklist = result.get("blocklist")
+                    info["blocklist"] = blocklist
+                    if str(blocklist).lower() == str(expectedValues[0]).lower():
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                elif len(arg) and arg[0] == "check_migration_status":
+                    migrationStatus = result.get("migrationStatus")
+                    info["migrationStatus"] = migrationStatus
+                    if migrationStatus == expectedValues[0]:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "system_check_boot_type":
+            try:
+                info = result
+                status = checkNonEmptyResultData(result)
+                if status == "TRUE":
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
         # User Preferces Plugin Response result parser steps

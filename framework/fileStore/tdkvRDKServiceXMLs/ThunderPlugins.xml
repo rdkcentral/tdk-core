@@ -655,7 +655,7 @@
                 <param tag="timeZone" defaultValue="null" type="int"/>
             </params>
         </method>
-        <method name="Numeric_Terrirtory_Region_Set_Territory" api="setTerritory" type="method" desc="Sets the system territory and region with numeric type">
+        <method name="Numeric_Territory_Region_Set_Territory" api="setTerritory" type="method" desc="Sets the system territory and region with numeric type">
             <params>
                 <param tag="territory" defaultValue="null" type="int"/>
                 <param tag="region" defaultValue="null" type="int"/>
@@ -678,7 +678,8 @@
                 <param tag="rfcList" type="int" />
             </params>
         </method>
-        <event name="Event_MacAddresses_Retreived" eventName="onMacAddressesRetreived" eventId="client.events.1" type="event" desc="MacAddressesRetreived" />
+	<method name="Get_Boot_Type_Info" api="getBootTypeInfo" desc="Gets the system boot type" />
+	<event name="Event_MacAddresses_Retreived" eventName="onMacAddressesRetreived" eventId="client.events.1" type="event" desc="MacAddressesRetreived" />
         <event name="Event_PowerState_Changed" eventName="onSystemPowerStateChanged" eventId="client.events.1" type="event" desc="power state changed event" />
         <event name="Event_SystemMode_Changed" eventName="onSystemModeChanged" eventId="client.events.1" type="event" desc="Fires on system mode changed event" />
         <event name="Event_Temperature_Threshold_Changed" eventName="onTemperatureThresholdChanged" eventId="client.events.1" type="event" desc="Fires on temperature threshold change" />
