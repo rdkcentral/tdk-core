@@ -5210,7 +5210,7 @@
         "type": ["unsignedInt"],
         "writable": ["true"],
         "persistentSet": [""],
-        "defaultValue": ["0"],
+        "defaultValue": [""],
         "expectedValues": ["[1:3600000]"],
         "flags": [""]
     },
@@ -5226,7 +5226,7 @@
         "type": ["unsignedInt"],
         "writable": ["true"],
         "persistentSet": [""],
-        "defaultValue": ["0"],
+        "defaultValue": [""],
         "expectedValues": ["[1:255]"],
         "flags": [""]
     },
@@ -5921,7 +5921,7 @@
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["ifdef FEATURE_HOTSPOT_SUPPORT"],
+        "expectedValues": [""],
         "flags": ["ifdef FEATURE_HOTSPOT_SUPPORT"]
     },
     "Device.X_COMCAST_COM_GRE.Interface.{i}.UseSequenceNumber": {

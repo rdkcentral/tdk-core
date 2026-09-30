@@ -1,5 +1,5 @@
 {
-    "Device.LAN.Bridge.{i}": {
+    "Device.LAN.Bridge.{i}.": {
         "NumberOfEntries": "",
         "elementType": ["RBUS_ELEMENT_TYPE_TABLE"],
         "table": "rbus_AddDelete",

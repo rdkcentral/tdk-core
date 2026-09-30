@@ -60,7 +60,8 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE"]
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE"],
+        "skipGet": "Yes"
     },
     "Device.X_RDK_WanManager.InterfaceIpStatus": {
         "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
@@ -69,7 +70,8 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE"]
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE"],
+        "skipGet": "Yes"
     },
     "Device.X_RDK_WanManager.DisableAutoRouting()": {
         "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
