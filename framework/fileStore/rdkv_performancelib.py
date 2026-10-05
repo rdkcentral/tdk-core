@@ -2328,4 +2328,77 @@ def browsertest_keypress(obj,app_name,keys):
         print("Failed to get the loaded apps")
         tdkTestObj.setResultStatus("FAILURE")
     return result  
+
+#This function retrieves the playback timestamps from the application log file for the specified app.
     
+def getPlaybackTimestamps(obj, app_name):
+    app_log_file = obj.logpath+"/"+str(obj.execID)+"/"+str(obj.execID)+"_"+str(obj.execDevId)+"_"+str(obj.resultId)+"_mvs_applog.txt"
+    continue_count = 0
+    file_check_count = 0
+    logging_flag = 0
+    load_video = ""
+    playback_started = ""
+    lastIndex = 0
+    while True:
+        if file_check_count > 60:
+            print("\nREST API Logging is not happening properly. Exiting...")
+            break;
+        if os.path.exists(app_log_file):
+            logging_flag = 1
+            break;
+        else:
+            file_check_count += 1
+            time.sleep(1);
+    while logging_flag:
+        if continue_count > 60:
+            print("\nApp not proceeding for 60 secs. Exiting...")
+            break;
+        with open(app_log_file,'r') as f:
+            lines = f.readlines()
+        if lines:
+            if len(lines) != lastIndex:
+                continue_count = 0
+                #print(lastIndex,len(lines))
+                for i in range(lastIndex,len(lines)):
+                    print(lines[i])
+                    if "Video Player Playing" in lines[i]:
+                        clean_line = re.sub(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])", "", lines[i])
+                        timestamps = re.findall(r"\b\d{2}:\d{2}:\d{2}(?:[.:]\d+)?\b", clean_line)
+                        playback_started = timestamps[-1] if timestamps else ""
+                        print("Video Player Playing at: {}".format(playback_started))
+
+                        ssh_params = rdkv_performancelib.rdkservice_getSSHParams(obj.realpath, ip)
+                        if ssh_params == "" or ssh_params == "{}":
+                            raise Exception("Failed to get SSH parameters from configuration")
+                        
+                        ssh_params_dict = json.loads(ssh_params)
+                        ssh_method = ssh_params_dict.get("ssh_method")
+                        credentials = ssh_params_dict.get("credentials")
+                        
+                        if not ssh_method or not credentials:
+                            raise Exception("SSH method or credentials not found in configuration")
+                        
+                        # Execute command on DUT to get inspector port from dacapp log
+                        cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
+                        log_path = rdkv_performancelib.rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+                        log_path_lines = [line.strip() for line in log_path.splitlines() if line.strip()]
+                        if not log_path_lines:
+                            print("Failed to get the application storage path")
+                            continue
+                        log_path = log_path_lines[-1]
+                        log_file = log_path +"/" + app_name + "/"+ app_name+".log"
+                        cmd = f"grep -i 'wpe load committed' {log_file} | tail -n 1 | cut -d' ' -f2 | sed 's/:$//'"
+                        output = rdkv_performancelib.rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+                        print(output)
+                        clean_output = re.sub(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])", "", output)
+                        load_timestamps = re.findall(r"\b\d{2}:\d{2}:\d{2}(?:[.:]\d+)?\b", clean_output)
+                        load_video = load_timestamps[-1] if load_timestamps else ""
+                lastIndex = len(lines)
+                if playback_started != "":
+                    break;
+            else:
+                continue_count += 1
+        else:
+            continue_count += 1
+        time.sleep(1)
+    return load_video, playback_started    
