@@ -2380,7 +2380,7 @@ def getPlaybackTimestamps(obj, app_name):
                         
                         # Execute command on DUT to get inspector port from dacapp log
                         cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
-                        log_path = rdkv_performancelib.rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+                        log_path = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
                         log_path_lines = [line.strip() for line in log_path.splitlines() if line.strip()]
                         if not log_path_lines:
                             print("Failed to get the application storage path")
