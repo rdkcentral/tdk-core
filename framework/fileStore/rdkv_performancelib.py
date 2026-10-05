@@ -2367,7 +2367,7 @@ def getPlaybackTimestamps(obj, app_name):
                         playback_started = timestamps[-1] if timestamps else ""
                         print("Video Player Playing at: {}".format(playback_started))
 
-                        ssh_params = rdkv_performancelib.rdkservice_getSSHParams(obj.realpath, obj.IP)
+                        ssh_params = rdkservice_getSSHParams(obj.realpath, obj.IP)
                         if ssh_params == "" or ssh_params == "{}":
                             raise Exception("Failed to get SSH parameters from configuration")
                         
@@ -2388,7 +2388,7 @@ def getPlaybackTimestamps(obj, app_name):
                         log_path = log_path_lines[-1]
                         log_file = log_path +"/" + app_name + "/"+ app_name+".log"
                         cmd = f"grep -i 'wpe load committed' {log_file} | tail -n 1 | cut -d' ' -f2 | sed 's/:$//'"
-                        output = rdkv_performancelib.rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+                        output = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
                         print(output)
                         clean_output = re.sub(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])", "", output)
                         load_timestamps = re.findall(r"\b\d{2}:\d{2}:\d{2}(?:[.:]\d+)?\b", clean_output)
