@@ -29,7 +29,7 @@ from web_socket_util import *
 import rdkv_performancelib
 import StabilityTestVariables
 
-obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
+obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True)
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
@@ -64,7 +64,7 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
         test_count = int(StabilityTestVariables.AppManager_test_count)
         app_bundle = PerformanceTestVariables.Large_Validation_File
         google_bundle = PerformanceTestVariables.google_bundle
-        app_name = "com.rdkcentral.test_app"
+        app_name = google_bundle.split("+")[0]
         app_download_url = PerformanceTestVariables.app_download_url.rstrip("/") + "/" + app_bundle
         google_download_url = PerformanceTestVariables.app_download_url.rstrip("/") + "/" + google_bundle
         seen_download_ids = []
@@ -192,7 +192,7 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
                                                                     continue
                                                                 event = event_listener.getEventsBuffer().pop(0)
                                                                 print("\nEvent:", event)
-                                                                if "onAppInstallationStatus" in event and "INSTALLED" in event:
+                                                                if "onAppInstallationStatus" in event and "INSTALLED" in event and app_name in event:
                                                                     installation_event = event
                                                                     break
                                                             if installation_event:

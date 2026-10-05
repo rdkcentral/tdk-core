@@ -45,8 +45,7 @@ expectedResult = "SUCCESS"
 #Check the device status before starting the stress test
 pre_condition_status = check_device_state(obj)
 
-if expectedResult in (result.upper() and pre_condition_status):
-    status ="SUCCESS"
+if expectedResult in result.upper() and expectedResult in pre_condition_status:    status ="SUCCESS"
     print("\nCheck the status of AppManagers in the device")
     plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager", "org.rdk.RDKWindowManager"]
     plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.AppPackageManager":"activated","org.rdk.AppManager":"activated", "org.rdk.RDKWindowManager":"activated"}
@@ -82,7 +81,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                     print(f"Preload Result {loaded_apps}")
                     if loaded_apps != "EXCEPTION OCCURRED":
                         for item in loaded_apps:
-                            if item.get("appId") == app_name and item.get("lifecycleState") == item.get("targetLifecycleState"):
+                            if (item.get("appId") == app_name and item.get("lifecycleState") == "APP_STATE_PAUSED" and item.get("targetLifecycleState") == "APP_STATE_PAUSED"):
                                 print(f"TargetLifecycle: {item.get('targetLifecycleState')}")
                                 print(f"LifecycleState: {item.get('lifecycleState')}")
                                 PRELOAD_FLAG = True

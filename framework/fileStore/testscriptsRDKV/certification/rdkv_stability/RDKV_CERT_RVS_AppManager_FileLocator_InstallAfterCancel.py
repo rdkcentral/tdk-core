@@ -29,7 +29,7 @@ from web_socket_util import *
 import rdkv_performancelib
 import StabilityTestVariables
 
-obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
+obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True)
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>

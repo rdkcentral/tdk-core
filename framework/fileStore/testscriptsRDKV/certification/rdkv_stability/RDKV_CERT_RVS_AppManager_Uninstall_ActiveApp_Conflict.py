@@ -42,12 +42,12 @@ print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
 Summ_list=[]
-if expectedResult in result.upper():
-    status ="SUCCESS"
+if expectedResult in result.upper() and expectedResult in pre_condition_status:    status ="SUCCESS"
     print("\nCheck the status of AppManagers in the device")
     print("\nCheck the status of AppManagers in the device")
     plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]
     plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.AppPackageManager":"activated","org.rdk.AppManager":"activated"}
+    curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj,plugins_list)
     if curr_plugins_status_dict != plugin_status_needed:
         status = StabilityTestUtility.set_plugins_status(obj,plugin_status_needed)
         time.sleep(10)

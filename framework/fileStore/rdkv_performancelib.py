@@ -2367,7 +2367,7 @@ def getPlaybackTimestamps(obj, app_name):
                         playback_started = timestamps[-1] if timestamps else ""
                         print("Video Player Playing at: {}".format(playback_started))
 
-                        ssh_params = rdkv_performancelib.rdkservice_getSSHParams(obj.realpath, ip)
+                        ssh_params = rdkv_performancelib.rdkservice_getSSHParams(obj.realpath, obj.IP)
                         if ssh_params == "" or ssh_params == "{}":
                             raise Exception("Failed to get SSH parameters from configuration")
                         

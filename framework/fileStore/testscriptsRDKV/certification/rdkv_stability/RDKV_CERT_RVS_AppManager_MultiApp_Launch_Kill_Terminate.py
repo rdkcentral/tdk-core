@@ -43,7 +43,7 @@ expectedResult = "SUCCESS"
 #Check the device status before starting the stress test
 pre_condition_status = check_device_state(obj)
 
-if expectedResult in (result.upper() and pre_condition_status):
+if expectedResult in result.upper() and expectedResult in pre_condition_status:
     status ="SUCCESS"
     print("\nCheck the status of AppManagers in the device")
     plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]
@@ -56,13 +56,13 @@ if expectedResult in (result.upper() and pre_condition_status):
         test_count = StabilityTestVariables.AppManager_test_count
         app_bundle_list = StabilityTestVariables.appmanager_test_apps
         app_download_url = PerformanceTestVariables.app_download_url
-        app_name_1= "com.rdkcentral.testapp1"
-        app_name_2= "com.rdkcentral.testapp2"
-        app_ids = [app_name_1, app_name_2]
-
+        
         #Two distinct app bundles are required, one per app id under test
         if len(app_bundle_list) >= 2:
-            status = rdkservice_install_launch_app(obj, app_bundle_list[0], app_name_1,app_download_url,launch =False)
+            app_name_1 = app_bundle_list[0].split("+")[0]
+            app_name_2 = app_bundle_list[1].split("+")[0]
+            app_ids = [app_name_1, app_name_2]
+            status = rdkservice_install_launch_app(obj, app_bundle_list[0], app_name_1, app_download_url, launch=False)
             if status == "SUCCESS":
                 print("Successfully installed {}".format(app_name_1))
                 status = rdkservice_install_launch_app(obj, app_bundle_list[1], app_name_2,app_download_url,launch =False)
