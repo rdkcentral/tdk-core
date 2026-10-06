@@ -2358,41 +2358,14 @@ def getPlaybackTimestamps(obj, app_name):
         if lines:
             if len(lines) != lastIndex:
                 continue_count = 0
-                #print(lastIndex,len(lines))
                 for i in range(lastIndex,len(lines)):
                     print(lines[i])
                     if "Video Player Playing" in lines[i]:
-                        clean_line = re.sub(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])", "", lines[i])
-                        timestamps = re.findall(r"\b\d{2}:\d{2}:\d{2}(?:[.:]\d+)?\b", clean_line)
-                        playback_started = timestamps[-1] if timestamps else ""
+                        print("Found 'Video Player Playing' log line: {}".format(lines[i]))
+                        playback_match = re.search(r"\b\d{2}:\d{2}:\d{2}(?:[.:]\d+)?\b", lines[i])
+                        playback_started = playback_match.group(0) if playback_match else ""
                         print("Video Player Playing at: {}".format(playback_started))
 
-                        ssh_params = rdkservice_getSSHParams(obj.realpath, obj.IP)
-                        if ssh_params == "" or ssh_params == "{}":
-                            raise Exception("Failed to get SSH parameters from configuration")
-                        
-                        ssh_params_dict = json.loads(ssh_params)
-                        ssh_method = ssh_params_dict.get("ssh_method")
-                        credentials = ssh_params_dict.get("credentials")
-                        
-                        if not ssh_method or not credentials:
-                            raise Exception("SSH method or credentials not found in configuration")
-                        
-                        # Execute command on DUT to get inspector port from dacapp log
-                        cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
-                        log_path = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
-                        log_path_lines = [line.strip() for line in log_path.splitlines() if line.strip()]
-                        if not log_path_lines:
-                            print("Failed to get the application storage path")
-                            continue
-                        log_path = log_path_lines[-1]
-                        log_file = log_path +"/" + app_name + "/"+ app_name+".log"
-                        cmd = f"grep -i 'wpe load committed' {log_file} | tail -n 1 | cut -d' ' -f2 | sed 's/:$//'"
-                        output = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
-                        print(output)
-                        clean_output = re.sub(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])", "", output)
-                        load_timestamps = re.findall(r"\b\d{2}:\d{2}:\d{2}(?:[.:]\d+)?\b", clean_output)
-                        load_video = load_timestamps[-1] if load_timestamps else ""
                 lastIndex = len(lines)
                 if playback_started != "":
                     break;
@@ -2401,4 +2374,33 @@ def getPlaybackTimestamps(obj, app_name):
         else:
             continue_count += 1
         time.sleep(1)
+    ssh_params = rdkservice_getSSHParams(obj.realpath, obj.IP)
+    if ssh_params == "" or ssh_params == "{}":
+        raise Exception("Failed to get SSH parameters from configuration")
+    
+    ssh_params_dict = json.loads(ssh_params)
+    ssh_method = ssh_params_dict.get("ssh_method")
+    credentials = ssh_params_dict.get("credentials")
+    
+    if not ssh_method or not credentials:
+        raise Exception("SSH method or credentials not found in configuration")
+    
+    cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
+    log_path = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+    log_path_lines = [line.strip() for line in log_path.splitlines() if line.strip()]
+    if not log_path_lines:
+        print("Failed to get the application storage path")
+        return "", playback_started
+    log_path = log_path_lines[-1]
+    log_file = log_path +"/" + app_name + "/"+ app_name+".log"
+    cmd = f"grep -i 'wpe load committed' {log_file} | tail -n 1 | cut -d' ' -f2 | sed 's/:$//'"
+    output = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+    clean_output = re.sub(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])", "", output)
+    load_match = re.search(r"\b\d{2}:\d{2}:\d{2}(?:[.:]\d+)?\b", clean_output)
+    load_video = load_match.group(0) if load_match else ""
+    print("load_video:", load_video) 
+    if not load_video:
+        print("Failed to get the load video time")
+        return "", playback_started
+    
     return load_video, playback_started    

@@ -63,7 +63,7 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
     if status == "SUCCESS":
         test_count = int(StabilityTestVariables.AppManager_test_count)
         app_bundle_name = PerformanceTestVariables.Large_Validation_File
-        app_name = "com.rdkcentral.google"
+        app_name = "com.rdkcentral.testapp"
         app_download_url = PerformanceTestVariables.app_download_url.rstrip("/") + "/" + app_bundle_name
         seen_download_ids = []
         thunder_port = rdkv_performancelib.devicePort

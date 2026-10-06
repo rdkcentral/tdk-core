@@ -1,3 +1,22 @@
+##########################################################################
+# If not stated otherwise in this file or this component's Licenses.txt
+# file the following copyright and licenses apply:
+#
+# Copyright 2026 RDK Management
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##########################################################################
+
 import json
 import re
 import shlex
@@ -88,7 +107,6 @@ if expectedResult in result.upper():
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS");
             print("\n Video test URL is set successfully");
-        #rdkv_performancelib.setPS_value(video_test_urls[0])
             app_bundle_name=MediaValidationVariables.unified_player_app_download_url.split("/")[-1]
             print(f"\nApp bundle name: {app_bundle_name}")
             app_name = app_bundle_name.split("+")[0]
@@ -101,10 +119,10 @@ if expectedResult in result.upper():
                     load_video, playback_started = getPlaybackTimestamps(obj, app_name)
                     if load_video and playback_started:
                         # Normalize colon-separated milliseconds (HH:MM:SS:mmm) to dot form for getTimeInMilliSec
-                        load_time_ms = getTimeInMilliSec(re.sub(r"(\d{2}:\d{2}:\d{2}):(\d+)", r"\1.\2", load_video))
-                        playback_time_ms = getTimeInMilliSec(re.sub(r"(\d{2}:\d{2}:\d{2}):(\d+)", r"\1.\2", playback_started))
-                        if playback_time_ms < load_time_ms:
-                            playback_time_ms += 24 * 60 * 60 * 1000
+                        load_time = re.sub(r"(\d{2}:\d{2}:\d{2}):(\d+)", r"\1.\2", load_video)
+                        playback_time = re.sub(r"(\d{2}:\d{2}:\d{2}):(\d+)", r"\1.\2", playback_started)
+                        load_time_ms = getTimeInMilliSec(load_time if "." in load_time else load_time + ".000")
+                        playback_time_ms = getTimeInMilliSec(playback_time if "." in playback_time else playback_time + ".000")
                         elapsed_time_ms = playback_time_ms - load_time_ms
                         print("\nTime from WPE load committed to Video Player Playing: {} ms".format(elapsed_time_ms))
                         result1, video_playback_threshold_value = getDeviceConfigKeyValue(conf_file,"VIDEO_PLAYBACK_THRESHOLD_VALUE")
@@ -113,7 +131,7 @@ if expectedResult in result.upper():
                         Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                         Summ_list.append('WPE load committed at :{}'.format(load_video))
                         Summ_list.append('Video Player Playing at :{}'.format(playback_started))
-                        Summ_list.append('Time to video playback :{}ms'.format(elapsed_time_ms))
+                        Summ_list.append('Time to video playback :{}ms'.format(elapsed_time_ms/1000))
                         if all(value != "" for value in (video_playback_threshold_value,offset)):
                             print("\n The threshold value for time to video playback: {} ms".format(video_playback_threshold_value))
                             if 0 < int(elapsed_time_ms) < (int(video_playback_threshold_value) + int(offset)):
