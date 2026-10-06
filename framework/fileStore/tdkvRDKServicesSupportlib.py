@@ -1149,6 +1149,45 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "system_check_get_operation":
+            try:
+                if len(arg) and arg[0] == "check_fsr_flag":
+                    fsrFlag = result.get("fsrFlag")
+                    info["fsrFlag"] = fsrFlag
+                    if str(fsrFlag).lower() == str(expectedValues[0]).lower():
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                elif len(arg) and arg[0] == "check_blocklist":
+                    blocklist = result.get("blocklist")
+                    info["blocklist"] = blocklist
+                    if str(blocklist).lower() == str(expectedValues[0]).lower():
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                elif len(arg) and arg[0] == "check_migration_status":
+                    migrationStatus = result.get("migrationStatus")
+                    info["migrationStatus"] = migrationStatus
+                    if migrationStatus == expectedValues[0]:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "system_check_boot_type":
+            try:
+                info = result
+                status = checkNonEmptyResultData(result)
+                if status == "TRUE":
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
         # User Preferces Plugin Response result parser steps
         elif tag == "userpreferences_get_ui_language":
             info = checkAndGetAllResultInfo(result,result.get("success"))
@@ -2066,13 +2105,14 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_current_output_settings":
-            info["colorSpace"] = result.get('colorSpace')
-            info["colorDepth"] = result.get('colorDepth')
-            info["matrixCoefficients"] = result.get('matrixCoefficients')
-            info["videoEOTF"] = result.get('videoEOTF')
-            if str(result.get("success")).lower() == "true" and result.get('colorSpace') in [0,1,2,3,4,5] and result.get('matrixCoefficients') in [0,1,2,3,4,5,6,7] :
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
+            try:
+                info = checkAndGetAllResultInfo(result)
+                if result.get('colorSpace') in [0,1,2,3,4,5] and result.get('matrixCoefficients') in [0,1,2,3,4,5,6,7]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_active_input":
@@ -6188,6 +6228,22 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 firmwareConfig = firmwareConfig.get("existing_firmware_configuration")
                 info["configId"] = firmwareConfig[0].get("id")
 
+        elif tag == "system_toggle_fsr_flag":
+            testStepResults = list(testStepResults[0].values())[0]
+            fsr_flag = testStepResults[0].get("fsrFlag")
+            if str(fsr_flag).lower() == "true":
+                info["fsrFlag"] = False
+            else:
+                info["fsrFlag"] = True
+
+        elif tag == "system_toggle_blocklist_flag":
+            testStepResults = list(testStepResults[0].values())[0]
+            blocklist = testStepResults[0].get("blocklist")
+            if str(blocklist).lower() == "true":
+                info["blocklist"] = False
+            else:
+                info["blocklist"] = True
+
         # user Preferences result parser steps
         elif tag == "userpreferences_switch_ui_language":
             testStepResults = list(testStepResults[0].values())[0]
@@ -7260,6 +7316,8 @@ def generateComplexTestInputParam(methodTag,testParams):
         elif tag == "systemaudioplayer_config_params":
             #print(testParams,"testParams")
             userGeneratedParam = { "id": testParams.get("id"), "pcmconfig": { "format": testParams.get("format"), "channels": int(testParams.get("channels")), "rate": int(testParams.get("rate")), "layout": testParams.get("layout") } }
+        elif tag == "system_get_rfc_config_params":
+            userGeneratedParam = { "rfcList": [ int(testParams.get("rfcList")) ] }
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
