@@ -3,7 +3,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2024 RDK Management
+# Copyright 2026 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ start_tdk()
 {
     echo -e "\nExtract TDK files to respective folders \n"
     # Use the tar command with error checking
-    if ! tar -xvzf $tdk_package --no-same-owner; then
+    if ! tar -xvzf "$tdk_package" --no-same-owner; then
         echo "Error extracting $tdk_package. Exiting."
         exit 1
     fi
@@ -32,7 +32,8 @@ start_tdk()
     systemctl enable tdk
     sleep 1
     echo -e "\nStarting TDK service\n"
-    systemctl start tdk
+    systemctl restart tdk
+    echo "TDK Package installed successfully"
 }
  
 # Check if TDK_Package.tar.gz is present in / folder.
@@ -40,11 +41,18 @@ cd /
 if [[ -z "$tdk_package" ]]; then
    echo "Packagename is not provided as command line argument"
    echo "Searching for package name \"TDK_Package*tar.gz\" "
-   mv TDK_Package*tar.gz TDK_Package.tar.gz
-   tdk_package="TDK_Package.tar.gz"
+   shopt -s nullglob
+   packages=(TDK_Package*tar.gz)
+   shopt -u nullglob
+   if (( ${#packages[@]} != 1 )); then
+       echo "Expected exactly one TDK package, found ${#packages[@]}" >&2
+       exit 1
+   fi
+   tdk_package="${packages[0]}"
 fi
 if [ -f "/$tdk_package" ]; then
     start_tdk
 else
-    echo -e "Please copy the TDK_Package.tar.gz file to / folder in the device"
+    echo "Please copy the TDK_Package.tar.gz file to / folder in the device" >&2
+    exit 1
 fi
