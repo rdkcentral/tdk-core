@@ -1,0 +1,50 @@
+## TestCase ID
+RDKV_MEDIA_1171
+## TestCase Name
+RDKV_CERT_MVS_Video_HTML_Play_HEVC_30FPS
+<a name="head.TOC"></a>
+## Table Of Contents
+- [Objective](#head.Objective)
+- [Precondition](#head.Precondition)
+- [Test Steps](#head.TestSteps)
+- [Test Attributes](#head.Attributes)
+
+<a name="head.Objective"></a>
+## Objective
+To launch a HTML Video Player application via AppManager and perform video play operation of HEVC content with 30 fps for few minutes and close the player. The test confirms that the stream opens and playback successfully, that playback starts without errors, average fps is obtained as expected and that the video progresses continuously without stalls or interruptions for the configured duration before the player closes.
+
+<a name="head.Precondition"></a>
+## Preconditions
+|#| Step Name | Step Description | Expected Result |
+|-|---------|-----------------|----------------|
+| 1 | Verify that the WPEFramework process is running on the device. | WPEFramework process should be up and running in the device. | WPEFramework should be active and running on the device. |
+| 2 | Verify that the BOLT package host path is configured correctly. | MediaValidationVariables.bolt_packages_base_path must be configured with the BOLT packages hosting server URL.<br>(E.g. `http://<TM_IP>:<port>/images/signed-packages/`) | Ensure that the BOLT package host path is configured and accessible. |
+| 3 | Verify that the BOLT app download URL resolves correctly. | MediaValidationVariables.html_player_app_download_url is derived from the base path and must resolve to the BOLT app package URL. | Ensure that the BOLT app package URL is valid and accessible for download. |
+| 4 | Verify that the required interval configuration is set correctly. | MediaValidationVariables.close_interval should be set to the close interval value (in seconds). | Ensure that the required configuration value is set correctly. |
+| 5 | Verify that the stream variable is configured correctly. | Stream variable `video_src_url_hevc_30fps` must be defined in `MediaValidationVariables.py` as `test_streams_base_path + "TDK_Asset_Sunrise_HEVC_30fps_v2.mp4"`, providing the test stream used for playback testing. | Verify that `video_src_url_hevc_30fps` resolves to a valid, accessible stream location for this test. |
+| 6 | Check whether the app is already installed on the device. | Query the installed package list using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppPackageManager.1.listPackages"}</code>. | Verify that the app is installed on the device. |
+| 7 | Download the app package when it is not already available. | If the app is not installed, then download the package using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<app_download_url>"}}</code>. | Ensure that the app package is downloaded successfully. |
+| 8 | Install the downloaded app package through PackageManager. | Install the package using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppPackageManager.install", "params": {"packageId": "com.rdkcentral.html-player", "version": "0.1.0", "additionalMetadata": [{"name": "type", "value": "native/dac-app"}], "fileLocator": "<PACKAGEMANAGER_FILE_LOCATOR>/package<download_id>"}}</code>. | Confirm that the app package is installed successfully on the device. |
+
+<a name="head.TestSteps"></a>
+## Test Steps
+|#| Step Name | Step Description | Expected Result |
+|-|---------|-----------------|----------------|
+| 1 | Set playback operations for given stream. | Configure the `close(30)` operation for stream: the video player will play the stream for 30 seconds and then close the player. | Ensure that the playback operations are set as specified for given stream. |
+| 2 | Store the launch URL in PersistentStore. | Construct and store the launch URL in PersistentStore for AppManager launch. <br>Sample URL: `http://<TM_IP>:<port>/tdkservice/fileStore/lightning-apps/htmlplayer.html?url=<video_src_url_hevc_30fps>&operations=close(30)&options=expectedfps(30)&autotest=true` | Ensure that launch URL is successfully stored in PersistentStore. |
+| 3 | Launch the app through AppManager. | Launch the test app through AppManager using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.launchApp", "params":{"appId": "com.rdkcentral.html-player"}}</code>. | Ensure that the app launches successfully via AppManager. |
+| 4 | Check loaded apps and verify app presence. | Check whether the app is listed in loaded apps using the following request: <br><code>{"jsonrpc": "2.0", "id": 1234567890, "method": "org.rdk.AppManager.getLoadedApps"}</code>. | Verify that com.rdkcentral.html-player is present in the loaded apps list. |
+| 5 | Run video playback and capture the FPS along with media events. | The player opens the stream and starts playback. A **play** event confirms that the video has started. The video position is monitored during playback to confirm the content is advancing continuously without stalls or interruptions. The FPS values are calculated during the playback of the stream, and the average FPS is calculated based on the values obtained. The player closes automatically after the configured duration. | Ensure that the average fps and video playback events are captured for the configured duration. |
+| 6 | Validate the observed events for the video playback operation, confirm that the average FPS falls within the expected range, and update the test result accordingly. | If playback starts successfully, the video position advances continuously throughout the configured duration without stalls or interruptions, and the average FPS falls within the expected range, the app reports SUCCESS, otherwise FAILURE. The test result is updated as SUCCESS or FAILURE based on event validation, FPS validation, and proc check status. | Ensure that the test result is updated as SUCCESS or FAILURE based on the video playback event validation, FPS validation, and proc check status. |
+| 7 | Terminate the app and restore test environment. | Terminate the test app through AppManager using the following request: <br><code>{"jsonrpc":"2.0", "id":1, "method":"org.rdk.AppManager.1.terminateApp", "params":{"appId": "com.rdkcentral.html-player"}}</code> and restore the test environment. | Ensure that the app is terminated and the test environment is restored. |
+
+<a name="head.Attributes"></a>
+## Test Attributes
+
+**Supported Models**: Video_Accelerator
+
+**Estimated duration**: 7 mins
+
+**Priority**: High
+
+**Release Version**: M153<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
