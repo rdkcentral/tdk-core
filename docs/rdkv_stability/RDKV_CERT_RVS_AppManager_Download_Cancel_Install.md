@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_STABILITY_28
 ## TestCase Name
-RDKV_CERT_RVS_AppManager_Install_Cancelled_Package
+RDKV_CERT_RVS_AppManager_Download_Cancel_Install
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)

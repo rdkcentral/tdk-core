@@ -77,85 +77,101 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
                 for i in range(test_count):
                     print("ITERATION :", i+1)
                     print("_________________")
-                    print("\nClearing data for all apps")
-                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                    tdkTestObj.addParameter("method", "org.rdk.AppManager.clearAllAppData")
-                    tdkTestObj.addParameter("value", '{}')
+                    print("Getting installed apps before clearing data")
+                    tdkTestObj = obj.createTestStep('rdkservice_getValue')
+                    tdkTestObj.addParameter("method", "org.rdk.AppManager.getInstalledApps")
                     tdkTestObj.executeTestCase(expectedResult)
                     status = tdkTestObj.getResult()
-                    details = tdkTestObj.getResultDetails()
-                    if status == "SUCCESS":
+                    installed_apps_before = tdkTestObj.getResultDetails()
+                    print("installed_apps_before:", installed_apps_before)
+                    missing_apps = [name for name in app_name_list if name not in str(installed_apps_before)]
+                    if status == "SUCCESS" and not missing_apps:
+                        print("All apps are installed before clearing data")
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print("Successfully cleared all app data")
-                        print("\nVerifying the installed package set is unchanged")
-                        tdkTestObj = obj.createTestStep('rdkservice_getValue')
-                        tdkTestObj.addParameter("method", "org.rdk.AppManager.getInstalledApps")
+                        print("installed_apps_before:", installed_apps_before)
+                        print("\nClearing data for all apps")
+                        tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                        tdkTestObj.addParameter("method", "org.rdk.AppManager.clearAllAppData")
+                        tdkTestObj.addParameter("value", '{}')
                         tdkTestObj.executeTestCase(expectedResult)
                         status = tdkTestObj.getResult()
-                        installed_apps = tdkTestObj.getResultDetails()
-
-                        print("installed_apps:", installed_apps)
-                        missing_apps = [name for name in app_name_list if name not in str(installed_apps)]
-                        if status == "SUCCESS" and not missing_apps:
+                        details = tdkTestObj.getResultDetails()
+                        if status == "SUCCESS":
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print("All apps remain installed after clearAllAppData")
-                            print("\nVerifying each app is still launchable")
-                            for app_name in app_name_list:
-                                print(f"\nLaunching {app_name}")
-                                tdkTestObj = obj.createTestStep('rdkservice_launch_app')
-                                tdkTestObj.addParameter("app_name", app_name)
-                                tdkTestObj.executeTestCase(expectedResult)
-                                status = tdkTestObj.getResult()
-                                details = tdkTestObj.getResultDetails()
-                                if status == "SUCCESS":
-                                    tdkTestObj.setResultStatus("SUCCESS")
-                                    time.sleep(10)
-                                    loaded_apps = rdkservice_get_loaded_apps()
-                                    print(loaded_apps)
-                                    if app_name in loaded_apps:
+                            print("Successfully cleared all app data")
+                            print("\nVerifying the installed package set is unchanged")
+                            tdkTestObj = obj.createTestStep('rdkservice_getValue')
+                            tdkTestObj.addParameter("method", "org.rdk.AppManager.getInstalledApps")
+                            tdkTestObj.executeTestCase(expectedResult)
+                            status = tdkTestObj.getResult()
+                            installed_apps = tdkTestObj.getResultDetails()
+
+                            print("installed_apps:", installed_apps)
+                            missing_apps = [name for name in app_name_list if name not in str(installed_apps)]
+                            if status == "SUCCESS" and not missing_apps:
+                                tdkTestObj.setResultStatus("SUCCESS")
+                                print("All apps remain installed after clearAllAppData")
+                                print("\nVerifying each app is still launchable")
+                                for app_name in app_name_list:
+                                    print(f"\nLaunching {app_name}")
+                                    tdkTestObj = obj.createTestStep('rdkservice_launch_app')
+                                    tdkTestObj.addParameter("app_name", app_name)
+                                    tdkTestObj.executeTestCase(expectedResult)
+                                    status = tdkTestObj.getResult()
+                                    details = tdkTestObj.getResultDetails()
+                                    if status == "SUCCESS":
                                         tdkTestObj.setResultStatus("SUCCESS")
-                                        print(f"{app_name} is in the list of loaded apps")
-                                        print(f"Successfully launched {app_name}")
-                                        print(f"Terminating {app_name}")
-                                        tdkTestObj = obj.createTestStep('rdkv_terminate_app')
-                                        tdkTestObj.addParameter("app_id", app_name)
-                                        tdkTestObj.executeTestCase(expectedResult)
-                                        result = tdkTestObj.getResult()
-                                        if result == "SUCCESS":
-                                            time.sleep(5)
+                                        time.sleep(10)
+                                        loaded_apps = rdkservice_get_loaded_apps()
+                                        print(loaded_apps)
+                                        if app_name in loaded_apps:
                                             tdkTestObj.setResultStatus("SUCCESS")
-                                            print(f"Successfully terminated {app_name}")
-                                            print("\n Validating resource usage:")
-                                            tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                                            print(f"{app_name} is in the list of loaded apps")
+                                            print(f"Successfully launched {app_name}")
+                                            print(f"Terminating {app_name}")
+                                            tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                                            tdkTestObj.addParameter("app_id", app_name)
                                             tdkTestObj.executeTestCase(expectedResult)
-                                            resource_usage = tdkTestObj.getResultDetails()
                                             result = tdkTestObj.getResult()
-                                            if expectedResult in result and resource_usage != "ERROR":
-                                                print("\n Resource usage is within the expected limit")
+                                            if result == "SUCCESS":
+                                                time.sleep(5)
                                                 tdkTestObj.setResultStatus("SUCCESS")
+                                                print(f"Successfully terminated {app_name}")
+                                                print("\n Validating resource usage:")
+                                                tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                                                tdkTestObj.executeTestCase(expectedResult)
+                                                resource_usage = tdkTestObj.getResultDetails()
+                                                result = tdkTestObj.getResult()
+                                                if expectedResult in result and resource_usage != "ERROR":
+                                                    print("\n Resource usage is within the expected limit")
+                                                    tdkTestObj.setResultStatus("SUCCESS")
+                                                else:
+                                                    print(f"\nIteration {i+1} Error while validating resource usage")
+                                                    tdkTestObj.setResultStatus("FAILURE")
+                                                    break
                                             else:
-                                                print(f"\nIteration {i+1} Error while validating resource usage")
                                                 tdkTestObj.setResultStatus("FAILURE")
+                                                print(f"\nIteration {i+1}: Failed to terminate {app_name}")
                                                 break
                                         else:
                                             tdkTestObj.setResultStatus("FAILURE")
-                                            print(f"\nIteration {i+1}: Failed to terminate {app_name}")
+                                            print(f"\nIteration {i+1}: {app_name} is not launchable after clearAllAppData")
                                             break
                                     else:
                                         tdkTestObj.setResultStatus("FAILURE")
-                                        print(f"\nIteration {i+1}: {app_name} is not launchable after clearAllAppData")
+                                        print(f"\nIteration {i+1}: Failed to launch {app_name}")
                                         break
-                                else:
-                                    tdkTestObj.setResultStatus("FAILURE")
-                                    print(f"\nIteration {i+1}: Failed to launch {app_name}")
-                                    break
+                            else:
+                                tdkTestObj.setResultStatus("FAILURE")
+                                print(f"\nIteration {i+1}: Installed package set changed after clearAllAppData. Missing: {missing_apps}")
+                                break
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
-                            print(f"\nIteration {i+1}: Installed package set changed after clearAllAppData. Missing: {missing_apps}")
+                            print(f"\nIteration {i+1}: Failed to clear all app data")
                             break
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print(f"\nIteration {i+1}: Failed to clear all app data")
+                        print(f"\nIteration {i+1}: Failed to get installed apps before clearAllAppData")
                         break
             else:
                 print("Failed to install the required apps")

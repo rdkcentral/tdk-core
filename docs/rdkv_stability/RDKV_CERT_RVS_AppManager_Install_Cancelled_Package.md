@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_STABILITY_29
 ## TestCase Name
-RDKV_CERT_RVS_AppManager_FileLocator_InstallAfterCancel
+RDKV_CERT_RVS_AppManager_Install_Cancelled_Package
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
