@@ -119,6 +119,7 @@ result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
+revert = "NO"
 if expectedResult in result.upper():
     filename = obj.realpath+"fileStore/lightning-apps/channels.js"
     basepath = MediaValidationVariables.test_streams_base_path.replace("http:","")

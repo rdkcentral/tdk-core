@@ -34,7 +34,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_RVS_AppManager_onAppInstalled_onAppUninstalled_Events_Lifecycle');
+obj.configureTestCase(ip,port,'RDKV_CERT_RVS_AppManager_Install_Uninstall_LifeCycle');
 
 #The device will reboot before starting the stability testing if "pre_req_reboot" is
 #configured as "Yes".
@@ -116,7 +116,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 print(f"{app_name} is not installed in the device")
                 uninstalled = True       
             if uninstalled:
-                for iteration in range(1):
+                for iteration in range(test_count):
                     print("ITERATION :", iteration + 1)
                     print("_________________")
                     install_event_count = 0

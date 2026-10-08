@@ -48,7 +48,7 @@ To validate the RDKWindowManager focus switching mechanism by installing and lau
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 200 minutes
 

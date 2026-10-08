@@ -14,7 +14,7 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-# limitations under the License.
+# limitations under the License.Summ_list
 #########################################################################
 from rdkv_performancelib import *
 import ast
@@ -301,7 +301,7 @@ def testUsingRestAPI(obj,result_dict_list):
         if continue_count > 60:
             hang_detected = 1
             print("\nApp not proceeding for 60 secs. Exiting...")
-            break;
+            return []
         with open(app_log_file,'r') as f:
             lines = f.readlines()
         if lines:

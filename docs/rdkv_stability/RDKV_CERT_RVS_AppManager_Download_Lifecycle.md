@@ -44,7 +44,7 @@ To validate that the DownloadManager correctly downloads an application bundle, 
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 150 minutes
 
