@@ -35,9 +35,8 @@ obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True)
 ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'RDKV_CERT_RVS_AppManager_Install_Cancelled_Package');
-#The device will reboot before starting the performance testing if "pre_req_reboot_pvs" is
-#configured as "Yes".
-pre_requisite_reboot(obj,"yes")
+#The device will reboot before starting the stability testing if "pre_req_reboot" is configured as "yes".
+pre_requisite_reboot(obj)
 
 result = obj.getLoadModuleResult()
 print("[LIB LOAD STATUS]  :  %s" % result)
