@@ -112,6 +112,7 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 print("All apps remain installed after clearAllAppData")
                                 print("\nVerifying each app is still launchable")
+                                launch_status = True
                                 for app_name in app_name_list:
                                     print(f"\nLaunching {app_name}")
                                     tdkTestObj = obj.createTestStep('rdkservice_launch_app')
@@ -148,19 +149,25 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
                                                 else:
                                                     print(f"\nIteration {i+1} Error while validating resource usage")
                                                     tdkTestObj.setResultStatus("FAILURE")
+                                                    launch_status = False
                                                     break
                                             else:
                                                 tdkTestObj.setResultStatus("FAILURE")
                                                 print(f"\nIteration {i+1}: Failed to terminate {app_name}")
+                                                launch_status = False
                                                 break
                                         else:
                                             tdkTestObj.setResultStatus("FAILURE")
                                             print(f"\nIteration {i+1}: {app_name} is not launchable after clearAllAppData")
+                                            launch_status = False
                                             break
                                     else:
                                         tdkTestObj.setResultStatus("FAILURE")
                                         print(f"\nIteration {i+1}: Failed to launch {app_name}")
+                                        launch_status = False
                                         break
+                                if not launch_status:
+                                    break
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
                                 print(f"\nIteration {i+1}: Installed package set changed after clearAllAppData. Missing: {missing_apps}")
