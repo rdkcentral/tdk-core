@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_PERFORMANCE_106
 ## TestCase Name
-RDKV_CERT_PVS_AppManager_Launch_After_Uninstall
+RDKV_CERT_PVS_AppManager_ResourceUsage_Launch_After_Uninstall
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)

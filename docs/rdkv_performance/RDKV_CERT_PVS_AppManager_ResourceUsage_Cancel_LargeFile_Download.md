@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_PERFORMANCE_103
 ## TestCase Name
-RDKV_CERT_PVS_AppManager_Cancel_LargeFile_Download
+RDKV_CERT_PVS_AppManager_ResourceUsage_Cancel_LargeFile_Download
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_PERFORMANCE_104
 ## TestCase Name
-RDKV_CERT_PVS_AppManager_Download_InvalidURL
+RDKV_CERT_PVS_AppManager_ResourceUsage_Download_InvalidURL
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)

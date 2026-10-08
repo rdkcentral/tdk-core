@@ -29,7 +29,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_media","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_MVS_Video_Play_Widevine_Cypt_Skip_Byte_Block_DASH_VP9_OPUS')
+obj.configureTestCase(ip,port,'RDKV_CERT_MVS_Video_Play_Widevine_Crypt_Skip_Byte_Block_DASH_VP9_OPUS')
 
 webkit_console_socket = None
 

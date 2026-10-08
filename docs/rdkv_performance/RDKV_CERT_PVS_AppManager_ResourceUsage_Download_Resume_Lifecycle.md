@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_PERFORMANCE_105
 ## TestCase Name
-RDKV_CERT_PVS_AppManager_Download_Resume_Lifecycle
+RDKV_CERT_PVS_AppManager_ResourceUsage_Download_Resume_Lifecycle
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
