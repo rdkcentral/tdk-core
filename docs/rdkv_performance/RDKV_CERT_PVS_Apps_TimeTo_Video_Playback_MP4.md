@@ -11,7 +11,7 @@ RDKV_CERT_PVS_Apps_TimeTo_Video_Playback_MP4
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the unified MP4 video player loads and starts playback within the configured time threshold after application launch.
+To validate that the unified MP4 video player launches successfully and begins playback within the configured time threshold by measuring the elapsed time between the WPE load-committed and Video Player Playing timestamps.
 
 <a name="head.Precondition"></a>
 ## Preconditions

@@ -11,7 +11,7 @@ RDKV_CERT_PVS_Apps_TimeTo_Video_Playback_4K_AV1
 
 <a name="head.Objective"></a>
 ## Objective
-To validate that the unified 4K AV1 video player loads and starts playback within the configured time threshold after application launch.
+To validate that the unified 4K AV1 video player launches successfully and begins playback within the configured time threshold by measuring the elapsed time between the WPE load-committed and Video Player Playing timestamps.
 
 <a name="head.Precondition"></a>
 ## Preconditions
@@ -53,7 +53,7 @@ To validate that the unified 4K AV1 video player loads and starts playback withi
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator
+**Supported Models** : Video_Accelerator
 
 **Estimated duration** : 5 mins
 
