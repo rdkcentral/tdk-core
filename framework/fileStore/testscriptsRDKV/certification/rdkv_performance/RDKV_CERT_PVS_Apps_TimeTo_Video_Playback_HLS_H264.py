@@ -61,7 +61,6 @@ if expectedResult in result.upper():
     setURLArgument("logging",logging_method)
     setURLArgument("tmUrl",str(obj.url)+"/")
 
-    setOperation("pause",10)
     setOperation("play",10)
     operations = getOperations()
     # Setting VideoPlayer test app URL arguments
@@ -147,19 +146,20 @@ if expectedResult in result.upper():
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     print("\n Error occured during video playback")
+
+                print("\n Terminating the app")
+                tdkTestObj = obj.createTestStep('rdkv_terminate_app')
+                tdkTestObj.addParameter("app_id",app_name)
+                tdkTestObj.executeTestCase(expectedResult)
+                result = tdkTestObj.getResult()
+                if result == "SUCCESS":
+                    tdkTestObj.setResultStatus("SUCCESS")
+                else:
+                    tdkTestObj.setResultStatus("FAILURE")
+                    print("Unable to terminate the app")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
                 print("Failed to install or launch app")
-            print("\n Terminating the app")
-            tdkTestObj = obj.createTestStep('rdkv_terminate_app')
-            tdkTestObj.addParameter("app_id",app_name)
-            tdkTestObj.executeTestCase(expectedResult)
-            result = tdkTestObj.getResult()
-            if result == "SUCCESS":
-                tdkTestObj.setResultStatus("SUCCESS")
-            else:
-                tdkTestObj.setResultStatus("FAILURE")
-                print("Unable to terminate the app")
         else:
             tdkTestObj.setResultStatus("FAILURE")
             print("Unable to set the video URL value in PersistentStorage")
