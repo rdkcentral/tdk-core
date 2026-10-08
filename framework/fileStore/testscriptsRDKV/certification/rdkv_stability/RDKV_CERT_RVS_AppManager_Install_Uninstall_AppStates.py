@@ -33,7 +33,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_RVS_AppManager_UninstallEvent_StateConsistency');
+obj.configureTestCase(ip,port,'RDKV_CERT_RVS_AppManager_Install_Uninstall_AppStates');
 
 #The device will reboot before starting the stability testing if "pre_req_reboot" is
 #configured as "Yes".
@@ -65,15 +65,11 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
         app_download_url = PerformanceTestVariables.app_download_url
         thunder_port = rdkv_performancelib.devicePort
 
-        payloads = []
-        events = ['{"org.rdk.AppManager": "onAppUninstalled"}']
-        for item in events:
-            parsed_item = json.loads(item)
-            for callsign, event_name in parsed_item.items():
-                payload = '{"jsonrpc": "2.0","id": 1,"method": "'+callsign+'.1.register","params": {"event": "'+event_name+'", "id": "client.events.1" }}'
-                payloads.append(payload)
+        callsign = "org.rdk.AppManager"
+        event_name = "onAppUninstalled"
+        payload = '{"jsonrpc": "2.0","id": 1,"method": "'+callsign+'.1.register","params": {"event": "'+event_name+'", "id": "client.events.1" }}'
 
-        event_listener = createEventListener(ip,thunder_port,payloads,"/jsonrpc",False)
+        event_listener = createEventListener(ip,thunder_port,[payload],"/jsonrpc",False)
         time.sleep(3)
 
         status = rdkservice_install_launch_app(obj, app_bundle, app_name, app_download_url, launch=False)
@@ -89,29 +85,29 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
                 tdkTestObj.addParameter("method", "org.rdk.AppManager.getInstalledApps")
                 tdkTestObj.executeTestCase(expectedResult)
                 status = tdkTestObj.getResult()
-                installed_snapshot = tdkTestObj.getResultDetails()
+                installed_apps_before_launch = tdkTestObj.getResultDetails()
                 if status == "SUCCESS":
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print("Installed apps snapshot before launching the app:", installed_snapshot)
+                    print("Installed apps before launching the app:", installed_apps_before_launch)
                     print("Checking if the app is installed before launching")
                     tdkTestObj = obj.createTestStep('rdkservice_getValueWithParams')
                     tdkTestObj.addParameter("method", "org.rdk.AppManager.isInstalled")
                     tdkTestObj.addParameter("params", '{"appId": "'+app_name+'"}')
                     tdkTestObj.executeTestCase(expectedResult)
                     status = tdkTestObj.getResult()
-                    installed_status = tdkTestObj.getResultDetails()
+                    is_installed_before_launch = tdkTestObj.getResultDetails()
                     print("Status of isInstalled check:", status)
                     if status == "SUCCESS":
-                        print("Installed status of the app before launching:", installed_status)
+                        print("isInstalled result before launching the app:", is_installed_before_launch)
                         tdkTestObj.setResultStatus("SUCCESS")
                         time.sleep(5)
                         tdkTestObj = obj.createTestStep('rdkservice_getValue')
                         tdkTestObj.addParameter("method", "org.rdk.AppManager.getLoadedApps")
                         tdkTestObj.executeTestCase(expectedResult)
                         status = tdkTestObj.getResult()
-                        loaded_snapshot = tdkTestObj.getResultDetails()
+                        loaded_apps_before_launch = tdkTestObj.getResultDetails()
                         if status == "SUCCESS":
-                            print("Loaded apps snapshot before launching the app:", loaded_snapshot)
+                            print("Loaded apps before launching the app:", loaded_apps_before_launch)
                             tdkTestObj.setResultStatus("SUCCESS")
                             tdkTestObj = obj.createTestStep('rdkservice_launch_app')
                             tdkTestObj.addParameter("app_name", app_name)
@@ -162,7 +158,7 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
                                             tdkTestObj.addParameter("method", "org.rdk.AppManager.getInstalledApps")
                                             tdkTestObj.executeTestCase(expectedResult)
                                             status = tdkTestObj.getResult()
-                                            final_installed_snapshot = tdkTestObj.getResultDetails()
+                                            installed_apps_after_uninstall = tdkTestObj.getResultDetails()
                                             if status == "SUCCESS":
                                                 tdkTestObj.setResultStatus("SUCCESS")
                                                 tdkTestObj = obj.createTestStep('rdkservice_getValueWithParams')
@@ -170,35 +166,35 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
                                                 tdkTestObj.addParameter("params", '{"appId": "'+app_name+'"}')
                                                 tdkTestObj.executeTestCase(expectedResult)
                                                 status = tdkTestObj.getResult()
-                                                final_isinstalled_snapshot = tdkTestObj.getResultDetails()
+                                                is_installed_after_uninstall = tdkTestObj.getResultDetails()
                                                 if status == "SUCCESS":
                                                     tdkTestObj.setResultStatus("SUCCESS")
                                                     tdkTestObj = obj.createTestStep('rdkservice_getValue')
                                                     tdkTestObj.addParameter("method", "org.rdk.AppManager.getLoadedApps")
                                                     tdkTestObj.executeTestCase(expectedResult)
                                                     status = tdkTestObj.getResult()
-                                                    final_loaded_snapshot = tdkTestObj.getResultDetails()
+                                                    loaded_apps_after_uninstall = tdkTestObj.getResultDetails()
                                                     if status == "SUCCESS":
                                                         tdkTestObj.setResultStatus("SUCCESS")
-                                                        initial_installed = app_name in str(installed_snapshot)
-                                                        initial_isinstalled = "true" in str(installed_status).lower()
-                                                        initial_loaded = app_name in str(loaded_snapshot)
-                                                        final_installed = app_name in str(final_installed_snapshot)
-                                                        final_isinstalled = "true" in str(final_isinstalled_snapshot).lower()
-                                                        final_loaded = app_name in str(final_loaded_snapshot)
+                                                        initial_installed = app_name in str(installed_apps_before_launch)
+                                                        initial_isinstalled = "true" in str(is_installed_before_launch).lower()
+                                                        initial_loaded = app_name in str(loaded_apps_before_launch)
+                                                        final_installed = app_name in str(installed_apps_after_uninstall)
+                                                        final_isinstalled = "true" in str(is_installed_after_uninstall).lower()
+                                                        final_loaded = app_name in str(loaded_apps_after_uninstall)
                                                         uninstall_event = "onAppUninstalled" in str(event) and app_name in str(event)
                                                         #Installed list, isInstalled and loaded list must agree with each other and with the event stream
                                                         initial_consistent = initial_installed and initial_isinstalled and not initial_loaded
                                                         final_consistent = not final_installed and not final_isinstalled and not final_loaded
                                                         if initial_consistent and final_consistent and uninstall_event:
-                                                            print("Snapshot state and event stream are consistent across query surfaces")
+                                                            print("App state results and event stream are consistent across query surfaces")
                                                             #Reinstall the app so it is available for the next iteration
                                                             status = rdkservice_install_launch_app(obj, app_bundle, app_name, app_download_url, launch=False)
                                                             if status != "SUCCESS":
                                                                 print("Failed to reinstall the app for the next iteration")
                                                                 break
                                                         else:
-                                                            print("State snapshot and event stream diverged across query surfaces")
+                                                            print("App state results and event stream diverged across query surfaces")
                                                             print("initial_installed=%s initial_isinstalled=%s initial_loaded=%s final_installed=%s final_isinstalled=%s final_loaded=%s uninstall_event=%s" % (initial_installed, initial_isinstalled, initial_loaded, final_installed, final_isinstalled, final_loaded, uninstall_event))
                                                             tdkTestObj.setResultStatus("FAILURE")
                                                             break
@@ -243,7 +239,7 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
                     print("Failed to get installed apps")
                     break
         else:
-            print("The app is not available for the app state snapshot event consistency flow")
+            print("The app is not available for the app state and event consistency flow")
             obj.setLoadModuleStatus("FAILURE")
 
         event_listener.disconnect()

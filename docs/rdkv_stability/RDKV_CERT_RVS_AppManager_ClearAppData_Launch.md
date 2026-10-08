@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_STABILITY_30
 ## TestCase Name
-RDKV_CERT_RVS_AppManager_Launch_ClearAppData_Terminate
+RDKV_CERT_RVS_AppManager_ClearAppData_Launch
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)

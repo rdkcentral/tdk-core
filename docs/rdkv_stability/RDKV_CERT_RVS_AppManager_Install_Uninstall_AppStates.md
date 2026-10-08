@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_STABILITY_34
 ## TestCase Name
-RDKV_CERT_RVS_AppManager_UninstallEvent_StateConsistency
+RDKV_CERT_RVS_AppManager_Install_Uninstall_AppStates
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)

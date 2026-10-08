@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_STABILITY_27
 ## TestCase Name
-RDKV_CERT_RVS_AppManager_ClearAllAppData_Relaunch
+RDKV_CERT_RVS_AppManager_ClearAllAppData_Launch
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)

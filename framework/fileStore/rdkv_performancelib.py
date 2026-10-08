@@ -2374,33 +2374,38 @@ def getPlaybackTimestamps(obj, app_name):
         else:
             continue_count += 1
         time.sleep(1)
-    ssh_params = rdkservice_getSSHParams(obj.realpath, obj.IP)
-    if ssh_params == "" or ssh_params == "{}":
-        raise Exception("Failed to get SSH parameters from configuration")
-    
-    ssh_params_dict = json.loads(ssh_params)
-    ssh_method = ssh_params_dict.get("ssh_method")
-    credentials = ssh_params_dict.get("credentials")
-    
-    if not ssh_method or not credentials:
-        raise Exception("SSH method or credentials not found in configuration")
-    
-    cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
-    log_path = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
-    log_path_lines = [line.strip() for line in log_path.splitlines() if line.strip()]
-    if not log_path_lines:
-        print("Failed to get the application storage path")
-        return "", playback_started
-    log_path = log_path_lines[-1]
-    log_file = log_path +"/" + app_name + "/"+ app_name+".log"
-    cmd = f"grep -i 'wpe load committed' {log_file} | tail -n 1 | cut -d' ' -f2 | sed 's/:$//'"
-    output = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
-    clean_output = re.sub(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])", "", output)
-    load_match = re.search(r"\b\d{2}:\d{2}:\d{2}(?:[.:]\d+)?\b", clean_output)
-    load_video = load_match.group(0) if load_match else ""
-    print("load_video:", load_video) 
-    if not load_video:
-        print("Failed to get the load video time")
-        return "", playback_started
+        
+    if playback_started != "":
+        ssh_params = rdkservice_getSSHParams(obj.realpath, obj.IP)
+        if ssh_params == "" or ssh_params == "{}":
+            raise Exception("Failed to get SSH parameters from configuration")
+
+        ssh_params_dict = json.loads(ssh_params)
+        ssh_method = ssh_params_dict.get("ssh_method")
+        credentials = ssh_params_dict.get("credentials")
+
+        if not ssh_method or not credentials:
+            raise Exception("SSH method or credentials not found in configuration")
+
+        cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
+        log_path = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+        log_path_lines = [line.strip() for line in log_path.splitlines() if line.strip()]
+        if not log_path_lines:
+            print("Failed to get the application storage path")
+            return "", playback_started
+        log_path = log_path_lines[-1]
+        log_file = log_path +"/" + app_name + "/"+ app_name+".log"
+        cmd = f"grep -i 'wpe load committed' {log_file} | tail -n 1 | cut -d' ' -f2 | sed 's/:$//'"
+        output = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+        clean_output = re.sub(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])", "", output)
+        load_match = re.search(r"\b\d{2}:\d{2}:\d{2}(?:[.:]\d+)?\b", clean_output)
+        load_video = load_match.group(0) if load_match else ""
+        print("load_video:", load_video) 
+        if not load_video:
+            print("Failed to get the load video time")
+            return "", playback_started
+    else:
+        print("Playback did not start")
+        return "", ""
     
     return load_video, playback_started    

@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_STABILITY_31
 ## TestCase Name
-RDKV_CERT_RVS_AppManager_MultiApp_Launch_Kill_Terminate
+RDKV_CERT_RVS_AppManager_Kill_Terminate_MultipleApps
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)

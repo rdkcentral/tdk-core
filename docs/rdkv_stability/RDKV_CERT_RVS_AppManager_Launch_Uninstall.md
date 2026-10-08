@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_STABILITY_33
 ## TestCase Name
-RDKV_CERT_RVS_AppManager_Uninstall_ActiveApp_Conflict
+RDKV_CERT_RVS_AppManager_Launch_Uninstall
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)

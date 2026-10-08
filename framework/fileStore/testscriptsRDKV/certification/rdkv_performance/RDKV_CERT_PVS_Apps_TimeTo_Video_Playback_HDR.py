@@ -17,10 +17,6 @@
 # limitations under the License.
 ##########################################################################
 
-import json
-import re
-import shlex
-
 import tdklib;
 from web_socket_util import *
 import PerformanceTestVariables
@@ -28,36 +24,29 @@ import MediaValidationVariables
 from MediaValidationUtility import *
 from StabilityTestUtility import *
 from rdkv_performancelib import *
-from urllib.parse import unquote, urlparse
-
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
-
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Apps_TimeTo_VideoPlayback_MP4');
-
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Apps_TimeTo_Video_Playback_HDR');
 webkit_console_socket = None
-
 #The device will reboot before starting the performance testing if "pre_req_reboot_pvs" is
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
-
 #Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print("[LIB LOAD STATUS]  :  %s" %result);
+print ("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result);
-
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     conf_file, status = get_configfile_name(obj);
     result, logging_method = getDeviceConfigKeyValue(conf_file,"LOGGING_METHOD")
     setDeviceConfigFile(conf_file)
-    videoURL  = MediaValidationVariables.video_src_url_mp4
+    videoURL  = MediaValidationVariables.video_src_url_hevc_hdr
     videoURL_type = "mp4"
     setURLArgument("execID",str(obj.execID))
     setURLArgument("execDevId",str(obj.execDevId))
@@ -76,19 +65,20 @@ if expectedResult in result.upper():
     appArguments = getURLArguments()
     video_test_urls = []
     players_list = str(MediaValidationVariables.codec_mp4).split(",")
-    print("SELECTED PLAYERS: ", players_list)
+    print( "SELECTED PLAYERS: ", players_list)
     # Getting the complete test app URL
     video_test_urls = getTestURLs(players_list,appArguments)
-    print("\n Check Pre conditions")
+    print ("\n Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     plugins_list = ["DeviceInfo","org.rdk.PersistentStore"]
     plugin_status_needed = {"org.rdk.PersistentStore":"activated","DeviceInfo":"activated"}
+    conf_file, status = get_configfile_name(obj);
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(20)
     status = "SUCCESS"
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print("\n Error while getting plugin status")
+        print ("\n Error while getting plugin status")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -118,12 +108,13 @@ if expectedResult in result.upper():
                 if logging_method == "REST_API":
                     load_video, playback_started = getPlaybackTimestamps(obj, app_name)
                     if load_video and playback_started:
-                        # Normalize colon-separated milliseconds (HH:MM:SS:mmm) to dot form for getTimeInMilliSec
                         load_time = re.sub(r"(\d{2}:\d{2}:\d{2}):(\d+)", r"\1.\2", load_video)
                         playback_time = re.sub(r"(\d{2}:\d{2}:\d{2}):(\d+)", r"\1.\2", playback_started)
                         load_time_ms = getTimeInMilliSec(load_time if "." in load_time else load_time + ".000")
                         playback_time_ms = getTimeInMilliSec(playback_time if "." in playback_time else playback_time + ".000")
                         elapsed_time_ms = playback_time_ms - load_time_ms
+                        if elapsed_time_ms < 0:
+                            elapsed_time_ms += 24 * 60 * 60 * 1000
                         print("\nTime from WPE load committed to Video Player Playing: {} ms".format(elapsed_time_ms))
                         result1, video_playback_threshold_value = getDeviceConfigKeyValue(conf_file,"VIDEO_PLAYBACK_THRESHOLD_VALUE")
                         Summ_list.append('VIDEO_PLAYBACK_THRESHOLD_VALUE :{}ms'.format(video_playback_threshold_value))
@@ -131,7 +122,7 @@ if expectedResult in result.upper():
                         Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                         Summ_list.append('WPE load committed at :{}'.format(load_video))
                         Summ_list.append('Video Player Playing at :{}'.format(playback_started))
-                        Summ_list.append('Time to video playback :{}ms'.format(elapsed_time_ms/1000))
+                        Summ_list.append('Time to video playback :{}ms'.format(elapsed_time_ms))
                         if all(value != "" for value in (video_playback_threshold_value,offset)):
                             print("\n The threshold value for time to video playback: {} ms".format(video_playback_threshold_value))
                             if 0 < int(elapsed_time_ms) < (int(video_playback_threshold_value) + int(offset)):
@@ -151,7 +142,7 @@ if expectedResult in result.upper():
                     print("\n Error occured during video playback")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                print("Unable to set the video url value in PersistanceStorage")
+                print("Failed to install or launch app")
             print("\n Terminating the app")
             tdkTestObj = obj.createTestStep('rdkv_terminate_app')
             tdkTestObj.addParameter("app_id",app_name)
@@ -164,7 +155,7 @@ if expectedResult in result.upper():
                 print("Unable to terminate the app")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print("Failed to install or launch app")
+            print("Unable to set the video URL value in PersistentStorage")
     else:
         print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");

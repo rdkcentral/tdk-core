@@ -31,7 +31,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_RVS_AppManager_Uninstall_ActiveApp_Conflict');
+obj.configureTestCase(ip,port,'RDKV_CERT_RVS_AppManager_Launch_Uninstall');
 
 #The device will reboot before starting the stability testing if "pre_req_reboot" is
 #configured as "Yes".
@@ -41,9 +41,9 @@ result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
-Summ_list=[]
-if expectedResult in result.upper() and expectedResult in pre_condition_status:    status ="SUCCESS"
-    print("\nCheck the status of AppManagers in the device")
+pre_condition_status = check_device_state(obj)
+if expectedResult in result.upper() and expectedResult in pre_condition_status:
+    status = "SUCCESS"
     print("\nCheck the status of AppManagers in the device")
     plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]
     plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.AppPackageManager":"activated","org.rdk.AppManager":"activated"}

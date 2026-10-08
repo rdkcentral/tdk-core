@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_STABILITY_32
 ## TestCase Name
-RDKV_CERT_RVS_AppManager_Preload_Activate_Terminate
+RDKV_CERT_RVS_AppManager_Preload_Launch
 <a name="head.TOC"></a>
 ## Table Of Contents
 - [Objective](#head.Objective)
