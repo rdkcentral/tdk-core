@@ -99,9 +99,9 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
                                 time.sleep(5)
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 print("Verifying app termination")
-                                loaded_apps = rdkservice_get_loaded_apps()
+                                loaded_apps = rdkservice_getValue("org.rdk.AppManager.getLoadedApps")
                                 print(loaded_apps)
-                                if app_name not in loaded_apps:
+                                if loaded_apps != "EXCEPTION OCCURRED" and all(item.get("appId") != app_name for item in loaded_apps):
                                     tdkTestObj.setResultStatus("SUCCESS")
                                     print(f"Successfully verified {app_name} was terminated")
                                     print("\n Validating resource usage:")

@@ -105,13 +105,15 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 print("App lifecycle action succeeded for app: %s" % target_app_id)
                                 time.sleep(10)
-                                loaded_app_ids = rdkservice_get_loaded_apps()
-                                app_active = target_app_id in loaded_app_ids
+                                loaded_apps = rdkservice_getValue("org.rdk.AppManager.getLoadedApps")
+                                target_app = None if loaded_apps == "EXCEPTION OCCURRED" else next(
+                                     (item for item in loaded_apps if item.get("appId") == target_app_id), None
+                                 )
                                 if lifecycle_action == "launch":
-                                    app_state_valid = app_active
+                                    app_state_valid = target_app is not None and target_app.get("lifecycleState") == "APP_STATE_ACTIVE"
                                     expected_state = "present with APP_STATE_ACTIVE state"
                                 else:
-                                    app_state_valid = not app_active
+                                    app_state_valid = target_app is None
                                     expected_state = "absent"
 
                                 if app_state_valid:

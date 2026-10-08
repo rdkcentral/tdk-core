@@ -18,7 +18,7 @@ To validate that the configured application can be launched, have its applicatio
 |#|StepName | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Configure the device connection | Configure the target device IP address and port so that the stability test framework can connect to the device. | The test framework should connect to the target device successfully. |
-| 2 | Configure the reboot policy | Configure `PRE_REQ_REBOOT_PVS` as Yes to reboot the device before test execution, or as No to skip the reboot. | The device reboot policy should be applied according to the configured value. |
+| 2 | Configure the reboot policy | Configure `PRE_REQ_REBOOT` as Yes to reboot the device before test execution, or as No to skip the reboot. | The device reboot policy should be applied according to the configured value. |
 | 3 | Check WPEFramework and device status | Load the `rdkv_stability` module and verify that the device is available before starting the test. | The framework module and device status should report success. |
 | 4 | Activate the required application services | Ensure that `org.rdk.DownloadManager`, `org.rdk.AppPackageManager`, and `org.rdk.AppManager` are activated. | All required application services should be in the activated state. |
 | 5 | Configure the application package | Configure the Google application bundle and a valid application download base URL. The application identifier must be `com.rdkcentral.google`. | The application package should be available for installation and its application identifier should be configured correctly. |

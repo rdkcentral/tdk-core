@@ -18,7 +18,7 @@ To validate that clearing application data for all installed applications does n
 |#|StepName | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
 | 1 | Configure the device connection | Configure the target device IP address and port so that the stability test framework can connect to the device. | The test framework should connect to the target device successfully. |
-| 2 | Configure the reboot policy | Configure `PRE_REQ_REBOOT_PVS` as Yes to reboot the device before test execution, or as No to skip the reboot. | The device reboot policy should be applied according to the configured value. |
+| 2 | Configure the reboot policy | Configure `PRE_REQ_REBOOT` as Yes to reboot the device before test execution, or as No to skip the reboot. | The device reboot policy should be applied according to the configured value. |
 | 3 | Check WPEFramework and device status | Load the `rdkv_stability` module and verify that the device is available before starting the test. | The framework module and device status should report success. |
 | 4 | Activate the required application services | Ensure that `org.rdk.DownloadManager`, `org.rdk.AppPackageManager`, and `org.rdk.AppManager` are activated. | All three application services should be in the activated state. |
 | 5 | Configure the application bundle set | Configure at least two application bundles in the stability application list. Each bundle must provide an application name and a valid downloadable application package location. | At least two application bundles should be available for installation and testing. |

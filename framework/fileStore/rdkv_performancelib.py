@@ -2374,18 +2374,20 @@ def getPlaybackTimestamps(obj, app_name):
         else:
             continue_count += 1
         time.sleep(1)
-        
+
     if playback_started != "":
         ssh_params = rdkservice_getSSHParams(obj.realpath, obj.IP)
         if ssh_params == "" or ssh_params == "{}":
-            raise Exception("Failed to get SSH parameters from configuration")
+            print("Failed to get SSH parameters from configuration")
+            return "", playback_started
 
         ssh_params_dict = json.loads(ssh_params)
         ssh_method = ssh_params_dict.get("ssh_method")
         credentials = ssh_params_dict.get("credentials")
 
         if not ssh_method or not credentials:
-            raise Exception("SSH method or credentials not found in configuration")
+            print("SSH method or credentials not found in configuration")
+            return "", playback_started
 
         cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
         log_path = rdkservice_getRequiredLog(ssh_method, credentials, cmd)

@@ -122,9 +122,9 @@ if expectedResult in result.upper() and expectedResult in pre_condition_status:
                                     time.sleep(5)
                                     tdkTestObj.setResultStatus("SUCCESS")
                                     print("Verifying no orphaned instance remains after terminate")
-                                    running_apps = rdkservice_get_loaded_apps()
+                                    running_apps = rdkservice_getValue("org.rdk.AppManager.getLoadedApps")
                                     print(running_apps)
-                                    if app_name not in running_apps:
+                                    if running_apps != "EXCEPTION OCCURRED" and all(item.get("appId") != app_name for item in running_apps):
                                         tdkTestObj.setResultStatus("SUCCESS")
                                         print(f"Successfully verified {app_name} left no orphaned instance")
                                         print("\n Validating resource usage:")
