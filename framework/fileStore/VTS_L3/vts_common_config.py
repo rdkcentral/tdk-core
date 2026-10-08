@@ -29,6 +29,7 @@ import os
 #Update device ip below inside quotes
 DEVICE_IP = ""
 #Update device SoC inside quotes ex : "Amlogic", "Realtek" , "Broadcom"
+DEVICE_TYPE = "Source"
 DEVICE_PLATFORM = ""
 DEVICE_DESCRIPTION = "xxx"
 SSH_USERNAME = "root"
