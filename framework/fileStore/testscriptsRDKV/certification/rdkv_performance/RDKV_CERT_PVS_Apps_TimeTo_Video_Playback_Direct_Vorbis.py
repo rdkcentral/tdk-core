@@ -117,6 +117,8 @@ if expectedResult in result.upper():
                         load_time_ms = getTimeInMilliSec(load_time if "." in load_time else load_time + ".000")
                         playback_time_ms = getTimeInMilliSec(playback_time if "." in playback_time else playback_time + ".000")
                         elapsed_time_ms = playback_time_ms - load_time_ms
+                        if elapsed_time_ms < 0:
+                            elapsed_time_ms += 24 * 60 * 60 * 1000
                         print("\nTime from WPE load committed to Video Player Playing: {} ms".format(elapsed_time_ms))
                         result1, video_playback_threshold_value = getDeviceConfigKeyValue(conf_file,"VIDEO_PLAYBACK_THRESHOLD_VALUE")
                         Summ_list.append('VIDEO_PLAYBACK_THRESHOLD_VALUE :{}ms'.format(video_playback_threshold_value))
@@ -124,7 +126,7 @@ if expectedResult in result.upper():
                         Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                         Summ_list.append('WPE load committed at :{}'.format(load_video))
                         Summ_list.append('Video Player Playing at :{}'.format(playback_started))
-                        Summ_list.append('Time to video playback :{}ms'.format(elapsed_time_ms/1000))
+                        Summ_list.append('Time to video playback :{}ms'.format(elapsed_time_ms))
                         if all(value != "" for value in (video_playback_threshold_value,offset)):
                             print("\n The threshold value for time to video playback: {} ms".format(video_playback_threshold_value))
                             if 0 < int(elapsed_time_ms) < (int(video_playback_threshold_value) + int(offset)):
@@ -144,7 +146,7 @@ if expectedResult in result.upper():
                     print("\n Error occured during video playback")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                print("Unable to set the video url value in PersistanceStorage")
+                print("Failed to install or launch app")
             print("\n Terminating the app")
             tdkTestObj = obj.createTestStep('rdkv_terminate_app')
             tdkTestObj.addParameter("app_id",app_name)
@@ -157,7 +159,7 @@ if expectedResult in result.upper():
                 print("Unable to terminate the app")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print("Failed to install or launch app")
+            print("Unable to set the video URL value in PersistentStorage")
     else:
         print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
