@@ -30,6 +30,8 @@ import time
 import yaml
 import importlib
 import urllib.request
+import ast
+from pathlib import Path
 import warnings
 from cryptography.utils import CryptographyDeprecationWarning
 warnings.filterwarnings("ignore", category=CryptographyDeprecationWarning)
@@ -39,6 +41,7 @@ from datetime import datetime
 from log_to_excel import *
 from vts_common_config import PLATFORM_EXPORTS
 from vts_common_config import STREAMS_HOST_SECONDARY_URL
+from vts_common_config import DEVICE_TYPE
 
 # ====================================
 # Dynamic target -> config module
@@ -54,7 +57,7 @@ VALID_TARGETS = {
 }
 
 config = None  # will be set after loading the target module
-
+test_version = 0 
 
 def load_config_for_target(target: str):
     """Import and return the config module for the selected target."""
@@ -78,6 +81,8 @@ def setup_halif_test():
     repo_url = getattr(config, "REPO_URL")
     repo_dir = getattr(config, "REPO_DIR")
     checkout_ver = getattr(config, "CHECKOUT_VER")
+    global test_version
+    checkout_ver = test_version
     host_dir = os.path.join(repo_dir, "host")
     print("REPO DIR " , repo_dir)
     print("host_dir ", host_dir)
@@ -249,6 +254,114 @@ def modify_waitForBoot_to_return_true_if_needed():
         print(f"❌ Error modifying {file_path}: {e}")
         return False
 
+def get_hpk_module_versions(version: str,
+                             repo: str = "rdkcentral/rdk-hpk-documentation") -> dict:
+    """
+    Fetch RELEASE.md for a given rdk-hpk-documentation tag (e.g. "3.1.0")
+    and return, for every module listed in that release's table, its
+    HAL Interface (current) version and HAL Testing Suite (current) version.
+
+    Returns:
+        {
+          "Deep Sleep Manager": {"hal_interface_version": "1.0.5", "hal_testing_version": "1.4.3"},
+          "RMF Audio Capture":  {"hal_interface_version": "1.0.6", "hal_testing_version": "1.5.4"},
+          ...
+        }
+    A value is None when the release table marks it "NYA"/"NA" (not available/applicable).
+    """
+    url = f"https://raw.githubusercontent.com/{repo}/refs/tags/{version}/RELEASE.md"
+    with urllib.request.urlopen(url) as resp:
+        text = resp.read().decode("utf-8")
+
+    # Isolate this release's section: from "##.. <version>" up to the next same-level
+    # heading. Different tags use "## " or "### " for these headings, so match either.
+    section_match = re.search(
+        rf'^(#{{2,3}}) {re.escape(version)}[ \t]*\n(.*?)(?=^\1 |\Z)',
+        text, re.MULTILINE | re.DOTALL
+    )
+    if not section_match:
+        raise ValueError(f"Could not find a '{version}' release section in {url}")
+    section = section_match.group(2)
+
+    # Pull out the markdown table lines (any line starting with '|')
+    table_lines = [ln for ln in section.splitlines() if ln.strip().startswith('|')]
+    if not table_lines:
+        raise ValueError(f"No table found under release {version}")
+
+    def split_row(row: str):
+        row = row.strip()
+        if row.startswith('|'):
+            row = row[1:]
+        if row.endswith('|'):
+            row = row[:-1]
+        return [c.strip() for c in row.split('|')]
+
+    # Sub-header row (contains **Current**) tells us the column layout.
+    subheader_idx = next(
+        (i for i, ln in enumerate(table_lines) if '**Current**' in ln), None
+    )
+
+    version_re = re.compile(r'\d+(?:\.\d+){2,}')
+    name_re = re.compile(r'\[([^\]]+)\]')
+
+    def extract_version(cell: str):
+        m = version_re.search(cell)
+        return m.group(0) if m else None
+
+    def resolve(current_cell: str, previous_cell: str):
+        v = extract_version(current_cell)
+        if v:
+            return v
+        if 'no change' in current_cell.lower():
+            return extract_version(previous_cell)
+        return None  # NYA / NA / unavailable
+
+    results = {}
+
+    if subheader_idx is not None:
+        has_changeinfo = '**ChangeInfo**' in table_lines[subheader_idx]
+        data_rows = table_lines[subheader_idx + 1:]
+
+        for row in data_rows:
+            cells = split_row(row)
+            if len(cells) < 3 or not cells[0].strip().isdigit():
+                continue  # skip separators / non-data rows
+
+            name_m = name_re.search(cells[1])
+            if not name_m:
+                continue
+            name = name_m.group(1).replace('`', '').strip()
+
+            rest = cells[2:]
+            if has_changeinfo and len(rest) >= 6:
+                hal_cur, _hal_change, hal_prev, test_cur, _test_change, test_prev = rest[:6]
+            elif len(rest) >= 4:
+                hal_cur, hal_prev, test_cur, test_prev = rest[:4]
+            else:
+                continue
+
+            results[name] = {
+                'hal_interface_version': resolve(hal_cur, hal_prev),
+                'hal_testing_version': resolve(test_cur, test_prev),
+            }
+    else:
+        # Older/simple format: single HAL Interface Version + HAL Testing Suite
+        # Version columns (no Current/Previous split), e.g. v1.1.0, v1.0.0.
+        for row in table_lines:
+            cells = split_row(row)
+            if len(cells) < 4 or not cells[0].strip().isdigit():
+                continue
+            name_m = name_re.search(cells[1])
+            if not name_m:
+                continue
+            name = name_m.group(1).replace('`', '').strip()
+            results[name] = {
+                'hal_interface_version': extract_version(cells[2]),
+                'hal_testing_version': extract_version(cells[3]),
+            }
+
+    return results
+
 def patch_testCleanSingleAsset_skip_cleanup(TARGET_DIR,target):
     """
     Patch <testModule>HelperClass.py to skip cleanup in:
@@ -268,7 +381,10 @@ def patch_testCleanSingleAsset_skip_cleanup(TARGET_DIR,target):
     Returns:
         bool: True if patched or already patched, False otherwise
     """
-    file_path = TARGET_DIR + "/" + target + "HelperClass.py"
+    if target == "rmfaudiocapture":
+        file_path = TARGET_DIR + "/" + "rmfAudio" + "HelperClass.py"
+    else:
+        file_path = TARGET_DIR + "/" + target + "HelperClass.py"
     if not os.path.exists(file_path):
         print(f"❌ File not found: {file_path}")
         return False
@@ -277,15 +393,17 @@ def patch_testCleanSingleAsset_skip_cleanup(TARGET_DIR,target):
         content = f.read()
 
     # ✅ Check function exists
-    func_pattern = r'def\s+testCleanSingleAsset\s*\(\s*self\s*\)\s*:'
-    func_pattern = r'def\s+testCleanAssets\s*\(\s*self\s*\)\s*:'
-    if not re.search(func_pattern, content):
-        print(f"❌ testCleanSingleAsset(self) not found in {file_path}")
+    func_match = re.search(r'def\s+(testCleanSingleAsset|testCleanAssets)\s*\(\s*self\s*\)\s*:', content)
+    if not func_match:
+        print(f"□~]~L testCleanSingleAsset(self)/testCleanAssets(self) not found in {file_path}")
         return False
+    func_name = func_match.group(1)
 
     # ✅ Already patched check (print + return exists inside function)
-    already_pattern = r'def\s+testCleanSingleAsset\s*\(\s*self\s*\)\s*:\s*[\s\S]*?print\(\s*[\'"]Cleanup handled by external framework[\'"]\s*\)\s*[\s\S]*?return'
-    already_pattern = r'def\s+testCleanAssets\s*\(\s*self\s*\)\s*:\s*[\s\S]*?print\(\s*[\'"]Cleanup handled by external framework[\'"]\s*\)\s*[\s\S]*?return'
+    already_pattern = (
+        rf'def\s+{func_name}\s*\(\s*self\s*\)\s*:\s*[\s\S]*?'
+        r'print\(\s*[\'"]Cleanup handled by external framework[\'"]\s*\)\s*[\s\S]*?return'
+    )
     if re.search(already_pattern, content):
         print(f"✅ Already patched: testCleanSingleAsset() in {file_path}")
         return True
@@ -853,7 +971,7 @@ def _run_shell_cmd(session, cmd, timeout=60, end_marker="__CMD_DONE__", drain_gr
     start = time.time()
     pattern = re.compile(rf"{end_marker}:(\d+)")
 
-    while time.time() - start < timeout:
+    while (time.time() - start < timeout) or timeout == 0:
         if session.recv_ready():
             chunk = session.recv(4096).decode(errors="replace")
             output += chunk
@@ -955,7 +1073,7 @@ def _download_delete_streams(download, streams, remote_dir, device_ip, ssh_port,
 
             if download:
                 s = os.path.basename(s)
-                stream_present = get_stream_url(s,STREAMS_HOST_SECONDARY_URL)
+                stream_present = get_stream_url(s, STREAMS_HOST_SECONDARY_URL)
                 if stream_present:
                     stream_path = stream_present
                 else:
@@ -972,7 +1090,7 @@ def _download_delete_streams(download, streams, remote_dir, device_ip, ssh_port,
                     f'rm -f {stream_base}{s}'
                 )
             #print("Executing command : ",cmd)
-            timeout=90
+            timeout=0
             exit_status, out = _run_shell_cmd(session, cmd, timeout=timeout)
             if exit_status == -1:
                 print(f"[streams] TIMEOUT (or unparsed output) for {fname} □~@~T command may still be running on device")
@@ -1130,6 +1248,7 @@ def ensure_preserve_streams_cleanup_override(target: str, config) -> None:
     base_path = getattr(config, "BASE_PATH", ".")
     host_tests_root = os.path.join(base_path, "host", "tests")
 
+    print("DEBUG : got target as ", target)
     # Handling rmfaudiocapture
     if target == "rmfaudiocapture":
         helper_dir = os.path.join(host_tests_root, "rmfAudio_L3_TestCases")
@@ -1222,7 +1341,7 @@ def add_platform_config_if_missing(config_file, platform, platform_export):
         f"    prerequisites:\n"
         + "\n".join(prerequisites)
         + "\n"
-        f"    play_command: gst-play-1.0\n"
+        f"    play_command: gst-play-1.0 --flags=video+audio+native-audio \n"
         f"    stop_command: \"\\x03\" # CNTRL-C\n"
         f"    primary_mixer_input_config: \"\"\n"
         f"    secondary_mixer_input_config: \"\"\n"
@@ -1581,8 +1700,27 @@ def run_interactive_with_logging(config, target, log_path : str = "test_run.log"
         raise ValueError("config.TEST_SCRIPT is not set")
     scripts = ts if isinstance(ts, (list, tuple)) else [ts]
 
-    #log_path = getattr(config, "LOG_FILE", "test_run.log")
-    #os.makedirs(os.path.dirname(log_path) or ".", exist_ok=True)
+    if DEVICE_TYPE.lower() == "source":
+        device_type = "Source"
+    elif DEVICE_TYPE.lower() == "sink":
+        device_type = "Sink"
+    else:
+        print("unknown device type, defaulting to source")
+        device_type = "Source"
+
+    target_dir = Path(config.TARGET_DIR)
+    print(target_dir)
+    pattern = re.compile(rf'run.*{re.escape(device_type)}', re.IGNORECASE)
+    matches = [p for p in target_dir.rglob("*") if p.is_file() and pattern.search(p.name)]
+    if not matches:
+        filtered = []
+        print("not found")
+    else:
+        runall_source_path = matches[0].resolve()
+        print(runall_source_path)
+        skipTests = get_skip_tests(runall_source_path)
+        print(ts)
+        filtered = [f for f in scripts if not any(skip in f for skip in skipTests)]
 
     results = []
 
@@ -1595,17 +1733,23 @@ def run_interactive_with_logging(config, target, log_path : str = "test_run.log"
             )
             sys.stdout.write(header); sys.stdout.flush()
             logfile.write(header); logfile.flush()
-            streams = get_streams_for_testfile(script)
-            if streams:
-                testModule = target
-                download_streams_for_target(target, streams, config,use_sshpass=bool(getattr(config, "SSH_PASSWORD","")),allow_self_signed_tls=True, targetDirectory=testModule)
-                ensure_preserve_streams_cleanup_override(testModule, config)
-            try:
-                rc = _run_one_script_with_logging(script, logfile)
-            finally:
+            if script not in str(filtered):
+                skip_line = f"TEST_RESULT : [SKIPPED]: [{script}] : Test not applicable to {device_type} device\n"
+                sys.stdout.write(skip_line); sys.stdout.flush()
+                logfile.write(skip_line); logfile.flush()
+                rc = 0
+            else:
+                streams = get_streams_for_testfile(script)
                 if streams:
-                    cleanup_streams_for_target(target, streams, config, targetDirectory=testModule)
-            results.append((script, rc))
+                    testModule = target
+                    download_streams_for_target(target, streams, config,use_sshpass=bool(getattr(config, "SSH_PASSWORD","")),allow_self_signed_tls=True, targetDirectory=testModule)
+                    ensure_preserve_streams_cleanup_override(testModule, config)
+                try:
+                    rc = _run_one_script_with_logging(script, logfile)
+                finally:
+                    if streams:
+                        cleanup_streams_for_target(target, streams, config, targetDirectory=testModule)
+                results.append((script, rc))
 
             footer = (
                 f"\n----- Completed {os.path.basename(script)} "
@@ -1634,6 +1778,39 @@ def run_interactive_with_logging(config, target, log_path : str = "test_run.log"
     # Return True if all passed
     return all(rc == 0 for _, rc in results)
 
+def get_skip_tests(runall_source_path):
+    """
+    Parse a *_Runall_Source.py file and return the `skipTests` list
+    defined inside it (e.g. inside Runall_L3()).
+
+    Args:
+        runall_source_path: path (str or Path) to the *_Runall_Source.py file
+
+    Returns:
+        list[str]: the skipTests values found in the file.
+
+    Raises:
+        FileNotFoundError: if the path doesn't exist.
+        ValueError: if no `skipTests = [...]` assignment is found.
+    """
+    path = Path(runall_source_path)
+    if not path.exists():
+        print(f"{runall_source_path} doesn't exist")
+        return []
+    source = path.read_text(encoding="utf-8")
+
+    tree = ast.parse(source, filename=str(path))
+
+    for node in ast.walk(tree):
+        # Look for: skipTests = [ ... ]
+        if isinstance(node, ast.Assign):
+            targets = [t.id for t in node.targets if isinstance(t, ast.Name)]
+            if "skipTests" in targets:
+                value = ast.literal_eval(node.value)
+                if isinstance(value, (list, tuple)):
+                    return list(value)
+
+    raise ValueError(f"No 'skipTests' list found in {path}")
 
 def patch_targetWorkspace(repo_dir, moduleName, testModule):
     """
@@ -1650,11 +1827,13 @@ def patch_targetWorkspace(repo_dir, moduleName, testModule):
     Returns:
         bool: True if patched or already patched, False otherwise
     """
-
-    file_path = os.path.join(
-        repo_dir,
-        f"{testModule}HelperClass.py"
-    )
+    if testModule == "rmfaudiocapture":
+        file_path = os.path.join(repo_dir, "rmfAudioHelperClass.py")
+    else:
+        file_path = os.path.join(
+            repo_dir,
+            f"{testModule}HelperClass.py"
+        )
 
     if not os.path.exists(file_path):
         print(f"❌ File not found: {file_path}")
@@ -1723,6 +1902,19 @@ def main():
     target = sys.argv[1]
     global config
     config = load_config_for_target(target)  
+
+    versions = get_hpk_module_versions("3.1.0")
+    if "dsAudio" in target or "dsHost" in target or "dsVideoPort" in target or "dsVideoDevice" in target or "dsDisplay" in target:
+        module = "Device Settings"
+    elif "rmfaudiocapture" in target:
+        module = "RMF Audio Capture"
+    elif "deepsleep" in target:
+        module = "Deep Sleep Manager"
+
+    global test_version
+    test_version = f"{versions[module]['hal_testing_version']}"
+    print(test_version)
+
     setup_halif_test()
 
     unique_string = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
@@ -1793,4 +1985,5 @@ def main():
     print(f"Report Generated : {saved_path}")
 
 if __name__ == "__main__":
+    versions = get_hpk_module_versions("3.1.0")
     main()
