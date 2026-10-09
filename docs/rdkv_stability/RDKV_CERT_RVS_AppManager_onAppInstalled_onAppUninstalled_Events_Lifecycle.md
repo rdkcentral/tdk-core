@@ -1,7 +1,7 @@
 ## TestCase ID
 RDKV_STABILITY_21
 ## TestCase Name
-RDKV_CERT_RVS_AppManager_Install_Uninstall_LifeCycle
+RDKV_CERT_RVS_AppManager_onAppInstalled_onAppUninstalled_Events_Lifecycle
 
 <a name="head.TOC"></a>
 ## Table Of Contents
