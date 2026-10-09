@@ -167,8 +167,8 @@ def get_configfile_name(obj):
             deviceConfigFile = deviceNameConfigFile
             rdkv_performancelib.log_device_config_file(deviceNameConfigFile)
         elif os.path.exists(deviceTypeConfigFile) == True:
-            deviceConfigFile = deviceTypeConfigFile
-            rdkv_performancelib.log_device_config_file(deviceTypeConfigFile)
+             deviceConfigFile = deviceTypeConfigFile
+             rdkv_performancelib.log_device_config_file(deviceTypeConfigFile)
         else:
             status = "FAILURE"
             print("[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile))
@@ -305,7 +305,7 @@ def testUsingRestAPI(obj,result_dict_list):
         if continue_count > 60:
             hang_detected = 1
             print("\nApp not proceeding for 60 secs. Exiting...")
-            break;
+            return []
         with open(app_log_file,'r') as f:
             lines = f.readlines()
         if lines:

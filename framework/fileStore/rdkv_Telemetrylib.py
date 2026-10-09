@@ -49,7 +49,6 @@ TELEMETRY_STEP_DESCRIPTIONS = {
     "telemetry_datamodelcheck": "Validate telemetry data model parameter",
 }
 
-
 def get_step_description(method, params):
     description = TELEMETRY_STEP_DESCRIPTIONS.get(method, method)
     if method == "execute_CmndInDUT" and params.get("command"):
@@ -282,9 +281,9 @@ DCM_SCP_SERVER=xconf.rdkcentral.com
 DCM_LA_SERVER_URL={Telemetry_Collector_URL}"""
     command = "echo '" + dcmProperties + "' > /etc/dcm.properties"
     execute_CmndInDUT (command)
-    print("\n[PRE-REQUISITE 1 RESULT] :DCM properties successfully set")
+    print("\nDCM properties successfully set")
 
-    print("\n[PRE-REQUISITE 2] : Setting Telemetry Version")
+    print("\nSetting Telemetry Version")
     command  = "tr181 -s -t string -v 2.0.1 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.Version"
     execute_CmndInDUT (command)
     print("Verifying if Telemetry Version is set")
@@ -294,18 +293,18 @@ DCM_LA_SERVER_URL={Telemetry_Collector_URL}"""
     if " 2.0.1" not in output:
         print("FAILURE : Telemetry Version is not successfully set")
         return "FAILURE"
-    print("\n[PRE-REQUISITE 2 RESULT] : Telemetry Version is successfully set")
+    print("\nTelemetry Version is successfully set")
 
-    print("\n[PRE-REQUISITE 3] : Getting Telemetry Config URL")
+    print("\nGetting Telemetry Config URL")
     command = "tr181 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.ConfigURL"
     output = execute_CmndInDUT (command)
     print("\nTelemetry Config URL : \n", output)
 
     if not output:
-        print("\n[PRE-REQUISITE 3 RESULT] : Unable to retrive the Telemetry Config URL from DUT\n")
+        print("\nUnable to retrive the Telemetry Config URL from DUT\n")
         return "FAILURE"
     else:
-        print("\n[PRE-REQUISITE 3 RESULT] : Telemetry Config URL was retrived successfully\n")
+        print("\nTelemetry Config URL was retrived successfully\n")
         return "SUCCESS"
 
 #------------------------------------------------------------------
