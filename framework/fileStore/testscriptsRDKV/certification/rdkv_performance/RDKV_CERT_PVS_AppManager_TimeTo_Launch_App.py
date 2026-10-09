@@ -73,7 +73,7 @@ if expectedResult in result.upper():
                 print("Check for launch event")
                 tdkTestObj.setResultStatus("SUCCESS")
                 continue_count = 0
-                end_time = ""
+                event = ""
                 while True:
                     if continue_count > 120:
                         break

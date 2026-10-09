@@ -48,7 +48,7 @@ To validate that the AppManager correctly transitions an application through all
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 250 minutes
 

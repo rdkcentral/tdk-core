@@ -50,7 +50,7 @@ To validate that the AppPackageManager reports consistent and accurate package m
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 170 minutes
 

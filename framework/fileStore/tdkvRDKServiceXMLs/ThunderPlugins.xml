@@ -424,29 +424,29 @@
 
     <!-- System Plugin Information -->
     <plugin pluginName="System" serviceName="org.rdk.System" serviceVersion="1">
-        <method name="Get_Device_Info" api="getDeviceInfo" type="method" desc="Gives device details"/>
-        <method name="Get_Serial_No"  api="getSerialNumber" type="method" desc="Gives device serial number"/>
-        <method name="Get_System_Version"  api="getSystemVersions" type="method" desc="Gives system version details"/>
-        <method name="Get_System_Uptime"  api="requestSystemUptime" type="method" desc="Gives system uptime"/>
-        <method name="Get_Core_Temperature"  api="getCoreTemperature" type="method" desc="Gives core temperature of the device"/>
-        <method name="Get_Milestones"  api="getMilestones" type="method" desc="Gives list of milestones"/>
-        <method name="Get_XConf_Params"  api="getXconfParams" type="method" desc="Gives Xconf configuration of the device"/>
-        <method name="Get_RFC_Config" api="getRFCConfig" type="method" desc="Gets RFC configurations" >
+        <method name="Get_Device_Info" api="getDeviceInfo" type="method" desc="Gives device details" />
+        <method name="Get_Serial_No" api="getSerialNumber" type="method" desc="Gives device serial number" />
+        <method name="Get_System_Version" api="getSystemVersions" type="method" desc="Gives system version details" />
+        <method name="Get_System_Uptime" api="requestSystemUptime" type="method" desc="Gives system uptime" />
+        <method name="Get_Core_Temperature" api="getCoreTemperature" type="method" desc="Gives core temperature of the device" />
+        <method name="Get_Milestones" api="getMilestones" type="method" desc="Gives list of milestones" />
+        <method name="Get_XConf_Params" api="getXconfParams" type="method" desc="Gives Xconf configuration of the device" />
+        <method name="Get_RFC_Config" api="getRFCConfig" type="method" desc="Gets RFC configurations">
             <params>
                 <param tag="rfcList" defaultValue="null" type="list" />
             </params>
         </method>
-        <method name="Get_GZ_Enable_Status"  api="isGzEnabled" type="method" desc="Gives GZ enabled status">
+        <method name="Get_GZ_Enable_Status" api="isGzEnabled" type="method" desc="Gives GZ enabled status">
             <expectedValues>True,False</expectedValues>
         </method>
-        <method name="Set_GZ_Enable_Status"  api="setGzEnabled" type="method" desc="Sets GZ enabled status " >
+        <method name="Set_GZ_Enable_Status" api="setGzEnabled" type="method" desc="Sets GZ enabled status">
             <params>
                 <param tag="enabled" defaultValue="null" type="bool" />
             </params>
-    	</method>
-		<method name="Delete_Persistent_Path"  api="deletePersistentPath" type="method" desc="Deletes the persistent path" >
+        </method>
+        <method name="Delete_Persistent_Path" api="deletePersistentPath" type="method" desc="Deletes the persistent path">
             <params>
-                <param tag="callsign"  type="string" defaultValue="null" />
+                <param tag="callsign" type="string" defaultValue="null" />
                 <param tag="type" type="string" defaultValue="null" />
             </params>
         </method>
@@ -454,53 +454,53 @@
         <method name="Set_Temperature_Thresholds" api="setTemperatureThresholds" type="method" desc="Sets temperature thresholds">
             <params paramKey="Thresholds" paramType="userGenerate" useMethodTag="system_set_thresholds_params">
                 <param tag="WARN" defaultValue="null" />
-                <param tag="MAX"  defaultValue="null" />
+                <param tag="MAX" defaultValue="null" />
             </params>
         </method>
-        <method name="Cache_Contains" api="cacheContains" type="method" desc="Checks if key is present in cache" >
+        <method name="Cache_Contains" api="cacheContains" type="method" desc="Checks if key is present in cache">
             <params>
                 <param tag="key" defaultValue="sampleKey" />
             </params>
         </method>
-        <method name="Get_Cache_Value" api="getCachedValue" type="method" desc="Get value of the key in cache" >
+        <method name="Get_Cache_Value" api="getCachedValue" type="method" desc="Get value of the key in cache">
             <params>
                 <param tag="key" defaultValue="sampleKey" />
             </params>
             <expectedValues>sampleKey,100.23</expectedValues>
         </method>
-        <method name="Set_Cache_Value" api="setCachedValue" type="method" desc="Set value of the key in cache" >
+        <method name="Set_Cache_Value" api="setCachedValue" type="method" desc="Set value of the key in cache">
             <params>
-                <param tag="key"   defaultValue="sampleKey" />
+                <param tag="key" defaultValue="sampleKey" />
                 <param tag="value" defaultValue="100.23" type="float" />
             </params>
         </method>
-        <method name="Remove_Cache_Key" api="removeCacheKey" type="method" desc="Remove key from cache" >
+        <method name="Remove_Cache_Key" api="removeCacheKey" type="method" desc="Remove key from cache">
             <params>
                 <param tag="key" defaultValue="sampleKey" />
             </params>
         </method>
-        <method name="Get_State_Info" api="getStateInfo" type="method" desc="Query device state information of various properties" >
+        <method name="Get_State_Info" api="getStateInfo" type="method" desc="Query device state information of various properties">
             <params>
                 <param tag="param" defaultValue="null" />
             </params>
         </method>
         <method name="Get_TimeZone_DST" api="getTimeZoneDST" type="method" desc="Get configured time zone" />
-        <method name="Set_TimeZone_DST" api="setTimeZoneDST" type="method" desc="Set configured time zone" >
+        <method name="Set_TimeZone_DST" api="setTimeZoneDST" type="method" desc="Set configured time zone">
             <params>
                 <param tag="timeZone" defaultValue="UTC-5" />
             </params>
         </method>
         <method name="Get_Available_StandBy_Modes" api="getAvailableStandbyModes" type="method" desc="Get available standby modes" />
-        <method name="Get_Preferred_StandBy_Mode" api="getPreferredStandbyMode" type="method" desc="Get preferred standby mode" >
+        <method name="Get_Preferred_StandBy_Mode" api="getPreferredStandbyMode" type="method" desc="Get preferred standby mode">
             <expectedValues>LIGHT_SLEEP,DEEP_SLEEP</expectedValues>
         </method>
-        <method name="Set_Preferred_StandBy_Mode" api="setPreferredStandbyMode" type="method" desc="Set preferred standby mode" >
+        <method name="Set_Preferred_StandBy_Mode" api="setPreferredStandbyMode" type="method" desc="Set preferred standby mode">
             <params>
                 <param tag="standbyMode" defaultValue="null" />
             </params>
         </method>
-        <method name="Get_Mode" api="getMode" type="method" desc="Gets currently set mode" >
-                <expectedValues>NORMAL,EAS,WAREHOUSE</expectedValues>
+        <method name="Get_Mode" api="getMode" type="method" desc="Gets currently set mode">
+            <expectedValues>NORMAL,EAS,WAREHOUSE</expectedValues>
         </method>
         <method name="Set_Mode" api="setMode" type="method" desc="Set mode for specific duration">
             <params paramKey="modeInfo">
@@ -508,22 +508,22 @@
                 <param tag="duration" defaultValue="10" type="int" />
             </params>
         </method>
-        <method name="Get_Power_State" api="getPowerState" type="method" desc="Get power state" >
+        <method name="Get_Power_State" api="getPowerState" type="method" desc="Get power state">
             <expectedValues>STANDBY,DEEP_SLEEP,LIGHT_SLEEP,ON</expectedValues>
-    	</method>
+        </method>
         <method name="Set_Power_State" api="setPowerState" type="method" desc="Set power state">
             <params>
-                <param tag="powerState"    defaultValue="STANDBY" />
+                <param tag="powerState" defaultValue="STANDBY" />
                 <param tag="standbyReason" defaultValue="APIUnitTest" />
             </params>
         </method>
-        <method name="Has_Reboot_BeenRequested" api="hasRebootBeenRequested" type="method" desc="Check whether a reboot has been requested." >
+        <method name="Has_Reboot_BeenRequested" api="hasRebootBeenRequested" type="method" desc="Check whether a reboot has been requested.">
             <expectedValues>true,false</expectedValues>
         </method>
-        <method name="Query_MocaStatus" api="queryMocaStatus" type="method" desc="Check whether Moca is enabled" >
+        <method name="Query_MocaStatus" api="queryMocaStatus" type="method" desc="Check whether Moca is enabled">
             <expectedValues>true,false</expectedValues>
         </method>
-        <method name="Enable_Moca" api="enableMoca" type="method" desc="Enables or disables Moca support for the platform" >
+        <method name="Enable_Moca" api="enableMoca" type="method" desc="Enables or disables Moca support for the platform">
             <expectedValues>true,false</expectedValues>
         </method>
         <method name="Clear_Last_DeepSleep_Reason" api="clearLastDeepSleepReason" type="method" desc="Clear the last deep sleep reason." />
@@ -531,29 +531,27 @@
         <method name="Get_PreviousReboot_Info" api="getPreviousRebootInfo" type="method" desc="Retrieve basic information about a reboot" />
         <method name="Get_PreviousReboot_Info2" api="getPreviousRebootInfo2" type="method" desc="Retrieve detailed information about a reboot" />
         <method name="Get_PreviousReboot_Reason" api="getPreviousRebootReason" type="method" desc="Retrieve the last reboot reason." />
-
-        <method name="Get_MacAddress" api="getMacAddresses" type="method" desc="Retrieve the mac addresses." >
+        <method name="Get_MacAddress" api="getMacAddresses" type="method" desc="Retrieve the mac addresses.">
             <params>
                 <param tag="GUID" defaultValue="61734787891723481" type="int" />
             </params>
-
             <expectedValues>true,false</expectedValues>
         </method>
-        <method name="Get_OptOut_Telemetry_Status" api="isOptOutTelemetry" type="method" desc="Checks the telemetry opt-out status" >
+        <method name="Get_OptOut_Telemetry_Status" api="isOptOutTelemetry" type="method" desc="Checks the telemetry opt-out status">
             <expectedValues>True,False</expectedValues>
         </method>
-        <method name="Set_OptOut_Telemetry_Status" api="setOptOutTelemetry" type="method" desc="Sets the telemetry opt-out status" >
+        <method name="Set_OptOut_Telemetry_Status" api="setOptOutTelemetry" type="method" desc="Sets the telemetry opt-out status">
             <params>
                 <param tag="Opt-Out" type="bool" />
             </params>
         </method>
-        <method name="Get_Over-Temperature_Grace_Interval" api="getOvertempGraceInterval" type="method" desc="Returns the over-temperature grace interval value"/>
-        <method name="Set_Over-Temperature_Grace_Interval" api="setOvertempGraceInterval" type="method" desc="Sets the over-temperature grace interval value" >
+        <method name="Get_Over-Temperature_Grace_Interval" api="getOvertempGraceInterval" type="method" desc="Returns the over-temperature grace interval value" />
+        <method name="Set_Over-Temperature_Grace_Interval" api="setOvertempGraceInterval" type="method" desc="Sets the over-temperature grace interval value">
             <params>
                 <param tag="graceInterval" defaultValue="null" />
             </params>
         </method>
-        <method name="Get_Platform_Configuration" api="getPlatformConfiguration" type="method" desc="Returns the supported features and device/account info" >
+        <method name="Get_Platform_Configuration" api="getPlatformConfiguration" type="method" desc="Returns the supported features and device/account info">
             <params>
                 <param tag="query" defaultValue="null" />
             </params>
@@ -564,39 +562,133 @@
         <method name="Get_Power_State_Before_Reboot" api="getPowerStateBeforeReboot" type="method" desc="Gets the power state before reboot" />
         <method name="Get_Power_State_Is_Managed_By_Device" api="getPowerStateIsManagedByDevice" type="method" desc="Checks whether the power state is managed by the device" />
         <method name="Get_Time_Zones" api="getTimeZones" type="method" desc="Gets the available timezones from the system's time zone database" />
-        <method name="Get_Network_Standby_Mode" api="getNetworkStandbyMode" type="method" desc="Returns the network standby mode of the device" >
+        <method name="Get_Network_Standby_Mode" api="getNetworkStandbyMode" type="method" desc="Returns the network standby mode of the device">
             <expectedValues>True,False</expectedValues>
         </method>
-        <method name="Set_Network_Standby_Mode" api="setNetworkStandbyMode" type="method" desc="Enables or disables the network standby mode of the device" >
+        <method name="Set_Network_Standby_Mode" api="setNetworkStandbyMode" type="method" desc="Enables or disables the network standby mode of the device">
             <params>
                 <param tag="nwStandby" type="bool" />
             </params>
         </method>
         <method name="System_Get_Friendly_Name" api="getFriendlyName" type="method" desc="Returns the friendly name set by setFriendlyName API or default value" />
-        <method name="System_Set_Friendly_Name" api="setFriendlyName" type="method" desc="Sets the friendly name of the device" >
+        <method name="System_Set_Friendly_Name" api="setFriendlyName" type="method" desc="Sets the friendly name of the device">
             <params>
-               <param tag="friendlyName" defaultValue="null" />
+                <param tag="friendlyName" defaultValue="null" />
             </params>
         </method>
-	<method name="System_Get_Territory" api="getTerritory" type="method" desc="Gets the configured system territory and region. " />
-        <method name="System_Set_Territory" api="setTerritory" type="method" desc="Sets the system territory and region" >
+        <method name="System_Get_Territory" api="getTerritory" type="method" desc="Gets the configured system territory and region." />
+        <method name="System_Set_Territory" api="setTerritory" type="method" desc="Sets the system territory and region">
             <params>
-               <param tag="territory" defaultValue="null" />
-               <param tag="region" defaultValue="null" />
+                <param tag="territory" defaultValue="null" />
+                <param tag="region" defaultValue="null" />
             </params>
         </method>
-	<method name="System_Get_Mfg_Serial_Number" api="getMfgSerialNumber" type="method" desc="Gets the manufacturing serial number" />
+        <method name="System_Get_Mfg_Serial_Number" api="getMfgSerialNumber" type="method" desc="Gets the manufacturing serial number" />
+        <method name="Set_Boot_Loader_Splash_Screen" api="setBootLoaderSplashScreen" type="method" desc="Install or update the BootLoader Splash Screens">
+            <params>
+                <param tag="path" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Path_Set_Boot_Loader_Splash_Screen" api="setBootLoaderSplashScreen" type="method" desc="Install or update the BootLoader Splash Screens with numeric path">
+            <params>
+                <param tag="path" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Set_Wakeup_Src_Configuration" api="setWakeupSrcConfiguration" type="method" desc="Sets the wakeup source configuration for the input powerState">
+            <params>
+                <param tag="wakeupSources" type="list" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Get_FSR_Flag" api="getFSRFlag" type="method" desc="Get the FSR flag from the emmc raw area" />
+        <method name="Set_FSR_Flag" api="setFSRFlag" type="method" desc="Set the FSR flag into the emmc raw area">
+            <params>
+                <param tag="fsrFlag" type="bool" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Set_Migration_Status" api="setMigrationStatus" type="method" desc="Sets the tr181 MigrationStatus parameter">
+            <params>
+                <param tag="status" type="string" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Get_Migration_Status" api="getMigrationStatus" type="method" desc="Gets the Migration Status of the device" />
+        <method name="Set_Blocklist_Flag" api="setBlocklistFlag" type="method" desc="Updates the Blocklist flag">
+            <params>
+                <param tag="blocklist" type="bool" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Get_Blocklist_Flag" api="getBlocklistFlag" type="method" desc="Gets the Blocklist flag" />
+        <method name="String_Duration_Set_Mode" api="setMode" type="method" desc="Set mode for specific duration with string type">
+            <params paramKey="modeInfo">
+                <param tag="mode" defaultValue="NORMAL" />
+                <param tag="duration" defaultValue="10" type="string" />
+            </params>
+        </method>
+        <method name="Numeric_Mode_Set_Mode" api="setMode" type="method" desc="Set mode for specific duration with numeric type">
+            <params paramKey="modeInfo">
+                <param tag="mode" defaultValue="null" type="int"/>
+                <param tag="duration" defaultValue="10" type="int" />
+            </params>
+        </method>
+        <method name="String_OptOut_Telemetry" api="setOptOutTelemetry" type="method" desc="Sets the telemetry opt-out status with string type">
+            <params>
+                <param tag="Opt-Out" type="string" />
+            </params>
+        </method>
+        <method name="Numeric_OptOut_Telemetry" api="setOptOutTelemetry" type="method" desc="Sets the telemetry opt-out status with numeric type">
+            <params>
+                <param tag="Opt-Out" type="int" />
+            </params>
+        </method>
+         <method name="Numeric_Query_GetPlatform_Configuration" api="getPlatformConfiguration" type="method" desc="Gets the platform configuration with numeric query">
+            <params>
+                <param tag="query" defaultValue="null" type="int" />
+            </params>
+        </method>
+        <method name="Numeric_PowerState_SetPowerState" api="setPowerState" type="method" desc="Set power state with numeric type">
+            <params>
+                <param tag="powerState" defaultValue="null" type="int" />
+                <param tag="standbyReason" defaultValue="APIUnitTest" type="string" />
+            </params>
+        </method>
+        <method name="Numeric_TimeZoneDST_SetTimeZoneDST" api="setTimeZoneDST" type="method" desc="Set configured time zone with numeric type">
+            <params>
+                <param tag="timeZone" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_Territory_Region_Set_Territory" api="setTerritory" type="method" desc="Sets the system territory and region with numeric type">
+            <params>
+                <param tag="territory" defaultValue="null" type="int"/>
+                <param tag="region" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_Region_Set_Territory" api="setTerritory" type="method" desc="Sets the system territory and region with numeric type">
+            <params>
+                <param tag="territory" defaultValue="null" type="string"/>
+                <param tag="region" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Numeric_Territory_Set_Territory" api="setTerritory" type="method" desc="Sets the system territory and region with numeric type">
+            <params>
+                <param tag="territory" defaultValue="null" type="int"/>
+                <param tag="region" defaultValue="null" type="string"/>
+            </params>
+        </method>
+        <method name="Numeric_Get_RFC_Config" api="getRFCConfig" type="method" desc="Gets the RFC configuration with numeric type">
+            <params paramType="userGenerate" useMethodTag="system_get_rfc_config_params">
+                <param tag="rfcList" type="int" />
+            </params>
+        </method>
+	<method name="Get_Boot_Type_Info" api="getBootTypeInfo" desc="Gets the system boot type" />
 	<event name="Event_MacAddresses_Retreived" eventName="onMacAddressesRetreived" eventId="client.events.1" type="event" desc="MacAddressesRetreived" />
         <event name="Event_PowerState_Changed" eventName="onSystemPowerStateChanged" eventId="client.events.1" type="event" desc="power state changed event" />
         <event name="Event_SystemMode_Changed" eventName="onSystemModeChanged" eventId="client.events.1" type="event" desc="Fires on system mode changed event" />
-	<event name="Event_Temperature_Threshold_Changed" eventName="onTemperatureThresholdChanged" eventId="client.events.1" type="event" desc="Fires on temperature threshold change" />
-	<event name="Event_Reboot_Request" eventName="onRebootRequest" eventId="client.events.1" type="event" desc="Fires on reboot request" />
+        <event name="Event_Temperature_Threshold_Changed" eventName="onTemperatureThresholdChanged" eventId="client.events.1" type="event" desc="Fires on temperature threshold change" />
+        <event name="Event_Reboot_Request" eventName="onRebootRequest" eventId="client.events.1" type="event" desc="Fires on reboot request" />
         <event name="Event_On_Network_Standby_Mode_Changed" eventName="onNetworkStandbyModeChanged" eventId="client.events.1" type="event" desc="Triggered when the network standby mode setting changes" />
         <event name="Event_On_TimeZoneDST_Changed" eventName="onTimeZoneDSTChanged" eventId="client.events.1" type="event" desc="Triggered when device timezone changed" />
-	<event name="Event_On_Friendly_Name_Changed" eventName="onFriendlyNameChanged" eventId="client.events.1" type="event" desc="Triggered when the device friendly name change" />
-	<event name="Event_On_Territory_Changed" eventName="onTerritoryChanged" eventId="client.events.1" type="event" desc="Triggered when the device territory changed" />
+        <event name="Event_On_Friendly_Name_Changed" eventName="onFriendlyNameChanged" eventId="client.events.1" type="event" desc="Triggered when the device friendly name change" />
+        <event name="Event_On_Territory_Changed" eventName="onTerritoryChanged" eventId="client.events.1" type="event" desc="Triggered when the device territory changed" />
     </plugin>
-
 
     <!-- Cobalt Plugin Information -->
     <plugin pluginName="Cobalt" serviceName="Cobalt" serviceVersion="1">
@@ -653,7 +745,6 @@
         <method name="Get_STB_Supported_HDCP_Version" api="getSettopHDCPSupport" type="method" desc="Returns which version of HDCP is supported by the STB"/>
     </plugin>
 
-
     <!-- User Preferences Plugin Information -->
     <plugin pluginName="UserPreferences" serviceName="org.rdk.UserPreferences" serviceVersion="1">
         <method name="Get_UI_Language" api="getUILanguage" type="method" desc="Gets the user preferred UI language" />
@@ -661,9 +752,13 @@
             <params>
                 <param tag="ui_language" defaultValue="null" />
             </params>
+	</method>
+	<method name="Numeric_Set_UI_Language" api="setUILanguage" type="method" desc="Sets the user preferred UI language with a numeric value" >
+            <params>
+                <param tag="ui_language" defaultValue="null" type="int"/>
+            </params>
         </method>
     </plugin>
-
 
     <!-- RDK Shell Plugin Information -->
     <plugin pluginName="RDKShell" serviceName="org.rdk.RDKShell" serviceVersion="1">

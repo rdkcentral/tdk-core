@@ -25,14 +25,23 @@ import sys
 import re
 import tty
 import termios
-import pandas as pd
 import shlex
 import time
 import yaml
 import importlib
-from collections import OrderedDict
+import urllib.request
+import ast
+from pathlib import Path
+import warnings
+from cryptography.utils import CryptographyDeprecationWarning
+warnings.filterwarnings("ignore", category=CryptographyDeprecationWarning)
+import paramiko
 from typing import Optional, List, Iterable
 from datetime import datetime
+from log_to_excel import *
+from vts_common_config import PLATFORM_EXPORTS
+from vts_common_config import STREAMS_HOST_SECONDARY_URL
+from vts_common_config import DEVICE_TYPE
 
 # ====================================
 # Dynamic target -> config module
@@ -48,7 +57,7 @@ VALID_TARGETS = {
 }
 
 config = None  # will be set after loading the target module
-
+test_version = 0 
 
 def load_config_for_target(target: str):
     """Import and return the config module for the selected target."""
@@ -72,6 +81,8 @@ def setup_halif_test():
     repo_url = getattr(config, "REPO_URL")
     repo_dir = getattr(config, "REPO_DIR")
     checkout_ver = getattr(config, "CHECKOUT_VER")
+    global test_version
+    checkout_ver = test_version
     host_dir = os.path.join(repo_dir, "host")
     print("REPO DIR " , repo_dir)
     print("host_dir ", host_dir)
@@ -243,6 +254,114 @@ def modify_waitForBoot_to_return_true_if_needed():
         print(f"❌ Error modifying {file_path}: {e}")
         return False
 
+def get_hpk_module_versions(version: str,
+                             repo: str = "rdkcentral/rdk-hpk-documentation") -> dict:
+    """
+    Fetch RELEASE.md for a given rdk-hpk-documentation tag (e.g. "3.1.0")
+    and return, for every module listed in that release's table, its
+    HAL Interface (current) version and HAL Testing Suite (current) version.
+
+    Returns:
+        {
+          "Deep Sleep Manager": {"hal_interface_version": "1.0.5", "hal_testing_version": "1.4.3"},
+          "RMF Audio Capture":  {"hal_interface_version": "1.0.6", "hal_testing_version": "1.5.4"},
+          ...
+        }
+    A value is None when the release table marks it "NYA"/"NA" (not available/applicable).
+    """
+    url = f"https://raw.githubusercontent.com/{repo}/refs/tags/{version}/RELEASE.md"
+    with urllib.request.urlopen(url) as resp:
+        text = resp.read().decode("utf-8")
+
+    # Isolate this release's section: from "##.. <version>" up to the next same-level
+    # heading. Different tags use "## " or "### " for these headings, so match either.
+    section_match = re.search(
+        rf'^(#{{2,3}}) {re.escape(version)}[ \t]*\n(.*?)(?=^\1 |\Z)',
+        text, re.MULTILINE | re.DOTALL
+    )
+    if not section_match:
+        raise ValueError(f"Could not find a '{version}' release section in {url}")
+    section = section_match.group(2)
+
+    # Pull out the markdown table lines (any line starting with '|')
+    table_lines = [ln for ln in section.splitlines() if ln.strip().startswith('|')]
+    if not table_lines:
+        raise ValueError(f"No table found under release {version}")
+
+    def split_row(row: str):
+        row = row.strip()
+        if row.startswith('|'):
+            row = row[1:]
+        if row.endswith('|'):
+            row = row[:-1]
+        return [c.strip() for c in row.split('|')]
+
+    # Sub-header row (contains **Current**) tells us the column layout.
+    subheader_idx = next(
+        (i for i, ln in enumerate(table_lines) if '**Current**' in ln), None
+    )
+
+    version_re = re.compile(r'\d+(?:\.\d+){2,}')
+    name_re = re.compile(r'\[([^\]]+)\]')
+
+    def extract_version(cell: str):
+        m = version_re.search(cell)
+        return m.group(0) if m else None
+
+    def resolve(current_cell: str, previous_cell: str):
+        v = extract_version(current_cell)
+        if v:
+            return v
+        if 'no change' in current_cell.lower():
+            return extract_version(previous_cell)
+        return None  # NYA / NA / unavailable
+
+    results = {}
+
+    if subheader_idx is not None:
+        has_changeinfo = '**ChangeInfo**' in table_lines[subheader_idx]
+        data_rows = table_lines[subheader_idx + 1:]
+
+        for row in data_rows:
+            cells = split_row(row)
+            if len(cells) < 3 or not cells[0].strip().isdigit():
+                continue  # skip separators / non-data rows
+
+            name_m = name_re.search(cells[1])
+            if not name_m:
+                continue
+            name = name_m.group(1).replace('`', '').strip()
+
+            rest = cells[2:]
+            if has_changeinfo and len(rest) >= 6:
+                hal_cur, _hal_change, hal_prev, test_cur, _test_change, test_prev = rest[:6]
+            elif len(rest) >= 4:
+                hal_cur, hal_prev, test_cur, test_prev = rest[:4]
+            else:
+                continue
+
+            results[name] = {
+                'hal_interface_version': resolve(hal_cur, hal_prev),
+                'hal_testing_version': resolve(test_cur, test_prev),
+            }
+    else:
+        # Older/simple format: single HAL Interface Version + HAL Testing Suite
+        # Version columns (no Current/Previous split), e.g. v1.1.0, v1.0.0.
+        for row in table_lines:
+            cells = split_row(row)
+            if len(cells) < 4 or not cells[0].strip().isdigit():
+                continue
+            name_m = name_re.search(cells[1])
+            if not name_m:
+                continue
+            name = name_m.group(1).replace('`', '').strip()
+            results[name] = {
+                'hal_interface_version': extract_version(cells[2]),
+                'hal_testing_version': extract_version(cells[3]),
+            }
+
+    return results
+
 def patch_testCleanSingleAsset_skip_cleanup(TARGET_DIR,target):
     """
     Patch <testModule>HelperClass.py to skip cleanup in:
@@ -262,7 +381,10 @@ def patch_testCleanSingleAsset_skip_cleanup(TARGET_DIR,target):
     Returns:
         bool: True if patched or already patched, False otherwise
     """
-    file_path = TARGET_DIR + "/" + target + "HelperClass.py"
+    if target == "rmfaudiocapture":
+        file_path = TARGET_DIR + "/" + "rmfAudio" + "HelperClass.py"
+    else:
+        file_path = TARGET_DIR + "/" + target + "HelperClass.py"
     if not os.path.exists(file_path):
         print(f"❌ File not found: {file_path}")
         return False
@@ -271,13 +393,17 @@ def patch_testCleanSingleAsset_skip_cleanup(TARGET_DIR,target):
         content = f.read()
 
     # ✅ Check function exists
-    func_pattern = r'def\s+testCleanSingleAsset\s*\(\s*self\s*\)\s*:'
-    if not re.search(func_pattern, content):
-        print(f"❌ testCleanSingleAsset(self) not found in {file_path}")
+    func_match = re.search(r'def\s+(testCleanSingleAsset|testCleanAssets)\s*\(\s*self\s*\)\s*:', content)
+    if not func_match:
+        print(f"□~]~L testCleanSingleAsset(self)/testCleanAssets(self) not found in {file_path}")
         return False
+    func_name = func_match.group(1)
 
     # ✅ Already patched check (print + return exists inside function)
-    already_pattern = r'def\s+testCleanSingleAsset\s*\(\s*self\s*\)\s*:\s*[\s\S]*?print\(\s*[\'"]Cleanup handled by external framework[\'"]\s*\)\s*[\s\S]*?return'
+    already_pattern = (
+        rf'def\s+{func_name}\s*\(\s*self\s*\)\s*:\s*[\s\S]*?'
+        r'print\(\s*[\'"]Cleanup handled by external framework[\'"]\s*\)\s*[\s\S]*?return'
+    )
     if re.search(already_pattern, content):
         print(f"✅ Already patched: testCleanSingleAsset() in {file_path}")
         return True
@@ -438,7 +564,6 @@ def generate_device_config():
 def update_rack_config():
     """Update rack configuration file with current parameters"""
     try:
-        import yaml
         rack_config = generate_rack_config()
         with open(config.RACK_CONFIG_PATH, 'w') as f:
             yaml.dump(rack_config, f, default_flow_style=config.YAML_DEFAULT_FLOW_STYLE, indent=config.YAML_INDENT)
@@ -454,7 +579,6 @@ def update_rack_config():
 def update_device_config():
     """Update device configuration file with current parameters"""
     try:
-        import yaml
         device_config = generate_device_config()
         with open(config.DEVICE_CONFIG_PATH, 'w') as f:
             yaml.dump(device_config, f, default_flow_style=config.YAML_DEFAULT_FLOW_STYLE, indent=config.YAML_INDENT)
@@ -687,7 +811,19 @@ def get_normalized_streams_for_target(target: str,config,remove_empty: bool = Tr
 
 
 def rewrite_testsetup_yaml_streams_with_renames(target: str,config,remove_empty: bool = True,dedupe: bool = True,) -> int:
+    """
+    Rewrite the target's *_L3_testSetup.yml in place, applying the module's
+    stream rename map and rules to every 'streams:' list.
 
+    Args:
+        target (str): Test module name (example: dsAudio).
+        config: Loaded vtsconfig_<target> module.
+        remove_empty (bool): Drop empty stream entries when True.
+        dedupe (bool): Remove duplicate entries when True.
+
+    Returns:
+        int: Number of changes applied to the YAML.
+    """
     yaml_path = _resolve_yaml_path_for_target(target, config)
     if not yaml_path or not os.path.exists(yaml_path):
         print(f"[streams-rename] Cannot rewrite: YAML not found for '{target}'. Path={yaml_path}")
@@ -698,11 +834,11 @@ def rewrite_testsetup_yaml_streams_with_renames(target: str,config,remove_empty:
     
     mapping = getattr(config, "STREAM_RENAME_MAP", None)
     if mapping is None:
-         mapping = STREAM_RENAME_MAP_BY_MODULE.get(target, {}) or {}
+         mapping = config.STREAM_RENAME_MAP_BY_MODULE.get(target, {}) or {}
 
     rules = getattr(config, "STREAM_RENAME_RULES", None)
     if rules is None:
-        rules = STREAM_RENAME_RULES_BY_MODULE.get(target, []) or []
+        rules = config.STREAM_RENAME_RULES_BY_MODULE.get(target, []) or []
 
 
     def apply_rules(name: str) -> str:
@@ -784,37 +920,225 @@ def rewrite_testsetup_yaml_streams_with_renames(target: str,config,remove_empty:
     print(f"[streams-rename] Rewrote {yaml_path}. Changes applied: {changes}")
     return changes
 
-def _build_url_and_filename(stream: str, base_url: str):
-    """
-    If the YAML stream entry is a full URL, use it.
-    Otherwise join with base_url. Local filename is the URL basename.
-    """
-    if stream.startswith(("http://", "https://")):
-        url = stream
-        filename = os.path.basename(stream.split("?")[0])
-    else:
-        url = base_url.rstrip("/") + "/" + stream.lstrip("/")
-        filename = os.path.basename(stream.split("?")[0])
-    return url, filename
+def startSession(hostname, username, password, port):
+    """Open an interactive SSH shell session. Uses invoke_shell() rather than
+    exec_command(), which is what works reliably against this device's sshd."""
+    try:
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect(hostname, username=username, password=password, port=port)
+        session = client.invoke_shell()
+        print("Created ssh session")
+        return client, session
+    except Exception as e:
+        print("Login to device failed")
+        print(e)
+        return None, None
 
-def download_streams_for_target(target: str,config,use_sshpass: bool = False,allow_self_signed_tls: bool = True, targetDirectory: str = "NONE") -> None:
+
+def closeSession(client):
+    """Close an SSH client session if it is open, ignoring any errors."""
+    if client is not None:
+        try:
+            client.close()
+        except Exception:
+            pass
+
+
+def _run_shell_cmd(session, cmd, timeout=60, end_marker="__CMD_DONE__", drain_grace=0.5):
     """
-    Download streams for the selected target *only* if it is in ALLOWED_DOWNLOAD_MODULES.
+    Run a command over an interactive SSH shell and capture its output.
+
+    Appends an end marker to detect completion and parse the exit status.
+
+    Args:
+        session: Active paramiko shell session.
+        cmd (str): Command to execute on the device.
+        timeout (int): Seconds to wait for the command to finish.
+        end_marker (str): Sentinel used to detect command completion.
+        drain_grace (float): Extra time to drain trailing output.
+
+    Returns:
+        tuple[int, str]: The command exit status and captured output.
+
+    Raises:
+        TimeoutError: If the command does not complete within timeout.
+    """
+    full_cmd = f'{cmd}; echo "{end_marker}:$?"\n'
+    session.send(full_cmd)
+
+    output = ""
+    start = time.time()
+    pattern = re.compile(rf"{end_marker}:(\d+)")
+
+    while (time.time() - start < timeout) or timeout == 0:
+        if session.recv_ready():
+            chunk = session.recv(4096).decode(errors="replace")
+            output += chunk
+            match = pattern.search(output)
+            if match:
+                break
+        else:
+            time.sleep(0.2)
+    else:
+        raise TimeoutError(f"Command timed out after {timeout}s: {cmd}")
+
+    # drain trailing bytes
+    drain_start = time.time()
+    while time.time() - drain_start < drain_grace:
+        if session.recv_ready():
+            output += session.recv(4096).decode(errors="replace")
+            drain_start = time.time()
+        else:
+            time.sleep(0.05)
+
+    exit_status = int(match.group(1))
+    return exit_status, output
+
+def get_stream_url(stream_name, index_url):
+    """
+    Fetches the VTS streams index page and returns the full URL
+    matching the given stream filename.
+
+    :param stream_name: The filename to search for
+    :param index_url: URL of the index.html to search (default: VTS streams dashboard)
+    :return: Full matching URL as a string, or None if not found
+    """
+    try:
+        with urllib.request.urlopen(index_url) as response:
+            html = response.read().decode("utf-8")
+    except Exception as e:
+        print(f"Failed to fetch index page: {e}")
+        return None
+
+    # Find all vts-streams URLs in the HTML
+    urls = re.findall(r'https://vts-streams[^"]+', html)
+
+    # Look for the one that ends with the given stream_name
+    for url in urls:
+        if url.endswith(stream_name):
+            return url
+
+    return None
+
+def _download_delete_streams(download, streams, remote_dir, device_ip, ssh_port, ssh_user,
+                       ssh_password=None, target=None, stream_base=None,
+                       timeout=60, stop_on_failure=False):
+    """
+    Download or delete stream files on the device over SSH.
+
+    Args:
+        download (bool): Download streams when True, delete them when False.
+        streams (list[str]): Stream names or paths to process.
+        remote_dir (str): Remote directory on the device.
+        device_ip (str): Device IP address.
+        ssh_port (int): SSH port.
+        ssh_user (str): SSH username.
+        ssh_password (str): SSH password.
+        target (str): Test module name.
+        stream_base (str): Base URL/path used to build stream download URLs.
+        timeout (int): Per-command timeout in seconds.
+        stop_on_failure (bool): Raise on the first failure when True.
+
+    Returns:
+        list[str]: Names of streams that failed to process.
+    """
+    delete = not download
+    if download:
+        action = "Downloading"
+    else:
+        action = "Deleting"
+
+    print(f"[streams] {action} {len(streams)} items for '{target}' into {remote_dir} on device {device_ip} ...")
+
+    client, session = startSession(device_ip, ssh_user, ssh_password or "", ssh_port)
+    if client is None or session is None:
+        raise RuntimeError(f"Failed to establish SSH session with {device_ip}")
+
+    failures = []
+    try:
+        # drain any initial banner/motd
+        time.sleep(0.5)
+        if session.recv_ready():
+            session.recv(4096)
+
+        exit_status, out = _run_shell_cmd(session, f'mkdir -p "{remote_dir}"', timeout=timeout)
+        
+        if exit_status != 0:
+            raise RuntimeError(f"mkdir failed on {device_ip}: {out}")
+
+        for i, s in enumerate(streams, 1):
+            fname = s.split("/")[-1].split("?")[0]
+            print(f"[streams] ({i}/{len(streams)}) {action} {fname} ...")
+
+            if download:
+                s = os.path.basename(s)
+                stream_present = get_stream_url(s, STREAMS_HOST_SECONDARY_URL)
+                if stream_present:
+                    stream_path = stream_present
+                else:
+                    stream_path = f'{stream_base}{s}'
+                cmd = (
+                    f'cd {remote_dir} && '
+                    f'curl -sS -L --retry 3 --retry-connrefused -O {stream_path}'
+                )
+                print(cmd)
+            else:
+                s = os.path.basename(s)
+                cmd = (
+                    f'cd {remote_dir} && '
+                    f'rm -f {stream_base}{s}'
+                )
+            #print("Executing command : ",cmd)
+            timeout=0
+            exit_status, out = _run_shell_cmd(session, cmd, timeout=timeout)
+            if exit_status == -1:
+                print(f"[streams] TIMEOUT (or unparsed output) for {fname} □~@~T command may still be running on device")
+                failures.append(fname)
+            elif exit_status != 0:
+                print(f"[streams] FAILED: {fname} (exit {exit_status})")
+                failures.append(fname)
+
+            if stop_on_failure:
+                raise RuntimeError(f"{action} failed for {fname} on {device_ip}")
+
+    finally:
+        closeSession(client)
+
+    if failures:
+        print(f"[streams] Completed with {len(failures)} failure(s): {failures}")
+    else:
+        print(f"[streams] All {len(streams)} {action.lower()} completed successfully.")
+
+    return failures
+
+
+def download_streams_for_target(target: str, streams, config, use_sshpass: bool = False,
+                                 allow_self_signed_tls: bool = True,
+                                 targetDirectory: str = "NONE") -> None:
+    """
+    Download the given streams for a target module onto the device.
+
+    Args:
+        target (str): Test module name (must be in ALLOWED_DOWNLOAD_MODULES).
+        streams (list[str]): Stream names to download.
+        config: Loaded vtsconfig_<target> module.
+        use_sshpass (bool): Reserved flag for sshpass-based auth.
+        allow_self_signed_tls (bool): Reserved flag for self-signed TLS.
+        targetDirectory (str): Sub-directory under the device target root.
     """
     if target not in ALLOWED_DOWNLOAD_MODULES:
         return
-
     stream_base = getattr(config, "STREAM_DOWNLOAD_PATH", None)
     if not stream_base:
         print("[streams] STREAM_DOWNLOAD_PATH is not set in vtsconfig. Skipping download.")
         return
-
-    device_ip  = getattr(config, "DEVICE_IP")
-    ssh_user   = getattr(config, "SSH_USERNAME")
-    ssh_port   = getattr(config, "SSH_PORT", 22)
-
-    target_root = getattr(config, "TARGET_DIRECTORY", "/opt/HAL/").rstrip("/")
-    remote_dir  = f"{target_root}/{targetDirectory}"
+    device_ip    = getattr(config, "DEVICE_IP")
+    ssh_user     = getattr(config, "SSH_USERNAME")
+    ssh_password = getattr(config, "SSH_PASSWORD", "") or ""
+    ssh_port     = getattr(config, "SSH_PORT", 22)
+    target_root  = getattr(config, "TARGET_DIRECTORY", "/opt/HAL/").rstrip("/")
+    remote_dir   = f"{target_root}/{targetDirectory}"
 
     yaml_path = _resolve_yaml_path_for_target(target, config)
     if not yaml_path:
@@ -823,68 +1147,18 @@ def download_streams_for_target(target: str,config,use_sshpass: bool = False,all
               f"  - {ALLOWED_DOWNLOAD_MODULES[target]} in current directory")
         return
 
-    streams = _collect_streams_from_yaml(yaml_path)
     if not streams:
         print(f"[streams] No streams listed in YAML for '{target}'. Nothing to download.")
         return
 
-    prelude_cmds = [
-        f'mkdir -p "{remote_dir}"',
-        f'cd "{remote_dir}"',
-    ]
-
-    wget_flags = ["-nc","-nv", "-c", "--timeout=30"]
-    #wget_flags = ["-q", "-c", "-T", "30"]
-    if allow_self_signed_tls:
-        wget_flags.append("--no-check-certificate")
-
-    wget_cmds = []
-    for s in streams:
-        url, fname = _build_url_and_filename(s, stream_base)
-        wget_cmds.append(f'wget {" ".join(wget_flags)} "{url}" -O "{fname}"')
-
-    check_wget = "command -v wget >/dev/null 2>&1"
-    fallback_curl = (
-        'echo "wget not found. Using curl..." && '
-        f'cd "{remote_dir}" && '
-        "for u in " + " ".join([f'"{_build_url_and_filename(s, stream_base)[0]}"' for s in streams]) + "; do "
-        'fname=$(basename "${u%%\\?*}"); '
-        'curl -L --progress-bar --retry 3 --retry-connrefused -o "$fname" "$u" || exit 1; '
-        "done"
-    )
-
-    remote_cmd = (
-        f"{check_wget} && ( " +
-        " && ".join(prelude_cmds + wget_cmds) +
-        f" ) || ( {fallback_curl} )" 
-    )
-
-    ssh_cmd = [
-        "ssh",
-        "-p", str(ssh_port),
-        f"{ssh_user}@{device_ip}",
-        remote_cmd,
-    ]
-    ssh_password = getattr(config, "SSH_PASSWORD", "")
-    if use_sshpass and ssh_password:
-        ssh_cmd = ["sshpass", "-p", ssh_password] + ssh_cmd
-
-    
-    print(f"[streams] Downloading {len(streams)} items for '{target}' into {remote_dir} on device {device_ip} ...")
-    subprocess.run(ssh_cmd, check=True)
-
-    # Final list from the device
-    ls_cmd = [
-        "ssh", "-p", str(ssh_port),
-        f"{ssh_user}@{device_ip}",
-        f'ls -lh "{remote_dir}"'
-    ]
-    subprocess.run(ls_cmd, check=True)
-    print(f"[streams] Download complete for '{target}'.")
+    _download_delete_streams(True, streams, remote_dir, device_ip, ssh_port, ssh_user,
+                       ssh_password, target, stream_base,
+                       timeout=30, stop_on_failure=False)
 
 #================== REMOVE THE DOWNLOADED STREAMS=============================================
 
-def cleanup_streams_for_target(target: str,config,use_sshpass: bool = False,remove_dir: bool = False,dry_run: bool = False,verbose: bool = True, targetDirectory: str = "NONE") -> None:
+
+def cleanup_streams_for_target(target: str, streams, config,use_sshpass: bool = False,remove_dir: bool = False,dry_run: bool = False,verbose: bool = True, targetDirectory: str = "NONE") -> None:
     """
     Remove downloaded stream files from the device for the selected target.
     """
@@ -896,6 +1170,7 @@ def cleanup_streams_for_target(target: str,config,use_sshpass: bool = False,remo
     # Device connection details
     device_ip  = getattr(config, "DEVICE_IP")
     ssh_user   = getattr(config, "SSH_USERNAME")
+    ssh_password = getattr(config, "SSH_PASSWORD", "") or ""
     ssh_port   = getattr(config, "SSH_PORT", 22)
     ssh_pass   = getattr(config, "SSH_PASSWORD", "")
 
@@ -907,12 +1182,9 @@ def cleanup_streams_for_target(target: str,config,use_sshpass: bool = False,remo
     if not yaml_path or not os.path.exists(yaml_path):
         if verbose:
             print(f"[streams-clean] YAML not found for '{target}'. Path={yaml_path} → nothing to clean.")
-        
-        if remove_dir:
-            _cleanup_remote_dir(remote_dir, device_ip, ssh_user, ssh_port, ssh_pass, use_sshpass, dry_run, verbose)
         return
 
-    streams = _collect_streams_from_yaml(yaml_path)
+    #streams = _collect_streams_from_yaml(yaml_path)
 
     mapping = config.STREAM_RENAME_MAP
     rules   = config.STREAM_RENAME_RULES
@@ -951,46 +1223,13 @@ def cleanup_streams_for_target(target: str,config,use_sshpass: bool = False,remo
             print(f"[streams-clean] (dry-run) Would also remove directory: {remote_dir}")
         return
 
-    cmds = [f'mkdir -p "{remote_dir}"', f'cd "{remote_dir}"']
-    if files_to_delete:
-        rm_files = " && ".join([f'rm -f -- "{fn}"' for fn in files_to_delete])
-        cmds.append(rm_files)
-
-
-    if remove_dir:
-        # Go to parent and remove the target dir
-        parent = target_root
-        cmds.append(f'cd "{parent}"')
-        cmds.append(f'rm -rf -- "{target}"')
-
-    remote_cmd = " && ".join(cmds)
-
-    
-    ssh_cmd = [
-        "ssh",
-        "-p", str(ssh_port),
-        f"{ssh_user}@{device_ip}",
-        remote_cmd,
-    ]
-    if use_sshpass and ssh_pass:
-        ssh_cmd = ["sshpass", "-p", ssh_pass] + ssh_cmd
-
     if verbose:
         if remove_dir:
             print(f"[streams-clean] Removing files and directory for '{target}' at {remote_dir} on {device_ip} ...")
         else:
             print(f"[streams-clean] Removing {len(files_to_delete)} files for '{target}' at {remote_dir} on {device_ip} ...")
 
-    subprocess.run(ssh_cmd, check=True)
-
-    # Final list
-    if not remove_dir:
-        ls_cmd = [
-            "ssh", "-p", str(ssh_port),
-            f"{ssh_user}@{device_ip}",
-            f'ls -lh "{remote_dir}" || true'
-        ]
-        subprocess.run(ls_cmd, check=False)
+    _download_delete_streams(False, streams, remote_dir, device_ip, ssh_port, ssh_user, ssh_password, target, "", timeout=30, stop_on_failure=False)
 
     if verbose:
         print(f"[streams-clean] Cleanup complete for '{target}'.")
@@ -1009,6 +1248,7 @@ def ensure_preserve_streams_cleanup_override(target: str, config) -> None:
     base_path = getattr(config, "BASE_PATH", ".")
     host_tests_root = os.path.join(base_path, "host", "tests")
 
+    print("DEBUG : got target as ", target)
     # Handling rmfaudiocapture
     if target == "rmfaudiocapture":
         helper_dir = os.path.join(host_tests_root, "rmfAudio_L3_TestCases")
@@ -1060,6 +1300,80 @@ def ensure_preserve_streams_cleanup_override(target: str, config) -> None:
 
 # ============= utPlayerConfig.yml UPDATE ===================================================
 
+def add_platform_config_if_missing(config_file, platform, platform_export):
+    """
+    Append a vendor-specific gstreamer player config block to utPlayerConfig.yml
+    if the platform is not already present.
+
+    Args:
+        config_file (str): Path to utPlayerConfig.yml.
+        platform (str): Platform/vendor key to add (example: broadcom).
+        platform_export (str): Newline-separated export lines used as prerequisites.
+
+    Returns:
+        bool: True if the platform is present after the operation, False otherwise.
+    """
+    # Read the existing YAML file
+    with open(config_file, "r") as file:
+        content = file.read()
+
+    # Check whether platform already exists as a top-level YAML key
+    platform_exists = any(
+        line.strip() == f"{platform}:"
+        for line in content.splitlines()
+    )
+
+    if platform_exists:
+        print(f"{platform} player config already exists")
+        return False
+
+    # Convert platform_export into YAML prerequisite entries
+    prerequisites = []
+    for line in platform_export.strip().splitlines():
+        line = line.strip()
+        if line:
+            prerequisites.append(f"      - {line}")
+
+    # Build new platform configuration
+    platform_config = (
+        f"\n{platform}:\n"
+        f"  gstreamer:\n"
+        f"    prerequisites:\n"
+        + "\n".join(prerequisites)
+        + "\n"
+        f"    play_command: gst-play-1.0 --flags=video+audio+native-audio \n"
+        f"    stop_command: \"\\x03\" # CNTRL-C\n"
+        f"    primary_mixer_input_config: \"\"\n"
+        f"    secondary_mixer_input_config: \"\"\n"
+    )
+
+    # Append to YAML
+    with open(config_file, "a") as file:
+        file.write(platform_config)
+
+    # Verify that it was actually written
+    with open(config_file, "r") as file:
+        updated_content = file.read()
+
+    if f"{platform}:" not in updated_content:
+        raise RuntimeError(
+            f"Failed to add platform '{platform}' to {config_file}"
+        )
+
+    print(f"Added {platform} player config values")
+    print(
+        f"✓ utPlayerConfig.yml updated for vendor '{platform}' "
+        f"at {config_file}"
+    )
+
+    print(f"Checking file: {config_file}")
+
+    with open(config_file, "r") as file:
+        content = file.read()
+
+    print(f"{platform} present: {'platform:' in content}")
+    return (platform in content)
+
 def update_ut_player_config():
     """
     Ensure utPlayerConfig.yml contains the vendor-specific gstreamer 'prerequisites' block
@@ -1084,7 +1398,14 @@ def update_ut_player_config():
         if re.search(existing_broadcom_re, content):
             print("✓ 'broadcom' block already present in utPlayerConfig.yml. No changes applied.")
         else:
-            print("⚠ Add broadcom player config values before execution")
+            print("⚠ Adding broadcom player config values before execution")
+            added = add_platform_config_if_missing(yml_path, vendor, PLATFORM_EXPORTS)
+            if added:
+                print(f"Added broadcom player config values")
+            else:
+                print(f"Platform already exists: {vendor}")
+
+
             #content = content.rstrip() + "\n" + broadcom_block
             #print("✓ Appended 'broadcom' block to utPlayerConfig.yml.")
     
@@ -1097,8 +1418,8 @@ def update_ut_player_config():
     else:
         raise ValueError(f"Unsupported vendor '{vendor}'.Supported vendors: broadcom, realtek, amlogic.")
 
-    with open(yml_path, 'w', encoding='utf-8') as f:
-        f.write(content)
+    #with open(yml_path, 'w', encoding='utf-8') as f:
+    #    f.write(content)
 
     print(f"✓ utPlayerConfig.yml updated for vendor '{vendor}' at {yml_path}")
 
@@ -1282,7 +1603,94 @@ def _run_one_script_with_logging(script_path: str, logfile):
 
     return process.wait()
 
-def run_interactive_with_logging(log_path : str = "test_run.log"):
+
+def get_streams_for_testfile(py_filename, repo_root="."):
+    """
+    Given a test filename like:
+        dsAudio_test01_EnableDisableAndVerifyAudioPortStatus.py
+
+    Finds the file under repo_root, locates the module's *_L3_testSetup.yml
+    in the same folder, and returns the list of stream basenames configured
+    for that specific test.
+    """
+    # 1. Find the .py file anywhere under repo_root
+    found_path = None
+    for dirpath, _, filenames in os.walk(repo_root):
+        if py_filename in filenames:
+            found_path = os.path.join(dirpath, py_filename)
+            break
+
+    if not found_path:
+        raise FileNotFoundError(f"{py_filename} not found under {repo_root}")
+
+    module_dir = os.path.dirname(found_path)
+
+    # 2. Find the L3_testSetup.yml in the same directory
+    yml_file = None
+    for f in os.listdir(module_dir):
+        if f.lower().endswith("l3_testsetup.yml"):
+            yml_file = os.path.join(module_dir, f)
+            break
+
+    if not yml_file:
+        raise FileNotFoundError(f"No *_L3_testSetup.yml found in {module_dir}")
+
+    # 3. Derive the test key, e.g. "dsAudio_test01_..." -> "test01_..."
+    module_name = os.path.basename(module_dir)  # e.g. dsAudio
+    base = os.path.splitext(py_filename)[0]
+    prefix = module_name + "_"
+    test_key = base[len(prefix):] if base.startswith(prefix) else base
+
+    # 4. Parse the yml for that key's "streams:" block (indentation-based, no pyyaml needed)
+    return extract_streams_for_key(yml_file, test_key)
+
+
+def extract_streams_for_key(yml_path, test_key):
+    """
+    Extract the list of stream basenames configured under a specific test key
+    in a *_L3_testSetup.yml file using indentation-based parsing.
+
+    Args:
+        yml_path (str): Path to the test setup YAML file.
+        test_key (str): Test key whose 'streams:' block should be read.
+
+    Returns:
+        list[str]: Stream basenames configured for the given test key.
+    """
+    stream_pattern = re.compile(r'^\s*-\s*(?:"([^"]*)"|\'([^\']*)\'|(\S+))\s*$')
+    key_pattern = re.compile(rf'^(\s*){re.escape(test_key)}\s*:\s*$')
+
+    streams = []
+    in_block = False
+    key_indent = None
+
+    with open(yml_path, "r", encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            stripped = line.rstrip("\n")
+
+            m = key_pattern.match(stripped)
+            if m:
+                in_block = True
+                key_indent = len(m.group(1))
+                continue
+
+            if in_block:
+                if stripped.strip() == "":
+                    continue
+                cur_indent = len(stripped) - len(stripped.lstrip())
+                if cur_indent <= key_indent:
+                    break  # left the test's block
+                sm = stream_pattern.match(stripped)
+                if sm:
+                    name = sm.group(1) or sm.group(2) or sm.group(3)
+                    if name and name.strip():
+                        streams.append(name.strip())
+
+    # return basenames only, e.g. "streams/tones_string_48k_stereo.ac3" -> "tones_string_48k_stereo.ac3"
+    return [s.rsplit("/", 1)[-1] for s in streams]
+
+
+def run_interactive_with_logging(config, target, log_path : str = "test_run.log"):
     """
     Run one or more interactive tests sequentially with logging.
     """
@@ -1292,8 +1700,27 @@ def run_interactive_with_logging(log_path : str = "test_run.log"):
         raise ValueError("config.TEST_SCRIPT is not set")
     scripts = ts if isinstance(ts, (list, tuple)) else [ts]
 
-    #log_path = getattr(config, "LOG_FILE", "test_run.log")
-    #os.makedirs(os.path.dirname(log_path) or ".", exist_ok=True)
+    if DEVICE_TYPE.lower() == "source":
+        device_type = "Source"
+    elif DEVICE_TYPE.lower() == "sink":
+        device_type = "Sink"
+    else:
+        print("unknown device type, defaulting to source")
+        device_type = "Source"
+
+    target_dir = Path(config.TARGET_DIR)
+    print(target_dir)
+    pattern = re.compile(rf'run.*{re.escape(device_type)}', re.IGNORECASE)
+    matches = [p for p in target_dir.rglob("*") if p.is_file() and pattern.search(p.name)]
+    if not matches:
+        filtered = []
+        print("not found")
+    else:
+        runall_source_path = matches[0].resolve()
+        print(runall_source_path)
+        skipTests = get_skip_tests(runall_source_path)
+        print(ts)
+        filtered = [f for f in scripts if not any(skip in f for skip in skipTests)]
 
     results = []
 
@@ -1306,9 +1733,23 @@ def run_interactive_with_logging(log_path : str = "test_run.log"):
             )
             sys.stdout.write(header); sys.stdout.flush()
             logfile.write(header); logfile.flush()
-
-            rc = _run_one_script_with_logging(script, logfile)
-            results.append((script, rc))
+            if script not in str(filtered):
+                skip_line = f"TEST_RESULT : [SKIPPED]: [{script}] : Test not applicable to {device_type} device\n"
+                sys.stdout.write(skip_line); sys.stdout.flush()
+                logfile.write(skip_line); logfile.flush()
+                rc = 0
+            else:
+                streams = get_streams_for_testfile(script)
+                if streams:
+                    testModule = target
+                    download_streams_for_target(target, streams, config,use_sshpass=bool(getattr(config, "SSH_PASSWORD","")),allow_self_signed_tls=True, targetDirectory=testModule)
+                    ensure_preserve_streams_cleanup_override(testModule, config)
+                try:
+                    rc = _run_one_script_with_logging(script, logfile)
+                finally:
+                    if streams:
+                        cleanup_streams_for_target(target, streams, config, targetDirectory=testModule)
+                results.append((script, rc))
 
             footer = (
                 f"\n----- Completed {os.path.basename(script)} "
@@ -1337,149 +1778,39 @@ def run_interactive_with_logging(log_path : str = "test_run.log"):
     # Return True if all passed
     return all(rc == 0 for _, rc in results)
 
-#================= EXCEL GENERATION ===================================================
-
-def generate_excel_from_log(target: str,log_path: str = "menu.log",excel_path: str = "final_test_results.xlsx",wait_for_log_close_secs: float = 0.5):
+def get_skip_tests(runall_source_path):
     """
-    Parse RAFT output from `menu.log` and write `final_test_results.xlsx`.
+    Parse a *_Runall_Source.py file and return the `skipTests` list
+    defined inside it (e.g. inside Runall_L3()).
+
+    Args:
+        runall_source_path: path (str or Path) to the *_Runall_Source.py file
+
+    Returns:
+        list[str]: the skipTests values found in the file.
+
+    Raises:
+        FileNotFoundError: if the path doesn't exist.
+        ValueError: if no `skipTests = [...]` assignment is found.
     """
+    path = Path(runall_source_path)
+    if not path.exists():
+        print(f"{runall_source_path} doesn't exist")
+        return []
+    source = path.read_text(encoding="utf-8")
 
-    time.sleep(wait_for_log_close_secs)
+    tree = ast.parse(source, filename=str(path))
 
-    log_path = os.path.abspath(log_path)
-    excel_path = os.path.abspath(excel_path)
+    for node in ast.walk(tree):
+        # Look for: skipTests = [ ... ]
+        if isinstance(node, ast.Assign):
+            targets = [t.id for t in node.targets if isinstance(t, ast.Name)]
+            if "skipTests" in targets:
+                value = ast.literal_eval(node.value)
+                if isinstance(value, (list, tuple)):
+                    return list(value)
 
-    if not os.path.exists(log_path):
-        print(f"✗ Log not found: {log_path} (cwd={os.getcwd()})")
-        return
-
-    ansi_re = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
-    with open(log_path, "r", encoding="utf-8", errors="ignore") as f:
-        lines = [ansi_re.sub('', line.rstrip('\n')) for line in f]
-
-    # Summary-level FAIL marker
-    summary_fail_re = re.compile(r"TEST_RESULT\s*:\s*\[FAILED\]", re.IGNORECASE)
-
-    # Start / completion markers
-    found_re      = re.compile(r"Found test:\s*\[(.*?)\]", re.IGNORECASE)
-    running_re    = re.compile(r"Running Test\s*:\s*'([^']+)'", re.IGNORECASE)
-    complete_re   = re.compile(r"Test Complete\s*:\s*'(.*?)'", re.IGNORECASE)
-    suite_line_re = re.compile(r"Suite:\s*\[(.*?)\]", re.IGNORECASE)
-
-    
-    expected_suite_frag = f"L3 {target}"
-
-    def classify_result(test_name: str, log_text: str):
-        pass_patterns = [
-            r"Result\s+.*\[\s*dsERR_NONE\s*\]",
-            r"\bPASSED\b",
-        ]
-        fail_patterns = [
-            r"\bFAILED\b",
-            r"undefined symbol",
-            r"symbol lookup error",
-            r"core dumped",
-            r"segmentation fault",
-            r"\bassert\b",
-            r"\bexception\b",
-            r"\btraceback\b",
-            r"command not found",
-            r"error:\s*",
-        ]
-        completes = set(complete_re.findall(log_text))
-        passed_hits = [p for p in pass_patterns if re.search(p, log_text, re.IGNORECASE)]
-        failed_hits = [p for p in fail_patterns if re.search(p, log_text, re.IGNORECASE)]
-
-        if failed_hits:
-            return "FAILED", f"Failure markers found: {', '.join(failed_hits)}"
-        if passed_hits and (test_name in completes):
-            return "PASSED", f"Found PASSED markers ({', '.join(passed_hits)}) and matching 'Test Complete' for '{test_name}'"
-        if passed_hits and (test_name not in completes):
-            return "FAILED", f"Found PASSED markers ({', '.join(passed_hits)}) but missing 'Test Complete' for '{test_name}'"
-        if test_name in completes:
-            return "PASSED", "No explicit markers, but found matching 'Test Complete'"
-        return "FAILED", "Missing 'Test Complete' and no explicit pass markers"
-
-    # Parse with target filtering
-    test_data = OrderedDict()
-    current_test = None
-    current_log  = []
-    current_suite = None  
-
-    def finalize_current():
-        if current_test is None:
-            return
-        
-        block_text = "\n".join(current_log)
-        
-        suite_match = suite_line_re.search(block_text)
-        suite_name = suite_match.group(1) if suite_match else current_suite
-        if suite_name and expected_suite_frag.lower() not in suite_name.lower():
-            # Wrong suite → discard this block
-            return
-        # Classify & store
-        if summary_fail_re.search(block_text):
-            result, _ = "FAILED", "Summary indicates FAILED"
-        else:
-            result, _ = classify_result(current_test, block_text)
-        test_data[current_test] = {"result": result, "logs": block_text}
-
-    for line in lines:
-        
-        m_suite = suite_line_re.search(line)
-        if m_suite:
-            current_suite = m_suite.group(1)  
-
-        # Start markers: either "Found test: [..]" or "Running Test : '...'"
-        m_found = found_re.search(line)
-        m_run   = running_re.search(line)
-
-        start_name = m_found.group(1) if m_found else (m_run.group(1) if m_run else None)
-        if start_name:
-            # If we were in a previous block, finalize it first
-            if current_test is not None:
-                finalize_current()
-            current_test = start_name
-            current_log  = [line]
-            continue
-
-        
-        if current_test is not None:
-            current_log.append(line)
-            m_complete = complete_re.search(line)
-            if m_complete and m_complete.group(1) == current_test:
-                finalize_current()
-                current_test = None
-                current_log  = []
-                current_suite = None
-                continue
-
-    if current_test is not None:
-        finalize_current()
-
-    if not test_data:
-        full_text = "\n".join(lines)
-        # Only write if the file contains the expected suite at all
-        if re.search(re.escape(expected_suite_frag), full_text, re.IGNORECASE):
-            result, _ = classify_result("L3_Run", full_text)
-            test_data["L3_Run"] = {"result": result, "logs": full_text}
-        else:
-            test_data[f"{target}_NoSuiteFound"] = {"result": "FAILED", "logs": "No matching suite found in log."}
-
-    # Write Excel
-    rows = [[name, data["result"], data["logs"]] for name, data in test_data.items()]
-    df = pd.DataFrame(rows, columns=["Testcase Name", "Result", "Log"])
-    with pd.ExcelWriter(excel_path, engine="xlsxwriter") as writer:
-        df.to_excel(writer, index=False, sheet_name="Results")
-        wb = writer.book
-        ws = writer.sheets["Results"]
-        wrap = wb.add_format({'text_wrap': True, 'valign': 'top'})
-        ws.set_column('A:A', 30)
-        ws.set_column('B:B', 12)
-        ws.set_column('C:C', 100, wrap)
-        ws.set_default_row(18)
-   
-    print(f" Excel file '{excel_path}' created successfully with full logs.")
+    raise ValueError(f"No 'skipTests' list found in {path}")
 
 def patch_targetWorkspace(repo_dir, moduleName, testModule):
     """
@@ -1496,11 +1827,13 @@ def patch_targetWorkspace(repo_dir, moduleName, testModule):
     Returns:
         bool: True if patched or already patched, False otherwise
     """
-
-    file_path = os.path.join(
-        repo_dir,
-        f"{testModule}HelperClass.py"
-    )
+    if testModule == "rmfaudiocapture":
+        file_path = os.path.join(repo_dir, "rmfAudioHelperClass.py")
+    else:
+        file_path = os.path.join(
+            repo_dir,
+            f"{testModule}HelperClass.py"
+        )
 
     if not os.path.exists(file_path):
         print(f"❌ File not found: {file_path}")
@@ -1569,6 +1902,19 @@ def main():
     target = sys.argv[1]
     global config
     config = load_config_for_target(target)  
+
+    versions = get_hpk_module_versions("3.1.0")
+    if "dsAudio" in target or "dsHost" in target or "dsVideoPort" in target or "dsVideoDevice" in target or "dsDisplay" in target:
+        module = "Device Settings"
+    elif "rmfaudiocapture" in target:
+        module = "RMF Audio Capture"
+    elif "deepsleep" in target:
+        module = "Deep Sleep Manager"
+
+    global test_version
+    test_version = f"{versions[module]['hal_testing_version']}"
+    print(test_version)
+
     setup_halif_test()
 
     unique_string = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
@@ -1576,8 +1922,12 @@ def main():
     # Always ensure SCP is skipped at startup
     modify_scpCopy_to_skip()
     modify_waitForBoot_to_return_true_if_needed()
-    if target == "dsVideoPort" or target == "dsAudio" or target == "dsVideoDevice":
-        testModule = "device_settings"
+    if target == "dsVideoPort" or target == "dsAudio" or target == "dsVideoDevice" or target == "rmfaudiocapture":
+        testModule = target
+        #if target == "rmfaudiocapture":
+        #    testModule = "rmf_audio_capture"
+        #else:
+        #    testModule = "device_settings"
         patch_targetWorkspace(config.TARGET_DIR, testModule, target)
         patch_testCleanSingleAsset_skip_cleanup(config.TARGET_DIR, target)
     
@@ -1621,25 +1971,19 @@ def main():
             normalized = get_normalized_streams_for_target(target, config)
             print(f"[streams-rename] Preview ({target}): {normalized}")
             rewrite_testsetup_yaml_streams_with_renames(target, config)
-    if target in ALLOWED_DOWNLOAD_MODULES:
-            download_streams_for_target(target, config,use_sshpass=bool(getattr(config, "SSH_PASSWORD","")),allow_self_signed_tls=True, targetDirectory=testModule)
-            ensure_preserve_streams_cleanup_override(testModule, config)
     if target in ('dsVideoPort','dsAudio','rmfaudiocapture'):
             comment_download_calls_in_helper(target=target,base_path=config.BASE_PATH,enabled_targets=None,note_text="Skipping asset downloads on DUT for this run.")
 
     log_path = target + "_" + unique_string + ".log"
-    run_interactive_with_logging(log_path)
+    run_interactive_with_logging(config, target, log_path)
     excel_sheet_path = target + "_" + unique_string + ".xlsx"
-    generate_excel_from_log(target=target,excel_path=excel_sheet_path)
     print("Removing embedded characters from log file")
     subprocess.run(["sed", "-i", "-e", "s/\r//g", log_path],check=True)
-    if target in ALLOWED_DOWNLOAD_MODULES:
-            # Remove only files (keep directory)
-            cleanup_streams_for_target(target=target,config=config,use_sshpass=bool(getattr(config, "SSH_PASSWORD", "")),
-                                             remove_dir=False,      # set True if you want to remove /opt/HAL/<target> entirely
-                                             dry_run=False,         # set True to preview without deleting
-                                             verbose=True,targetDirectory=testModule)
 
+    excel_path = target + "_" + unique_string + ".xlsx"
+    saved_path = process_log_to_excel(log_path, excel_path)
+    print(f"Report Generated : {saved_path}")
 
 if __name__ == "__main__":
+    versions = get_hpk_module_versions("3.1.0")
     main()

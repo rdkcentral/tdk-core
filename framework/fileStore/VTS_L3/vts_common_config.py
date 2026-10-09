@@ -29,6 +29,7 @@ import os
 #Update device ip below inside quotes
 DEVICE_IP = ""
 #Update device SoC inside quotes ex : "Amlogic", "Realtek" , "Broadcom"
+DEVICE_TYPE = "Source"
 DEVICE_PLATFORM = ""
 DEVICE_DESCRIPTION = "xxx"
 SSH_USERNAME = "root"
@@ -41,9 +42,14 @@ LOG_DIRECTORY = "./logs"
 CPE_PLATFORM = ""
 CPE_MODEL = "test"
 #Update device SoC inside quotes ex : "amlogic", "realtek", "broadcom"
-SOC_VENDOR = ""
+SOC_VENDOR = CPE_PLATFORM.lower()
 TARGET_DIRECTORY ="/VTS_Package/"
 
 #=====================STREAM====================================
 #Update stream server hosting streams
 STREAM_DOWNLOAD_PATH = ""
+STREAMS_HOST_SECONDARY_URL = ""
+
+#Platform specific player config
+PLATFORM_EXPORTS="""
+"""

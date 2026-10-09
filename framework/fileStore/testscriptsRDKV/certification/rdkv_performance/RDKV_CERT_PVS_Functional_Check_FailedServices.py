@@ -142,7 +142,7 @@ if expectedResult in result.upper():
                 output = tdkTestObj.getResultDetails()
                 services_list = output.replace(command,"")
                 if services_count == 0:
-                    print("The list of failed services are: {}".format(services_list))
+                    print("No failed services found in this device")
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
                     print("The number of failed services in the device are: {} \n The list of failed services are: {} \n".format(services_count,services_list))
