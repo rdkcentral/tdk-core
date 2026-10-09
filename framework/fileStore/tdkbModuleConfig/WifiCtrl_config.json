@@ -154,5 +154,49 @@
         "defaultValue": [""],
         "expectedValues": [""],
         "flags": [""]
+    },
+    "Device.WiFi.ApplyIgniteSettings": {
+        "elementType": ["bus_element_type_property"],
+        "type": [""],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.EndPoint.1.Enable": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.EndPoint.1.Status": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Ignite.LinkQualityThreshold": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.WiFi.Ignite.SubdocData": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
+    },
+    "Device.X_RDKCENTRAL-COM_WEI.LinkQualityFlags": {
+        "elementType": ["bus_element_type_method"],
+        "arg": [""],
+        "argsType": [""],
+        "rangeArgs": [""],
+        "flags": [""]
     }
 }
