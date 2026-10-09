@@ -119,7 +119,6 @@ result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
-revert = "NO"
 if expectedResult in result.upper():
     filename = obj.realpath+"fileStore/lightning-apps/channels.js"
     basepath = MediaValidationVariables.test_streams_base_path.replace("http:","")
@@ -367,10 +366,6 @@ if expectedResult in result.upper():
     else:
         print("Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE")
-    #Revert the values
-    if revert=="YES":
-        print("Revert the values before exiting")
-        status = set_plugins_status(obj,curr_plugins_status_dict)
     getSummary(Summ_list,obj)
     obj.unloadModule("rdkv_performance");
 else:
