@@ -2329,4 +2329,86 @@ def browsertest_keypress(obj,app_name,keys):
         print("Failed to get the loaded apps")
         tdkTestObj.setResultStatus("FAILURE")
     return result  
+
+#This function retrieves the playback timestamps from the application log file for the specified app.
     
+def getPlaybackTimestamps(obj, app_name):
+    app_log_file = obj.logpath+"/"+str(obj.execID)+"/"+str(obj.execID)+"_"+str(obj.execDevId)+"_"+str(obj.resultId)+"_mvs_applog.txt"
+    continue_count = 0
+    file_check_count = 0
+    logging_flag = 0
+    load_video = ""
+    playback_started = ""
+    lastIndex = 0
+    while True:
+        if file_check_count > 60:
+            print("\nREST API Logging is not happening properly. Exiting...")
+            break;
+        if os.path.exists(app_log_file):
+            logging_flag = 1
+            break;
+        else:
+            file_check_count += 1
+            time.sleep(1);
+    while logging_flag:
+        if continue_count > 60:
+            print("\nApp not proceeding for 60 secs. Exiting...")
+            break;
+        with open(app_log_file,'r') as f:
+            lines = f.readlines()
+        if lines:
+            if len(lines) != lastIndex:
+                continue_count = 0
+                for i in range(lastIndex,len(lines)):
+                    print(lines[i])
+                    if "Video Player Playing" in lines[i]:
+                        print("Found 'Video Player Playing' log line: {}".format(lines[i]))
+                        playback_match = re.search(r"\b\d{2}:\d{2}:\d{2}(?:[.:]\d+)?\b", lines[i])
+                        playback_started = playback_match.group(0) if playback_match else ""
+                        print("Video Player Playing at: {}".format(playback_started))
+
+                lastIndex = len(lines)
+                if playback_started != "":
+                    break;
+            else:
+                continue_count += 1
+        else:
+            continue_count += 1
+        time.sleep(1)
+
+    if playback_started != "":
+        ssh_params = rdkservice_getSSHParams(obj.realpath, obj.IP)
+        if ssh_params == "" or ssh_params == "{}":
+            print("Failed to get SSH parameters from configuration")
+            return "", playback_started
+
+        ssh_params_dict = json.loads(ssh_params)
+        ssh_method = ssh_params_dict.get("ssh_method")
+        credentials = ssh_params_dict.get("credentials")
+
+        if not ssh_method or not credentials:
+            print("SSH method or credentials not found in configuration")
+            return "", playback_started
+
+        cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
+        log_path = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+        log_path_lines = [line.strip() for line in log_path.splitlines() if line.strip()]
+        if not log_path_lines:
+            print("Failed to get the application storage path")
+            return "", playback_started
+        log_path = log_path_lines[-1]
+        log_file = log_path +"/" + app_name + "/"+ app_name+".log"
+        cmd = f"grep -i 'wpe load committed' {log_file} | tail -n 1 | cut -d' ' -f2 | sed 's/:$//'"
+        output = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
+        clean_output = re.sub(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])", "", output)
+        load_match = re.search(r"\b\d{2}:\d{2}:\d{2}(?:[.:]\d+)?\b", clean_output)
+        load_video = load_match.group(0) if load_match else ""
+        print("load_video:", load_video) 
+        if not load_video:
+            print("Failed to get the load video time")
+            return "", playback_started
+    else:
+        print("Playback did not start")
+        return "", ""
+    
+    return load_video, playback_started    
