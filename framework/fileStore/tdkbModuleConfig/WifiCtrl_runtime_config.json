@@ -222,7 +222,7 @@
     },
     "Device.WiFi.Ignite_Control.{i}.MaxChutilThreshold": {
         "elementType": ["bus_element_type_property"],
-        "type": ["unsignedInt"],
+        "type": ["bytes"],
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
@@ -231,7 +231,7 @@
     },
     "Device.WiFi.Ignite_Control.{i}.MinChutilThreshold": {
         "elementType": ["bus_element_type_property"],
-        "type": ["unsignedInt"],
+        "type": ["bytes"],
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],
@@ -240,16 +240,7 @@
     },
     "Device.WiFi.Ignite_Control.{i}.SNRDifference": {
         "elementType": ["bus_element_type_property"],
-        "type": ["unsignedInt"],
-        "writable": ["true"],
-        "persistentSet": [""],
-        "defaultValue": [""],
-        "expectedValues": [""],
-        "flags": [""]
-    },
-    "Device.WiFi.Ignite_Control.{i}.SNRThreshold": {
-        "elementType": ["bus_element_type_property"],
-        "type": [""],
+        "type": ["bytes"],
         "writable": ["true"],
         "persistentSet": [""],
         "defaultValue": [""],

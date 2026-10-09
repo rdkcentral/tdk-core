@@ -107,11 +107,11 @@
     },
     "Device.Ethernet.Interface.{i}.Upstream": {
         "type": ["boolean"],
-        "writable": ["true"],
+        "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": ["true","false"],
-        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER","ifdef FEATURE_RDKB_WAN_UPSTREAM"]
+        "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
     },
     "Device.Ethernet.Interface.{i}.MACAddress": {
         "type": ["string"],

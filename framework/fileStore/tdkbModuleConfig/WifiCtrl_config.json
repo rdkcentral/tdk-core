@@ -171,15 +171,6 @@
         "rangeArgs": [""],
         "flags": [""]
     },
-    "Device.WiFi.EndPoint.1.LinkQualityStatus": {
-        "elementType": ["bus_element_type_event"],
-        "type": [""],
-        "writable": ["false"],
-        "persistentSet": [""],
-        "defaultValue": [""],
-        "expectedValues": [""],
-        "flags": [""]
-    },
     "Device.WiFi.EndPoint.1.Status": {
         "elementType": ["bus_element_type_method"],
         "arg": [""],
@@ -201,14 +192,7 @@
         "rangeArgs": [""],
         "flags": [""]
     },
-    "Device.WiFi.LinkQualityData": {
-        "elementType": ["bus_element_type_method"],
-        "arg": [""],
-        "argsType": [""],
-        "rangeArgs": [""],
-        "flags": [""]
-    },
-    "Device.WiFi.LinkQualityFlags": {
+    "Device.X_RDKCENTRAL-COM_WEI.LinkQualityFlags": {
         "elementType": ["bus_element_type_method"],
         "arg": [""],
         "argsType": [""],

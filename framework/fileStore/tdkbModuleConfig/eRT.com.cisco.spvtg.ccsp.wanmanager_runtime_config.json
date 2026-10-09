@@ -1181,7 +1181,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.BroadcastPacketsSent": {
+    "Device.MAP.Domain.{i}.Interface.Stats.BroadcastPacketsSent": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1189,7 +1189,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.BytesReceived": {
+    "Device.MAP.Domain.{i}.Interface.Stats.BytesReceived": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1197,7 +1197,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.BytesSent": {
+    "Device.MAP.Domain.{i}.Interface.Stats.BytesSent": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1213,7 +1213,7 @@
         "expectedValues": ["[-2:63]"],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.DiscardPacketsReceived": {
+    "Device.MAP.Domain.{i}.Interface.Stats.DiscardPacketsReceived": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1221,7 +1221,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.DiscardPacketsSent": {
+    "Device.MAP.Domain.{i}.Interface.Stats.DiscardPacketsSent": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1237,7 +1237,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.ErrorsReceived": {
+    "Device.MAP.Domain.{i}.Interface.Stats.ErrorsReceived": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1245,7 +1245,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.ErrorsSent": {
+    "Device.MAP.Domain.{i}.Interface.Stats.ErrorsSent": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1261,7 +1261,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.LastChange": {
+    "Device.MAP.Domain.{i}.Interface.LastChange": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1269,7 +1269,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.LowerLayers": {
+    "Device.MAP.Domain.{i}.Interface.LowerLayers": {
         "type": ["string"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1277,7 +1277,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.MulticastPacketsReceived": {
+    "Device.MAP.Domain.{i}.Interface.Stats.MulticastPacketsReceived": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1285,7 +1285,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.MulticastPacketsSent": {
+    "Device.MAP.Domain.{i}.Interface.Stats.MulticastPacketsSent": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1293,7 +1293,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.Name": {
+    "Device.MAP.Domain.{i}.Interface.Name": {
         "type": ["string"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1301,7 +1301,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.PacketsReceived": {
+    "Device.MAP.Domain.{i}.Interface.Stats.PacketsReceived": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1309,13 +1309,20 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.PacketsSent": {
+    "Device.MAP.Domain.{i}.Interface.Stats.PacketsSent": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
         "flags": [""]
+    },
+    "Device.MAP.Domain.{i}.RuleNumberOfEntries": {
+        "RuleNumberOfEntries": "",
+        "table": "staticTable",
+        "flags": [""],
+        "addOperation": "No",
+        "removeOperation": "No"
     },
     "Device.MAP.Domain.{i}.Rule.{i}.Alias": {
         "type": ["string"],
@@ -1429,13 +1436,6 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.RuleNumberOfEntries": {
-        "RuleNumberOfEntries": "",
-        "table": "staticTable",
-        "flags": [""],
-        "addOperation": "No",
-        "removeOperation": "No"
-    },
     "Device.MAP.Domain.{i}.Status": {
         "type": ["string"],
         "writable": ["false"],
@@ -1452,7 +1452,7 @@
         "expectedValues": ["ENCAPSULATED","TRANSLATION","UNKNOWN"],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.UnicastPacketsReceived": {
+    "Device.MAP.Domain.{i}.Interface.Stats.UnicastPacketsReceived": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1460,7 +1460,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.UnicastPacketsSent": {
+    "Device.MAP.Domain.{i}.Interface.Stats.UnicastPacketsSent": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
@@ -1468,7 +1468,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.MAP.Domain.{i}.UnknownProtoPacketsReceived": {
+    "Device.MAP.Domain.{i}.Interface.Stats.UnknownProtoPacketsReceived": {
         "type": ["unsignedInt"],
         "writable": ["false"],
         "persistentSet": [""],
