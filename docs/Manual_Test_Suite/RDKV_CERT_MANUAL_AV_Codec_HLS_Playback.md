@@ -30,7 +30,7 @@ To validate that HLS (.m3u8) adaptive streaming playback is functional on the DU
 | 9 | Configure HLS live stream URL | Configure the stream variable `video_src_url_live_hls` in `MediaValidationVariables.py` with a valid, accessible HLS live stream URL (this variable is environment-specific and must be set before running the test). | The `video_src_url_live_hls` variable should be configured with a valid, accessible HLS live stream URL in `MediaValidationVariables.py`. |
 | 10 | Check app installation status | Query the installed package list to check whether the player app is already installed on the device. | The installed app package list should be retrievable and the app installation status should be confirmed. |
 | 11 | Download app package if not installed | If the app is not already installed, download the app package from the configured download URL using the DownloadManager API. | The app package should be downloaded successfully if it was not already installed. |
-| 12 | Install app via PackageManager | Install the downloaded app package using the PackageManagerRDKEMS.install API with the appropriate `packageId` and file locator. | The app package should be installed successfully on the device. |
+| 12 | Install app via PackageManager | Install the downloaded app package using the AppPackageManager.install API with the appropriate `packageId` and file locator. | The app package should be installed successfully on the device. |
 
 <a name="head.TestSteps"></a>
 ## Test Steps
