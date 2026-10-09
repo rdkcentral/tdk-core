@@ -55,7 +55,7 @@ To validate that the DownloadManager supports repeated download of the same appl
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 180 minutes
 

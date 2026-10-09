@@ -171,7 +171,7 @@ if expectedResult in result.upper():
                             print("\n Keycode logs are present in logs")
                             log_line = output.split('\n')[1]
                             end_get_key_time = getTimeStampFromString(log_line)
-                            if result in expectedResult and end_get_key_time != {}:
+                            if result in expectedResult and end_get_key_time :
                                 print("\n key codes are received successfully \n")
                                 print("end time",end_get_key_time)
                                 start_get_key_time_in_millisec = getTimeInMilliSec(start_get_key_time)

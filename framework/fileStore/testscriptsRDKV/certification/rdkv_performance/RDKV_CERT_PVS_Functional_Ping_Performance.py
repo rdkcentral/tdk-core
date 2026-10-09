@@ -118,10 +118,10 @@ if expectedResult in result.upper():
     revert="NO"
     plugins_list = ["org.rdk.System"]
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
-    plugins_list = ["org.rdk.Network"]
+    plugins_list = ["org.rdk.NetworkManager"]
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     status = "SUCCESS"
-    plugin_status_needed = {"org.rdk.Network":"activated"}
+    plugin_status_needed = {"org.rdk.NetworkManager":"activated"}
     if curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
         status = set_plugins_status(obj,plugin_status_needed)
@@ -132,7 +132,7 @@ if expectedResult in result.upper():
     print("\nPre conditions for the test are set successfully")
     params = '{"endpoint": "'+ping_test_destination+'", "packets": 10}'
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
-    tdkTestObj.addParameter("method","org.rdk.Network.1.ping");
+    tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.Ping");
     tdkTestObj.addParameter("value",params)
     tdkTestObj.executeTestCase(expectedResult);
     result = tdkTestObj.getResult();

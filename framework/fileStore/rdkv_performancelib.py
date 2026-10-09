@@ -1624,16 +1624,17 @@ def getSummary(Summ_list,obj = False):
         Value = [x for x in Summ_list]
         getDataAndWriteInFile(Value,obj)
 
-    print("############## Execution Summary #######################")
-    for key in Summ_list:
-        print(key)
-        value = key.split(':')[1]
-        try:
-            numeric_value = parse_value_to_float(value)
-            if numeric_value < 0:
-                print("Check if VM and DUT time is synchronized OR Check if any previous steps got failed.")
-        except ValueError as e:
-            print(e)
+    if Summ_list != []:
+        print("############## Execution Summary #######################")
+        for key in Summ_list:
+            print(key)
+            value = key.split(':')[1]
+            try:
+                numeric_value = parse_value_to_float(value)
+                if numeric_value < 0:
+                    print("Check if VM and DUT time is synchronized OR Check if any previous steps got failed.")
+            except ValueError as e:
+                print(e)
 
 #Function to test using RESTAPI
 def testusingRestAPI(obj):
