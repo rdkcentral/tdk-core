@@ -116,7 +116,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 print(f"{app_name} is not installed in the device")
                 uninstalled = True       
             if uninstalled:
-                for iteration in range(1):
+                for iteration in range(test_count):
                     print("ITERATION :", iteration + 1)
                     print("_________________")
                     install_event_count = 0

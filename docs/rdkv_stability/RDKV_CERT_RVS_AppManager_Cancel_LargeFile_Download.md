@@ -48,7 +48,7 @@ To validate that the DownloadManager correctly cancels an in-progress large file
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 150 minutes
 

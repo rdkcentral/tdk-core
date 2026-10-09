@@ -32,6 +32,46 @@ devicePort=""
 deviceName=""
 deviceType=""
 
+BASIC_SANITY_STEP_DESCRIPTIONS = {
+    "rdkv_basic_sanity_launchPlayback": "Launch basic sanity playback",
+    "rdkv_basic_sanity_rebootexecution": "Execute reboot command on device",
+    "rdkv_basic_sanity_executeInDUT": "Execute command on device",
+    "rdkv_basic_sanity_verifyVulkanProperties": "Verify Vulkan properties",
+    "rdkv_basic_sanity_wifiStartScanAndVerify": "Scan and verify WiFi SSID",
+    "rdkv_basic_sanity_verifyVulkanVersion": "Verify Vulkan version",
+    "rdkv_basic_sanity_getDeviceConfig": "Read basic sanity device configuration",
+    "rdkv_basic_sanity_createAndVerifyDisplay": "Create and verify display",
+    "rdkv_basic_sanity_checkPlaybackProgress": "Validate playback progress",
+    "rdkv_basic_sanity_wifiVerifyConnectedSSID": "Verify connected WiFi SSID",
+    "rdkv_basic_sanity_verifyEOS": "Validate end-of-stream event",
+    "rdkv_basic_sanity_getSystemUptime": "Read device system uptime",
+    "rdkv_basic_sanity_wifiDisconnect": "Disconnect WiFi",
+    "rdkv_basic_sanity_deviceStatus": "Verify device status",
+    "rdkv_basic_sanity_wifiConnect": "Connect to WiFi",
+    "rdkv_basic_sanity_runVulkaninfo": "Run vulkaninfo on device",
+    "rdkv_basic_sanity_hdmiConnectionCheck": "Verify HDMI connection",
+    "rdkv_basic_sanity_rebootDevice": "Reboot device",
+}
+
+
+def get_step_description(method, params):
+    description = BASIC_SANITY_STEP_DESCRIPTIONS.get(method, method)
+    if method == "rdkv_basic_sanity_getDeviceConfig" and params.get("configKey"):
+        description = "%s: %s" % (description, params["configKey"])
+    elif method in ("rdkv_basic_sanity_rebootexecution", "rdkv_basic_sanity_executeInDUT") and params.get("command"):
+        description = "%s: %s" % (description, params["command"])
+    elif method == "rdkv_basic_sanity_createAndVerifyDisplay" and params.get("DISPLAY_NAME"):
+        description = "%s: %s" % (description, params["DISPLAY_NAME"])
+    elif method == "rdkv_basic_sanity_wifiStartScanAndVerify" and params.get("targetSSID"):
+        description = "%s: %s" % (description, params["targetSSID"])
+    elif method == "rdkv_basic_sanity_wifiVerifyConnectedSSID" and params.get("expectedSSID"):
+        description = "%s: %s" % (description, params["expectedSSID"])
+    elif method == "rdkv_basic_sanity_wifiConnect" and params.get("ssid"):
+        description = "%s: %s" % (description, params["ssid"])
+    elif method == "rdkv_basic_sanity_deviceStatus" and params.get("expectedStatus"):
+        description = "%s: %s" % (description, params["expectedStatus"])
+    return description
+
 #METHODS
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE

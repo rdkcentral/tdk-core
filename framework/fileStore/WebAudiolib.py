@@ -41,6 +41,36 @@ realpath=""
 securityEnabled=False
 deviceToken=""
 expectedResult="SUCCESS"
+
+WEBAUDIO_STEP_DESCRIPTIONS = {
+    "webaudio_getPluginStatus": "Verify WebAudio plugin status",
+    "webaudio_setPluginStatus": "Set WebAudio plugin status",
+    "webaudio_getValue": "Read WebAudio device value",
+    "webaudio_getLogs_webinspectpage": "Read WebAudio browser logs",
+    "webaudio_prerequisite": "Validate WebAudio prerequisites",
+    "webaudio_getSSHParams": "Read WebAudio SSH parameters",
+    "webaudio_setValue": "Set WebAudio device value",
+    "webaudio_getRequiredLog": "Read required WebAudio log",
+}
+
+
+def get_step_description(method, params):
+    description = WEBAUDIO_STEP_DESCRIPTIONS.get(method, method)
+    context_keys = {
+        "webaudio_getPluginStatus": "plugin",
+        "webaudio_setPluginStatus": "plugin",
+        "webaudio_getValue": "method",
+        "webaudio_setValue": "method",
+        "webaudio_prerequisite": "VariableList",
+        "webaudio_getRequiredLog": "command",
+    }
+    context_key = context_keys.get(method)
+    if context_key and params.get(context_key):
+        description = "%s: %s" % (description, params[context_key])
+    elif method == "webaudio_getLogs_webinspectpage" and params.get("browser"):
+        description = "%s: %s" % (description, params["browser"])
+    return description
+
 #METHODS
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
@@ -308,10 +338,10 @@ def webaudio_keypress(obj,app_name,keys):
     param='['
     index=0
     expectedResult= "SUCCESS"
-    print(f"Getting the app instance id of {app_name}")
     tdkTestObj = obj.createTestStep('rdkservice_getValue')
     tdkTestObj.addParameter("method","org.rdk.AppManager.getLoadedApps")
     tdkTestObj.executeTestCase(expectedResult)
+    print(f"Getting the app instance id of {app_name}")
     result = tdkTestObj.getResultDetails()
     status = tdkTestObj.getResult()
     if status == expectedResult and app_name in result:
@@ -521,9 +551,9 @@ def getTimeInMilliSec(time_string):
 #------------------------------------------------------------------------------------
 def webaudio_getLogs_fromDevicelogs(obj,app_name,grep_line,keys=[]):
    log_message=""
-   print("\n Check for required configurations to ssh to the device")
    tdkTestObj = obj.createTestStep('webaudio_getSSHParams')
    tdkTestObj.executeTestCase(expectedResult)
+   print("\n Check for required configurations to ssh to the device")
    result = tdkTestObj.getResult()
    ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
    if ssh_param_dict != {} and expectedResult in result:

@@ -249,8 +249,11 @@ class PrimitiveTestCase:
     #                Receives the result of the execution send by the Server
     # Parameters   : expectedResult - Expected result for that particular test
     # Return Value : None
-        print("Executing %s...." %self.testCaseName)
-        sys.stdout.flush()
+        if self.isStandAlone:
+            tdkStandAlonelib.closePendingStep(self.parentTestCase)
+        else:
+            print("Executing %s...." %self.testCaseName)
+            sys.stdout.flush()
 
         if self.isStandAlone == False:
             data = json.loads(self.jsonMsgValue)
@@ -400,6 +403,13 @@ class PrimitiveTestCase:
 
         try:
             self.resultStatus = status
+            if self.isStandAlone and hasattr(self.parentTestCase, "pendingStandaloneStep"):
+                step_number, unused_result = self.parentTestCase.pendingStandaloneStep
+                # A failure reported through any object still marks the currently open step failed
+                if "FAILURE" in status:
+                    self.parentTestCase.pendingStandaloneStep = (step_number, status)
+                elif getattr(self.parentTestCase, "pendingStandaloneStepObject", None) is self:
+                    self.parentTestCase.pendingStandaloneStep = (step_number, status)
             if "FAILURE" in status :
                 self.parentTestCase.resultStatus=status
             result = self.getResult()
@@ -1383,6 +1393,8 @@ class TDKScriptingLibrary:
     # Description  : Unload module
     # Parameters   : cName - Component name
     # Return Value : null
+        if self.isStandAlone:
+            tdkStandAlonelib.closePendingStep(self)
         try:
             if self.isStandAlone == False:
                 if(self.enabledXmlLogging == True):
@@ -1429,7 +1441,7 @@ class TDKScriptingLibrary:
             exit()
         else:
             if unloadmoduleresult:
-                print("Unloading Module : " , cName)
+                print("\nUnloading Module : " , cName)
                 if "SUCCESS" in unloadmoduleresult.upper():
                     print("Unload Module Status  : Success")
                     endTime=time.time()

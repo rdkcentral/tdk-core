@@ -93,7 +93,7 @@ result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 
 if "SUCCESS" in result.upper():
-    print("\n[TEST STEP 1] : Check if lighttpd is running")
+    print("\nCheck if lighttpd is running")
     tdkTestObj = obj.createTestStep('telemetry_executeCmdInDUT');
     command = "tr181 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.Version"
     tdkTestObj.addParameter("command", command)
@@ -102,11 +102,11 @@ if "SUCCESS" in result.upper():
     print("\n ", details)
     if "2.0" in details:
         print("\nExpected Telemetry version is running in device")
-        print("\n[TEST STEP RESULT] : SUCCESS\n");
+        print("\nSUCCESS\n");
         tdkTestObj.setResultStatus("SUCCESS");
     else:
         print("Telemetry version is not as expected in device")
-        print("\n[TEST STEP RESULT] : FAILURE\n")
+        print("\nFAILURE\n")
         tdkTestObj.setResultStatus("FAILURE");
 
 obj.unloadModule("rdkv_telemetry");

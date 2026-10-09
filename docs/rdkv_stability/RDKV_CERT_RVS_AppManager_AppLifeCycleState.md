@@ -49,7 +49,7 @@ To validate that the AppManager correctly tracks and reports the lifecycle state
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video Accelerator
+**Supported Models** : RPI-Client, Video_Accelerator
 
 **Estimated duration** : 250 minutes
 

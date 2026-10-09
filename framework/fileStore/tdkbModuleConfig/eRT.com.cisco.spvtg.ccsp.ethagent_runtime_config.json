@@ -126,7 +126,7 @@
         "writable": ["false"],
         "persistentSet": [""],
         "defaultValue": [""],
-        "expectedValues": ["range(-1,2^31 - 1)"],
+        "expectedValues": ["[-1:]"],
         "flags": ["ifdef FEATURE_RDKB_WAN_MANAGER"]
     },
     "Device.Ethernet.Interface.{i}.CurrentBitRate": {

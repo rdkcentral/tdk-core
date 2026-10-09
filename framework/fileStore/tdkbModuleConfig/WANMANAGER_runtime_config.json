@@ -127,27 +127,27 @@
         "arg": [""],
         "argsType": [""],
         "rangeArgs": [""],
-        "flags": [""]
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE"]
     },
     "Device.X_RDK_WanManager.Interface.{i}.WanStop()": {
         "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
         "arg": [""],
         "argsType": [""],
         "rangeArgs": [""],
-        "flags": [""]
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE"]
     },
     "Device.X_RDK_WanManager.Interface.{i}.Activate()": {
         "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
         "arg": [""],
         "argsType": [""],
         "rangeArgs": [""],
-        "flags": [""]
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE"]
     },
     "Device.X_RDK_WanManager.Interface.{i}.Deactivate()": {
         "elementType": ["RBUS_ELEMENT_TYPE_METHOD"],
         "arg": [""],
         "argsType": [""],
         "rangeArgs": [""],
-        "flags": [""]
+        "flags": ["ifdef RBUS_BUILD_FLAG_ENABLE"]
     }
 }

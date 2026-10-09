@@ -156,7 +156,7 @@ if pre_requisite_set:
     details = tdkTestObj.getResultDetails()
     details = re.sub(r"\n", "", details)
     print("RBUS CLI COMMAND ", details)
-    print("\n[TEST STEP 1] : Execute rbuscli command")
+    print("\nExecute rbuscli command")
     tdkTestObj = obj.createTestStep('telemetry_executeCmdInDUT');
     command = str(details)
     tdkTestObj.addParameter("command", command)
@@ -166,10 +166,10 @@ if pre_requisite_set:
     profile_set = False
     if "setvalues succeeded" in details:
         print("Successfully executed rbuscli command")
-        print("\n[TEST STEP RESULT] : SUCCESS\n");
+        print("\nSUCCESS\n");
         tdkTestObj.setResultStatus("SUCCESS");
 
-        print("\n[TEST STEP 2]: Verify if profile is successfully set in rbuscli rules")
+        print("\nVerify if profile is successfully set in rbuscli rules")
         command = "rbuscli get Device.X_RDKCENTRAL-COM_T2.ReportProfiles"
         tdkTestObj.addParameter("command", command)
         tdkTestObj.executeTestCase("SUCCESS");
@@ -178,16 +178,16 @@ if pre_requisite_set:
 
         if profile_name in details:
             print("SUCCESS : Profile is successfully set in rbuscli rules")
-            print("\n[TEST STEP RESULT] : SUCCESS")
+            print("\nSUCCESS")
             tdkTestObj.setResultStatus("SUCCESS");
             profile_set = True
         else:
             print("FAILURE : Profile is not set successfully in rbuscli rules")
-            print("\n[TEST STEP RESULT] : FAILURE")
+            print("\nFAILURE")
             tdkTestObj.setResultStatus("FAILURE")
     else:
         print("\nFAILURE observed during rbuscli command execution")
-        print("\n[TEST STEP RESULT] : FAILURE\n")
+        print("\nFAILURE\n")
         tdkTestObj.setResultStatus("FAILURE");
 
     if profile_set:
@@ -214,37 +214,37 @@ if pre_requisite_set:
                 HTTP_line = line
                 HTTP_found = False
 
-        print ("\n[TEST STEP 3]: Verify if cJSON Report is generated successfully")
+        print ("\nVerify if cJSON Report is generated successfully")
         if not cJSON_found:
             print("FAILURE : Unable to find cJSON report")
-            print("\n[TEST STEP RESULT] : FAILURE\n")
+            print("\nFAILURE\n")
             tdkTestObj.setResultStatus("FAILURE")
         elif name not in cJSON_line:
             print("FAILURE : Unable to find device Device CM MAC in cJSON report")
-            print("\n[TEST STEP RESULT] : FAILURE\n")
+            print("\nFAILURE\n")
             tdkTestObj.setResultStatus("FAILURE")
         else:
             print(cJSON_line)
             print("SUCCESS : cJSON report is generated successfully")
-            print("\n[TEST STEP RESULT] : SUCCESS\n");
+            print("\nSUCCESS\n");
             tdkTestObj.setResultStatus("SUCCESS");
-        print ("\n[TEST STEP 4] : Verify if report is sent successfully into server")
+        print ("\nVerify if report is sent successfully into server")
         if not HTTP_found and dummy_url:
             print("FAILURE : report not sent successfully to server")
-            print("\n[TEST STEP RESULT] : FAILURE")
+            print("\nFAILURE")
             print("EXPECTED RESULT AS DUMMY URL USED\n")
             tdkTestObj.setResultStatus("SUCCESS")
         elif not HTTP_found:
             print("FAILURE : report not sent successfully to server")
-            print("\n[TEST STEP RESULT] : FAILURE\n")
+            print("\nFAILURE\n")
             tdkTestObj.setResultStatus("FAILURE")
         else:
             print(HTTP_line)
             print("SUCCESS : Report Sent Successfully")
-            print("\n[TEST STEP RESULT] : SUCCESS\n");
+            print("\nSUCCESS\n");
             tdkTestObj.setResultStatus("SUCCESS");
 
-        print ("\n[TEST STEP 5] : Verify if report is generated correctly")
+        print ("\nVerify if report is generated correctly")
         CM_MAC = ""
         if cJSON_line and name in cJSON_line:
             try:
@@ -255,14 +255,15 @@ if pre_requisite_set:
                     CM_MAC = data["Report"][0][name]
                     print("Device CM MAC:", CM_MAC)
                     print("SUCCESS : Able to obtain  \"Device CM MAC\" from cJSON report")
-                    print("\n[TEST STEP RESULT] : SUCCESS\n");
+                    print("\nSUCCESS\n");
                     tdkTestObj.setResultStatus("SUCCESS");
             except:
                 print("FAILURE : Unable to obtain \"Device CM MAC\" from cJSON report")
-                print("\n[TEST STEP RESULT] : FAILURE\n")
+                print("\nFAILURE\n")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
             print("No JSON found in log line")
             print("Unable to get Device CM MAC from cJSON report")
+            tdkTestObj.setResultStatus("FAILURE")
 
 obj.unloadModule("rdkv_telemetry");

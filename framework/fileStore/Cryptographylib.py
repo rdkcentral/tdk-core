@@ -33,6 +33,17 @@ import time
 ssh_param_dict = {}
 securityEnabled=False
 
+CRYPTOGRAPHY_STEP_DESCRIPTIONS = {
+    "execute_Cmnd_In_DUT": "Execute cryptography command on device",
+}
+
+
+def get_step_description(method, params):
+    description = CRYPTOGRAPHY_STEP_DESCRIPTIONS.get(method, method)
+    if method == "execute_Cmnd_In_DUT" and params.get("command"):
+        description = "%s: %s" % (description, params["command"])
+    return description
+
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
 #---------------------------------------------------------------

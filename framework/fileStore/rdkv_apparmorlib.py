@@ -30,6 +30,28 @@ devicePort=""
 deviceName=""
 deviceType=""
 
+APPARMOR_STEP_DESCRIPTIONS = {
+    "execute_step": "Execute AppArmor service request",
+    "obtainCredentials": "Obtain AppArmor credentials",
+    "rdkvapparmor_rebootDevice": "Reboot device",
+    "rdkvapparmor_getDeviceConfig": "Read AppArmor device configuration",
+    "rdkvapparmor_getPluginStatus": "Verify AppArmor plugin status",
+    "rdkvapparmor_executeInDUT": "Execute command on device",
+    "rdkvapparmor_getTestDeviceStatus": "Read AppArmor test device status",
+    "rdkvapparmor_setValue": "Set AppArmor device value",
+}
+
+
+def get_step_description(method, params):
+    description = APPARMOR_STEP_DESCRIPTIONS.get(method, method)
+    if method == "rdkvapparmor_getDeviceConfig" and params.get("configKey"):
+        description = "%s: %s" % (description, params["configKey"])
+    elif method == "rdkvapparmor_getPluginStatus" and params.get("plugin"):
+        description = "%s: %s" % (description, params["plugin"])
+    elif method == "rdkvapparmor_setValue" and params.get("method"):
+        description = "%s: %s" % (description, params["method"])
+    return description
+
 #METHODS
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
@@ -87,7 +109,6 @@ def rdkvapparmor_getDeviceConfig (basePath, configKey):
 #TO OBTAIN CREDENTIALS FROM CONFIG FILE
 #-----------------------------------------------------------------
 def obtainCredentials(obj,key_list):
-    print("Retrieving Configuration values from config file.......")
     configKeyList = key_list
     configValues = {}
     value_list = []

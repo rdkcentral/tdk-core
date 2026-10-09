@@ -6,8 +6,8 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": [""],
-	"skipGet": "Yes"
+        "flags": ["ifdef DCMAGENT"],
+        "skipGet": "Yes"
     },
     "Device.DCM.Processconfig": {
         "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
@@ -16,8 +16,8 @@
         "persistentSet": [""],
         "defaultValue": [""],
         "expectedValues": [""],
-        "flags": [""],
-	"skipGet": "Yes"
+        "flags": ["ifdef DCMAGENT"],
+        "skipGet": "Yes"
     },
     "Telemetry.ReportProfiles.EventMarker": {
         "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],
@@ -27,7 +27,7 @@
         "defaultValue": [""],
         "expectedValues": [""],
         "flags": [""],
-	"skipGet": "Yes"
+        "skipGet": "Yes"
     },
     "Telemetry.ReportProfiles.ProfilesUpdated": {
         "elementType": ["RBUS_ELEMENT_TYPE_EVENT"],
@@ -37,7 +37,7 @@
         "defaultValue": [""],
         "expectedValues": [""],
         "flags": [""],
-	"skipGet": "Yes"
+        "skipGet": "Yes"
     },
     "Telemetry.OperationalStatus": {
         "elementType": ["RBUS_ELEMENT_TYPE_PROPERTY"],

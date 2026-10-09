@@ -32,6 +32,43 @@ from time import sleep
 import pexpect
 import tdklib
 
+RFC_STEP_DESCRIPTIONS = {
+    "rfc_formfeaturename": "Format RFC feature name",
+    "rfc_urlvalidate": "Validate RFC configuration URL",
+    "rfc_deletefeaturerule": "Delete RFC feature rule",
+    "rfc_check_setornot_configdata": "Validate RFC configuration data state",
+    "rfc_initializefeatures": "Initialize RFC feature",
+    "rfc_datamodelcheck": "Validate RFC data model",
+    "rfc_partnersdefaultschecker": "Validate RFC partner defaults",
+    "rfc_getDeviceConfig": "Read RFC device configuration",
+    "rfc_deletefeature": "Delete RFC feature",
+    "rfc_checkconfiguredata": "Validate RFC configured data",
+    "rfc_enable_maintenance_manager": "Enable RFC maintenance manager",
+    "rfc_disable_enable_maintenance_manager": "Configure RFC maintenance manager",
+    "rfc_datfilechecker": "Validate RFC data file",
+}
+
+
+def get_step_description(method, params):
+    description = RFC_STEP_DESCRIPTIONS.get(method, method)
+    context_keys = {
+        "rfc_formfeaturename": "feature_name",
+        "rfc_urlvalidate": "configKey",
+        "rfc_deletefeaturerule": "xconfdomainname",
+        "rfc_check_setornot_configdata": "rfcparameter",
+        "rfc_datamodelcheck": "rfcparameter",
+        "rfc_partnersdefaultschecker": "xconfdomainname",
+        "rfc_getDeviceConfig": "configKey",
+        "rfc_deletefeature": "xconfdomainname",
+        "rfc_checkconfiguredata": "feature_name",
+        "rfc_enable_maintenance_manager": "method",
+        "rfc_disable_enable_maintenance_manager": "method",
+    }
+    context_key = context_keys.get(method)
+    if context_key and params.get(context_key):
+        description = "%s: %s" % (description, params[context_key])
+    return description
+
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
 #---------------------------------------------------------------

@@ -80,5 +80,21 @@
         "defaultValue": [""],
         "expectedValues": [""],
         "flags": ["ifndef FEATURE_RDKB_DHCP_MANAGER"]
+    },
+    "Device.DSLite.Enable": {
+        "type": ["boolean"],
+        "writable": ["true"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": ["ifdef FEATURE_DSLITE_V2"]
+    },
+    "Device.MAP.Enable": {
+        "type": ["boolean"],
+        "writable": ["false"],
+        "persistentSet": [""],
+        "defaultValue": [""],
+        "expectedValues": [""],
+        "flags": [""]
     }
 }

@@ -36,6 +36,30 @@ deviceMAC=""
 password=""
 user_name=""
 sshMethod=""
+
+WEBPA_STEP_DESCRIPTIONS = {
+    "integer_check": "Validate integer value",
+    "webpa_deviceconfig_value": "Read WebPA device configuration",
+    "webpa_parodusstatuscheck": "Verify WebPA Parodus status",
+    "webpa_validate_set": "Validate WebPA set operation",
+    "webpa_get": "Read WebPA parameter",
+    "webpa_set": "Set WebPA parameter",
+}
+
+def get_step_description(method, params):
+    description = WEBPA_STEP_DESCRIPTIONS.get(method, method)
+    context_keys = {
+        "integer_check": "value",
+        "webpa_deviceconfig_value": "configKey",
+        "webpa_validate_set": "paramName",
+        "webpa_get": "paramName",
+        "webpa_set": "paramName",
+    }
+    context_key = context_keys.get(method)
+    if context_key and params.get(context_key):
+        description = "%s: %s" % (description, params[context_key])
+    return description
+
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
 #---------------------------------------------------------------
@@ -265,24 +289,58 @@ def webpa_get(paramName,WEBPA_URL,AUTH_TOKEN):
             print("\nExecuting Command : %s" %command)
             #execute in DUT function
             result=execute_CmndInDUT (sshMethod, credentials, command)
-            result=str(result).split("\n")
-            result=str(result[1])
+            result_lines = str(result).split("\n")
+            
+            # Check if we have enough lines in the response
+            if len(result_lines) < 2:
+                print("\nFAILURE : WebPA response is incomplete or empty.")
+                print("Raw output: %s" % result)
+                webpa_getstatus="FAILURE"
+                return webpa_getstatus, value_field, data_type_field
+            
+            result=str(result_lines[1])
             print("\nGet Response : ", result)
-            data = json.loads(result)
+            
+            data_type_field = 0
+            value_field = ""
 
-            data_type_field =0
-
-            value_field = data["parameters"][0]["value"].strip('"')
-
-            print("Value : ", value_field)
-
-            if value_field == "" or value_field == "EMPTY":
-                print("\nFAILURE : Value field is empty\n")
+            # Check if response is empty
+            if not result or result.strip() == "":
+                print("\nFAILURE : WebPA response is empty")
                 webpa_getstatus="FAILURE"
             else:
-                data_type_field = data["parameters"][0]["dataType"]
-                print("Data Type : ", data_type_field)
-                print("\nSUCCESS : Value field is not empty\n")
+                try:
+                    data = json.loads(result)
+                except json.JSONDecodeError as e:
+                    print("\nFAILURE : Failed to parse WebPA response as JSON - %s" % str(e))
+                    print("Raw Response: %s" % result)
+                    webpa_getstatus="FAILURE"
+                    return webpa_getstatus, value_field, data_type_field
+
+                # Check if response contains error or success
+                if "parameters" not in data:
+                    # This is an error response
+                    if "code" in data and "message" in data:
+                        print("\nFAILURE : WebPA API Error - Code: %s, Message: %s" % (data["code"], data["message"]))
+                    else:
+                        print("\nFAILURE : Invalid WebPA response format. Response: %s" % result)
+                    webpa_getstatus="FAILURE"
+                else:
+                    try:
+                        value_field = data["parameters"][0]["value"].strip('"')
+                        print("Value : ", value_field)
+
+                        if value_field == "" or value_field == "EMPTY":
+                            print("\nFAILURE : Value field is empty\n")
+                            webpa_getstatus="FAILURE"
+                        else:
+                            data_type_field = data["parameters"][0]["dataType"]
+                            print("Data Type : ", data_type_field)
+                            print("\nSUCCESS : Value field is not empty\n")
+                    except (KeyError, IndexError) as e:
+                        print("\nFAILURE : Failed to parse WebPA response - %s" % str(e))
+                        print("Response: %s" % result)
+                        webpa_getstatus="FAILURE"
 
         else:
             print("\nFAILURE : Failed to get the device credentials")
@@ -356,16 +414,51 @@ def webpa_validate_set(paramName, testValue, WEBPA_URL, AUTH_TOKEN):
             command = f"curl -X GET '{WEBPA_URL}/api/v2/device/mac:{deviceMAC}/config?names={paramName}' -H 'authorization:{AUTH_TOKEN}'"
             print(f"\nExecuting Command: {command}")
             result = execute_CmndInDUT(sshMethod, credentials, command)
-            result = str(result).split("\n")[1]
-            data = json.loads(result)
-
-            actual_value = data["parameters"][0]["value"].strip('"')
-
-            if actual_value == testValue:
-                print(f"[SUCCESS] Parameter '{paramName}' is correctly set to '{testValue}'")
-                validation_status = "SUCCESS"
+            result_lines = str(result).split("\n")
+            
+            # Check if we have enough lines in the response
+            if len(result_lines) < 2:
+                print(f"[FAILURE] WebPA response is incomplete or empty.")
+                print(f"Raw output: {result}")
+                validation_status = "FAILURE"
+                return validation_status
+            
+            result = str(result_lines[1])
+            
+            # Check if response is empty
+            if not result or result.strip() == "":
+                print(f"[FAILURE] WebPA response is empty.")
+                validation_status = "FAILURE"
             else:
-                print(f"[FAILURE] Mismatch! Expected: '{testValue}', Got: '{actual_value}'")
+                try:
+                    data = json.loads(result)
+                except json.JSONDecodeError as e:
+                    print(f"[FAILURE] Failed to parse WebPA response as JSON - {str(e)}")
+                    print(f"Raw Response: {result}")
+                    validation_status = "FAILURE"
+                    return validation_status
+
+                # Check if response contains error or success
+                if "parameters" not in data:
+                    # This is an error response
+                    if "code" in data and "message" in data:
+                        print(f"[FAILURE] WebPA API Error - Code: {data['code']}, Message: {data['message']}")
+                    else:
+                        print(f"[FAILURE] Invalid WebPA response format. Response: {result}")
+                    validation_status = "FAILURE"
+                else:
+                    try:
+                        actual_value = data["parameters"][0]["value"].strip('"')
+
+                        if actual_value == testValue:
+                            print(f"[SUCCESS] Parameter '{paramName}' is correctly set to '{testValue}'")
+                            validation_status = "SUCCESS"
+                        else:
+                            print(f"[FAILURE] Mismatch! Expected: '{testValue}', Got: '{actual_value}'")
+                    except (KeyError, IndexError) as e:
+                        print(f"[FAILURE] Failed to parse WebPA response - {str(e)}")
+                        print(f"Response: {result}")
+                        validation_status = "FAILURE"
         else:
             print("[FAILURE] Failed to obtain WebPA credentials")
     else:
