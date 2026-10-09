@@ -11,6 +11,10 @@ RDKV_CERT_AVS_User_Preferences
    - [UserPreferences_ActivateDeactivate_All_Event_Test](#userpreferences_activatedeactivate_all_event_test)
    - [UserPreferences_Get_UI_Language_Error](#userpreferences_get_ui_language_error)
    - [UserPreferences_SetUILanguage_without_Params](#userpreferences_setuilanguage_without_params)
+   - [UserPreferences_Set_Invalid_UI_Language](#userpreferences_set_invalid_ui_language)
+   - [UserPreferences_Set_Empty_UI_Language](#userpreferences_set_empty_ui_language)
+   - [UserPreferences_Set_Numeric_UI_Language](#userpreferences_set_numeric_ui_language)
+   - [UserPreferences_Set_Specialchar_UI_Language](#userpreferences_set_specialchar_ui_language)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -172,6 +176,78 @@ Verify that the setUILanguage API returns an error when UI language parameter is
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | Set UI language | Invoke setUILanguage on org.rdk.UserPreferences<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.setUILanguage"}' http://127.0.0.1:9998/jsonrpc` | API returns error response with `"success": false` (missing `ui_language` parameter) |
+
+---
+
+<a id="userpreferences_set_invalid_ui_language"></a>
+### TestCase Name
+UserPreferences_Set_Invalid_UI_Language
+
+### TestCase ID
+UP_06
+
+### TestCase Objective
+Verify that the setUILanguage API returns an error when an invalid UI language value is provided
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set UI language with invalid value | Invoke setUILanguage on org.rdk.UserPreferences with ui_language: "INVALID"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.setUILanguage", "params": {"ui_language": "INVALID"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setUILanguage` returns an error response with `success: false` for the invalid UI language value `"INVALID"` |
+
+---
+
+<a id="userpreferences_set_empty_ui_language"></a>
+### TestCase Name
+UserPreferences_Set_Empty_UI_Language
+
+### TestCase ID
+UP_07
+
+### TestCase Objective
+Verify that the setUILanguage API returns an error when an empty UI language value is provided
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set UI language with empty value | Invoke setUILanguage on org.rdk.UserPreferences with ui_language: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.setUILanguage", "params": {"ui_language": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setUILanguage` returns an error response with `success: false` for the empty UI language value |
+
+---
+
+<a id="userpreferences_set_numeric_ui_language"></a>
+### TestCase Name
+UserPreferences_Set_Numeric_UI_Language
+
+### TestCase ID
+UP_08
+
+### TestCase Objective
+Verify that the setUILanguage API returns an error when a numeric UI language value is provided
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set UI language with numeric value | Invoke setUILanguage on org.rdk.UserPreferences with ui_language: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.setUILanguage", "params": {"ui_language": 12345}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setUILanguage` returns an error response with `success: false` for the numeric UI language value `12345` |
+
+---
+
+<a id="userpreferences_set_specialchar_ui_language"></a>
+### TestCase Name
+UserPreferences_Set_Specialchar_UI_Language
+
+### TestCase ID
+UP_09
+
+### TestCase Objective
+Verify that the setUILanguage API returns an error when a special-character UI language value is provided
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set UI language with special characters value | Invoke setUILanguage on org.rdk.UserPreferences with ui_language: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.UserPreferences.1.setUILanguage", "params": {"ui_language": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setUILanguage` returns an error response with `success: false` for the special characters UI language value `"()^*!"` |
 
 ## Plugin Post-conditions
 

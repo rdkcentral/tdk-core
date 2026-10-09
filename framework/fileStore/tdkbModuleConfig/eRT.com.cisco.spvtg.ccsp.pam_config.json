@@ -1104,14 +1104,6 @@
         "expectedValues": [""],
         "flags": ["ifndef FEATURE_FWUPGRADE_MANAGER"]
     },
-    "Device.DeviceInfo.X_RDKCENTRAL-COM_xOpsDeviceMgmt.RPC.RebootDevice": {
-        "type": ["string"],
-        "writable": ["true"],
-        "persistentSet": [""],
-        "defaultValue": [""],
-        "expectedValues": [""],
-        "flags": [""]
-    },
     "Device.DeviceInfo.X_RDKCENTRAL-COM_xOpsDeviceMgmt.RPC.FirmwareDownloadStartedNotification": {
         "type": ["string"],
         "writable": ["true"],
@@ -4630,7 +4622,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.xMemInsight.Enable": {
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.meminsight.Enable": {
         "type": ["boolean"],
         "writable": ["true"],
         "persistentSet": [""],
@@ -4638,7 +4630,7 @@
         "expectedValues": [""],
         "flags": [""]
     },
-    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.xMemInsight.Args": {
+    "Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.meminsight.Args": {
         "type": ["string(512)"],
         "writable": ["true"],
         "persistentSet": [""],

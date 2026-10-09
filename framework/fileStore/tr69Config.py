@@ -17,24 +17,6 @@
 # limitations under the License.
 ##########################################################################
 
-#URI of ACS server to be used for testing
-ACS_URI=""
-
-#Tr69 Managment Server URL
-SERVER_URL=""
-
-# Name of the xml file(including its full path), holding the soap request for TS_TR069PA_Enable_CWMP_ConnectToACS.py, could be any set/get request
-Enable_CWMP_XML=""
-
-# Name of the xml file(including its full path), holding the soap request for TS_TR069PA_SetManagementServerURL.py, should be a get request for Device.ManagementServer.URL
-SERVERURI_GET_XML=""
-
-# Name of the xml file(including its full path), holding the soap request for TS_TR069PA_SetManagementServerURL.py, should be a set request to set a url as Device.ManagementServer.URL
-SERVERURI_SET_XML=""
-
-# Name of the xml file(including its full path), holding the soap request for TS_ETHWAN_CheckTR069Support.py, should be a get request for Device.ManagementServer.Username
-SERVERUSERNAME_GET_XML=""
-
 #Location/path of the TR-069 (CWMP) client certificate on the DUT
 TR069_CERTIFICATE_LOCATION=""
 

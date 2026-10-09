@@ -1741,7 +1741,8 @@ def parseXMLAndExecuteTest(paramsRoot, factoryReset, setup_type, obj, testtype):
     if testtype == "get":
         totalCount = {"total" : 0, "typeTestCount" : 0, "valueCheckCount" : 0}
         for param in paramsRoot:
-            paramList.append(param.find('name').text)
+            if param.find('skipGet') is None:
+                paramList.append(param.find('name').text)
         print("\nPARAMS TO BE GET ARE: ",paramList)
 
     elif testtype == "readOnlySet":
@@ -1764,6 +1765,9 @@ def parseXMLAndExecuteTest(paramsRoot, factoryReset, setup_type, obj, testtype):
 
     if testtype == "get":
         for param in paramsRoot:
+            #Check if a get test is needed
+            if param.find('skipGet') is not None:
+                continue
             #for some params default value is not applicable, skip
             if factoryReset == "true" and param.find('defaultValue') is None:
                 continue

@@ -64,6 +64,11 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
         print(f"ACTUAL RESULT {step}: Parsed the device configuration file successfully.")
         print("[TEST EXECUTION RESULT] : SUCCESS")
 
+        if tdkbE2EUtility.mlo_capability == "True":
+            tdkbE2EUtility.wlan_5ghz_interface = tdkbE2EUtility.wlan_interface
+            tdkbE2EUtility.ssid_5ghz_name = tdkbE2EUtility.ssid_name
+            tdkbE2EUtility.ssid_5ghz_pwd = tdkbE2EUtility.ssid_pwd
+
         #Check for ACL test prerequisites
         tdkTestObj,preRequisiteStatus,ap_indices,orgMacFilterEnables,orgFilterAsBlacklists,step = tdkutility.set_ACLprerequisites_allRadios(obj2,step)
         if "SUCCESS" in preRequisiteStatus:

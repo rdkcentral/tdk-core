@@ -16,101 +16,41 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
-'''
-<?xml version="1.0" encoding="UTF-8"?><xml>
-  <id/>
-  <version>1</version>
-  <name>E2E_DisablePF_FirewallLow_HTTPSFromWanToWlan</name>
-  <primitive_test_id/>
-  <primitive_test_name>tdkb_e2e_Get</primitive_test_name>
-  <primitive_test_version>2</primitive_test_version>
-  <status>FREE</status>
-  <synopsis>Verify that on disabling Port Forwarding HTTPs traffic should not passthrough from WAN to WLAN</synopsis>
-  <groups_id/>
-  <execution_time>30</execution_time>
-  <long_duration>false</long_duration>
-  <advanced_script>false</advanced_script>
-  <remarks/>
-  <skip>false</skip>
-  <box_types>
-    <box_type>Broadband</box_type>
-    <box_type>Emulator</box_type>
-    <box_type>RPI</box_type>
-  <box_type>BPI</box_type></box_types>
-  <rdk_versions>
-    <rdk_version>RDKB</rdk_version>
-  </rdk_versions>
-  <test_cases>
-    <test_case_id>TC_TDKB_E2E_184</test_case_id>
-    <test_objective>Verify that on disabling Port Forwarding HTTPs traffic should not passthrough from WAN to WLAN</test_objective>
-    <test_type>Negative</test_type>
-    <test_setup>Broadband,Emulator,RPI</test_setup>
-    <pre_requisite>Ensure the client setup is up with the IP address assigned by the gateway</pre_requisite>
-    <api_or_interface_used>None</api_or_interface_used>
-    <input_parameters>Device.WiFi.Radio.1.Enable
-Device.WiFi.SSID.1.SSID
-Device.WiFi.AccessPoint.1.Security.KeyPassphrase
-Device.X_CISCO_COM_Security.Firewall.FirewallLeve
-Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress
-Device.NAT.X_Comcast_com_EnablePortMapping</input_parameters>
-    <automation_approch>1. Load tdkb_e2e and advancedconfig modules
-2. Using tdkb_e2e_Get, get and save firewall level
-3. Set the firewall level to low using tdkb_e2e_SetMultipleParams
-4. Connect wifi client to GW and get its ip
-5. Enable Device.NAT.X_Comcast_com_EnablePortMapping using AdvancedConfig_Set
-6. Create new port mapping rule and set the wifi client ip as the internal client ip
-7. Enable the created port mapping rule
-8. Login to wan client machine
-9. From wan client try to establish https connection with the WAN ip of GW(it should go through the wlan client)
-10. Check if the https connection is success
-11. Disable Device.NAT.X_Comcast_com_EnablePortMapping using AdvancedConfig_Set
-12. From wan client try to establish https connection with the WAN ip of GW(it should fail)
-13. Delete the added port mapping rule
-14. Revert the firewall level to original value
-13.Unload tdkb_e2e and advancedconfig modules</automation_approch>
-    <except_output>HTTPS connection from WAN client to WAN ip of gateway, after enabling port forwarding should be success.  On disabling port forwarding, this connection should fail</except_output>
-    <priority>High</priority>
-    <test_stub_interface>tdkb_e2e, advancedconfig</test_stub_interface>
-    <test_script>E2E_DisablePF_FirewallLow_HTTPSFromWanToWlan</test_script>
-    <skipped>No</skipped>
-    <release_version>M56</release_version>
-    <remarks>WAN,WLAN</remarks>
-  </test_cases>
-</xml>
 
-'''
 # use tdklib library,which provides a wrapper for tdk testcase script
-import tdklib;
-import time;
+import tdklib
+import time
 import tdkbE2EUtility
-from tdkbE2EUtility import *;
+from tdkbE2EUtility import *
 
 #Test component to be tested
-obj = tdklib.TDKScriptingLibrary("tdkb_e2e","1");
-obj1 = tdklib.TDKScriptingLibrary("advancedconfig","RDKB");
+obj = tdklib.TDKScriptingLibrary("tdkb_e2e","1")
+obj1 = tdklib.TDKScriptingLibrary("advancedconfig","RDKB")
 
 #IP and Port of box, No need to change,
-#This will be replaced with correspoing Box Ip and port while executing script
+#This will be replaced with corresponding Box Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'E2E_DisablePF_FirewallLow_HTTPSFromWanToWlan');
-obj1.configureTestCase(ip,port,'E2E_DisablePF_FirewallLow_HTTPSFromWanToWlan');
+obj.configureTestCase(ip,port,'E2E_DisablePF_FirewallLow_HTTPSFromWanToWlan')
+obj1.configureTestCase(ip,port,'E2E_DisablePF_FirewallLow_HTTPSFromWanToWlan')
 
 #Get the result of connection with test component
-loadmodulestatus =obj.getLoadModuleResult();
-loadmodulestatus1 =obj1.getLoadModuleResult();
-print("[LIB LOAD STATUS]  :  %s " %loadmodulestatus) ;
+loadmodulestatus = obj.getLoadModuleResult()
+loadmodulestatus1 = obj1.getLoadModuleResult()
+print("[LIB LOAD STATUS]  :  %s " %loadmodulestatus)
+print("[LIB LOAD STATUS]  :  %s " %loadmodulestatus1)
 
-if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.upper() :
-    obj.setLoadModuleStatus("SUCCESS");
-    obj1.setLoadModuleStatus("SUCCESS");
+if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.upper():
+    obj.setLoadModuleStatus("SUCCESS")
+    obj1.setLoadModuleStatus("SUCCESS")
     expectedresult = "SUCCESS"
     finalStatus = "FAILURE"
+    step = 1
+    status = "FAILURE"
 
     #Parse the device configuration file
-    status = parseDeviceConfig(obj);
+    status = parseDeviceConfig(obj)
     if expectedresult in status:
-        obj.setLoadModuleStatus("SUCCESS");
         print("Parsed the device configuration file successfully")
 
         #Assign the WIFI parameters names to a variable
@@ -120,219 +60,282 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
         firewallLevel = "Device.X_CISCO_COM_Security.Firewall.FirewallLevel"
 
         #Get the value of the wifi parameters that are currently set.
-        paramList=[ssidName,keyPassPhrase,radioEnable]
-        tdkTestObj,status,orgValue = getMultipleParameterValues(obj,paramList)
-        tdkTestObj1,retStatus,firewallValue = getParameterValue(obj,firewallLevel)
-        print("Firewall Level: %s" %firewallValue);
+        paramList = [ssidName, keyPassPhrase, radioEnable]
+        tdkTestObj, status, orgValue = getMultipleParameterValues(obj, paramList)
+        tdkTestObj1, retStatus, firewallValue = getParameterValue(obj, firewallLevel)
+        print("Firewall Level: %s" %firewallValue)
 
         if expectedresult in status and expectedresult in retStatus:
-            tdkTestObj.setResultStatus("SUCCESS");
-            print("TEST STEP 1: Get the current ssid,keypassphrase,Radio enable status,firewall level")
-            print("EXPECTED RESULT 1: Should retrieve the current ssid,keypassphrase,Radio enable status,firewall level")
-            print("ACTUAL RESULT 1: %s %s" %(orgValue,firewallValue));
-            print("[TEST EXECUTION RESULT] : SUCCESS");
+            tdkTestObj.setResultStatus("SUCCESS")
+            print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,Radio enable status,firewall level")
+            print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,Radio enable status,firewall level")
+            print(f"ACTUAL RESULT {step}: {orgValue} {firewallValue}")
+            print("[TEST EXECUTION RESULT] : SUCCESS")
 
-            # Set the SSID name,password,Radio enable status and firewall level"
-            setValuesList = [tdkbE2EUtility.ssid_2ghz_name,tdkbE2EUtility.ssid_2ghz_pwd,'true'];
-            print("Parameter values that are set: %s" %setValuesList)
+            if tdkbE2EUtility.mlo_capability == "False":
+                #Set the SSID name,password,Radio enable status and firewall level
+                setValuesList = [tdkbE2EUtility.ssid_2ghz_name, tdkbE2EUtility.ssid_2ghz_pwd, 'true']
+                print("Parameter values that are set: %s" %setValuesList)
 
-            list1 = [ssidName,tdkbE2EUtility.ssid_2ghz_name,'string']
-            list2 = [keyPassPhrase,tdkbE2EUtility.ssid_2ghz_pwd,'string']
-            list3 = [radioEnable,'true','bool']
+                list1 = [ssidName, tdkbE2EUtility.ssid_2ghz_name, 'string']
+                list2 = [keyPassPhrase, tdkbE2EUtility.ssid_2ghz_pwd, 'string']
+                list3 = [radioEnable, 'true', 'bool']
 
-            firewallParam = "%s|Low|string" %firewallLevel
+                firewallParam = "%s|Low|string" %firewallLevel
 
-            #Concatenate the lists with the elements separated by pipe
-            setParamList = list1 + list2 + list3
-            setParamList = "|".join(map(str, setParamList))
+                #Concatenate the lists with the elements separated by pipe
+                setParamList = list1 + list2 + list3
+                setParamList = "|".join(map(str, setParamList))
 
-            tdkTestObj,actualresult,details = setMultipleParameterValues(obj,setParamList)
-            tdkTestObj,firewallResult,details = setMultipleParameterValues(obj,firewallParam)
-            if expectedresult in actualresult and expectedresult in firewallResult:
-                tdkTestObj.setResultStatus("SUCCESS");
-                print("TEST STEP 2: Set the ssid,keypassphrase,Radio enable status,firewall level")
-                print("EXPECTED RESULT 2: Should set the ssid,keypassphrase,Radio enable status,firewall level");
-                print("ACTUAL RESULT 2: %s" %details);
-                print("[TEST EXECUTION RESULT] : SUCCESS");
+                tdkTestObj, actualresult, details = setMultipleParameterValues(obj, setParamList)
+                tdkTestObj, firewallResult, details = setMultipleParameterValues(obj, firewallParam)
 
-                #Retrieve the values after set and compare
-                newParamList=[ssidName,keyPassPhrase,radioEnable]
-                tdkTestObj,status,newValues = getMultipleParameterValues(obj,newParamList)
-                tdkTestObj1,retStatus,newFirewallValue = getParameterValue(obj,firewallLevel)
-                print("Firewall Level: %s" %newFirewallValue);
+                step = step + 1
+                if expectedresult in actualresult and expectedresult in firewallResult:
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    print(f"\nTEST STEP {step}: Set the ssid,keypassphrase,Radio enable status,firewall level")
+                    print(f"EXPECTED RESULT {step}: Should set the ssid,keypassphrase,Radio enable status,firewall level")
+                    print(f"ACTUAL RESULT {step}: {details}")
+                    print("[TEST EXECUTION RESULT] : SUCCESS")
 
-                if expectedresult in status and expectedresult in retStatus and setValuesList == newValues and newFirewallValue == "Low":
-                    tdkTestObj.setResultStatus("SUCCESS");
-                    print("TEST STEP 3: Get the current ssid,keypassphrase,Radio enable status,firewall level")
-                    print("EXPECTED RESULT 3: Should retrieve the current ssid,keypassphrase,Radio enable status,firewall level")
-                    print("ACTUAL RESULT 3: %s %s" %(newValues,newFirewallValue));
-                    print("[TEST EXECUTION RESULT] : SUCCESS");
+                    #Retrieve the values after set and compare
+                    newParamList = [ssidName, keyPassPhrase, radioEnable]
+                    tdkTestObj, status, newValues = getMultipleParameterValues(obj, newParamList)
+                    tdkTestObj1, retStatus, newFirewallValue = getParameterValue(obj, firewallLevel)
+                    print("Firewall Level: %s" %newFirewallValue)
 
-                    #Wait for the changes to reflect in client device
-                    time.sleep(60);
+                    step = step + 1
+                    if expectedresult in status and expectedresult in retStatus and setValuesList == newValues and newFirewallValue == "Low":
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,Radio enable status,firewall level")
+                        print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,Radio enable status,firewall level")
+                        print(f"ACTUAL RESULT {step}: {newValues} {newFirewallValue}")
+                        print("[TEST EXECUTION RESULT] : SUCCESS")
+                        status = "SUCCESS"
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE")
+                        print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,Radio enable status,firewall level")
+                        print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,Radio enable status,firewall level")
+                        print(f"ACTUAL RESULT {step}: {newValues} {newFirewallValue}")
+                        print("[TEST EXECUTION RESULT] : FAILURE")
+                else:
+                    tdkTestObj.setResultStatus("FAILURE")
+                    details = tdkTestObj.getResultDetails()
+                    print(f"\nTEST STEP {step}: Set the ssid,keypassphrase,Radio enable status,firewall level")
+                    print(f"EXPECTED RESULT {step}: Should set the ssid,keypassphrase,Radio enable status,firewall level")
+                    print(f"ACTUAL RESULT {step}: {details}")
+                    print("[TEST EXECUTION RESULT] : FAILURE")
+            else:
+                #Set the firewall level to Low using firewallSet function for MLO device
+                level = "Low"
+                step = step + 1
+                status, step = firewallSet(obj, level, step)
 
-                    #Connect to the wifi ssid from wlan client
-                    print("TEST STEP 4: From wlan client, Connect to the wifi ssid")
-                    status = wlanConnectWifiSsid(tdkbE2EUtility.ssid_2ghz_name,tdkbE2EUtility.ssid_2ghz_pwd,tdkbE2EUtility.wlan_2ghz_interface);
-                    if expectedresult in status:
-                        tdkTestObj.setResultStatus("SUCCESS");
+            if tdkbE2EUtility.mlo_capability == "False":
+                tdkbE2EUtility.ssid_name = tdkbE2EUtility.ssid_2ghz_name
+                tdkbE2EUtility.ssid_pwd = tdkbE2EUtility.ssid_2ghz_pwd
+                tdkbE2EUtility.wlan_interface = tdkbE2EUtility.wlan_2ghz_interface
 
-                        print("TEST STEP 5: Get the IP address of the wlan client after connecting to wifi")
-                        wlanIP = getWlanIPAddress(tdkbE2EUtility.wlan_2ghz_interface);
-                        if wlanIP:
-                            tdkTestObj.setResultStatus("SUCCESS");
+            if status == "SUCCESS":
+                #Wait for the changes to reflect in client device
+                time.sleep(60)
 
-                            print("TEST STEP 6: Get the current LAN IP address DHCP range")
-                            param = "Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress"
-                            tdkTestObj,status,curIPAddress = getParameterValue(obj,param)
-                            print("LAN IP Address: %s" %curIPAddress);
+                #Connect to the wifi ssid from wlan client
+                step = step + 1
+                print(f"\nTEST STEP {step}: From wlan client, Connect to the wifi ssid")
+                print(f"EXPECTED RESULT {step}: The wlan client should connect to the WiFi SSID successfully")
+                status = wlanConnectWifiSsid(tdkbE2EUtility.ssid_name, tdkbE2EUtility.ssid_pwd, tdkbE2EUtility.wlan_interface)
 
-                            if expectedresult in status and curIPAddress:
-                                tdkTestObj.setResultStatus("SUCCESS");
+                if expectedresult in status:
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    print(f"ACTUAL RESULT {step}: WLAN client connected to WiFi SSID successfully")
+                    print("[TEST EXECUTION RESULT] : SUCCESS")
 
-                                print("TEST STEP 7: Check whether wlan ip address is in same DHCP range")
-                                status = "SUCCESS"
-                                status = checkIpRange(curIPAddress,wlanIP);
+                    step = step + 1
+                    print(f"\nTEST STEP {step}: Get the IP address of the wlan client after connecting to wifi")
+                    print(f"EXPECTED RESULT {step}: Should get the IP address of the wlan client")
+                    wlanIP = getWlanIPAddress(tdkbE2EUtility.wlan_interface)
+
+                    if wlanIP:
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        print(f"ACTUAL RESULT {step}: WLAN IP Address is {wlanIP}")
+                        print("[TEST EXECUTION RESULT] : SUCCESS")
+
+                        step = step + 1
+                        print(f"\nTEST STEP {step}: Get the current LAN IP address DHCP range")
+                        print(f"EXPECTED RESULT {step}: Should get the current LAN IP address DHCP range")
+                        param = "Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress"
+                        tdkTestObj, status, curIPAddress = getParameterValue(obj, param)
+                        print("LAN IP Address: %s" %curIPAddress)
+
+                        if expectedresult in status and curIPAddress:
+                            tdkTestObj.setResultStatus("SUCCESS")
+                            print(f"ACTUAL RESULT {step}: LAN IP Address retrieved as {curIPAddress}")
+                            print("[TEST EXECUTION RESULT] : SUCCESS")
+
+                            step = step + 1
+                            print(f"\nTEST STEP {step}: Check whether wlan ip address is in same DHCP range")
+                            print(f"EXPECTED RESULT {step}: WLAN IP address should be in same DHCP range")
+                            status = "SUCCESS"
+                            status = checkIpRange(curIPAddress, wlanIP)
+
+                            if expectedresult in status:
+                                tdkTestObj.setResultStatus("SUCCESS")
+                                print(f"ACTUAL RESULT {step}: WLAN IP address is in same DHCP range")
+                                print("[TEST EXECUTION RESULT] : SUCCESS")
+
+                                step = step + 1
+                                print(f"\nTEST STEP {step}: Add static route in WLAN client")
+                                print(f"EXPECTED RESULT {step}: Static route should be added successfully")
+                                status = addStaticRoute(tdkbE2EUtility.wan_ip, curIPAddress, tdkbE2EUtility.wlan_interface)
+
                                 if expectedresult in status:
-                                    tdkTestObj.setResultStatus("SUCCESS");
-                                    print("wlan ip address is in same DHCP range")
+                                    tdkTestObj.setResultStatus("SUCCESS")
+                                    print(f"ACTUAL RESULT {step}: Static route add success")
+                                    print("[TEST EXECUTION RESULT] : SUCCESS")
 
-                                    tdkTestObj = obj1.createTestStep("AdvancedConfig_Get");
-                                    tdkTestObj.addParameter("paramName","Device.NAT.X_Comcast_com_EnablePortMapping");
-                                    expectedresult="SUCCESS";
-                                    tdkTestObj.executeTestCase(expectedresult);
-                                    actualresult = tdkTestObj.getResult();
-                                    details = tdkTestObj.getResultDetails();
+                                    step = step + 1
+                                    print(f"\nTEST STEP {step}: Saving the EnablePortMapping value")
+                                    print(f"EXPECTED RESULT {step}: Should get the EnablePortMapping value successfully")
+                                    tdkTestObj = obj1.createTestStep("AdvancedConfig_Get")
+                                    tdkTestObj.addParameter("paramName", "Device.NAT.X_Comcast_com_EnablePortMapping")
+                                    expectedresult = "SUCCESS"
+                                    tdkTestObj.executeTestCase(expectedresult)
+                                    actualresult = tdkTestObj.getResult()
+                                    details = tdkTestObj.getResultDetails()
+
                                     if expectedresult in actualresult:
-                                        tdkTestObj.setResultStatus("SUCCESS");
-                                        details = tdkTestObj.getResultDetails();
-                                        print("[TEST STEP ]: Saving the EnablePortMapping value")
-                                        print("[EXPECTED RESULT ]: Should get the EnablePortMapping value successfully");
-                                        print("[ACTUAL RESULT ]: %s" %details);
-                                        print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                                        tdkTestObj.setResultStatus("SUCCESS")
+                                        details = tdkTestObj.getResultDetails()
+                                        print(f"ACTUAL RESULT {step}: {details}")
+                                        print("[TEST EXECUTION RESULT] : %s" %actualresult)
+
                                         if "true" in details:
-                                            portMap="true";
+                                            portMap = "true"
                                         else:
-                                            portMap="false";
+                                            portMap = "false"
 
                                         #Enabling port forwarding - setting the port mapping as true
-                                        tdkTestObj = obj1.createTestStep("AdvancedConfig_Set");
-                                        tdkTestObj.addParameter("paramName","Device.NAT.X_Comcast_com_EnablePortMapping");
-                                        tdkTestObj.addParameter("paramValue","true");
-                                        tdkTestObj.addParameter("paramType","boolean");
-                                        expectedresult = "SUCCESS";
-                                        tdkTestObj.executeTestCase(expectedresult);
-                                        actualresult = tdkTestObj.getResult();
-                                        print("[TEST EXECUTION RESULT] : %s" %actualresult) ;
+                                        step = step + 1
+                                        print(f"\nTEST STEP {step}: Enabling Port Mapping")
+                                        print(f"EXPECTED RESULT {step}: Should enable Port Mapping")
+                                        tdkTestObj = obj1.createTestStep("AdvancedConfig_Set")
+                                        tdkTestObj.addParameter("paramName", "Device.NAT.X_Comcast_com_EnablePortMapping")
+                                        tdkTestObj.addParameter("paramValue", "true")
+                                        tdkTestObj.addParameter("paramType", "boolean")
+                                        expectedresult = "SUCCESS"
+                                        tdkTestObj.executeTestCase(expectedresult)
+                                        actualresult = tdkTestObj.getResult()
+                                        print("[TEST EXECUTION RESULT] : %s" %actualresult)
+
                                         if expectedresult in actualresult:
-                                            #Set the result status of execution
-                                            tdkTestObj.setResultStatus("SUCCESS");
-                                            details = tdkTestObj.getResultDetails();
-                                            print("[TEST STEP 8]: Enabling Port Mapping");
-                                            print("[EXPECTED RESULT 8]: Should enable Port Mapping");
-                                            print("[ACTUAL RESULT 8]: %s" %details);
-                                            print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                                            tdkTestObj.setResultStatus("SUCCESS")
+                                            details = tdkTestObj.getResultDetails()
+                                            print(f"ACTUAL RESULT {step}: {details}")
+                                            print("[TEST EXECUTION RESULT] : %s" %actualresult)
                                             print("Port Mapping is enabled\n")
 
-                                            # Adding a new row to the port forwarding table
-                                            tdkTestObj = obj1.createTestStep("AdvancedConfig_AddObject");
-                                            tdkTestObj.addParameter("paramName","Device.NAT.PortMapping.");
-                                            expectedresult="SUCCESS";
-                                            tdkTestObj.executeTestCase(expectedresult);
-                                            actualresult = tdkTestObj.getResult();
+                                            #Adding a new row to the port forwarding table
+                                            step = step + 1
+                                            print(f"\nTEST STEP {step}: Adding new rule to Port Mapping")
+                                            print(f"EXPECTED RESULT {step}: Should add new rule to Port Mapping")
+                                            tdkTestObj = obj1.createTestStep("AdvancedConfig_AddObject")
+                                            tdkTestObj.addParameter("paramName", "Device.NAT.PortMapping.")
+                                            expectedresult = "SUCCESS"
+                                            tdkTestObj.executeTestCase(expectedresult)
+                                            actualresult = tdkTestObj.getResult()
+
                                             if expectedresult in actualresult:
-                                            #Set the result status of execution
-                                                tdkTestObj.setResultStatus("SUCCESS");
-                                                details = tdkTestObj.getResultDetails();
-                                                print("[TEST STEP 9]: Adding new rule to Port Mapping");
-                                                print("[EXPECTED RESULT 9]: Should add new rule to Port Mapping");
-                                                print("[ACTUAL RESULT 9]: %s" %details);
-                                                print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                                                tdkTestObj.setResultStatus("SUCCESS")
+                                                details = tdkTestObj.getResultDetails()
+                                                print(f"ACTUAL RESULT {step}: {details}")
+                                                print("[TEST EXECUTION RESULT] : %s" %actualresult)
                                                 print("Add service option is selected and a new table is created\n")
-                                                temp = details.split(':');
-                                                instance1 = temp[1];
-                                                if (instance1 > 0):
-                                                    # Setting the external port
-                                                    tdkTestObj = obj1.createTestStep("AdvancedConfig_SetMultiple");
-                                                    tdkTestObj.addParameter("paramList","Device.NAT.PortMapping.%s.Enable|true|bool|Device.NAT.PortMapping.%s.ExternalPort|%s|unsignedint|Device.NAT.PortMapping.%s.Protocol|BOTH|string|Device.NAT.PortMapping.%s.InternalClient|%s|string|Device.NAT.PortMapping.%s.Description|NEW_RULE|string|Device.NAT.PortMapping.%s.ExternalPortEndRange|%s|unsignedint" %(instance1, instance1, tdkbE2EUtility.wlan_https_port, instance1, instance1, wlanIP, instance1, instance1, tdkbE2EUtility.wlan_https_port));
-                                                    expectedresult="SUCCESS";
-                                                    tdkTestObj.executeTestCase(expectedresult);
-                                                    actualresult = tdkTestObj.getResult();
+
+                                                temp = details.split(':')
+                                                instance1 = temp[1]
+
+                                                if int(instance1) > 0:
+                                                    #Setting the external port
+                                                    step = step + 1
+                                                    print(f"\nTEST STEP {step}: Setting external port")
+                                                    print(f"EXPECTED RESULT {step}: Should set external port successfully")
+                                                    tdkTestObj = obj1.createTestStep("AdvancedConfig_SetMultiple")
+                                                    tdkTestObj.addParameter("paramList", "Device.NAT.PortMapping.%s.Enable|true|bool|Device.NAT.PortMapping.%s.ExternalPort|%s|unsignedint|Device.NAT.PortMapping.%s.Protocol|BOTH|string|Device.NAT.PortMapping.%s.InternalClient|%s|string|Device.NAT.PortMapping.%s.Description|NEW_HTTPS_RULE|string|Device.NAT.PortMapping.%s.ExternalPortEndRange|%s|unsignedint" %(instance1, instance1, tdkbE2EUtility.wlan_https_port, instance1, instance1, wlanIP, instance1, instance1, tdkbE2EUtility.wlan_https_port))
+                                                    expectedresult = "SUCCESS"
+                                                    tdkTestObj.executeTestCase(expectedresult)
+                                                    actualresult = tdkTestObj.getResult()
+
                                                     if expectedresult in actualresult:
-                                                        #Set the result status of execution
-                                                        tdkTestObj.setResultStatus("SUCCESS");
-                                                        details = tdkTestObj.getResultDetails();
-                                                        print("[TEST STEP 10]: Setting external port");
-                                                        print("[EXPECTED RESULT 10]: Should set external port successfully");
-                                                        print("[ACTUAL RESULT 10]: %s" %details);
-                                                        print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                                                        tdkTestObj.setResultStatus("SUCCESS")
+                                                        details = tdkTestObj.getResultDetails()
+                                                        print(f"ACTUAL RESULT {step}: {details}")
+                                                        print("[TEST EXECUTION RESULT] : %s" %actualresult)
                                                         print("Added port mapping rule successfully\n")
 
-                                                        time.sleep(60);
-                                                        print("TEST STEP :Check the HTTPS from WAN to WLAN")
+                                                        time.sleep(60)
+
+                                                        step = step + 1
+                                                        print(f"\nTEST STEP {step}: Check the HTTPS from WAN to WLAN after enabling port mapping")
+                                                        print(f"EXPECTED RESULT {step}: HTTPS from WAN to WLAN should be successful after enabling Port Mapping")
                                                         status = verifyNetworkConnectivity(tdkbE2EUtility.gw_wan_ip, "WGET_HTTPS", tdkbE2EUtility.wan_ip, curIPAddress, "WAN")
+
                                                         if expectedresult in status:
-                                                            tdkTestObj.setResultStatus("SUCCESS");
-                                                            finalStatus = "SUCCESS";
-                                                            print("HTTPS from WAN to WLAN: SUCCESS")
+                                                            tdkTestObj.setResultStatus("SUCCESS")
+                                                            print(f"ACTUAL RESULT {step}: HTTPS from WAN to WLAN is successful")
+                                                            print("[TEST EXECUTION RESULT] : SUCCESS")
 
                                                             #Disabling port forwarding - setting the port mapping as false
-                                                            tdkTestObj = obj1.createTestStep("AdvancedConfig_Set");
-                                                            tdkTestObj.addParameter("paramName","Device.NAT.X_Comcast_com_EnablePortMapping");
-                                                            tdkTestObj.addParameter("paramValue","false");
-                                                            tdkTestObj.addParameter("paramType","boolean");
-                                                            expectedresult = "SUCCESS";
-                                                            tdkTestObj.executeTestCase(expectedresult);
-                                                            actualresult = tdkTestObj.getResult();
-                                                            print("[TEST EXECUTION RESULT] : %s" %actualresult) ;
+                                                            step = step + 1
+                                                            print(f"\nTEST STEP {step}: Disabling Port Mapping")
+                                                            print(f"EXPECTED RESULT {step}: Should disable Port Mapping")
+                                                            tdkTestObj = obj1.createTestStep("AdvancedConfig_Set")
+                                                            tdkTestObj.addParameter("paramName", "Device.NAT.X_Comcast_com_EnablePortMapping")
+                                                            tdkTestObj.addParameter("paramValue", "false")
+                                                            tdkTestObj.addParameter("paramType", "boolean")
+                                                            expectedresult = "SUCCESS"
+                                                            tdkTestObj.executeTestCase(expectedresult)
+                                                            actualresult = tdkTestObj.getResult()
+                                                            print("[TEST EXECUTION RESULT] : %s" %actualresult)
+
                                                             if expectedresult in actualresult:
-                                                                #Set the result status of execution
-                                                                tdkTestObj.setResultStatus("SUCCESS");
-                                                                details = tdkTestObj.getResultDetails();
-                                                                print("[TEST STEP 11]: Disabling Port Mapping");
-                                                                print("[EXPECTED RESULT 11]: Should disable Port Mapping");
-                                                                print("[ACTUAL RESULT 11]: %s" %details);
-                                                                print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                                                                tdkTestObj.setResultStatus("SUCCESS")
+                                                                details = tdkTestObj.getResultDetails()
+                                                                print(f"ACTUAL RESULT {step}: {details}")
+                                                                print("[TEST EXECUTION RESULT] : %s" %actualresult)
                                                                 print("Port Mapping is disabled\n")
 
-                                                                time.sleep(60);
-                                                                print("TEST STEP :Check the HTTPS from WAN to WLAN after disabling port mapping")
+                                                                time.sleep(60)
+
+                                                                step = step + 1
+                                                                print(f"\nTEST STEP {step}: Check the HTTPS from WAN to WLAN after disabling port mapping")
+                                                                print(f"EXPECTED RESULT {step}: HTTPS from WAN to WLAN should fail after disabling Port Mapping")
                                                                 status = verifyNetworkConnectivity(tdkbE2EUtility.gw_wan_ip, "WGET_HTTPS", tdkbE2EUtility.wan_ip, curIPAddress, "WAN")
+
                                                                 if expectedresult not in status:
-                                                                    tdkTestObj.setResultStatus("SUCCESS");
-                                                                    finalStatus = "SUCCESS";
-                                                                    print("SUCCESS, HTTPS from WAN to WLAN failed")
+                                                                    tdkTestObj.setResultStatus("SUCCESS")
+                                                                    finalStatus = "SUCCESS"
+                                                                    print(f"ACTUAL RESULT {step}: HTTPS from WAN to WLAN failed as expected")
+                                                                    print("[TEST EXECUTION RESULT] : SUCCESS")
                                                                 else:
-                                                                    tdkTestObj.setResultStatus("FAILURE");
-                                                                    print("TEST STEP : FAILURE: HTTPS from WAN to WLAN is success")
+                                                                    tdkTestObj.setResultStatus("FAILURE")
+                                                                    print(f"ACTUAL RESULT {step}: HTTPS from WAN to WLAN is successful after disabling Port Mapping")
+                                                                    print("[TEST EXECUTION RESULT] : FAILURE")
                                                             else:
-                                                                tdkTestObj.setResultStatus("FAILURE");
-                                                                details = tdkTestObj.getResultDetails();
-                                                                print("[TEST STEP 11]: Disabling Port Mapping");
-                                                                print("[EXPECTED RESULT 11]: Should disable Port Mapping");
-                                                                print("[ACTUAL RESULT 11]: %s" %details);
-                                                                print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                                                                tdkTestObj.setResultStatus("FAILURE")
+                                                                details = tdkTestObj.getResultDetails()
+                                                                print(f"ACTUAL RESULT {step}: {details}")
+                                                                print("[TEST EXECUTION RESULT] : %s" %actualresult)
                                                                 print("Failure in setting the port forwarding as false\n ")
                                                         else:
-                                                            tdkTestObj.setResultStatus("FAILURE");
-                                                            print("TEST STEP :HTTPS from WAN to WLAN failed")
-
-                                                        print("TEST STEP 12: From wlan client, Disconnect from the wifi ssid")
-                                                        status = wlanDisconnectWifiSsid(tdkbE2EUtility.wlan_2ghz_interface);
-                                                        if expectedresult in status:
-                                                            tdkTestObj.setResultStatus("SUCCESS");
-                                                            print("Disconnect from WIFI SSID: SUCCESS")
-                                                        else:
-                                                            tdkTestObj.setResultStatus("FAILURE");
-                                                            print("TEST STEP 11:Disconnect from WIFI SSID: FAILED")
-
+                                                            tdkTestObj.setResultStatus("FAILURE")
+                                                            print(f"ACTUAL RESULT {step}: HTTPS from WAN to WLAN failed")
+                                                            print("[TEST EXECUTION RESULT] : FAILURE")
                                                     else:
-                                                        tdkTestObj.setResultStatus("FAILURE");
-                                                        details = tdkTestObj.getResultDetails();
-                                                        print("[TEST STEP 10]: Setting external port");
-                                                        print("[EXPECTED RESULT 10]: Should set external port successfully");
-                                                        print("[ACTUAL RESULT 10]: %s" %details);
-                                                        print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                                                        tdkTestObj.setResultStatus("FAILURE")
+                                                        details = tdkTestObj.getResultDetails()
+                                                        print(f"ACTUAL RESULT {step}: {details}")
+                                                        print("[TEST EXECUTION RESULT] : %s" %actualresult)
                                                         print("Failure in setting the start port\n")
                                                 else:
                                                     print("Instance value should be greater than 0\n")
@@ -340,144 +343,171 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
 
                                                 #To delete the added table
                                                 if instance1:
-                                                    tdkTestObj = obj1.createTestStep("AdvancedConfig_DelObject");
-                                                    tdkTestObj.addParameter("paramName","Device.NAT.PortMapping.%s." %instance1);
-                                                    expectedresult = "SUCCESS";
-                                                    tdkTestObj.executeTestCase(expectedresult);
-                                                    actualresult = tdkTestObj.getResult();
-                                                    print("[TEST EXECUTION RESULT] : %s" %actualresult) ;
+                                                    step = step + 1
+                                                    print(f"\nTEST STEP {step}: Deleting the added rule")
+                                                    print(f"EXPECTED RESULT {step}: Should delete the added rule")
+                                                    tdkTestObj = obj1.createTestStep("AdvancedConfig_DelObject")
+                                                    tdkTestObj.addParameter("paramName", "Device.NAT.PortMapping.%s." %instance1)
+                                                    expectedresult = "SUCCESS"
+                                                    tdkTestObj.executeTestCase(expectedresult)
+                                                    actualresult = tdkTestObj.getResult()
+                                                    print("[TEST EXECUTION RESULT] : %s" %actualresult)
+
                                                     if expectedresult in actualresult:
-                                                        #Set the result status of execution
-                                                        tdkTestObj.setResultStatus("SUCCESS");
-                                                        details = tdkTestObj.getResultDetails();
-                                                        print("[TEST STEP ]: Deleting the added rule");
-                                                        print("[EXPECTED RESULT ]: Should delete the added rule");
-                                                        print("[ACTUAL RESULT]: %s" %details);
-                                                        print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                                                        tdkTestObj.setResultStatus("SUCCESS")
+                                                        details = tdkTestObj.getResultDetails()
+                                                        print(f"ACTUAL RESULT {step}: {details}")
+                                                        print("[TEST EXECUTION RESULT] : %s" %actualresult)
                                                         print("Added table is deleted successfully\n")
                                                     else:
-                                                        print("[TEST STEP ]: Deleting the added rule");
-                                                        print("[EXPECTED RESULT ]: Should delete the added rule");
-                                                        print("[ACTUAL RESULT]: %s" %details);
-                                                        print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                                                        details = tdkTestObj.getResultDetails()
+                                                        print(f"ACTUAL RESULT {step}: {details}")
+                                                        print("[TEST EXECUTION RESULT] : %s" %actualresult)
                                                         print("Added table could not be deleted\n")
-
                                             else:
-                                                tdkTestObj.setResultStatus("FAILURE");
-                                                details = tdkTestObj.getResultDetails();
-                                                print("[TEST STEP 9]: Adding new rule to Port Mapping");
-                                                print("[EXPECTED RESULT 9]: Should add new rule to Port Mapping");
-                                                print("[ACTUAL RESULT 9]: %s" %details);
-                                                print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                                                tdkTestObj.setResultStatus("FAILURE")
+                                                details = tdkTestObj.getResultDetails()
+                                                print(f"ACTUAL RESULT {step}: {details}")
+                                                print("[TEST EXECUTION RESULT] : %s" %actualresult)
                                                 print("Failure in adding the new port forwarding row\n")
-
-                                            #Reverting port mapping status
-                                            tdkTestObj = obj1.createTestStep("AdvancedConfig_Set");
-                                            tdkTestObj.addParameter("paramName","Device.NAT.X_Comcast_com_EnablePortMapping");
-                                            tdkTestObj.addParameter("paramValue",portMap)
-                                            tdkTestObj.addParameter("paramType","boolean");
-                                            expectedresult = "SUCCESS";
-                                            tdkTestObj.executeTestCase(expectedresult);
-                                            actualresult = tdkTestObj.getResult();
-                                            print("[TEST EXECUTION RESULT] : %s" %actualresult) ;
-                                            if expectedresult in actualresult:
-                                                #Set the result status of execution
-                                                tdkTestObj.setResultStatus("SUCCESS");
-                                                details = tdkTestObj.getResultDetails();
-                                                print("[TEST STEP ]: Reverting Port Mapping");
-                                                print("[EXPECTED RESULT ]: Should revert Port Mapping");
-                                                print("[ACTUAL RESULT ]: %s" %details);
-                                                print("[TEST EXECUTION RESULT] : %s" %actualresult);
-                                                print("Port Mapping is reverted\n")
-                                            else:
-                                                tdkTestObj.setResultStatus("FAILURE");
-                                                details = tdkTestObj.getResultDetails();
-                                                print("[TEST STEP ]: Reverting Port Mapping");
-                                                print("[EXPECTED RESULT ]: Should revert Port Mapping");
-                                                print("[ACTUAL RESULT ]: %s" %details);
-                                                print("[TEST EXECUTION RESULT] : %s" %actualresult);
-                                                print("Port Mapping is not reverted\n")
                                         else:
-                                            tdkTestObj.setResultStatus("FAILURE");
-                                            details = tdkTestObj.getResultDetails();
-                                            print("[TEST STEP 8]: Enabling Port Mapping");
-                                            print("[EXPECTED RESULT 8]: Should enable Port Mapping");
-                                            print("[ACTUAL RESULT 8]: %s" %details);
-                                            print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                                            tdkTestObj.setResultStatus("FAILURE")
+                                            details = tdkTestObj.getResultDetails()
+                                            print(f"ACTUAL RESULT {step}: {details}")
+                                            print("[TEST EXECUTION RESULT] : %s" %actualresult)
                                             print("Failure in setting the port forwarding as true\n ")
+
+                                        #Reverting port mapping status
+                                        step = step + 1
+                                        print(f"\nTEST STEP {step}: Reverting Port Mapping")
+                                        print(f"EXPECTED RESULT {step}: Should revert Port Mapping")
+                                        tdkTestObj = obj1.createTestStep("AdvancedConfig_Set")
+                                        tdkTestObj.addParameter("paramName", "Device.NAT.X_Comcast_com_EnablePortMapping")
+                                        tdkTestObj.addParameter("paramValue", portMap)
+                                        tdkTestObj.addParameter("paramType", "boolean")
+                                        expectedresult = "SUCCESS"
+                                        tdkTestObj.executeTestCase(expectedresult)
+                                        actualresult = tdkTestObj.getResult()
+                                        print("[TEST EXECUTION RESULT] : %s" %actualresult)
+
+                                        if expectedresult in actualresult:
+                                            tdkTestObj.setResultStatus("SUCCESS")
+                                            details = tdkTestObj.getResultDetails()
+                                            print(f"ACTUAL RESULT {step}: {details}")
+                                            print("[TEST EXECUTION RESULT] : %s" %actualresult)
+                                            print("Port Mapping is reverted\n")
+                                        else:
+                                            tdkTestObj.setResultStatus("FAILURE")
+                                            details = tdkTestObj.getResultDetails()
+                                            print(f"ACTUAL RESULT {step}: {details}")
+                                            print("[TEST EXECUTION RESULT] : %s" %actualresult)
+                                            print("Port Mapping is not reverted\n")
                                     else:
-                                        print("[TEST STEP 8]: Saving the EnablePortMapping value")
-                                        print("[EXPECTED RESULT 8]: Should get the EnablePortMapping value successfully");
-                                        print("[ACTUAL RESULT 8]: %s" %details);
-                                        print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                                        tdkTestObj.setResultStatus("FAILURE")
+                                        print(f"ACTUAL RESULT {step}: {details}")
+                                        print("[TEST EXECUTION RESULT] : %s" %actualresult)
                                         print("Failure in getting EnablePortMapping value\n")
+
+                                    #Delete the static route since it was added successfully
+                                    step = step + 1
+                                    print(f"\nTEST STEP {step}: Delete the static route")
+                                    print(f"EXPECTED RESULT {step}: Static route should be deleted successfully")
+                                    status = delStaticRoute(tdkbE2EUtility.wan_ip, curIPAddress, tdkbE2EUtility.wlan_interface)
+
+                                    if expectedresult in status:
+                                        tdkTestObj.setResultStatus("SUCCESS")
+                                        print(f"ACTUAL RESULT {step}: Static route delete success")
+                                        print("[TEST EXECUTION RESULT] : SUCCESS")
+                                    else:
+                                        tdkTestObj.setResultStatus("FAILURE")
+                                        print(f"ACTUAL RESULT {step}: Static route delete failed")
+                                        print("[TEST EXECUTION RESULT] : FAILURE")
                                 else:
-                                    tdkTestObj.setResultStatus("FAILURE");
-                                    print("TEST STEP 7:WLAN Client IP address is not in the same Gateway DHCP range")
+                                    tdkTestObj.setResultStatus("FAILURE")
+                                    print(f"ACTUAL RESULT {step}: Static route add failed")
+                                    print("[TEST EXECUTION RESULT] : FAILURE")
                             else:
-                                tdkTestObj.setResultStatus("FAILURE");
-                                print("TEST STEP 6:Failed to get the Gateway IP address")
-
+                                tdkTestObj.setResultStatus("FAILURE")
+                                print(f"ACTUAL RESULT {step}: WLAN Client IP address is not in the same Gateway DHCP range")
+                                print("[TEST EXECUTION RESULT] : FAILURE")
                         else:
-                            tdkTestObj.setResultS6atus("FAILURE");
-                            print("TEST STEP 5:Failed to get the WLAN Client IP address")
+                            tdkTestObj.setResultStatus("FAILURE")
+                            print(f"ACTUAL RESULT {step}: Failed to get the Gateway IP address")
+                            print("[TEST EXECUTION RESULT] : FAILURE")
                     else:
-                        tdkTestObj.setResultStatus("FAILURE");
-                        print("TEST STEP 4:Failed to connect to WIFI SSID")
+                        tdkTestObj.setResultStatus("FAILURE")
+                        print(f"ACTUAL RESULT {step}: Failed to get the WLAN Client IP address")
+                        print("[TEST EXECUTION RESULT] : FAILURE")
+
+                    #Disconnect WLAN client since it was connected successfully
+                    step = step + 1
+                    print(f"\nTEST STEP {step}: From wlan client, Disconnect from the wifi ssid")
+                    print(f"EXPECTED RESULT {step}: WLAN client should disconnect from WiFi SSID successfully")
+                    status = wlanDisconnectWifiSsid(tdkbE2EUtility.wlan_interface)
+
+                    if expectedresult in status:
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        print(f"ACTUAL RESULT {step}: Disconnect from WIFI SSID is successful")
+                        print("[TEST EXECUTION RESULT] : SUCCESS")
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE")
+                        print(f"ACTUAL RESULT {step}: Disconnect from WIFI SSID failed")
+                        print("[TEST EXECUTION RESULT] : FAILURE")
                 else:
-                    tdkTestObj.setResultStatus("FAILURE");
-                    print("TEST STEP 3: Get the current ssid,keypassphrase,Radio enable status,firewall level")
-                    print("EXPECTED RESULT 3: Should retrieve the current ssid,keypassphrase,Radio enable status,firewall level")
-                    print("ACTUAL RESULT 3: %s %s" %(newValues,newFirewallValue));
-                    print("[TEST EXECUTION RESULT] : FAILURE");
+                    tdkTestObj.setResultStatus("FAILURE")
+                    print(f"ACTUAL RESULT {step}: Failed to connect to WIFI SSID")
+                    print("[TEST EXECUTION RESULT] : FAILURE")
+
+            if tdkbE2EUtility.mlo_capability == "False":
+                #Prepare the list of parameter values to be reverted
+                list1 = [ssidName, orgValue[0], 'string']
+                list2 = [keyPassPhrase, orgValue[1], 'string']
+                list3 = [radioEnable, orgValue[2], 'bool']
+
+                #Concatenate the lists with the elements separated by pipe
+                revertParamList = list1 + list2 + list3
+                revertParamList = "|".join(map(str, revertParamList))
+
+                firewallParam = "%s|%s|string" %(firewallLevel, firewallValue)
+
+                #Revert the values to original
+                step = step + 1
+                print(f"\nTEST STEP {step}: Revert the values to original")
+                print(f"EXPECTED RESULT {step}: Should set the original ssid,keypassphrase,Radio enable status,firewall level")
+                tdkTestObj, actualresult, details = setMultipleParameterValues(obj, revertParamList)
+                tdkTestObj, firewallResult, details = setMultipleParameterValues(obj, firewallParam)
+
+                if expectedresult in actualresult and expectedresult in firewallResult and expectedresult in finalStatus:
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    print(f"ACTUAL RESULT {step}: {details}")
+                    print("[TEST EXECUTION RESULT] : SUCCESS")
+                else:
+                    tdkTestObj.setResultStatus("FAILURE")
+                    details = tdkTestObj.getResultDetails()
+                    print(f"ACTUAL RESULT {step}: {details}")
+                    print("[TEST EXECUTION RESULT] : FAILURE")
             else:
-                tdkTestObj.setResultStatus("FAILURE");
-                details = tdkTestObj.getResultDetails();
-                print("TEST STEP 2: Set the ssid,keypassphrase,Radio enable status,firewall level")
-                print("EXPECTED RESULT 2: Should set the ssid,keypassphrase,Radio enable status,firewall level");
-                print("ACTUAL RESULT 2: %s" %details);
-                print("[TEST EXECUTION RESULT] : FAILURE");
-
-            #Prepare the list of parameter values to be reverted
-            list1 = [ssidName,orgValue[0],'string']
-            list2 = [keyPassPhrase,orgValue[1],'string']
-            list3 = [radioEnable,orgValue[2],'bool']
-
-            #Concatenate the lists with the elements separated by pipe
-            revertParamList = list1 + list2 + list3
-            revertParamList = "|".join(map(str, revertParamList))
-
-            firewallParam = "%s|%s|string" %(firewallLevel,firewallValue)
-            #Revert the values to original
-            tdkTestObj,actualresult,details = setMultipleParameterValues(obj,revertParamList)
-            tdkTestObj,firewallResult,details = setMultipleParameterValues(obj,firewallParam)
-            if expectedresult in actualresult and expectedresult in firewallResult and expectedresult in finalStatus:
-                tdkTestObj.setResultStatus("SUCCESS");
-                print("EXPECTED RESULT 13: Should set the original ssid,keypassphrase,Radio enable status,firewall level");
-                print("ACTUAL RESULT 13: %s" %details);
-                print("[TEST EXECUTION RESULT] : SUCCESS");
-            else:
-                tdkTestObj.setResultStatus("FAILURE");
-                details = tdkTestObj.getResultDetails();
-                print("EXPECTED RESULT 13: Should set the original ssid,keypassphrase,Radio enable status,firewall level");
-                print("ACTUAL RESULT 12: %s" %details);
-                print("[TEST EXECUTION RESULT] : FAILURE");
+                #Revert the firewall level to original value using firewallSet function
+                level = firewallValue
+                step = step + 1
+                _, _ = firewallSet(obj, level, step, revert="true")
         else:
-            tdkTestObj.setResultStatus("FAILURE");
-            print("TEST STEP 1: Get the current ssid,keypassphrase,Radio enable status,firewall level")
-            print("EXPECTED RESULT 1: Should retrieve the current ssid,keypassphrase,Radio enable status,firewall level")
-            print("ACTUAL RESULT 1: %s %s" %(orgValue,firewallValue));
-            print("[TEST EXECUTION RESULT] : FAILURE");
+            tdkTestObj.setResultStatus("FAILURE")
+            print(f"\nTEST STEP {step}: Get the current ssid,keypassphrase,Radio enable status,firewall level")
+            print(f"EXPECTED RESULT {step}: Should retrieve the current ssid,keypassphrase,Radio enable status,firewall level")
+            print(f"ACTUAL RESULT {step}: {orgValue} {firewallValue}")
+            print("[TEST EXECUTION RESULT] : FAILURE")
     else:
-        obj.setLoadModuleStatus("FAILURE");
+        obj.setLoadModuleStatus("FAILURE")
         print("Failed to parse the device configuration file")
 
     #Handle any post execution cleanup required
-    postExecutionCleanup();
-    obj.unloadModule("tdkb_e2e");
-    obj1.unloadModule("advancedconfig");
+    postExecutionCleanup()
+    obj.unloadModule("tdkb_e2e")
+    obj1.unloadModule("advancedconfig")
 
 else:
-    print("FAILURE to load Advancedconfig module");
-    obj.setLoadModuleStatus("FAILURE");
-    print("Module loading failed");
+    print("Failed to load tdkb_e2e module")
+    print("Failed to load advancedconfig module")
+    obj.setLoadModuleStatus("FAILURE")
+    obj1.setLoadModuleStatus("FAILURE")

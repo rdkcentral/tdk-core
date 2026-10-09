@@ -51,6 +51,11 @@ if "SUCCESS" in loadmodulestatus.upper():
         print(f"ACTUAL RESULT {step}: Parsed the device configuration file successfully")
         print("[TEST EXECUTION RESULT] : SUCCESS")
 
+        if tdkbE2EUtility.mlo_capability == "True":
+            tdkbE2EUtility.wlan_2ghz_interface = tdkbE2EUtility.wlan_interface
+            tdkbE2EUtility.ssid_2ghz_name = tdkbE2EUtility.ssid_name
+            tdkbE2EUtility.ssid_2ghz_pwd = tdkbE2EUtility.ssid_pwd
+
         #save device's current state before it goes for reboot
         obj.saveCurrentState()
 

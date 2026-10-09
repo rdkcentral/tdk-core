@@ -287,7 +287,7 @@ tcp_get_client_throughput()
 tcp_init_server()
 {
         #If server port is provided as input
-        if [ -n $var4 ]; then
+        if [ -n "$var4" ]; then
             rm -rf $var2
             iperf -s -B $var3 -i 1 -p $var4 > $var2 &
         #If server port is not provided take default port
@@ -306,7 +306,9 @@ tcp_request()
         bindStatus="$(cat $var4 | grep "bind failed:" && echo "FAILURE" || echo "SUCCESS")"
         echo "bindStatus:$bindStatus"
         if [ $bindStatus = "SUCCESS" ]; then
-                value="$(cat $var4 | grep bits/sec | cut -d ' ' -f 11)"
+                # Uncomment below line and comment out next line if Ubuntu version < 22.04
+                # value="$(cat $var4 | grep bits/sec | cut -d ' ' -f 11)"
+                value="$(cat $var4 | grep bits/sec | awk '{ print $7 }' | tail -1)"
                 echo "OUTPUT:$value"
         else
                 echo "OUTPUT:"

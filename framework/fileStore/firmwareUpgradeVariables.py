@@ -59,19 +59,6 @@ DEFINE_PROPERTIES_FILTER = "DOWNLOAD_LOCATION_FILTER"
 # Username of DUT
 username = "root"
 
-# Standalone TDK-B Package Installation Files and Path to enable TDK-B in RDK-B Builds
-# Please ensure that the TDK-B package installation files are present in the source path mentioned below
-
-# Source path of TDK Package Installation Files in the Host Machine[TM]
-source_path = ""
-# Name of the TDK-B Installation Script
-install_script = ""
-# Name of the TDK-B Package to be deployed
-tdk_package = ""
-
-# Destination of Package Installation Files in DUT
-dest_path = "/rdklogs"
-
 # Log file for firmware upgrade operations
 logFile = "/rdklogs/TDK_FirmwareUpgrade.log"
 

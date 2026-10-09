@@ -30,7 +30,7 @@ To validate that the NetworkManager GetPublicIP API correctly resolves and retur
 
 |#|Step Name | Step Description| Expected Result|
 |-|---------|-----------------|----------------|
-| 1 | Verify GetPublicIP API with explicit interface | Execute the GetPublicIP API with the Ethernet interface explicitly specified as a parameter, while both the IPv6-supported WiFi (wlan0) and Ethernet (eth0) interfaces are simultaneously active on the DUT:<br>`curl -d '{"jsonrpc":"2.0","id":42,"method":"org.rdk.NetworkManager.1.GetPublicIP","params":{"interface":"eth0","ipversion":"IPv6"}}' http://127.0.0.1:9998/jsonrpc` | The GetPublicIP API should return `success: true` with `interface: eth0` and a valid public IPv6 address, confirming the API correctly resolves the IPv6 address for the explicitly specified Ethernet interface. If the Ethernet interface does not have a public IPv6 address assigned, the API should return `success: false`, confirming the API handles the interface-specific query gracefully without error. |
+| 1 | Verify GetPublicIP API with explicit interface | Execute the GetPublicIP API with the Ethernet interface explicitly specified as a parameter, while both the IPv6-supported WiFi (wlan0) and Ethernet (eth0) interfaces are simultaneously active on the DUT:<br>`curl -d '{"jsonrpc":"2.0","id":42,"method":"org.rdk.NetworkManager.1.GetPublicIP","params":{"interface":"eth0","ipversion":"IPv6"}}' http://127.0.0.1:9998/jsonrpc` | The GetPublicIP API should return `success: false` for the `eth0` interface when queried with `ipversion: IPv6`, confirming the API correctly determines that no public IPv6 address is available on the Ethernet interface and does not fall back to the active WiFi interface. |
 
 <a name="head.Attributes"></a>
 ## Test Attributes

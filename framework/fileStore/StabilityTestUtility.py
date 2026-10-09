@@ -301,7 +301,6 @@ def testUsingRestAPI(obj,result_dict_list):
         if continue_count > 60:
             hang_detected = 1
             print("\nApp not proceeding for 60 secs. Exiting...")
-            tdkTestObj.setResultStatus("FAILURE")
             break;
         with open(app_log_file,'r') as f:
             lines = f.readlines()

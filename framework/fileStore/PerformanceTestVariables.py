@@ -44,3 +44,9 @@ invalid_download_url = "http://invalid.com/"
 
 #Configure any file of size upto 1GB
 Large_Validation_File = ""
+
+#Configure the timeout duration for app bundle download progress
+progress_wait_time = 60
+
+#Configure the Z-order
+requested_zorder = 2

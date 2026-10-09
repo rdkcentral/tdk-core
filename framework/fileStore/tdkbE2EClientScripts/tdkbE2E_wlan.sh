@@ -230,8 +230,12 @@ delete_saved_wifi_connections()
         ls_2ghz=""
         ls_5ghz=""
         ls_6ghz=""
+        ls_wifi=""
 
-        if [ "$var2" = "$var3" ] && [ "$var3" = "$var4" ]; then
+        if [ -z "$var3" ] && [ -z "$var4" ]; then
+                ls_wifi="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
+
+        elif [ "$var2" = "$var3" ] && [ "$var3" = "$var4" ]; then
                 ls_2ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var2.nmconnection")"
 
         elif [ "$var2" = "$var3" ]; then
@@ -252,40 +256,56 @@ delete_saved_wifi_connections()
                 ls_6ghz="$(find /etc/NetworkManager/system-connections/ -type f -name "$var4.nmconnection")"
         fi
 
+        if [ -n "$ls_wifi" ]; then
+                wifi="$(rm -f "/etc/NetworkManager/system-connections/${var2}.nmconnection" && echo SUCCESS || echo FAILURE)"
+                wifi_connection="$(nmcli connection delete "$var2" >/dev/null 2>&1 && echo SUCCESS || echo FAILURE)"
+        else
+                wifi="SUCCESS"
+                wifi_connection="SUCCESS"
+        fi
 
         if [ -n "$ls_2ghz" ]; then
-                wifi_2ghz="$(rm -f /etc/NetworkManager/system-connections/"$var2.nmconnection" && echo "SUCCESS" || echo "FAILURE")"
-                wifi_2ghz_connection="$(nmcli connection delete "$var2" >/dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+                wifi_2ghz="$(rm -f "/etc/NetworkManager/system-connections/${var2}.nmconnection" && echo SUCCESS || echo FAILURE)"
+                wifi_2ghz_connection="$(nmcli connection delete "$var2" >/dev/null 2>&1 && echo SUCCESS || echo FAILURE)"
         else
                 wifi_2ghz="SUCCESS"
                 wifi_2ghz_connection="SUCCESS"
         fi
 
         if [ -n "$ls_5ghz" ]; then
-                wifi_5ghz="$(rm -f /etc/NetworkManager/system-connections/"$var3.nmconnection" && echo "SUCCESS" || echo "FAILURE")"
-                wifi_5ghz_connection="$(nmcli connection delete "$var3" >/dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+                wifi_5ghz="$(rm -f "/etc/NetworkManager/system-connections/${var3}.nmconnection" && echo SUCCESS || echo FAILURE)"
+                wifi_5ghz_connection="$(nmcli connection delete "$var3" >/dev/null 2>&1 && echo SUCCESS || echo FAILURE)"
         else
                 wifi_5ghz="SUCCESS"
                 wifi_5ghz_connection="SUCCESS"
         fi
 
         if [ -n "$ls_6ghz" ]; then
-                wifi_6ghz="$(rm -f /etc/NetworkManager/system-connections/"$var4.nmconnection" && echo "SUCCESS" || echo "FAILURE")"
-                wifi_6ghz_connection="$(nmcli connection delete "$var4" >/dev/null 2>&1 && echo "SUCCESS" || echo "FAILURE")"
+                wifi_6ghz="$(rm -f "/etc/NetworkManager/system-connections/${var4}.nmconnection" && echo SUCCESS || echo FAILURE)"
+                wifi_6ghz_connection="$(nmcli connection delete "$var4" >/dev/null 2>&1 && echo SUCCESS || echo FAILURE)"
         else
                 wifi_6ghz="SUCCESS"
                 wifi_6ghz_connection="SUCCESS"
         fi
 
-        if [ "$wifi_2ghz" = "SUCCESS" ] &&
-           [ "$wifi_5ghz" = "SUCCESS" ] &&
-           [ "$wifi_6ghz" = "SUCCESS" ] &&
-           [ "$wifi_2ghz_connection" = "SUCCESS" ] &&
-           [ "$wifi_5ghz_connection" = "SUCCESS" ] &&
-           [ "$wifi_6ghz_connection" = "SUCCESS" ]; then
-                echo "OUTPUT:SUCCESS"
+        if [ -z "$var3" ] && [ -z "$var4" ]; then
+                if [ "$wifi" = "SUCCESS" ] &&
+                   [ "$wifi_connection" = "SUCCESS" ]; then
+                        echo "OUTPUT:SUCCESS"
+                else
+                        echo "OUTPUT:FAILURE"
+                fi
         else
-                echo "OUTPUT:FAILURE"
+                if [ "$wifi_2ghz" = "SUCCESS" ] &&
+                   [ "$wifi_5ghz" = "SUCCESS" ] &&
+                   [ "$wifi_6ghz" = "SUCCESS" ] &&
+                   [ "$wifi_2ghz_connection" = "SUCCESS" ] &&
+                   [ "$wifi_5ghz_connection" = "SUCCESS" ] &&
+                   [ "$wifi_6ghz_connection" = "SUCCESS" ]; then
+                        echo "OUTPUT:SUCCESS"
+                else
+                        echo "OUTPUT:FAILURE"
+                fi
         fi
 }
 
@@ -362,6 +382,14 @@ tcp_init_server_perf()
 tcp_request_perf()
 {
         iperf -f m -c $var2 -B $var3 -t $var5 -i $var6 > $var4 2>&1 &
+        bindStatus="$(cat $var4 | grep "bind failed:" && echo "FAILURE" || echo "SUCCESS")"
+        echo "bindStatus:$bindStatus"
+        if [ $bindStatus = "SUCCESS" ]; then
+                value="$(cat $var4 | grep bits/sec | awk '{ print $7 }' | tail -1)"
+                echo "OUTPUT:$value"
+        else
+                echo "OUTPUT:"
+        fi
 }
 
 #To parse the output from iperf client and find the throughput data of machine under test
@@ -416,7 +444,7 @@ tcp_request()
 #To get the bandwidth from server
 validate_tcp_server_output()
 {
-        serverOutput="$(cat $var2 | grep bits/sec | cut -d ' ' -f 11)"
+        serverOutput="$(awk '/bits\/sec/ {for(i=1;i<=NF;i++) if($i ~ /bits\/sec/) {bw=$(i-1)}} END {print bw}' $var2)"
         echo "OUTPUT:$serverOutput"
         deleteTmpFile="$(sudo rm $var2 > /dev/null && echo "SUCCESS" || echo "FAILURE")"
 }
@@ -424,11 +452,8 @@ validate_tcp_server_output()
 #To get the throughput from server
 validate_tcp_server_output_throughput()
 {
-        # Uncomment below 2 lines and comment out next 2 lines if Ubuntu version < 22.04
-        # serverOutput="$(cat $var2 | grep bits/sec | cut -d ' ' -f 11)"
-        # size="$(cat $var2 | grep bits/sec | cut -d ' ' -f 12)"
-        serverOutput="$(cat $var2 | grep bits/sec | awk '{ print $7 }' | tail -1)"
-        size="$(cat $var2 | grep bits/sec | awk '{ print $8 }' | tail -1)"
+        serverOutput="$(awk '/bits\/sec/ {for(i=1;i<=NF;i++) if($i ~ /bits\/sec/) {bw=$(i-1)}} END {print bw}' $var2)"
+        size="$(awk '/bits\/sec/ {for(i=1;i<=NF;i++) if($i ~ /bits\/sec/) {unit=$i}} END {print unit}' $var2)"
         echo "OUTPUT:$serverOutput $size"
         deleteTmpFile="$(sudo rm $var2 > /dev/null && echo "SUCCESS" || echo "FAILURE")"
 }
