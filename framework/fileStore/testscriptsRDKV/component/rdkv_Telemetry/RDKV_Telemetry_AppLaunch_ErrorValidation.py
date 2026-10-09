@@ -70,7 +70,7 @@ if "SUCCESS" in result.upper():
 
 if pre_requisite_set:
 
-    print("\n[TEST STEP 1] : Create Telemetry Event Profile")
+    print("\nCreate Telemetry Event Profile")
 
     tdkTestObj = obj.createTestStep('form_rbuscli_event_command')
     tdkTestObj.addParameter("event_name",event_name)
@@ -93,7 +93,7 @@ if pre_requisite_set:
         print("SUCCESS : Profile configured")
 
 if profile_set:
-    print("\n[TEST STEP 2] : Verify Profile")
+    print("\nVerify Profile")
     command = \
         "rbuscli get Device.X_RDKCENTRAL-COM_T2.ReportProfiles"
     tdkTestObj = obj.createTestStep('telemetry_executeCmdInDUT')
@@ -116,7 +116,7 @@ if profile_set:
     start_line = tdkTestObj.getResultDetails().strip()
     print("Current Log Line :", start_line)
 
-    print("\n[TEST STEP 3] : Launch Application")
+    print("\nLaunch Application")
     status = rdkservice_install_launch_app(obj,app_bundle_name,app_name,app_download_url,launch=True)
 
     if status == "SUCCESS":
@@ -148,7 +148,7 @@ if profile_set:
     tdkTestObj.executeTestCase(expectedResult)
     details = tdkTestObj.getResultDetails()
     print(details)
-    print("\n[TEST STEP 4] : Verify cJSON Report")
+    print("\nVerify cJSON Report")
     cJSON_line = ""
 
     for line in details.splitlines():
@@ -159,7 +159,7 @@ if profile_set:
         print(cJSON_line)
         print("SUCCESS : cJSON Report found")
 
-        print("\n[TEST STEP 5] : Parse Launch Telemetry Report")
+        print("\nParse Launch Telemetry Report")
         launch_data = ""
         if cJSON_line:
             try:
@@ -173,30 +173,31 @@ if profile_set:
                     report = data.get("Report", [])
                     if len(report) == 0:
                         print("FAILURE : Telemetry report is empty")
-                        print("\n[TEST STEP RESULT] : FAILURE\n")
+                        print("\nFAILURE\n")
                         tdkTestObj.setResultStatus("FAILURE")
                     else:
                         launch_data = report[0]
                         print("\nLaunch Telemetry Data :")
                         print(launch_data)
                         print("SUCCESS : Launch telemetry data found")
-                        print("\n[TEST STEP RESULT] : SUCCESS\n")
+                        print("\nSUCCESS\n")
                         tdkTestObj.setResultStatus("SUCCESS")
                 else:
                     print("FAILURE : Unable to extract JSON from cJSON report")
-                    print("\n[TEST STEP RESULT] : FAILURE\n")
+                    print("\nFAILURE\n")
                     tdkTestObj.setResultStatus("FAILURE")
 
             except Exception as e:
                 print("FAILURE : Unable to obtain launch telemetry data")
                 print(e)
-                print("\n[TEST STEP RESULT] : FAILURE\n")
+                print("\nFAILURE\n")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
             print("FAILURE : No cJSON report found")
-            print("\n[TEST STEP RESULT] : FAILURE\n")            
+            print("\nFAILURE\n")            
             tdkTestObj.setResultStatus("FAILURE")
     else:
         print("FAILURE : cJSON Report not found")
+        tdkTestObj.setResultStatus("FAILURE")
 
 obj.unloadModule("rdkv_telemetry")

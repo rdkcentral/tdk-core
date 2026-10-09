@@ -96,7 +96,7 @@ print("[LIB LOAD STATUS]  :  %s" %result);
 
 if "SUCCESS" in result.upper():
     #Prmitive test case which associated to this Script
-    print("\n[TEST STEP 1] : Check telemetry2_0 service status")
+    print("\nCheck telemetry2_0 service status")
     tdkTestObj = obj.createTestStep('telemetry_executeCmdInDUT');
     command = "systemctl status telemetry2_0"
     tdkTestObj.addParameter("command", command)
@@ -106,14 +106,14 @@ if "SUCCESS" in result.upper():
     print("\n\n ", details)
     if "active (running)" in details:
         print("\ntelemetry2_0 service is running in device")
-        print("\n[TEST STEP RESULT] : SUCCESS\n");
+        print("\nSUCCESS\n");
         tdkTestObj.setResultStatus("SUCCESS");
     else:
         print("\ntelemetry2_0 service is not running in device")
-        print("\n[TEST STEP RESULT] : FAILURE\n")
+        print("\nFAILURE\n")
         tdkTestObj.setResultStatus("FAILURE");
 
-    print("\n[TEST STEP 2] : Check if telemetry2_0 is running")
+    print("\nCheck if telemetry2_0 is running")
     tdkTestObj = obj.createTestStep('telemetry_executeCmdInDUT');
     command = "pidof telemetry2_0"
     tdkTestObj.addParameter("command", command)
@@ -122,11 +122,11 @@ if "SUCCESS" in result.upper():
     print("\n ", details)
     if details:
         print("\ntelemetry2_0 running in device")
-        print("\n[TEST STEP RESULT] : SUCCESS\n");
+        print("\nSUCCESS\n");
         tdkTestObj.setResultStatus("SUCCESS");
     else:
         print("\ntelemetry2_0 is not running in device")
-        print("\n[TEST STEP RESULT] : FAILURE\n")
+        print("\nFAILURE\n")
         tdkTestObj.setResultStatus("FAILURE");
 
 obj.unloadModule("rdkv_telemetry");
