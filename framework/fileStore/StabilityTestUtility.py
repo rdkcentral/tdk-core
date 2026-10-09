@@ -17,8 +17,10 @@
 # limitations under the License.
 #########################################################################
 from rdkv_performancelib import *
+import rdkv_performancelib
 import ast
 import json
+import os
 import urllib.request, urllib.parse, urllib.error
 
 expectedResult ="SUCCESS"
@@ -42,22 +44,22 @@ def set_plugins_status(obj,plugins_state_dict):
     plugin_status = ""
     for plugin in plugins_state_dict:
         if plugins_state_dict[plugin] != "deactivated" and plugins_state_dict[plugin] != "None":
-            print("{}  activating".format(plugin))
             tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
             tdkTestObj.addParameter("plugin",plugin)
             tdkTestObj.addParameter("status","activate")
             tdkTestObj.executeTestCase(expectedResult)
+            print("{}  activating".format(plugin))
             plugin_status = tdkTestObj.getResult()
             if plugin_status == "SUCCESS":
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
         elif plugins_state_dict[plugin] == "deactivated":
-            print("{} disabling".format(plugin))
             tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
             tdkTestObj.addParameter("plugin",plugin)
             tdkTestObj.addParameter("status","deactivate")
             tdkTestObj.executeTestCase(expectedResult)
+            print("{} disabling".format(plugin))
             plugin_status = tdkTestObj.getResult()
             if expectedResult in plugin_status:
                 tdkTestObj.setResultStatus("SUCCESS")
@@ -79,10 +81,10 @@ def launch_cobalt(obj):
     result = tdkTestObj.getResult()
     if result == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS")
-        print("\n Checking Cobalt is in foreground")
         tdkTestObj = obj.createTestStep('rdkservice_getValue')
         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getZOrder")
         tdkTestObj.executeTestCase(expectedResult)
+        print("\n Checking Cobalt is in foreground")
         zorder = tdkTestObj.getResultDetails()
         result = tdkTestObj.getResult()
         if result == "SUCCESS":
@@ -153,18 +155,20 @@ def get_configfile_name(obj):
 
         deviceConfigFile=""
         status ="SUCCESS"
-        configPath = obj.realpath + "/"   + "fileStore/tdkvRDKServiceConfig"
-        deviceNameConfigFile = configPath + "/" + deviceName + ".config"
-        deviceTypeConfigFile = configPath + "/" + deviceType + ".config"
+        configPath = os.path.join(
+            os.path.normpath(obj.realpath), "fileStore", "tdkvRDKServiceConfig"
+        )
+        deviceNameConfigFile = os.path.join(configPath, deviceName + ".config")
+        deviceTypeConfigFile = os.path.join(configPath, deviceType + ".config")
 
         # Check whether device / platform config files required for
         # executing the test are present
         if os.path.exists(deviceNameConfigFile) == True:
             deviceConfigFile = deviceNameConfigFile
-            print("[INFO]: Using Device config file: %s" %(deviceNameConfigFile))
+            rdkv_performancelib.log_device_config_file(deviceNameConfigFile)
         elif os.path.exists(deviceTypeConfigFile) == True:
-            deviceConfigFile = deviceTypeConfigFile
-            print("[INFO]: Using Device config file: %s" %(deviceTypeConfigFile))
+             deviceConfigFile = deviceTypeConfigFile
+             rdkv_performancelib.log_device_config_file(deviceTypeConfigFile)
         else:
             status = "FAILURE"
             print("[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile))
@@ -222,10 +226,10 @@ def pre_requisite_reboot(obj,is_pvs = "no"):
 #----------------------------------------------------------------------------
 def check_device_state(obj):
     #get the resource usage and validate
-    print("\nGet CPU and Memory usage")
     tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
     tdkTestObj.addParameter("plugin","DeviceInfo")
     tdkTestObj.executeTestCase(expectedResult)
+    print("\nGet CPU and Memory usage")
     status = tdkTestObj.getResult()
     result = tdkTestObj.getResultDetails()
     curr_status = result;
@@ -312,9 +316,9 @@ def testUsingRestAPI(obj,result_dict_list):
                     print(lines[i])
                     if "Video Player CanPlay Through" in lines[i]:
                         #Validate resource usage
-                        print("\n Validate Resource usage for iteration: {}".format(count+1))
                         tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
                         tdkTestObj.executeTestCase(expectedResult)
+                        print("\n Validate Resource usage for iteration: {}".format(count+1))
                         resource_usage = tdkTestObj.getResultDetails()
                         result = tdkTestObj.getResult()
                         if expectedResult in result and resource_usage != "ERROR":
@@ -387,9 +391,9 @@ def testUsingWebInspect(obj,webkit_console_socket,result_dict_list):
                 if not [True for element in webkit_console_socket.getEventsBuffer() if "TEST RESULT:" in str(element)]:
                     webkit_console_socket.clearEventsBuffer()
                 #Validate resource usage
-                    print("\n Validate Resource usage for iteration: {}".format(count+1))
                     tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
                     tdkTestObj.executeTestCase(expectedResult)
+                    print("\n Validate Resource usage for iteration: {}".format(count+1))
                     resource_usage = tdkTestObj.getResultDetails()
                     result = tdkTestObj.getResult()
                     if expectedResult in result and resource_usage != "ERROR":

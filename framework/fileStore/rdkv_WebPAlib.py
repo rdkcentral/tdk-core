@@ -36,6 +36,30 @@ deviceMAC=""
 password=""
 user_name=""
 sshMethod=""
+
+WEBPA_STEP_DESCRIPTIONS = {
+    "integer_check": "Validate integer value",
+    "webpa_deviceconfig_value": "Read WebPA device configuration",
+    "webpa_parodusstatuscheck": "Verify WebPA Parodus status",
+    "webpa_validate_set": "Validate WebPA set operation",
+    "webpa_get": "Read WebPA parameter",
+    "webpa_set": "Set WebPA parameter",
+}
+
+def get_step_description(method, params):
+    description = WEBPA_STEP_DESCRIPTIONS.get(method, method)
+    context_keys = {
+        "integer_check": "value",
+        "webpa_deviceconfig_value": "configKey",
+        "webpa_validate_set": "paramName",
+        "webpa_get": "paramName",
+        "webpa_set": "paramName",
+    }
+    context_key = context_keys.get(method)
+    if context_key and params.get(context_key):
+        description = "%s: %s" % (description, params[context_key])
+    return description
+
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
 #---------------------------------------------------------------

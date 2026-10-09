@@ -251,21 +251,21 @@ def createWebKitSocket(obj):
 
 # Function to set Pre/Post requisites for executing media tests
 def checkPluginStatus(obj,plugin):
-    print("\nChecking %s Plugin Status..." %(plugin))
     tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus');
     tdkTestObj.addParameter("plugin",plugin);
     tdkTestObj.executeTestCase("SUCCESS");
+    print("\nChecking %s Plugin Status..." %(plugin))
     result = tdkTestObj.getResult();
     status = tdkTestObj.getResultDetails();
     print("%s Plugin Status: %s" %(plugin,status))
     return result,status
 
 def setPluginState(obj,plugin,state):
-    print("\nActivating %s Plugin" %(plugin))
     tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus');
     tdkTestObj.addParameter("plugin",plugin);
     tdkTestObj.addParameter("status",state);
     tdkTestObj.executeTestCase("SUCESS");
+    print("\nActivating %s Plugin" %(plugin))
     result = tdkTestObj.getResult();
     if "SUCCESS" in result:
         print("%s plugin %sed" %(plugin,state))
@@ -279,10 +279,10 @@ def setPluginState(obj,plugin,state):
 def launchApp(obj,app_id):
     global event_listener
     max_retries = 2
-    print(f"\nLaunching the app: {app_id}")
     tdkTestObj = obj.createTestStep('rdkservice_launch_app')
     tdkTestObj.addParameter("app_name", app_id)
     tdkTestObj.executeTestCase(expectedResult)
+    print(f"\nLaunching the app: {app_id}")
     status = tdkTestObj.getResult()
     if status == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS")
@@ -334,10 +334,10 @@ def checkDRMSupported(obj,drm):
             time.sleep(3)
             result,ocdm_status = checkPluginStatus(obj,"OCDM");
         if "SUCCESS" in result and "activated" in ocdm_status:
-            print("\nChecking Supported DRMs...")
             tdkTestObj = obj.createTestStep('rdkservice_getValue');
             tdkTestObj.addParameter("method","OCDM.1.drms");
             tdkTestObj.executeTestCase("SUCCESS");
+            print("\nChecking Supported DRMs...")
             result  = tdkTestObj.getResult();
             details = tdkTestObj.getResultDetails();
             details = ast.literal_eval(details)
@@ -365,10 +365,10 @@ def checkDRMSupported(obj,drm):
 
 def getConnectedVideoDisplay(obj):
     global video_port
-    print("\nChecking Connected video displays...")
     tdkTestObj = obj.createTestStep('rdkservice_getValue');
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getConnectedVideoDisplays");
     tdkTestObj.executeTestCase("SUCCESS");
+    print("\nChecking Connected video displays...")
     result  = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if "SUCCESS" in result:
@@ -393,10 +393,10 @@ def getConnectedVideoDisplay(obj):
 
 def getConnectedAudioPorts(obj):
     global audio_port
-    print("\nChecking Connected audio ports...")
     tdkTestObj = obj.createTestStep('rdkservice_getValue');
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getConnectedAudioPorts");
     tdkTestObj.executeTestCase("SUCCESS");
+    print("\nChecking Connected audio ports...")
     result  = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if "SUCCESS" in result:
@@ -424,12 +424,12 @@ def getConnectedAudioPorts(obj):
 
 def checkSupportedAudioModes(obj,mode):
     global auto_mode
-    print("\nChecking Supported Audio modes...")
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     params = '{"audioPort":"'+audio_port+'"}'
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getSupportedAudioModes");
     tdkTestObj.addParameter("value",params)
     tdkTestObj.executeTestCase("SUCCESS");
+    print("\nChecking Supported Audio modes...")
     result  = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     check_status = ""
@@ -463,12 +463,12 @@ def checkSupportedAudioModes(obj,mode):
     return mode,check_status
 
 def checkSupportedAudioCapabilities(obj,mode):
-    print("\nChecking Supported Audio capabilities...")
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     params = '{"audioPort":"'+audio_port+'"}'
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getSettopAudioCapabilities");
     tdkTestObj.addParameter("value",params)
     tdkTestObj.executeTestCase("SUCCESS");
+    print("\nChecking Supported Audio capabilities...")
     result  = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     check_status = ""
@@ -493,12 +493,12 @@ def checkSupportedAudioCapabilities(obj,mode):
     return check_status
 
 def checkSupportedResolution(obj,res):
-    print("\nChecking Supported Resolutions...")
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     params = '{"videoDisplay":"'+video_port+'"}'
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getSupportedResolutions");
     tdkTestObj.addParameter("value",params)
     tdkTestObj.executeTestCase("SUCCESS");
+    print("\nChecking Supported Resolutions...")
     result  = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     check_status = ""
@@ -527,12 +527,12 @@ def checkSupportedResolution(obj,res):
     return res,check_status
 
 def getCurrentSoundMode(obj):
-    print("\nGet Current Sound Mode...")
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     params = '{"audioPort":"'+audio_port+'"}'
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getSoundMode");
     tdkTestObj.addParameter("value",params)
     tdkTestObj.executeTestCase("SUCCESS");
+    print("\nGet Current Sound Mode...")
     result  = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if "SUCCESS" in result:
@@ -546,12 +546,12 @@ def getCurrentSoundMode(obj):
         return "FAILURE",None
 
 def getCurrentResolution(obj):
-    print("\nGet Current Resolution...")
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     params = '{"videoDisplay":"'+video_port+'"}'
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getCurrentResolution");
     tdkTestObj.addParameter("value",params)
     tdkTestObj.executeTestCase("SUCCESS");
+    print("\nGet Current Resolution...")
     result  = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if "SUCCESS" in result:
@@ -580,7 +580,6 @@ def setCurrentSoundMode(obj,mode):
         set_status = "SUCCESS"
         print("Required sound mode is set already")
     else:
-        print("\nSetting %s sound mode...." %(mode))
         tdkTestObj = obj.createTestStep('rdkservice_setValue');
         if auto_mode == 1:
             params = '{"audioPort":"'+audio_port+'","soundMode":"AUTO", "persist":false}'
@@ -590,6 +589,7 @@ def setCurrentSoundMode(obj,mode):
         tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.setSoundMode");
         tdkTestObj.addParameter("value",params)
         tdkTestObj.executeTestCase("SUCCESS");
+        print("\nSetting %s sound mode...." %(mode))
         result  = tdkTestObj.getResult();
         details = tdkTestObj.getResultDetails();
         if "SUCCESS" in result:
@@ -631,12 +631,12 @@ def setCurrentResolution(obj,res):
         set_status = "SUCCESS"
         print("Required resolution is set already")
     else:
-        print("\nSetting %s Resolution...." %(res))
         tdkTestObj = obj.createTestStep('rdkservice_setValue');
         params = '{"videoDisplay":"'+video_port+'","resolution":"'+res+'", "persist":false}'
         tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.setCurrentResolution");
         tdkTestObj.addParameter("value",params)
         tdkTestObj.executeTestCase("SUCCESS");
+        print("\nSetting %s Resolution...." %(res))
         result  = tdkTestObj.getResult();
         details = tdkTestObj.getResultDetails();
         if "SUCCESS" in result:
@@ -658,12 +658,12 @@ def setCurrentResolution(obj,res):
     return set_status
 
 def setAudioAtmosOutputMode(obj,enable):
-    print("\nSetting Audio Atmos o/p mode %s" %(enable))
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     params = '{"enable":"'+str(enable)+'"}'
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.setAudioAtmosOutputMode");
     tdkTestObj.addParameter("value",params);
     tdkTestObj.executeTestCase("SUCESS");
+    print("\nSetting Audio Atmos o/p mode %s" %(enable))
     result = tdkTestObj.getResult();
     if "SUCCESS" in result:
         print("Audio Atmos o/p mode enable %s" %(enable))

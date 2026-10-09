@@ -34,6 +34,38 @@ deviceIP=""
 devicePort=""
 deviceName=""
 deviceType=""
+logged_config_files = set()
+
+MEDIA_STEP_DESCRIPTIONS = {
+    "rdkv_media_pre_requisites": "Prepare media test prerequisites",
+    "rdkv_media_test": "Validate media playback operation",
+    "rdkv_media_post_requisites": "Clean up media test prerequisites",
+    "rdkv_media_getProcCheckInfo": "Read media process-validation configuration",
+    "rdkv_media_checkProcEntry": "Validate media player process status",
+    "rdkservice_getPluginStatus": "Verify media plugin status",
+    "rdkservice_setPluginStatus": "Set media plugin status",
+    "rdkservice_setValue": "Configure media device value",
+    "rdkv_media_readUIData": "Read media data from UI",
+}
+
+
+def log_device_config_file(config_file):
+    if config_file not in logged_config_files:
+        print("[INFO]: Using Device config file: %s" % config_file)
+        logged_config_files.add(config_file)
+
+
+def get_step_description(method, params):
+    description = MEDIA_STEP_DESCRIPTIONS.get(method, method)
+    if method in ("rdkservice_getPluginStatus", "rdkservice_setPluginStatus"):
+        plugin = params.get("plugin")
+        if plugin:
+            description = "%s: %s" % (description, plugin)
+    elif method == "rdkservice_setValue":
+        device_method = params.get("method")
+        if device_method:
+            description = "%s: %s" % (description, device_method)
+    return description
 
 #METHODS
 #---------------------------------------------------------------
@@ -63,17 +95,19 @@ def rdkv_media_post_requisites():
 def getDeviceConfigFile(basePath):
     deviceConfigFile=""
     status ="SUCCESS"
-    configPath = basePath + "/"   + "fileStore/tdkvRDKServiceConfig"
+    configPath = os.path.join(
+        os.path.normpath(basePath), "fileStore", "tdkvRDKServiceConfig"
+    )
     deviceNameConfigFile = configPath + "/" + deviceName + ".config"
     deviceTypeConfigFile = configPath + "/" + deviceType + ".config"
     # Check whether device / platform config files required for
     # executing the test are present
     if os.path.exists(deviceNameConfigFile) == True:
         deviceConfigFile = deviceNameConfigFile
-        print("[INFO]: Using Device config file: %s" %(deviceNameConfigFile))
+        log_device_config_file(deviceNameConfigFile)
     elif os.path.exists(deviceTypeConfigFile) == True:
         deviceConfigFile = deviceTypeConfigFile
-        print("[INFO]: Using Device config file: %s" %(deviceTypeConfigFile))
+        log_device_config_file(deviceTypeConfigFile)
     else:
         status = "FAILURE"
         print("[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile))

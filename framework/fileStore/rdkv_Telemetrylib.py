@@ -39,6 +39,30 @@ password=""
 user_name=""
 sshMethod=""
 
+TELEMETRY_STEP_DESCRIPTIONS = {
+    "execute_CmndInDUT": "Execute command on device",
+    "telemetry_deviceconfig_value": "Read telemetry device configuration",
+    "run_rbuscli_and_check": "Run rbuscli and validate parameter",
+    "form_rbuscli_command": "Form rbuscli configuration command",
+    "setPreRequisites": "Set telemetry test prerequisites",
+    "form_rbuscli_event_command": "Form rbuscli event profile command",
+    "telemetry_datamodelcheck": "Validate telemetry data model parameter",
+}
+
+def get_step_description(method, params):
+    description = TELEMETRY_STEP_DESCRIPTIONS.get(method, method)
+    if method == "execute_CmndInDUT" and params.get("command"):
+        description = "%s: %s" % (description, params["command"])
+    elif method == "telemetry_deviceconfig_value" and params.get("configKey"):
+        description = "%s: %s" % (description, params["configKey"])
+    elif method in ("run_rbuscli_and_check", "form_rbuscli_command") and params.get("param_name"):
+        description = "%s: %s" % (description, params["param_name"])
+    elif method == "form_rbuscli_event_command" and params.get("event_name"):
+        description = "%s: %s" % (description, params["event_name"])
+    elif method == "telemetry_datamodelcheck" and params.get("rfcparameter"):
+        description = "%s: %s" % (description, params["rfcparameter"])
+    return description
+
 #---------------------------------------------------------------------------------------
 #INITIALIZE THE MODULE
 #---------------------------------------------------------------

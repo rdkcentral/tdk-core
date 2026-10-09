@@ -54,19 +54,79 @@ def getThunderPortDetails(self):
     sys.stdout.flush()
     return thunderPortDetails
 
+def closePendingStep(test_case):
+    if hasattr(test_case, "pendingStandaloneStep"):
+        step_number, result = test_case.pendingStandaloneStep
+        if "FAILURE" in str(result).upper():
+            test_case.resultStatus = "FAILURE"
+        print("\n[STEP %d END] Result: %s" % (step_number, result))
+        sys.stdout.flush()
+        del test_case.pendingStandaloneStep
+        if hasattr(test_case, "pendingStandaloneStepObject"):
+            del test_case.pendingStandaloneStepObject
+
+#------------------------------------------------------------------------------
+# Collapses any run of consecutive blank lines in stdout down to exactly one,
+# so redundant blank-line prints scattered across scripts/libs don't create
+# multi-line gaps around [STEP START]/[STEP END] banners.
+#------------------------------------------------------------------------------
+class _BlankLineCollapsingStream:
+    def __init__(self, stream):
+        self._stream = stream
+        self._buffer = ""
+        self._last_line_blank = False
+
+    def write(self, data):
+        if not data:
+            return 0
+        self._buffer += data
+        parts = self._buffer.split("\n")
+        self._buffer = parts[-1]
+        out_chunks = []
+        for line in parts[:-1]:
+            is_blank = (line.rstrip("\r") == "")
+            if is_blank and self._last_line_blank:
+                continue
+            out_chunks.append(line + "\n")
+            self._last_line_blank = is_blank
+        if out_chunks:
+            self._stream.write("".join(out_chunks))
+        return len(data)
+
+    def flush(self):
+        if self._buffer:
+            self._stream.write(self._buffer)
+            self._buffer = ""
+        self._stream.flush()
+
+    def __getattr__(self, name):
+        return getattr(self._stream, name)
+
+def _install_blank_line_collapsing():
+    if not isinstance(sys.stdout, _BlankLineCollapsingStream):
+        sys.stdout = _BlankLineCollapsingStream(sys.stdout)
+
 # Description : To execute the stand alone tests
 # Parameters  : None
 # Return Value: Return the test status and details
 
 def executeTest (self) :
+    _install_blank_line_collapsing()
     executeJson = json.loads(self.jsonMsgValue)
     params = executeJson["params"]
     method = params["method"]
     componentName = params["module"]
+    closePendingStep(self.parentTestCase)
+    if not hasattr(self.parentTestCase, "standaloneStepCount"):
+        self.parentTestCase.standaloneStepCount = 0
+    self.parentTestCase.standaloneStepCount += 1
+    step_number = self.parentTestCase.standaloneStepCount
     thunderPortDetails = getThunderPortDetails(self)
     thunderPort = thunderPortDetails["thunderPort"]
 
     if method == "TestMgr_RdkService_Test" :
+        print("Executing %s...." % self.testCaseName)
+        sys.stdout.flush()
         deviceInfo = getDeviceDetails(self);
         deviceName = deviceInfo["devicename"]
         deviceType = deviceInfo["boxtype"]
@@ -89,6 +149,22 @@ def executeTest (self) :
         Now "lib" contains all the function definitions in the imported module.
         """
         lib = importlib.import_module(module)
+        args = {}
+        if "params" in params:
+            args = params["params"]
+        step_description = method
+        if "get_step_description" in dir(lib):
+            try:
+                # pass the calling script's suite name so libs can vary wording by caller (e.g. rdkv_media vs rdkv_performance)
+                step_description = lib.get_step_description(method, args, self.parentTestCase.componentName)
+            except TypeError:
+                step_description = lib.get_step_description(method, args)
+        print("\n#==============================================================================#")
+        print("[STEP %d START] %s" % (step_number, step_description))
+        print("#==============================================================================#")
+        sys.stdout.flush()
+        print("Executing %s...." % self.testCaseName)
+        sys.stdout.flush()
         """
         The function 'init_method' helps to initialise the module with ip and port. User can use this function
         if they want ip/port in library.
@@ -107,12 +183,12 @@ def executeTest (self) :
         This will be in the form of a dictionary(key:value pair).
         Keys are the argument name, values are the argument value.
         """
-        args = {}
-        if "params" in params:
-            args = params["params"]
         details = method_to_call(**args)
         if isinstance(details , bytes):
             details = details.decode().encode('ascii','ignore').decode()
         if (details or details == None) and details != "EXCEPTION OCCURRED":
             result = "SUCCESS"
+    if method != "TestMgr_RdkService_Test":
+        self.parentTestCase.pendingStandaloneStep = (step_number, result)
+        self.parentTestCase.pendingStandaloneStepObject = self
     return result,details;
