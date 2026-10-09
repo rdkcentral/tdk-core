@@ -93,7 +93,7 @@ result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 
 if "SUCCESS" in result.upper():
-    print("\n[TEST STEP 1] : Check if lighttpd is running")
+    print("\nCheck if lighttpd is running")
     tdkTestObj = obj.createTestStep('telemetry_executeCmdInDUT');
     command = "pidof lighttpd"
     tdkTestObj.addParameter("command", command)
@@ -102,11 +102,11 @@ if "SUCCESS" in result.upper():
     print("\n ", details)
     if details:
         print("\nlighttpd running in device")
-        print("\n[TEST STEP RESULT] : SUCCESS\n");
+        print("\nSUCCESS\n");
         tdkTestObj.setResultStatus("SUCCESS");
     else:
         print("\nlighttpd is not running in device")
-        print("\n[TEST STEP RESULT] : FAILURE\n")
+        print("\nFAILURE\n")
         tdkTestObj.setResultStatus("FAILURE");
 
 obj.unloadModule("rdkv_telemetry");

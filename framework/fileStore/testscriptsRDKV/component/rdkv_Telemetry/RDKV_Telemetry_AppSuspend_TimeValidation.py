@@ -76,7 +76,7 @@ if "SUCCESS" in result.upper():
 
 if pre_requisite_set:
 
-    print("\n[TEST STEP 1] : Create Telemetry Event Profile")
+    print("\nCreate Telemetry Event Profile")
 
     tdkTestObj = obj.createTestStep('form_rbuscli_event_command')
     tdkTestObj.addParameter("event_name",event_name)
@@ -99,7 +99,7 @@ if pre_requisite_set:
         print("SUCCESS : Profile configured")
 
 if profile_set:
-    print("\n[TEST STEP 2] : Verify Profile")
+    print("\nVerify Profile")
     command = \
         "rbuscli get Device.X_RDKCENTRAL-COM_T2.ReportProfiles"
     tdkTestObj = obj.createTestStep('telemetry_executeCmdInDUT')
@@ -114,7 +114,7 @@ if profile_set:
         print("FAILURE : Profile not found")
 
 if profile_set:
-    print("\n[TEST STEP 3] : Start Parallel Monitoring")
+    print("\nStart Parallel Monitoring")
     tdkTestObj = obj.createTestStep('telemetry_executeCmdInDUT')
     monitor_cmd = ('rm -f /tmp/Suspend_monitor.log; ' 'tail -F /opt/logs/telemetry2_0.txt > ''/tmp/Suspend_monitor.log 2>&1 & echo $!')
     tdkTestObj.addParameter("command",monitor_cmd)
@@ -122,7 +122,7 @@ if profile_set:
     monitor_pid = tdkTestObj.getResultDetails().strip()
     print("Monitor PID :", monitor_pid)
 
-    print("\n[TEST STEP 4] : Install the Application")
+    print("\nInstall the Application")
     print("\nInstalling applications")
     rdkservice_install_launch_app(obj,app_bundle_1,resume_app,app_download_url,launch=False)
     rdkservice_install_launch_app(obj,app_bundle_2,background_app,app_download_url,launch=False)
@@ -166,7 +166,7 @@ if profile_set:
             obj.unloadModule("rdkv_telemetry")
             exit()
 
-    print("\n[TEST STEP 5] : Verify Suspend")
+    print("\nVerify Suspend")
     suspended = False
     timeout = 120
     while timeout > 0:
@@ -199,7 +199,7 @@ if profile_set:
     tdkTestObj.executeTestCase(expectedResult)
     details = tdkTestObj.getResultDetails()
     print(details)
-    print("\n[TEST STEP 4] : Verify cJSON Report")
+    print("\nVerify cJSON Report")
     cJSON_line = ""
 
     for line in details.splitlines():
@@ -210,7 +210,7 @@ if profile_set:
         print(cJSON_line)
         print("SUCCESS : cJSON Report found")
 
-        print("\n[TEST STEP 5] : Parse Telemetry Report")
+        print("\nParse Telemetry Report")
         result_data = ""
         if cJSON_line:
             try:
@@ -224,30 +224,31 @@ if profile_set:
                     report = data.get("Report", [])
                     if len(report) == 0:
                         print("FAILURE : Telemetry report is empty")
-                        print("\n[TEST STEP RESULT] : FAILURE\n")
+                        print("\nFAILURE\n")
                         tdkTestObj.setResultStatus("FAILURE")
                     else:
                         result_data = report[0]
                         print("\nApp Suspend Telemetry Data :")
                         print(result_data)
                         print("SUCCESS : App Suspend telemetry data found")
-                        print("\n[TEST STEP RESULT] : SUCCESS\n")
+                        print("\nSUCCESS\n")
                         tdkTestObj.setResultStatus("SUCCESS")
                 else:
                     print("FAILURE : Unable to extract JSON from cJSON report")
-                    print("\n[TEST STEP RESULT] : FAILURE\n")
+                    print("\nFAILURE\n")
                     tdkTestObj.setResultStatus("FAILURE")
 
             except Exception as e:
                 print("FAILURE : Unable to obtain Suspend telemetry data")
                 print(e)
-                print("\n[TEST STEP RESULT] : FAILURE\n")
+                print("\nFAILURE\n")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
             print("FAILURE : No cJSON report found")
-            print("\n[TEST STEP RESULT] : FAILURE\n")            
+            print("\nFAILURE\n")            
             tdkTestObj.setResultStatus("FAILURE")
     else:
         print("FAILURE : cJSON Report not found")
+        tdkTestObj.setResultStatus("FAILURE")
 
 obj.unloadModule("rdkv_telemetry")
