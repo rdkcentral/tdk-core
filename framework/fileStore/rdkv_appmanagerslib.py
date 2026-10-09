@@ -29,6 +29,27 @@ from web_socket_util import *
 
 deviceToken = ""
 
+APPMANAGER_STEP_DESCRIPTIONS = {
+    "appmanagers_setvalue": "Set AppManager device value",
+    "appmanagers_executeInDUT": "Execute command on device",
+    "appmanagers_checkpluginstatus": "Verify AppManager plugin statuses",
+    "appmanagers_getdeviceconfig": "Read AppManager device configuration",
+    "appmanagers_getvalue": "Read AppManager device value",
+}
+
+
+def get_step_description(method, params):
+    description = APPMANAGER_STEP_DESCRIPTIONS.get(method, method)
+    if method == "appmanagers_setvalue" and params.get("method"):
+        description = "%s: %s" % (description, params["method"])
+    elif method == "appmanagers_getvalue" and params.get("method"):
+        description = "%s: %s" % (description, params["method"])
+    elif method == "appmanagers_getdeviceconfig" and params.get("configkeylist"):
+        description = "%s: %s" % (description, params["configkeylist"])
+    elif method == "appmanagers_checkpluginstatus" and params.get("pluginlist"):
+        description = "%s: %s" % (description, params["pluginlist"])
+    return description
+
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
 #---------------------------------------------------------------

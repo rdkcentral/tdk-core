@@ -39,6 +39,31 @@ password=""
 user_name=""
 sshMethod=""
 
+TELEMETRY_STEP_DESCRIPTIONS = {
+    "execute_CmndInDUT": "Execute command on device",
+    "telemetry_deviceconfig_value": "Read telemetry device configuration",
+    "run_rbuscli_and_check": "Run rbuscli and validate parameter",
+    "form_rbuscli_command": "Form rbuscli configuration command",
+    "setPreRequisites": "Set telemetry test prerequisites",
+    "form_rbuscli_event_command": "Form rbuscli event profile command",
+    "telemetry_datamodelcheck": "Validate telemetry data model parameter",
+}
+
+
+def get_step_description(method, params):
+    description = TELEMETRY_STEP_DESCRIPTIONS.get(method, method)
+    if method == "execute_CmndInDUT" and params.get("command"):
+        description = "%s: %s" % (description, params["command"])
+    elif method == "telemetry_deviceconfig_value" and params.get("configKey"):
+        description = "%s: %s" % (description, params["configKey"])
+    elif method in ("run_rbuscli_and_check", "form_rbuscli_command") and params.get("param_name"):
+        description = "%s: %s" % (description, params["param_name"])
+    elif method == "form_rbuscli_event_command" and params.get("event_name"):
+        description = "%s: %s" % (description, params["event_name"])
+    elif method == "telemetry_datamodelcheck" and params.get("rfcparameter"):
+        description = "%s: %s" % (description, params["rfcparameter"])
+    return description
+
 #---------------------------------------------------------------------------------------
 #INITIALIZE THE MODULE
 #---------------------------------------------------------------
@@ -257,9 +282,9 @@ DCM_SCP_SERVER=xconf.rdkcentral.com
 DCM_LA_SERVER_URL={Telemetry_Collector_URL}"""
     command = "echo '" + dcmProperties + "' > /etc/dcm.properties"
     execute_CmndInDUT (command)
-    print("\nDCM properties successfully set")
+    print("\n[PRE-REQUISITE 1 RESULT] :DCM properties successfully set")
 
-    print("\nSetting Telemetry Version")
+    print("\n[PRE-REQUISITE 2] : Setting Telemetry Version")
     command  = "tr181 -s -t string -v 2.0.1 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.Version"
     execute_CmndInDUT (command)
     print("Verifying if Telemetry Version is set")
@@ -269,18 +294,18 @@ DCM_LA_SERVER_URL={Telemetry_Collector_URL}"""
     if " 2.0.1" not in output:
         print("FAILURE : Telemetry Version is not successfully set")
         return "FAILURE"
-    print("\nTelemetry Version is successfully set")
+    print("\n[PRE-REQUISITE 2 RESULT] : Telemetry Version is successfully set")
 
-    print("\nGetting Telemetry Config URL")
+    print("\n[PRE-REQUISITE 3] : Getting Telemetry Config URL")
     command = "tr181 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.ConfigURL"
     output = execute_CmndInDUT (command)
     print("\nTelemetry Config URL : \n", output)
 
     if not output:
-        print("\nUnable to retrive the Telemetry Config URL from DUT\n")
+        print("\n[PRE-REQUISITE 3 RESULT] : Unable to retrive the Telemetry Config URL from DUT\n")
         return "FAILURE"
     else:
-        print("\nTelemetry Config URL was retrived successfully\n")
+        print("\n[PRE-REQUISITE 3 RESULT] : Telemetry Config URL was retrived successfully\n")
         return "SUCCESS"
 
 #------------------------------------------------------------------

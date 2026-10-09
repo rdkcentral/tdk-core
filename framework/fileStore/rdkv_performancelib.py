@@ -44,6 +44,7 @@ import urllib.request, urllib.parse, urllib.error
 from SecurityTokenUtility import *
 import web_socket_util
 import StabilityTestUtility
+import tdkStandAlonelib
 
 deviceIP=""
 devicePort=""
@@ -53,8 +54,80 @@ deviceMac=""
 realpath=""
 securityEnabled=False
 deviceToken=""
+logged_config_files = set()
 
 graphical_plugins_list = PerformanceTestVariables.graphical_plugins_list
+
+
+def log_device_config_file(config_file):
+    if config_file not in logged_config_files:
+        print("[INFO]: Using Device config file: %s" % config_file)
+        logged_config_files.add(config_file)
+
+PERFORMANCE_STEP_DESCRIPTIONS = {
+    "rdkservice_getPluginStatus": "Verify plugin status",
+    "rdkservice_setPluginStatus": "Set plugin status",
+    "rdkservice_getAllPluginStatus": "Read all plugin statuses",
+    "rdkservice_getValue": "Read device value",
+    "rdkservice_setValue": "Set device value",
+    "rdkservice_getValueWithParams": "Read device value with parameters",
+    "rdkservice_getReqValueFromResult": "Read required value from response",
+    "rdkv_getInstalledPackages": "Check installed application packages",
+    "rdkservice_download_app_bundle": "Download application bundle",
+    "rdkservice_install_app": "Install application package",
+    "rdkservice_uninstall_app": "Uninstall application package",
+    "rdkservice_launch_app": "Launch application",
+    "rdkservice_close_app": "Close application",
+    "rdkv_terminate_app": "Terminate application",
+    "rdkservice_executeLifeCycle": "Execute application lifecycle operation",
+    "setPS_value": "Set media player URL in PersistentStore",
+    "rdkservice_getBrowserScore_AnimationBenchmark": "Run animation browser benchmark",
+    "rdkservice_getBrowserScore_MotionMark": "Run MotionMark browser benchmark",
+    "rdkservice_getBrowserScore_Speedometer": "Run Speedometer browser benchmark",
+    "rdkservice_getBrowserScore_CSS3": "Run CSS3 browser benchmark",
+    "rdkservice_getBrowserScore_HTML5": "Run HTML5 browser benchmark",
+    "rdkservice_getBrowserScore_Kraken": "Run Kraken browser benchmark",
+    "rdkservice_getBrowserScore_Octane": "Run Octane browser benchmark",
+    "rdkservice_getBrowserScore_Smashcat": "Run SmashCat browser benchmark",
+    "rdkservice_getBrowserScore_SunSpider": "Run SunSpider browser benchmark",
+    "rdkservice_getBrowserURL": "Read browser target URL",
+    "rdkservice_getBluetoothMac": "Read Bluetooth MAC address",
+    "rdkservice_getCPULoad": "Read device CPU load",
+    "rdkservice_getMemoryUsage": "Read device memory usage",
+    "rdkservice_getMaxResponseTime": "Measure service response time",
+    "rdkservice_getRequiredLog": "Read required device log",
+    "rdkservice_getSSHParams": "Read device SSH parameters",
+    "rdkservice_validateCPULoad": "Validate device CPU load",
+    "rdkservice_validateMemoryUsage": "Validate device memory usage",
+    "rdkservice_validatePluginFunctionality": "Validate plugin functionality",
+    "rdkservice_validateProcEntry": "Validate device process entry",
+    "rdkservice_memcrApps_executeLifeCycle": "Execute memory-test app lifecycle",
+    "memcr_appMemorySize": "Measure application memory usage",
+    "memcr_getProcessID": "Read application process ID",
+    "rdkservice_validateResourceUsage": "Validate resource usage",
+    "rdkservice_rebootDevice": "Reboot device",
+}
+
+
+def get_step_description(method, params, calling_suite=None):
+    description = PERFORMANCE_STEP_DESCRIPTIONS.get(method, method)
+    if (method == "rdkservice_getPluginStatus" and params.get("plugin") == "org.rdk.PersistentStore"
+            and calling_suite == "rdkv_media"):
+        # PersistentStore check in media pre-requisites is immediately followed by setting the test URL in it
+        description = "Verify PersistentStore status and set URL in it"
+    elif method == "rdkservice_getPluginStatus" and params.get("plugin"):
+        description = "%s: %s" % (description, params["plugin"])
+    elif method == "rdkservice_setPluginStatus" and params.get("plugin"):
+        description = "%s: %s" % (description, params["plugin"])
+        if params.get("status"):
+            description = "%s (%s)" % (description, params["status"])
+    elif method in ("rdkservice_getValue", "rdkservice_setValue",
+                    "rdkservice_getValueWithParams") and params.get("method"):
+        description = "%s: %s" % (description, params["method"])
+    elif method == "rdkservice_getRequiredLog" and params.get("command"):
+        description = "%s: %s" % (description, params["command"])
+    return description
+
 #METHODS
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
@@ -162,7 +235,13 @@ def execute_step(Data,IsPerformanceStressTest="NO"):
         if status == "INVALID TOKEN":
             print("\nAuthorization issue occurred. Update Token & Re-try...")
             global deviceToken
-            tokenFile = libObj.realpath + "/" + "fileStore/tdkvRDKServiceConfig/tokenConfig/" + deviceName + ".config"
+            tokenFile = os.path.join(
+                libObj.realpath,
+                "fileStore",
+                "tdkvRDKServiceConfig",
+                "tokenConfig",
+                deviceName + ".config"
+            )
             if not securityEnabled:
                 # Create the Device Token config file and update the token
                 token_status,deviceToken = read_token_config(deviceIP,tokenFile)
@@ -187,8 +266,8 @@ def execute_step(Data,IsPerformanceStressTest="NO"):
         web_socket_util.deviceToken = deviceToken
         if status == "SUCCESS":
             print("\n---------------------------------------------------------------------------------------------------")
-            print("Json command : ", data)
-            print("\n Response : ", json_response, "\n")
+            print("JSON REQUEST : ", data)
+            print("\nJSON RESPONSE : ", json_response, "\n")
             print("----------------------------------------------------------------------------------------------------\n")
             result = json_response.get("result")
             if result is None and "error" in json_response:
@@ -524,7 +603,9 @@ def rdkservice_getBrowserScore_Octane():
 def getConfigFileName(basePath):
     deviceConfigFile=""
     status ="SUCCESS"
-    configPath = basePath + "/"   + "fileStore/tdkvRDKServiceConfig"
+    configPath = os.path.join(
+        os.path.normpath(basePath), "fileStore", "tdkvRDKServiceConfig"
+    )
     deviceNameConfigFile = configPath + "/" + deviceName + ".config"
     deviceTypeConfigFile = configPath + "/" + deviceType + ".config"
 
@@ -532,10 +613,10 @@ def getConfigFileName(basePath):
     # executing the test are present
     if os.path.exists(deviceNameConfigFile) == True:
         deviceConfigFile = deviceNameConfigFile
-        print("[INFO]: Using Device config file: %s" %(deviceNameConfigFile))
+        log_device_config_file(deviceNameConfigFile)
     elif os.path.exists(deviceTypeConfigFile) == True:
         deviceConfigFile = deviceTypeConfigFile
-        print("[INFO]: Using Device config file: %s" %(deviceTypeConfigFile))
+        log_device_config_file(deviceTypeConfigFile)
     else:
         status = "FAILURE"
         print("[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile))
@@ -1194,17 +1275,19 @@ def getConfigFileNameDetail(obj):
         device_Type = deviceDetails["boxtype"]
         deviceConfigFile=""
         status ="SUCCESS"
-        configPath = obj.realpath + "/"   + "fileStore/tdkvRDKServiceConfig"
+        configPath = os.path.join(
+            os.path.normpath(obj.realpath), "fileStore", "tdkvRDKServiceConfig"
+        )
         deviceNameConfigFile = configPath + "/" + device_Name + ".config"
         deviceTypeConfigFile = configPath + "/" + device_Type + ".config"
         # Check whether device / platform config files required for
         # executing the test are present
         if os.path.exists(deviceNameConfigFile) == True:
             deviceConfigFile = deviceNameConfigFile
-            print("[INFO]: Using Device config file: %s" %(deviceNameConfigFile))
+            log_device_config_file(deviceNameConfigFile)
         elif os.path.exists(deviceTypeConfigFile) == True:
             deviceConfigFile = deviceTypeConfigFile
-            print("[INFO]: Using Device config file: %s" %(deviceTypeConfigFile))
+            log_device_config_file(deviceTypeConfigFile)
         else:
             status = "FAILURE"
             print("[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile))
@@ -1621,20 +1704,21 @@ def parse_value_to_float(raw_value):
 #---------------------------------------------------------------------------------------
 def getSummary(Summ_list,obj = False):
     if obj != False:
+        if obj.isStandAlone:
+            tdkStandAlonelib.closePendingStep(obj)
         Value = [x for x in Summ_list]
         getDataAndWriteInFile(Value,obj)
 
-    if Summ_list != []:
-        print("############## Execution Summary #######################")
-        for key in Summ_list:
-            print(key)
-            value = key.split(':')[1]
-            try:
-                numeric_value = parse_value_to_float(value)
-                if numeric_value < 0:
-                    print("Check if VM and DUT time is synchronized OR Check if any previous steps got failed.")
-            except ValueError as e:
-                print(e)
+    print("\n############## Execution Summary #######################")
+    for key in Summ_list:
+        print(key)
+        value = key.split(':')[1]
+        try:
+            numeric_value = parse_value_to_float(value)
+            if numeric_value < 0:
+                print("Check if VM and DUT time is synchronized OR Check if any previous steps got failed.")
+        except ValueError as e:
+            print(e)
 
 #Function to test using RESTAPI
 def testusingRestAPI(obj):
@@ -2150,9 +2234,9 @@ def rdkservice_get_loaded_apps():
 #---------------------------------------------------------------
 def rdkservice_install_launch_app(obj,app_bundle_name, app_name, app_download_url = PerformanceTestVariables.app_download_url,launch =True):
     expectedResult="SUCCESS"
-    print(f"\nCheck if {app_name} is installed in the device")
     tdkTestObj = obj.createTestStep('rdkv_getInstalledPackages')
     tdkTestObj.executeTestCase(expectedResult)
+    print(f"\nCheck if {app_name} is installed in the device")
     status = tdkTestObj.getResult()
     details = tdkTestObj.getResultDetails()
     if status == "SUCCESS" and app_name in details:
@@ -2167,7 +2251,6 @@ def rdkservice_install_launch_app(obj,app_bundle_name, app_name, app_download_ur
         tdkTestObj.setResultStatus("SUCCESS")
         print("\nApp is not installed in the device")
         status = "SUCCESS"
-        print("\nCheck the status of AppManagers in the device")
         plugins_list = ["org.rdk.DownloadManager", "org.rdk.AppPackageManager", "org.rdk.AppManager"]
         plugin_status_needed = {"org.rdk.DownloadManager":"activated", "org.rdk.AppPackageManager":"activated", "org.rdk.AppManager":"activated"}
         curr_plugins_status_dict = StabilityTestUtility.get_plugins_status(obj,plugins_list)
@@ -2177,7 +2260,6 @@ def rdkservice_install_launch_app(obj,app_bundle_name, app_name, app_download_ur
             time.sleep(10)
         if status == "SUCCESS":
     #        app_download_url = PerformanceTestVariables.app_download_url
-            print(f"Download {app_bundle_name} from {app_download_url} to install")
             app_download_url = app_download_url + "/" + app_bundle_name
             tdkTestObj = obj.createTestStep('rdkservice_download_app_bundle')
             tdkTestObj.addParameter("download_url", app_download_url)
@@ -2188,14 +2270,12 @@ def rdkservice_install_launch_app(obj,app_bundle_name, app_name, app_download_ur
                 tdkTestObj.setResultStatus("SUCCESS")
                 time.sleep(10)
                 print(f"Successfully downloaded {app_bundle_name}")
-                print(f"Installing {app_bundle_name}")
                 conf_file,result = getConfigFileName(libObj.realpath)
                 fileLocator = ""
                 if result == "SUCCESS":
                     status,fileLocator = getDeviceConfigKeyValue(conf_file,"PACKAGEMANAGER_FILE_LOCATOR")
                 if fileLocator != "":
                     fileLocator = fileLocator + str(details)
-                    print (fileLocator)
                     tdkTestObj = obj.createTestStep('rdkservice_install_app')
                     tdkTestObj.addParameter("fileLocator", fileLocator)
                     tdkTestObj.addParameter("app_id", app_name)
@@ -2205,9 +2285,9 @@ def rdkservice_install_launch_app(obj,app_bundle_name, app_name, app_download_ur
                     details = tdkTestObj.getResultDetails()
                     if status == "SUCCESS":
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print(f"Check if the app is installed successfully")
                         tdkTestObj = obj.createTestStep('rdkv_getInstalledPackages')
                         tdkTestObj.executeTestCase(expectedResult)
+                        print(f"Check if the app is installed successfully")
                         status = tdkTestObj.getResult()
                         details = tdkTestObj.getResultDetails()
                         if status == "SUCCESS" and app_name in details:
@@ -2231,11 +2311,11 @@ def rdkservice_install_launch_app(obj,app_bundle_name, app_name, app_download_ur
             print("Unable to activate the AppManagers")
             status ="FAILURE"
     if Isinstalled and launch:
-        print(f"\nLaunching {app_name}")
         tdkTestObj = obj.createTestStep('rdkservice_launch_app')
         tdkTestObj.addParameter("app_name", app_name)
 
         tdkTestObj.executeTestCase(expectedResult)
+        print(f"\nLaunching {app_name}")
         status = tdkTestObj.getResult()
         details = tdkTestObj.getResultDetails()
 
@@ -2282,10 +2362,10 @@ def browsertest_keypress(obj,app_name,keys):
     param='['
     index=0
     expectedResult= "SUCCESS"
-    print(f"Getting the app instance id of {app_name}")
     tdkTestObj = obj.createTestStep('rdkservice_getValue')
     tdkTestObj.addParameter("method","org.rdk.AppManager.getLoadedApps")
     tdkTestObj.executeTestCase(expectedResult)
+    print(f"Getting the app instance id of {app_name}")
     result = tdkTestObj.getResultDetails()
     status = tdkTestObj.getResult()
     if status == expectedResult and app_name in result:
@@ -2329,86 +2409,4 @@ def browsertest_keypress(obj,app_name,keys):
         print("Failed to get the loaded apps")
         tdkTestObj.setResultStatus("FAILURE")
     return result  
-
-#This function retrieves the playback timestamps from the application log file for the specified app.
     
-def getPlaybackTimestamps(obj, app_name):
-    app_log_file = obj.logpath+"/"+str(obj.execID)+"/"+str(obj.execID)+"_"+str(obj.execDevId)+"_"+str(obj.resultId)+"_mvs_applog.txt"
-    continue_count = 0
-    file_check_count = 0
-    logging_flag = 0
-    load_video = ""
-    playback_started = ""
-    lastIndex = 0
-    while True:
-        if file_check_count > 60:
-            print("\nREST API Logging is not happening properly. Exiting...")
-            break;
-        if os.path.exists(app_log_file):
-            logging_flag = 1
-            break;
-        else:
-            file_check_count += 1
-            time.sleep(1);
-    while logging_flag:
-        if continue_count > 60:
-            print("\nApp not proceeding for 60 secs. Exiting...")
-            break;
-        with open(app_log_file,'r') as f:
-            lines = f.readlines()
-        if lines:
-            if len(lines) != lastIndex:
-                continue_count = 0
-                for i in range(lastIndex,len(lines)):
-                    print(lines[i])
-                    if "Video Player Playing" in lines[i]:
-                        print("Found 'Video Player Playing' log line: {}".format(lines[i]))
-                        playback_match = re.search(r"\b\d{2}:\d{2}:\d{2}(?:[.:]\d+)?\b", lines[i])
-                        playback_started = playback_match.group(0) if playback_match else ""
-                        print("Video Player Playing at: {}".format(playback_started))
-
-                lastIndex = len(lines)
-                if playback_started != "":
-                    break;
-            else:
-                continue_count += 1
-        else:
-            continue_count += 1
-        time.sleep(1)
-
-    if playback_started != "":
-        ssh_params = rdkservice_getSSHParams(obj.realpath, obj.IP)
-        if ssh_params == "" or ssh_params == "{}":
-            print("Failed to get SSH parameters from configuration")
-            return "", playback_started
-
-        ssh_params_dict = json.loads(ssh_params)
-        ssh_method = ssh_params_dict.get("ssh_method")
-        credentials = ssh_params_dict.get("credentials")
-
-        if not ssh_method or not credentials:
-            print("SSH method or credentials not found in configuration")
-            return "", playback_started
-
-        cmd = "grep DEFAULT_APP_STORAGE_PATH /etc/device.properties | cut -d'=' -f2"
-        log_path = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
-        log_path_lines = [line.strip() for line in log_path.splitlines() if line.strip()]
-        if not log_path_lines:
-            print("Failed to get the application storage path")
-            return "", playback_started
-        log_path = log_path_lines[-1]
-        log_file = log_path +"/" + app_name + "/"+ app_name+".log"
-        cmd = f"grep -i 'wpe load committed' {log_file} | tail -n 1 | cut -d' ' -f2 | sed 's/:$//'"
-        output = rdkservice_getRequiredLog(ssh_method, credentials, cmd)
-        clean_output = re.sub(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])", "", output)
-        load_match = re.search(r"\b\d{2}:\d{2}:\d{2}(?:[.:]\d+)?\b", clean_output)
-        load_video = load_match.group(0) if load_match else ""
-        print("load_video:", load_video) 
-        if not load_video:
-            print("Failed to get the load video time")
-            return "", playback_started
-    else:
-        print("Playback did not start")
-        return "", ""
-    
-    return load_video, playback_started    

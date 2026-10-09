@@ -48,6 +48,28 @@ use_appsrc = ""
 start_westeros = ""
 create_display = ""
 
+NATIVE_PLAYBACK_STEP_DESCRIPTIONS = {
+    "setOperations": "Configure playback operations",
+    "getDeviceDetails": "Read device details",
+    "getDeviceConfigValue": "Read native playback configuration value",
+    "getDeviceConfig": "Read native playback device configuration",
+    "checkFPS": "Validate playback frame rate",
+    "getOperations": "Read configured playback operations",
+    "init_module": "Initialize native playback library",
+    "getMediaPipelineTestCommand": "Build media pipeline test command",
+    "DurationParse": "Validate playback duration",
+    "checkifLanguagePlayed": "Validate played audio language",
+    "parseLatency": "Validate playback latency",
+    "checkifCodecPlayed": "Validate played media codec",
+    "checkMediaPipelineTestStatus": "Validate media pipeline test status",
+    "ParseGraphicsOutput": "Parse graphics test output",
+    "executeCmndInDUT": "Execute command on device",
+}
+
+
+def get_step_description(method, params):
+    return NATIVE_PLAYBACK_STEP_DESCRIPTIONS.get(method, method)
+
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
 #---------------------------------------------------------------

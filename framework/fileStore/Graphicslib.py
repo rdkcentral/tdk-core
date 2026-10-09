@@ -62,6 +62,34 @@ width = 0
 resolution="1080p"
 api="vulkan"
 
+GRAPHICS_STEP_DESCRIPTIONS = {
+    "execute_binary": "Execute graphics benchmark binary",
+    "execute_Cmnd_InDUT": "Execute graphics command on device",
+    "run_test": "Run graphics test",
+    "set_prerequisites": "Set graphics test prerequisites",
+    "execute_postrequisites": "Clean up graphics test prerequisites",
+    "parse_graphics_output": "Parse graphics test output",
+}
+
+
+def get_step_description(method, params):
+    description = GRAPHICS_STEP_DESCRIPTIONS.get(method, method)
+    if method == "execute_binary":
+        details = [params.get("binary"), params.get("present_mode")]
+        details = [detail for detail in details if detail]
+        if details:
+            description = "%s: %s" % (description, ", ".join(details))
+    elif method in ("execute_Cmnd_InDUT", "run_test") and params.get("command"):
+        description = "%s: %s" % (description, params["command"])
+    elif method == "set_prerequisites":
+        details = [params.get("model"), params.get("resolution")]
+        details = [detail for detail in details if detail]
+        if details:
+            description = "%s: %s" % (description, ", ".join(details))
+    elif method == "parse_graphics_output" and params.get("test_app"):
+        description = "%s: %s" % (description, params["test_app"])
+    return description
+
 #---------------------------------------------------------------------------------------
 # THRESHOLD VALUES FOR VALIDATION
 #---------------------------------------------------------------------------------------

@@ -77,11 +77,11 @@ def set_pre_requisites(obj):
     }
     
     if "Cobalt" in supported_plugins:
-        print("\nDeactivating Cobalt")
         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
         tdkTestObj.addParameter("plugin", "Cobalt")
         tdkTestObj.addParameter("status", "deactivate")
         tdkTestObj.executeTestCase(expectedResult)
+        print("\nDeactivating Cobalt")
         result1 = tdkTestObj.getResult()
         time.sleep(5)
         plugin_statuses["Cobalt"]["result"] = result1
@@ -124,11 +124,11 @@ def revert_value(curr_webkit_status,curr_cobalt_status,obj):
         if curr_webkit_status != "deactivated" and curr_webkit_status != "None":
             print("WebKit was activated")
         elif curr_webkit_status == "deactivated":
-            print("WebKit was deactivated")
             tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
             tdkTestObj.addParameter("plugin", "WebKitBrowser")
             tdkTestObj.addParameter("status", "deactivate")
             tdkTestObj.executeTestCase(expectedResult)
+            print("WebKit was deactivated")
             webkit_status = tdkTestObj.getResult()
     else:
         print("WebKitBrowser not in supported plugins. Skipping WebKit revert.")
@@ -146,11 +146,11 @@ def revert_value(curr_webkit_status,curr_cobalt_status,obj):
             tdkTestObj.executeTestCase(expectedResult)
             cobalt_status = tdkTestObj.getResult()
         elif curr_cobalt_status == "deactivated":
-            print("Cobalt was deactivated")
             tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
             tdkTestObj.addParameter("plugin", "Cobalt")
             tdkTestObj.addParameter("status", "deactivate")
             tdkTestObj.executeTestCase(expectedResult)
+            print("Cobalt was deactivated")
             cobalt_status = tdkTestObj.getResult()
     else:
         print("Cobalt not in supported plugins. Skipping Cobalt revert.")
