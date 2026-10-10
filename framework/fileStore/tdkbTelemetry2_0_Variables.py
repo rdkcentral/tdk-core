@@ -19,25 +19,8 @@
 
 #The values are populated for test purposes and can be populated by the user as required.
 
-#Telemetry 2.0 Configurations
-TELEMETRY_ENABLE = "true"
-TELEMETRY_CONFIG_URL = "https://xconf.rdkcentral.com/loguploader/getT2Settings"
-TELEMETRY_VERSION = "2.0.1"
-
-#Telemetry Log Upload Location
-TELEMETRY_UPLOAD_URL = "https://xconf.rdkcentral.com/logTelemetryServer/logupload.php"
-
 #Reporting Interval for Telemetry 2.0 Report
 REPORTING_INTERVAL = 30
 
 #Timeout for Report Generation
 ACTIVATION_TIMEOUT = 150
-
-#REPORT PROFILES LOCATION
-PROFILE_PATH = "/nvram/.t2reportprofiles"
-
-#CACHED REPORT LOCATION
-CACHED_REPORT_PATH = "/nvram/.t2cachedmessages"
-
-#TELEMETRY LOG LOCATION
-TELEMETRY_LOG_PATH = "/rdklogs/logs/telemetry2_0.txt.0"

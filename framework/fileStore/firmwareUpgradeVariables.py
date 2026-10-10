@@ -21,17 +21,6 @@
 # This file contains the variables used for firmware upgrade operations.
 # The user can populate the values as per requirement.
 
-# Target Firmware Names for RPI and BPI
-# For other platforms, the same variable naming convention can be followed: FIRMWARE_UPGRADE_<PLATFORM>
-FIRMWARE_UPGRADE_RPI = ""
-FIRMWARE_UPGRADE_BPI = ""
-
-# Target Firmware location and Protocol
-# Target and Initial Firmware is placed in the http server location mentioned below.
-# Please configure <server_ip> in FIRMWARE_LOCATION.
-# The firmware hosting server should listen to the default HTTP port 80.
-FIRMWARE_LOCATION = ""
-FIRMWARE_PROTOCOL = "http"
 
 # Firmware upgrade TR-181 data models
 FW_DOWNLOAD_PROTOCOL_DM = "Device.DeviceInfo.X_RDKCENTRAL-COM_FirmwareDownloadProtocol"
@@ -46,33 +35,13 @@ FW_UPGRADE_DM_PARAMS = [
     FW_DOWNLOAD_DM
 ]
 
-# XCONF Server URL
-XCONF_URL = "https://xconf.rdkcentral.com/xconfAdminService"
-
-# XCONF API Key for Authentication - Please ensure to use a valid API key with appropriate permissions for firmware upgrade operations
-XCONF_API_KEY = ""
-
 DEFINE_PROPERTIES_TYPE = "com.comcast.xconf.firmware.DefinePropertiesAction"
 
 DEFINE_PROPERTIES_FILTER = "DOWNLOAD_LOCATION_FILTER"
 
-# Username of DUT
-username = "root"
-
-# Log file for firmware upgrade operations
-logFile = "/rdklogs/TDK_FirmwareUpgrade.log"
 
 # Suffix for firmware checksum version
 checksum_suffix = ".txt"
 
-# Binary to trigger Firmware Upgrade
-FWUPGRADE_BINARY = "/usr/bin/fwupgrade"
-
-# Firmware Download Location in DUT
-FW_DOWNLOAD_PATH = "/mnt/bootpart"
-
 # Delay between the execution of XCONF config commands
 XCONF_CMD_WAIT = 30
-
-# Partition path for getting partition count
-PARTITION_PATH = "/dev/mmcblk0p*"
