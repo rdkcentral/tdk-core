@@ -81,7 +81,7 @@ def identify_players(directory):
                 counts["lightning_fps"] += 1
             if "dash" in name_lower:
                 counts["lightning_dash"] += 1
-            if "hls" in name_lower:
+            if "hls" in name_lower or "mpeg_ts" in name_lower:
                 counts["lightning_hls"] += 1
             if "aamp" in name_lower:
                 counts["lightning_aamp"] += 1
