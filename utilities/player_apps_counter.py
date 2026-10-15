@@ -17,84 +17,102 @@
 # limitations under the License.
 ##########################################################################
 
+# Usage: python player_apps_counter.py /path/to/scripts/directory
+
 import os
 import sys
 
-# Define keyword groups for different player types
-AAMP_KEYS = ["aamp"]
-SHAKA_KEYS = ["shaka"]
-HTML_KEYS = ["html"]
-DASH_KEYS = ["dash"]
-HLS_KEYS = ["hls"]
-SDK_KEYS = ["mp4", "hdr", "hevc_mkv", "mkv", "4k_vp9", "4k_av1"]
-SDK_EXCLUSIVE = ["4k_av1", "4k_vp9", "hevc_mkv"]  # Keywords exclusive to SDK, used to exclude DASH
-
-# Rule 6 & 9: Dash extra codecs
-DASH_EXTRA_KEYS = [
-    "av1", "ec3", "ac3", "vp9", "audio_only", "ogg", "opus",
-    "hevc", "aac", "h263", "mpeg", "vp8"]
-
-# Rule 10: HLS extra keywords
-HLS_EXTRA_KEYS = ["mpeg_ts"]
-
 
 def identify_players(directory):
-    # Initialize player apps count dictionary
-    player_counts = {
-        "aamp": 0,
-        "shaka": 0,
+    # Initialize category counters
+    counts = {
+        "total": 0,
+        "lightning": 0,
+        "lightning_animation": 0,
+        "lightning_shaka": 0,
+        "lightning_fps": 0,
+        "lightning_dash": 0,
+        "lightning_hls": 0,
+        "lightning_aamp": 0,
         "html": 0,
-        "sdk": 0,
-        "dash": 0,
-        "hls": 0
+        "html_dash": 0,
+        "html_hls": 0,
+        "html_shaka": 0,
+        "html_successive": 0,
+        "html_fps": 0,
+        "html_aamp": 0,
+        "corrupted": 0,
+        "delay": 0,
     }
 
-    # Process each file in the directory
+    # Process each script file in the directory
     for filename in sorted(os.listdir(directory)):
         file_path = os.path.join(directory, filename)
 
-        # Skip if not a file
-        if not os.path.isfile(file_path):
+        # Skip if not a python test script file
+        if not os.path.isfile(file_path) or not filename.endswith(".py"):
             continue
 
         name_lower = filename.lower()
-        matched_players = set()
+        counts["total"] += 1
 
-        # ---------------------------- Priority Rules ------------------------------
-        # Rule 13: If filename contains AAMP keyword, assign only AAMP player
-        if any(key in name_lower for key in AAMP_KEYS):
-            matched_players = {"aamp"}
-        # Rule 12: If filename contains Shaka keyword, assign only Shaka player
-        elif any(key in name_lower for key in SHAKA_KEYS):
-            matched_players = {"shaka"}
-        # Rule 8: If filename contains HTML keyword, assign only HTML player
-        elif any(key in name_lower for key in HTML_KEYS):
-            matched_players = {"html"}
-        # Rule 11: If filename contains 'fps' but not 'animation', assign SDK player
-        elif "fps" in name_lower and "animation" not in name_lower:
-            matched_players = {"sdk"}
-        # --------------------------- Normal Matching ---------------------------
+        # A script is counted as either HTML or Lightning, never both
+        if "html" in name_lower:
+            counts["html"] += 1
+            if "dash" in name_lower:
+                counts["html_dash"] += 1
+            if "hls" in name_lower:
+                counts["html_hls"] += 1
+            if "shaka" in name_lower:
+                counts["html_shaka"] += 1
+            if "successive" in name_lower:
+                counts["html_successive"] += 1
+            if "fps" in name_lower:
+                counts["html_fps"] += 1
+            if "aamp" in name_lower:
+                counts["html_aamp"] += 1
         else:
-            if any(key in name_lower for key in SDK_KEYS):
-                matched_players.add("sdk")
-            if not any(ex in name_lower for ex in SDK_EXCLUSIVE):
-                if any(key in name_lower for key in DASH_KEYS + DASH_EXTRA_KEYS):
-                    matched_players.add("dash")
-            if any(key in name_lower for key in HLS_KEYS + HLS_EXTRA_KEYS):
-                matched_players.add("hls")
+            counts["lightning"] += 1
+            if "animation" in name_lower:
+                counts["lightning_animation"] += 1
+            if "shaka" in name_lower:
+                counts["lightning_shaka"] += 1
+            if "fps" in name_lower and "animation" not in name_lower:
+                counts["lightning_fps"] += 1
+            if "dash" in name_lower:
+                counts["lightning_dash"] += 1
+            if "hls" in name_lower or "mpeg_ts" in name_lower:
+                counts["lightning_hls"] += 1
+            if "aamp" in name_lower:
+                counts["lightning_aamp"] += 1
 
-        # Update player counts
-        for player in matched_players:
-            player_counts[player] += 1
+        # These tags are counted independently of the HTML/Lightning classification
+        if "corrupted" in name_lower:
+            counts["corrupted"] += 1
+        if "delay" in name_lower:
+            counts["delay"] += 1
 
     # ----------------- Output Results -----------------
-    print("\n Player Apps Count Summary")
-    print(f" Scanned Directory : {directory}\n")
-    total_count = sum(player_counts.values())
-    # Print count for each player type
-    for player, count in player_counts.items():
-        print(f" {player.upper():<5} : {count}")
-    print(f"\n Total Matched Files : {total_count}\n")
+    print(f"\nTotal Scripts: {counts['total']}\n")
+
+    print(f"Lightning Player Scripts: {counts['lightning']}\n")
+    print(f"Lightning Animation Scripts: {counts['lightning_animation']}")
+    print(f"Lightning SHAKA Scripts: {counts['lightning_shaka']}")
+    print(f"Lightning FPS Scripts: {counts['lightning_fps']}")
+    print(f"Lightning DASH Scripts: {counts['lightning_dash']}")
+    print(f"Lightning HLS Scripts: {counts['lightning_hls']}")
+    print(f"Lightning AAMP Scripts: {counts['lightning_aamp']}\n")
+
+    print(f"HTML Player Scripts: {counts['html']}\n")
+    print(f"HTML DASH Scripts: {counts['html_dash']}")
+    print(f"HTML HLS Scripts: {counts['html_hls']}")
+    print(f"HTML SHAKA Scripts: {counts['html_shaka']}")
+    print(f"HTML Successive Scripts: {counts['html_successive']}")
+    print(f"HTML FPS Scripts: {counts['html_fps']}")
+    print(f"HTML AAMP Scripts: {counts['html_aamp']}\n")
+
+    print(f"Corrupted Scripts: {counts['corrupted']}")
+    print(f"Delay Scripts: {counts['delay']}\n")
 
 
 if __name__ == "__main__":
@@ -107,3 +125,4 @@ if __name__ == "__main__":
         sys.exit(1)
 
     identify_players(target_directory)
+
