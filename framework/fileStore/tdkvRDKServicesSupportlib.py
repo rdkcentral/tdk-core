@@ -2968,7 +2968,12 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "monitor_negative_scenario_validation":
             try:
                 info["Test_Step_Status"] = "FAILURE"
-                if str(result.get("success")).lower() == "false":
+                if otherInfo and "error" in otherInfo:
+                     info["error_info"] = otherInfo["error"]
+                     info["Test_Step_Status"] = "SUCCESS"
+                 elif isinstance(result, list) and not result:
+                     info["Test_Step_Status"] = "SUCCESS"
+                 elif str(result.get("success")).lower() == "false":
                     info["Test_Step_Status"] = "SUCCESS"
             except Exception as e:
                 info["error"] = str(e)
@@ -7387,6 +7392,8 @@ def generateComplexTestInputParam(methodTag,testParams):
         elif tag == "systemaudioplayer_config_params":
             #print(testParams,"testParams")
             userGeneratedParam = { "id": testParams.get("id"), "pcmconfig": { "format": testParams.get("format"), "channels": int(testParams.get("channels")), "rate": int(testParams.get("rate")), "layout": testParams.get("layout") } }
+        elif tag == "system_get_rfc_config_params":
+             userGeneratedParam = { "rfcList": [ int(testParams.get("rfcList")) ] }
         elif tag == "devicediagnostics_get_configuration_params":
             userGeneratedParam = { "names": [ int(testParams.get("names")) ] }
         else:
