@@ -799,7 +799,6 @@
         <method name="Get_STB_Supported_HDCP_Version" api="getSettopHDCPSupport" type="method" desc="Returns which version of HDCP is supported by the STB"/>
     </plugin>
 
-
     <!-- User Preferences Plugin Information -->
     <plugin pluginName="UserPreferences" serviceName="org.rdk.UserPreferences" serviceVersion="1">
         <method name="Get_UI_Language" api="getUILanguage" type="method" desc="Gets the user preferred UI language" />
@@ -814,7 +813,6 @@
             </params>
         </method>
     </plugin>
-
 
     <!-- RDK Shell Plugin Information -->
     <plugin pluginName="RDKShell" serviceName="org.rdk.RDKShell" serviceVersion="1">
@@ -2383,36 +2381,13 @@
         <method name="Get_Dolby_Atmos_MetaData" api="dolby_atmosmetadata" type="method" desc="Atmos capabilities of Sink" />
         <method name="Get_Dolby_SoundMode" api="dolby_soundmode" type="method" desc="Gets the dolby sound mode" />
         <method name="Set_Atmos_Output" api="dolby_enableatmosoutput" type="method" desc="Enables Atmos Audio Output" >
-            <params paramType="directBool">
-		<param tag="enable"/>
-	    </params>
-	</method>
-	<method name="Get_Dolby_Mode" api="dolby_mode" type="method" desc="Gets the dolby mode">
-            <expectedValues>DIGITAL_PCM,DIGITAL_PLUS,DIGITAL_AC3,AUTO,DIGITAL_PASSTHROUGH,MS12</expectedValues>
-        </method>
-        <method name="Set_Dolby_Mode" api="dolby_mode" type="method" desc="Sets the dolby mode" >
-            <params>
-                <param tag="mode" type="string" defaultValue="null" />
-            </params>
-	</method>
-	<method name="Numeric_Dolby_Mode" api="dolby_mode" type="method" desc="Sends a numeric value for the dolby mode">
-            <params>
-                <param tag="mode" type="int" defaultValue="null" />
-            </params>
-	</method>
-	<method name="String_Set_Atmos_Output" api="dolby_enableatmosoutput" type="method" desc="Sends the enable param as a string">
-            <params>
-                <param tag="enable" type="string" defaultValue="null" />
+            <params paramType="directBool" >
+                <param tag="enable"  />
             </params>
         </method>
-        <method name="Numeric_Set_Atmos_Output" api="dolby_enableatmosoutput" type="method" desc="Sends the enable param as a numeric value">
-            <params>
-                <param tag="enable" type="int" defaultValue="null" />
-            </params>
-        </method>
-	<event name="Event_AudioMode_Changed" eventName="dolby_audiomodechanged" eventId="client.events.1" type="event" desc="Notifies audio mode changed event" />
+        <event name="Event_AudioMode_Changed" eventName="dolby_audiomodechanged" eventId="client.events.1" type="event" desc="Notifies audio mode changed event" />
     </plugin>
-  
+
     <!-- PersistentStore Plugin Information -->
     <plugin pluginName="PersistentStore" serviceName="org.rdk.PersistentStore" serviceVersion="1">
         <method name="Set_Value" api="setValue" type="method" desc="Sets the value of the key for given the namespace" >
@@ -2448,150 +2423,18 @@
         <method name="Get_Namespaces" api="getNamespaces" type="method" desc="Gets the available namespaces" />
         <method name="Get_Storage_Size" api="getStorageSize" type="method" desc="Returns the size occupied by each namespace" />
         <method name="Flush_Cache" api="flushCache" type="method" desc="flushes the database cache" />
-	    <method name="Set_Namespace_Storagelimit" api="setNamespaceStorageLimit" type="method" desc="Sets the storage limit for a given namespace">
-	        <params>
+	<method name="Set_Namespace_Storagelimit" api="setNamespaceStorageLimit" type="method" desc="Sets the storage limit for a given namespace">
+	    <params>
                <param tag="namespace" defaultValue="null"/>
                <param tag="storageLimit" type="int"/>
             </params>
-        </method>	
-	    <method name="Get_Namespace_Storagelimit" api="getNamespaceStorageLimit" type="method" desc="Returns the storage limit for a given namespace">
-	        <params>
+        </method>
+	<method name="Get_Namespace_Storagelimit" api="getNamespaceStorageLimit" type="method" desc="Returns the storage limit for a given namespace">
+	    <params>
                <param tag="namespace" defaultValue="null"/>
             </params>
         </method>
-        <method name="Scope_Set_Value" api="setValue" type="method" desc="Sets the value of the key for given the namespace with the invalid scope">
-            <params>
-                <param tag="namespace" type="string" defaultValue="null"/>
-                <param tag="key" type="string" defaultValue="null"/>
-                <param tag="value" type="string" defaultValue="null"/>
-                <param tag="scope" type="string" defaultValue="null" />
-            </params>
-        </method>
-        <method name="Numeric_Scope_Set_Value" api="setValue" type="method" desc="Sets the value of the key for given the namespace with the numeric scope">
-            <params>
-                <param tag="namespace" type="string" defaultValue="null"/>
-                <param tag="key" type="string" defaultValue="null"/>
-                <param tag="value" type="string" defaultValue="null"/>
-                <param tag="scope" type="int" defaultValue="null" />
-            </params>
-        </method>
-        <method name="String_TTL_Set_Value" api="setValue" type="method" desc="Sets the value of the key for given the namespace with the invalid TTL">
-            <params>
-                <param tag="namespace" type="string" defaultValue="null"/>
-                <param tag="key" type="string" defaultValue="null"/>
-                <param tag="value" type="string" defaultValue="null"/>
-                <param tag="scope" type="string" defaultValue="null" />
-                <param tag="ttl" type="string" defaultValue="null"/>
-            </params>
-        </method>
-        <method name="Numeric_TTL_Set_Value" api="setValue" type="method" desc="Sets the value of the key for given the namespace with the numeric TTL">
-            <params>
-                <param tag="namespace" type="string" defaultValue="null"/>
-                <param tag="key" type="string" defaultValue="null"/>
-                <param tag="value" type="string" defaultValue="null"/>
-                <param tag="scope" type="string" defaultValue="null" />
-                <param tag="ttl" type="int" defaultValue="null"/>
-            </params>
-        </method>
-        <method name="Scope_Get_Value" api="getValue" type="method" desc="Gets the value of the key for given namespace with the invalid scope">
-            <params>
-                <param tag="namespace" type="string" defaultValue="null" />
-                <param tag="key" type="string" defaultValue="null" />
-                <param tag="scope" type="string" defaultValue="null" />
-            </params>
-        </method>
-        <method name="Numeric_Scope_Get_Value" api="getValue" type="method" desc="Gets the value of the key for given namespace with the numeric scope">
-            <params>
-                <param tag="namespace" type="string" defaultValue="null" />
-                <param tag="key" type="string" defaultValue="null" />
-                <param tag="scope" type="int" defaultValue="null" />
-            </params>
-        </method>
-        <method name="Scope_Get_Keys" api="getKeys" type="method" desc="Gets the keys list for given namespace with the invalid scope">
-            <params>
-                <param tag="namespace" type="string" defaultValue="null" />
-                <param tag="scope" type="string" defaultValue="null" />
-            </params>
-        </method>
-        <method name="Numeric_Scope_Get_Keys" api="getKeys" type="method" desc="Gets the keys list for given namespace with the numeric scope">
-            <params>
-                <param tag="namespace" type="string" defaultValue="null" />
-                <param tag="scope" type="int" defaultValue="null" />
-            </params>
-        </method>
-        <method name="Scope_Delete_Key" api="deleteKey" type="method" desc="Deletes the key for given namespace with the invalid scope">
-            <params>
-                <param tag="namespace" type="string" defaultValue="null" />
-                <param tag="key" type="string" defaultValue="null" />
-                <param tag="scope" type="string" defaultValue="null" />
-            </params>
-        </method>
-        <method name="Numeric_Scope_Delete_Key" api="deleteKey" type="method" desc="Deletes the key for given namespace with the numeric scope">
-            <params>
-                <param tag="namespace" type="string" defaultValue="null" />
-                <param tag="key" type="string" defaultValue="null" />
-                <param tag="scope" type="int" defaultValue="null" />
-            </params>
-        </method>
-        <method name="Scope_Delete_Namespace" api="deleteNamespace" type="method" desc="Deletes the given Namespace with the invalid scope">
-            <params>
-                <param tag="namespace" type="string" defaultValue="null"/>
-                <param tag="scope" type="string" defaultValue="null"/>
-            </params>
-        </method>
-        <method name="Numeric_Scope_Delete_Namespace" api="deleteNamespace" type="method" desc="Deletes the given Namespace with the numeric scope">
-            <params>
-                <param tag="namespace" type="string" defaultValue="null"/>
-                <param tag="scope" type="int" defaultValue="null"/>
-            </params>
-        </method>
-        <method name="Scope_Get_Namespaces" api="getNamespaces" type="method" desc="Gets the available namespaces with the invalid scope">
-            <params>
-               <param tag="scope" type="string" defaultValue="null" />
-            </params>
-        </method>
-        <method name="Numeric_Scope_Get_Namespaces" api="getNamespaces" type="method" desc="Gets the available namespaces with the numeric scope">
-            <params>
-               <param tag="scope" type="int" defaultValue="null" />
-            </params>
-        </method>
-        <method name="Scope_Get_Storage_Size" api="getStorageSizes" type="method" desc="Returns the size occupied by each namespace with the invalid scope">
-            <params>
-               <param tag="scope" type="string" defaultValue="null" />
-            </params>
-        </method>
-        <method name="Numeric_Scope_Get_Storage_Size" api="getStorageSizes" type="method" desc="Returns the size occupied by each namespace with the numeric scope">
-            <params>
-               <param tag="scope" type="int" defaultValue="null" />
-            </params>
-        </method>
-        <method name="Scope_Set_Namespace_Storagelimit" api="setNamespaceStorageLimit" type="method" desc="Sets the storage limit for a given namespace with the invalid scope">
-	        <params>
-                <param tag="namespace" type="string" defaultValue="null"/>
-               <param tag="storageLimit" type="int"/>
-                <param tag="scope" type="string" defaultValue="null" />
-            </params>
-	</method>
-        <method name="Numeric_Scope_Set_Namespace_Storagelimit" api="setNamespaceStorageLimit" type="method" desc="Sets the storage limit for a given namespace with the numeric scope">
-            <params>
-                <param tag="namespace" type="string" defaultValue="null"/>
-               <param tag="storageLimit" type="int"/>
-                <param tag="scope" type="int" defaultValue="null" />
-            </params>
-        </method>
-	    <method name="Scope_Get_Namespace_Storagelimit" api="getNamespaceStorageLimit" type="method" desc="Returns the storage limit for a given namespace with the invalid scope">
-	        <params>
-                <param tag="namespace" type="string" defaultValue="null"/>
-                <param tag="scope" type="string" defaultValue="null" />
-            </params>
-        </method>
-	    <method name="Numeric_Scope_Get_Namespace_Storagelimit" api="getNamespaceStorageLimit" type="method" desc="Returns the storage limit for a given namespace with the numeric scope">
-	        <params>
-                <param tag="namespace" type="string" defaultValue="null"/>
-                <param tag="scope" type="int" defaultValue="null" />
-            </params>
-        </method>
-	    <event name="Event_On_Value_Changed" eventName="onValueChanged" eventId="client.events.1" type="event" desc="Triggered whenever any of the values stored are changed using setValue" />
+	<event name="Event_On_Value_Changed" eventName="onValueChanged" eventId="client.events.1" type="event" desc="Triggered whenever any of the values stored are changed using setValue" />
     </plugin>
 
     <!-- TextToSpeech Plugin Information -->
