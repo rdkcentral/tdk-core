@@ -2968,12 +2968,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "monitor_negative_scenario_validation":
             try:
                 info["Test_Step_Status"] = "FAILURE"
-                if otherInfo and "error" in otherInfo:
-                     info["error_info"] = otherInfo["error"]
-                     info["Test_Step_Status"] = "SUCCESS"
-                 elif isinstance(result, list) and not result:
-                     info["Test_Step_Status"] = "SUCCESS"
-                 elif str(result.get("success")).lower() == "false":
+                if str(result.get("success")).lower() == "false":
                     info["Test_Step_Status"] = "SUCCESS"
             except Exception as e:
                 info["error"] = str(e)
@@ -6313,6 +6308,22 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 firmwareConfig = firmwareConfig.get("existing_firmware_configuration")
                 info["configId"] = firmwareConfig[0].get("id")
 
+        elif tag == "system_toggle_fsr_flag":
+            testStepResults = list(testStepResults[0].values())[0]
+            fsr_flag = testStepResults[0].get("fsrFlag")
+            if str(fsr_flag).lower() == "true":
+                info["fsrFlag"] = False
+            else:
+                info["fsrFlag"] = True
+
+        elif tag == "system_toggle_blocklist_flag":
+            testStepResults = list(testStepResults[0].values())[0]
+            blocklist = testStepResults[0].get("blocklist")
+            if str(blocklist).lower() == "true":
+                info["blocklist"] = False
+            else:
+                info["blocklist"] = True
+
         # user Preferences result parser steps
         elif tag == "userpreferences_switch_ui_language":
             testStepResults = list(testStepResults[0].values())[0]
@@ -7393,7 +7404,7 @@ def generateComplexTestInputParam(methodTag,testParams):
             #print(testParams,"testParams")
             userGeneratedParam = { "id": testParams.get("id"), "pcmconfig": { "format": testParams.get("format"), "channels": int(testParams.get("channels")), "rate": int(testParams.get("rate")), "layout": testParams.get("layout") } }
         elif tag == "system_get_rfc_config_params":
-             userGeneratedParam = { "rfcList": [ int(testParams.get("rfcList")) ] }
+            userGeneratedParam = { "rfcList": [ int(testParams.get("rfcList")) ] }
         elif tag == "devicediagnostics_get_configuration_params":
             userGeneratedParam = { "names": [ int(testParams.get("names")) ] }
         else:
