@@ -3046,6 +3046,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+
         # PlayerInfo Plugin Response result parser steps
         elif tag == "playerinfo_check_audio_video_codecs":
             info["RESULT"] = result
@@ -3055,18 +3056,21 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "playerinfo_validate_boolean_result":
             info["RESULT"] = result
             if str(result).lower() == "true" or str(result).lower() == "false" :
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "playerinfo_check_results":
             info["RESULT"] = result
             if result in expectedValues:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "playerinfo_check_resolution":
             info["resolution"]= result
             fps_data = ""
@@ -3080,12 +3084,52 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "playerinfo_dolby_mode":
+            try:
+                mode = result.get("mode")
+                info["mode"] = mode
+                if mode in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "playerinfo_null_result_validation":
+            try:
+                if otherInfo and "error" in otherInfo:
+                    info["error_info"] = otherInfo["error"]
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] = result
+                    if str(result).strip().lower() in ("none"):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "playerinfo_negative_scenario_validation":
+            try:
+                info["Test_Step_Status"] = "FAILURE"
+                expected = [e.lower() for e in expectedValues] if expectedValues else []
+                if otherInfo and "error" in otherInfo:
+                    msg = str(otherInfo["error"].get("message", "")).lower()
+                    if not expected or any(e in msg for e in expected):
+                        info["Test_Step_Status"] = "SUCCESS"
+            except Exception as e:
+                info["error"] = str(e)
+                info["Test_Step_Status"] = "FAILURE"
+
         # PersistentStore Plugin Response result parser steps
         elif tag == "persistentstore_check_set_operation":
             if str(result.get("success")).lower() == "true":
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "persistentstore_check_value":
             if len(arg) and arg[0] == "lightningapp_url_check":
                 try:
@@ -3112,6 +3156,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "persistentstore_get_keys":
             keys = result.get("keys")
             info["Keys"] = keys
@@ -3125,6 +3170,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "persistentstore_get_namespaces":
             Namespaces = result.get("namespaces")
             info["Namespaces"] = Namespaces
@@ -3138,6 +3184,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "persistentstore_get_storage_size":
             status = checkNonEmptyResultData(result)
             if "FALSE" not in status:
@@ -3155,6 +3202,18 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             if int(output) == int(expectedValues[0]):
                 info["Test_Step_Status"] = "SUCCESS"
             else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "persistentstore_negative_scenario_validation":
+            try:
+                info["Test_Step_Status"] = "FAILURE"
+                expected = [e.lower() for e in expectedValues] if expectedValues else []
+                if otherInfo and "error" in otherInfo:
+                    msg = str(otherInfo["error"].get("message", "")).lower()
+                    if not expected or any(e in msg for e in expected):
+                        info["Test_Step_Status"] = "SUCCESS"
+            except Exception as e:
+                info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
         # TextToSpeech Plugin Response result parser steps
