@@ -25,7 +25,7 @@ accessible via JSON-RPC under the callsign `org.rdk.UserPreferences` (version 1)
 
 ## Plugin Pre-conditions
 
-### Plugin Pre-condition 1: Activate_Plugins
+### Plugin Pre-condition 1: Activate_UserPreferences_Plugin
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |

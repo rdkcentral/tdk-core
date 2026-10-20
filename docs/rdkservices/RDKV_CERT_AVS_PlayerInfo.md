@@ -15,6 +15,18 @@ RDKV_CERT_AVS_PlayerInfo
    - [PlayerInfo_SetAndGet_All_Supported_Resolutions](#playerinfo_setandget_all_supported_resolutions)
    - [PlayerInfo_Dolby_AudioMode_Changed_Event](#playerinfo_dolby_audiomode_changed_event)
    - [PlayerInfo_ActivateDeactivate_Event_Test](#playerinfo_activatedeactivate_event_test)
+   - [PlayerInfo_Get_Dolby_Mode](#playerinfo_get_dolby_mode)
+   - [PlayerInfo_Set_And_Get_Dolby_Mode](#playerinfo_set_and_get_dolby_mode)
+   - [PlayerInfo_Set_Dolby_Mode_Invalid_Mode](#playerinfo_set_dolby_mode_invalid_mode)
+   - [PlayerInfo_Set_Dolby_Mode_Empty_Mode](#playerinfo_set_dolby_mode_empty_mode)
+   - [PlayerInfo_Set_Dolby_Mode_Numeric_Mode](#playerinfo_set_dolby_mode_numeric_mode)
+   - [PlayerInfo_Set_Dolby_Mode_Special_Character_Mode](#playerinfo_set_dolby_mode_special_character_mode)
+   - [PlayerInfo_Set_Dolby_Mode_Without_Mode](#playerinfo_set_dolby_mode_without_mode)
+   - [PlayerInfo_Set_Atmos_Output_Invalid_Enable](#playerinfo_set_atmos_output_invalid_enable)
+   - [PlayerInfo_Set_Atmos_Output_Empty_Enable](#playerinfo_set_atmos_output_empty_enable)
+   - [PlayerInfo_Set_Atmos_Output_Numeric_Enable](#playerinfo_set_atmos_output_numeric_enable)
+   - [PlayerInfo_Set_Atmos_Output_Special_Character_Enable](#playerinfo_set_atmos_output_special_character_enable)
+   - [PlayerInfo_Set_Atmos_Output_Without_Enable](#playerinfo_set_atmos_output_without_enable)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -25,7 +37,7 @@ accessible via JSON-RPC under the callsign `PlayerInfo` (version 1)
 
 ## Plugin Pre-conditions
 
-### Plugin Pre-condition 1: Activate_Plugins
+### Plugin Pre-condition 1: Activate_PlayerInfo_Plugin
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
@@ -55,6 +67,8 @@ accessible via JSON-RPC under the callsign `PlayerInfo` (version 1)
 | 1 | Configure supported audio codecs | `SUPPORTED_AUDIO_CODECS` must be set to the audio codec formats supported by the DUT | The `SUPPORTED_AUDIO_CODECS` value should be correctly configured in the device-specific config file |
 | 2 | Configure supported video codecs | `SUPPORTED_VIDEO_CODECS` must be set to the video codec formats supported by the DUT | The `SUPPORTED_VIDEO_CODECS` value should be correctly configured in the device-specific config file |
 | 3 | Configure NA tests | `PLAYERINFO_NA_TESTS` must be set to the PlayerInfo test names to skip when not applicable on the DUT | The `PLAYERINFO_NA_TESTS` value should be correctly configured in the device-specific config file |
+| 4 | Configure dolby mode | `PLAYERINFO_DOLBY_MODE` must be set to the dolby audio modes supported by the DUT | The `PLAYERINFO_DOLBY_MODE` value should be correctly configured in the device-specific config file |
+
 ## Test Cases
 
 <a id="playerinfo_get_audio_codecs"></a>
@@ -242,6 +256,225 @@ Validates statechange event on activating/deactivating the plugin
 | 4 | Activate PlayerInfo plugin | Invoke activate on Controller with callsign: "PlayerInfo"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "PlayerInfo"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
 | 5 | Check state change event | Listen for Event_Controller_State_Changed event (wait2s) | Verify that the `statechange` event is received for callsign `playerinfo` with state `"activated"` |
 | 6 | Check plugin active status | Invoke status on Controller for PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@PlayerInfo"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+
+---
+
+<a id="playerinfo_get_dolby_mode"></a>
+### TestCase Name
+PlayerInfo_Get_Dolby_Mode
+
+### TestCase ID
+PI_10
+
+### TestCase Objective
+Get the dolby mode
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get dolby mode | Invoke dolby_mode on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_mode"}' http://127.0.0.1:9998/jsonrpc` | Verify that the dolby mode is returned successfully |
+
+---
+
+<a id="playerinfo_set_and_get_dolby_mode"></a>
+### TestCase Name
+PlayerInfo_Set_And_Get_Dolby_Mode
+
+### TestCase ID
+PI_11
+
+### TestCase Objective
+Set and get all the supported dolby modes
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get dolby mode | Invoke dolby_mode on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_mode"}' http://127.0.0.1:9998/jsonrpc` | Verify that the dolby mode is returned successfully |
+| 2 | Set dolby mode | Invoke dolby_mode on PlayerInfo with mode: "<PLAYERINFO_DOLBY_MODE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_mode", "params": {"mode": "<PLAYERINFO_DOLBY_MODE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
+| 3 | Get dolby mode | Invoke dolby_mode on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_mode"}' http://127.0.0.1:9998/jsonrpc` | API should return `success`: `true` and returned value matches the iterated value set in the previous step |
+
+---
+
+<a id="playerinfo_set_dolby_mode_invalid_mode"></a>
+### TestCase Name
+PlayerInfo_Set_Dolby_Mode_Invalid_Mode
+
+### TestCase ID
+PI_12
+
+### TestCase Objective
+SetDolbyMode rejects an invalid mode value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set dolby mode invalid mode | Invoke dolby_mode on PlayerInfo with mode: "INVALID_MODE"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_mode", "params": {"mode": "INVALID_MODE"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="playerinfo_set_dolby_mode_empty_mode"></a>
+### TestCase Name
+PlayerInfo_Set_Dolby_Mode_Empty_Mode
+
+### TestCase ID
+PI_13
+
+### TestCase Objective
+SetDolbyMode rejects an empty mode value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set dolby mode empty mode | Invoke dolby_mode on PlayerInfo with mode: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_mode", "params": {"mode": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="playerinfo_set_dolby_mode_numeric_mode"></a>
+### TestCase Name
+PlayerInfo_Set_Dolby_Mode_Numeric_Mode
+
+### TestCase ID
+PI_14
+
+### TestCase Objective
+SetDolbyMode rejects a numeric mode value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set dolby mode numeric mode | Invoke dolby_mode on PlayerInfo with mode: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_mode", "params": {"mode": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="playerinfo_set_dolby_mode_special_character_mode"></a>
+### TestCase Name
+PlayerInfo_Set_Dolby_Mode_Special_Character_Mode
+
+### TestCase ID
+PI_15
+
+### TestCase Objective
+SetDolbyMode rejects special characters in the mode value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set dolby mode special character mode | Invoke dolby_mode on PlayerInfo with mode: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_mode", "params": {"mode": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="playerinfo_set_dolby_mode_without_mode"></a>
+### TestCase Name
+PlayerInfo_Set_Dolby_Mode_Without_Mode
+
+### TestCase ID
+PI_16
+
+### TestCase Objective
+SetDolbyMode rejects invocation without the required mode parameter
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set dolby mode without mode | Invoke dolby_mode on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_mode"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="playerinfo_set_atmos_output_invalid_enable"></a>
+### TestCase Name
+PlayerInfo_Set_Atmos_Output_Invalid_Enable
+
+### TestCase ID
+PI_17
+
+### TestCase Objective
+SetAtmosOutput rejects an invalid enable value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set atmos output invalid enable | Invoke dolby_enableatmosoutput on PlayerInfo with enable: "invalid_enable"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_enableatmosoutput", "params": {"enable": "invalid_enable"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="playerinfo_set_atmos_output_empty_enable"></a>
+### TestCase Name
+PlayerInfo_Set_Atmos_Output_Empty_Enable
+
+### TestCase ID
+PI_18
+
+### TestCase Objective
+SetAtmosOutput rejects an empty enable value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set atmos output empty enable | Invoke dolby_enableatmosoutput on PlayerInfo with enable: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_enableatmosoutput", "params": {"enable": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="playerinfo_set_atmos_output_numeric_enable"></a>
+### TestCase Name
+PlayerInfo_Set_Atmos_Output_Numeric_Enable
+
+### TestCase ID
+PI_19
+
+### TestCase Objective
+SetAtmosOutput rejects a numeric enable value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set atmos output numeric enable | Invoke dolby_enableatmosoutput on PlayerInfo with enable: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_enableatmosoutput", "params": {"enable": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="playerinfo_set_atmos_output_special_character_enable"></a>
+### TestCase Name
+PlayerInfo_Set_Atmos_Output_Special_Character_Enable
+
+### TestCase ID
+PI_20
+
+### TestCase Objective
+SetAtmosOutput rejects special characters in the enable value
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set atmos output special character enable | Invoke dolby_enableatmosoutput on PlayerInfo with enable: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_enableatmosoutput", "params": {"enable": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="playerinfo_set_atmos_output_without_enable"></a>
+### TestCase Name
+PlayerInfo_Set_Atmos_Output_Without_Enable
+
+### TestCase ID
+PI_21
+
+### TestCase Objective
+SetAtmosOutput rejects invocation without the required enable parameter
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set atmos output without enable | Invoke dolby_enableatmosoutput on PlayerInfo<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "PlayerInfo.1.dolby_enableatmosoutput"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
 
 ## Plugin Post-conditions
 
