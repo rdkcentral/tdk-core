@@ -83,6 +83,11 @@ setup_vts_module() {
 
     mkdir -p "$_new_dir" || return 1
 
+    # Symlink libut_control.so into the source module dir (idempotent)
+    if [ ! -f "${_src_dir}/libut_control.so" ]; then
+        ln -sf "${_vts_root}/libut_control.so" "${_src_dir}/libut_control.so"
+    fi
+
     # Symlink a file from the source dir into the new dir, warning if missing
     _link_or_warn() {
         if [ -f "${_src_dir}/$1" ]; then

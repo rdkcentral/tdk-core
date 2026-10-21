@@ -146,10 +146,7 @@ if "SUCCESS" in result.upper():
         socIDFromDUT = ssh_and_execute (sshMethod, ip, username, password, getSoCID_command).splitlines()[-1]
         print("getSoCID_command output : ", socIDFromDUT)
         if socIDFromDUT:
-            updateSoCID_command = f"""sed -i 's/^\\([[:space:]]*socID[[:space:]]*:\\).*$/\\1 "{socIDFromDUT}"/' {hostConfigFile}"""
-            updateSoCID_command = fr"sed -i 's/socID:[[:space:]]*$/socID: \"{socIDFromDUT}\"/' {hostConfigFile}"
             updateSoCID_command = fr"sed -i 's/^    socID.*/    socID: {socIDFromDUT}/' {hostConfigFile}"
-            #updateSoCID_command = fr"sed -i 's/socID:[[:space:]]*$/socID: \"{socIDFromDUT}\"/' {hostConfigFile}"
             print("updateSoCID_command : ", updateSoCID_command)
             output = ssh_and_execute (sshMethod, ip, username, password, updateSoCID_command)
             print("Updated socID in config file")
