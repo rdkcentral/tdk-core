@@ -114,7 +114,7 @@ if "SUCCESS" in result.upper():
     #Set TestCase Config
     binaryConfig = Host_SOURCE_binaryConfig if "SOURCE" in DEVICE_TYPE.upper() else Host_SINK_binaryConfig
     #Set basepath of test
-    basePath = VTS_Binary_basePath + DeviceSettings_basePath
+    basePath =  DeviceSettings_basePath
     #SkipTestCaseList
     SkipTestCaseList = Host_L1_SkipTestCaseList
     boxtype = obj.getDeviceBoxType();
