@@ -116,7 +116,7 @@ if "SUCCESS" in result.upper():
     #Set Custom List of TestCases
     testCaseList = PowerManager_L2_List
     #Set basepath of test
-    basePath = VTS_Binary_basePath + PowerManager_basePath
+    basePath =  PowerManager_basePath
 
     #Configuring plugin name
     words = module.split()

@@ -47,9 +47,6 @@
 #                           TDK_L1_SkipTestCaseList["Test4"] = "This test case powers off the DUT."       #
 ###########################################################################################################
 
-# VTS - all binaries base path
-VTS_Binary_basePath = " /VTS_Package/"
-
 # Device type: determines which profile YAMLs are bundled during compilation.
 # Set to "SOURCE" to include Source_* profile files.
 # Set to "SINK" to include Sink_* profile files.
@@ -244,6 +241,20 @@ Display_L2_SkipTestCaseList = {}
 Display_L2_SkipTestCaseList_RPI = {}
 Display_L2_SkipTestCaseList_RPI["SetAndGetAVIContentType_src"] = "Not applicable for RPI REFPLTV-3004"
 
+FPD_SOURCE_binaryConfig = "Source_FPD.yaml"
+FPD_SINK_binaryConfig = "Sink_FPD.yaml"
+# COMMON CHANGE: FPD_L1_List / FPD_L1_SkipTestCaseList entries below drive
+# VTS_dsFPD_L1_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
+FPD_L1_List = []
+FPD_L1_SkipTestCaseList = {}
+# COMMON CHANGE: FPD_L2_List / FPD_L2_SkipTestCaseList entries below drive
+# VTS_dsFPD_L2_test.py and apply to ALL platforms that run this script.
+# If you are editing this only for platform-specific testing, REVERT this
+# change after your testing to not affect other platform executions.
+FPD_L2_List = []
+FPD_L2_SkipTestCaseList = {}
 
 # RMF Audio Capture HAL test Configurations
 rmfAudioCapture_basePath = "rmfaudiocapture/"
@@ -261,7 +272,7 @@ rmfAudioCapture_L1_List = []
 rmfAudioCapture_L2_List = []
 
 # HDMICEC HAL test configurations
-HDMICEC_basePath = "hdmi_cec/"
+HDMICEC_basePath = "hdmicec/"
 HDMICEC_binaryName = "hal_test_RCECHal"
 HDMICEC_SOURCE_binaryConfig = "source_hdmiCEC.yml"
 HDMICEC_SINK_binaryConfig = "sink_hdmiCEC.yml"

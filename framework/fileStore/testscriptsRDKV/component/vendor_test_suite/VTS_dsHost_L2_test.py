@@ -98,6 +98,11 @@ obj.configureTestCase(ip,port,'VTS_dsHost_L2_test');
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 
+def is_multiline(value):
+    if not isinstance(value, str):   # handles None, numbers, etc.
+        return False
+    return len(value.strip().splitlines()) > 1
+
 if "SUCCESS" in result.upper():
     tdkTestObj = obj.createTestStep('getDeviceConfigValues')
     tdkTestObj.addParameter("configKey", "SSHParams")
@@ -115,14 +120,12 @@ if "SUCCESS" in result.upper():
     #Set TestCase Config
     binaryConfig = Host_SOURCE_binaryConfig if "SOURCE" in DEVICE_TYPE.upper() else Host_SINK_binaryConfig
     #Set basepath of test
-    basePath = VTS_Binary_basePath + DeviceSettings_basePath
+    basePath = DeviceSettings_basePath
     testCaseList = Host_L2_List
     plugin_name = "dsHost L2"
 
-    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
-
     socIDerror = False
-    hostConfigFile = basePath + "/" + binaryConfig
+    hostConfigFile = getVTSBasePath(ip, username, password) + basePath + binaryConfig
     sshMethod = "directSSH"
     try:
         sshPort = getDeviceConfigValues("SSH_PORT")
@@ -131,7 +134,9 @@ if "SUCCESS" in result.upper():
         sshPort = 22
     checkSoCID_command = r'grep -q "Raspberry Pi 4" /proc/cpuinfo 2>/dev/null && echo "rpi4" || { [ -d /proc/brcm ] && echo "bcm"; }'
     print("checkSoCID_command : " , checkSoCID_command)
-    output = executeSingleCommand(ip, username, password, checkSoCID_command, sshPort).splitlines()[-1]
+    output = executeSingleCommand(ip, username, password, checkSoCID_command, sshPort)
+    if is_multiline(output):
+        output = output.splitlines()[-1]
     print("checkSoCID_command output : ",output)
     if "rpi4" in output or "bcm" in output:
         if "rpi4" in output:
@@ -141,13 +146,18 @@ if "SUCCESS" in result.upper():
         socIDFromDUT = ssh_and_execute (sshMethod, ip, username, password, getSoCID_command).splitlines()[-1]
         print("getSoCID_command output : ", socIDFromDUT)
         if socIDFromDUT:
+            updateSoCID_command = f"""sed -i 's/^\\([[:space:]]*socID[[:space:]]*:\\).*$/\\1 "{socIDFromDUT}"/' {hostConfigFile}"""
             updateSoCID_command = fr"sed -i 's/socID:[[:space:]]*$/socID: \"{socIDFromDUT}\"/' {hostConfigFile}"
+            updateSoCID_command = fr"sed -i 's/^    socID.*/    socID: {socIDFromDUT}/' {hostConfigFile}"
+            #updateSoCID_command = fr"sed -i 's/socID:[[:space:]]*$/socID: \"{socIDFromDUT}\"/' {hostConfigFile}"
             print("updateSoCID_command : ", updateSoCID_command)
             output = ssh_and_execute (sshMethod, ip, username, password, updateSoCID_command)
             print("Updated socID in config file")
         else:
             print("ERROR : Unable to obtain socIDFromDUT")
             socIDerror = True
+
+    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
 
     try:
         if testList and not socIDerror:
