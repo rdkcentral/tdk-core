@@ -948,13 +948,16 @@ def SetupPreRequisites(host, username, password, basePath, binaryName, binaryCon
     try:
         if not vts_base_path:
             vts_base_path = getVTSBasePath(host,username,password)
+        elif session is None or session.closed:
+            sshPort = getDeviceConfigValues("SSH_PORT")
+            client,session = startSession(host,username,password,sshPort)
         binary_base_path = vts_base_path + basePath
         print("Binary Base Path = ", binary_base_path)
         binaryPath = "cd " + binary_base_path + " ; ./" + binaryName
         if binaryConfig:
             binaryPath = binaryPath + " -p " + binaryConfig
         if setupEnvironment:
-            setupEnvironmentInSession(session,basePath)
+            setupEnvironmentInSession(session, binary_base_path)
         output = startBinary(session, binaryPath, module)
         testList = parseTestList(output)
         if not testList:
