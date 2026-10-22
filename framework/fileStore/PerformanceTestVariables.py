@@ -50,3 +50,6 @@ progress_wait_time = 60
 
 #Configure the Z-order
 requested_zorder = 2
+
+#Number of successive playback iterations for video streams
+Succesive_playback_iterations = 10

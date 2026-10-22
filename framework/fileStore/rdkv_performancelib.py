@@ -1718,7 +1718,7 @@ def getSummary(Summ_list,obj = False):
                 if numeric_value < 0:
                     print("Check if VM and DUT time is synchronized OR Check if any previous steps got failed.")
             except ValueError as e:
-                print(e)
+                pass
 
 #Function to test using RESTAPI
 def testusingRestAPI(obj):
@@ -2492,3 +2492,72 @@ def getPlaybackTimestamps(obj, app_name):
         return "", ""
     
     return load_video, playback_started    
+
+# Function to test successive playback of video streams
+def testSuccessivePlayback(obj,expected_streams):
+    app_log_file = obj.logpath+"/"+str(obj.execID)+"/"+str(obj.execID)+"_"+str(obj.execDevId)+"_"+str(obj.resultId)+"_mvs_applog.txt"
+    continue_count = 0
+    file_check_count = 0
+    logging_flag = 0
+    hang_detected = 0
+    test_result = ""
+    expected_play_evt = ""
+    observed_play_evt = ""
+    expected_pause_evt = ""
+    observed_pause_evt = ""
+    lastLine = None
+    lastIndex = 0
+    play_event_count = 0
+    stream_results = {}
+    while True:
+        if file_check_count > 60:
+            print("\nREST API Logging is not happening properly. Exiting...")
+            break;
+        if os.path.exists(app_log_file):
+            logging_flag = 1
+            break;
+        else:
+            file_check_count += 1
+            time.sleep(1);
+    while logging_flag:
+        if continue_count > 60:
+            hang_detected = 1
+            print("\nApp not proceeding for 60 secs. Exiting...")
+            break;
+        with open(app_log_file,'r') as f:
+            lines = f.readlines()
+        if lines:
+            if len(lines) != lastIndex:
+                continue_count = 0
+                for i in range(lastIndex,len(lines)):
+                    print(lines[i])
+                    if "Video Player Playing" in lines[i]:
+                        play_event_count += 1
+                    stream_match = re.search(r"STREAM (\d+) PLAYBACK RESULT\s*:\s*(SUCCESS|FAILURE)", lines[i])
+                    if stream_match:
+                        stream_results[int(stream_match.group(1))] = stream_match.group(2)
+                    elif "TEST RESULT:" in lines[i]:
+                        test_result = lines[i]
+                lastIndex = len(lines)
+                if test_result != "":
+                    break;
+            else:
+                continue_count += 1
+        else:
+            continue_count += 1
+        time.sleep(1)
+    playback_status = "FAILURE"
+    streams_ok = True
+    for stream_num in range(1,expected_streams+1):
+        if stream_results.get(stream_num) != "SUCCESS":
+            streams_ok = False
+            print("\n Stream {} did not report a successful playback".format(stream_num))
+    if play_event_count < expected_streams:
+        print("\n Only {} of {} streams started playback".format(play_event_count,expected_streams))
+    elif not streams_ok:
+        print("\n Per stream results are not successful")
+    elif "TEST RESULT: SUCCESS" not in test_result:
+        print("\n Final test result is not SUCCESS")
+    else:
+        playback_status = "SUCCESS"
+    return test_result,play_event_count,stream_results,playback_status    
