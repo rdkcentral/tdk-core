@@ -1720,7 +1720,7 @@ def getSummary(Summ_list,obj = False):
                 if numeric_value < 0:
                     print("Check if VM and DUT time is synchronized OR Check if any previous steps got failed.")
             except ValueError as e:
-                pass
+                print(e)
 
 #Function to test using RESTAPI
 def testusingRestAPI(obj):
