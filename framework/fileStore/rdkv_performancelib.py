@@ -1713,6 +1713,8 @@ def getSummary(Summ_list,obj = False):
         for key in Summ_list:
             print(key)
             value = key.split(':')[1]
+            if not value.isdigit():
+                continue
             try:
                 numeric_value = parse_value_to_float(value)
                 if numeric_value < 0:
@@ -2555,7 +2557,7 @@ def testSuccessivePlayback(obj,expected_streams):
     if play_event_count < expected_streams:
         print("\n Only {} of {} streams started playback".format(play_event_count,expected_streams))
     elif not streams_ok:
-        print("\n Per stream results are not successful")
+        print("\n Playback started on all {} streams, but not all of them completed successfully".format(expected_streams))
     elif "TEST RESULT: SUCCESS" not in test_result:
         print("\n Final test result is not SUCCESS")
     else:

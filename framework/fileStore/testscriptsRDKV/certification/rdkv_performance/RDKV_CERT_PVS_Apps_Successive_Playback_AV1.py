@@ -17,16 +17,11 @@
 # limitations under the License.
 ##########################################################################
 
-import json
-import re
-import shlex
-
 import tdklib;
 from web_socket_util import *
 import PerformanceTestVariables
 import MediaValidationVariables
 from MediaValidationUtility import *
-from StabilityTestUtility import *
 from rdkv_performancelib import *
 from urllib.parse import unquote, urlparse
 
@@ -37,7 +32,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Apps_HTML_Successive_Playback');
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Apps_Successive_Playback_AV1');
 
 webkit_console_socket = None
 
@@ -59,8 +54,8 @@ if expectedResult in result.upper():
     setDeviceConfigFile(conf_file)
     
     appURL    = MediaValidationVariables.html_video_test_app_url
-    videoURL  = MediaValidationVariables.video_src_url_mp4
-    video_codec = "MP4"
+    videoURL  = MediaValidationVariables.video_src_url_av1_23fps
+    video_codec = "AV1"
     setURLArgument("execID",str(obj.execID))
     setURLArgument("execDevId",str(obj.execDevId))
     setURLArgument("resultId",str(obj.resultId))
@@ -103,7 +98,7 @@ if expectedResult in result.upper():
         time.sleep(10)
         #set the video test url to PersistanceStorage
         tdkTestObj = obj.createTestStep('setPS_value');
-        tdkTestObj.addParameter("video_test_url",video_test_urls);
+        tdkTestObj.addParameter("video_test_url",json.dumps(video_test_urls));
         tdkTestObj.executeTestCase(expectedResult);
         result = tdkTestObj.getResult();
         if result == "SUCCESS":
@@ -135,6 +130,7 @@ if expectedResult in result.upper():
                         # Validate resource usage after the successive playback
                         tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
                         tdkTestObj.executeTestCase(expectedResult)
+                        print("\n Validating resource usage...")
                         resource_usage = tdkTestObj.getResultDetails()
                         if expectedResult in tdkTestObj.getResult() and resource_usage != "ERROR":
                             tdkTestObj.setResultStatus("SUCCESS")
@@ -144,7 +140,7 @@ if expectedResult in result.upper():
                             Summ_list.append("Memory usage :{}".format(resource_values[1]))
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
-                            print("\n Resource usage validation failed")
+                            print("\n Failed to validate resource usage")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
                         print("\n Successive playback is not happening")
