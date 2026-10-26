@@ -54,7 +54,7 @@ if expectedResult in result.upper():
     setDeviceConfigFile(conf_file)
     
     appURL    = MediaValidationVariables.html_video_test_app_url
-    videoURL  = MediaValidationVariables.video_src_url_av1_23fps
+    videoURL  = MediaValidationVariables.video_src_url_av1_30fps
     video_codec = "AV1"
     setURLArgument("execID",str(obj.execID))
     setURLArgument("execDevId",str(obj.execDevId))
