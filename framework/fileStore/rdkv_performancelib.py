@@ -1713,7 +1713,7 @@ def getSummary(Summ_list,obj = False):
         for key in Summ_list:
             print(key)
             value = key.split(':')[1]
-            if not value.isdigit():
+            if not re.match(r'^-?\d+(\.\d+)?', value):
                 continue
             try:
                 numeric_value = parse_value_to_float(value)
