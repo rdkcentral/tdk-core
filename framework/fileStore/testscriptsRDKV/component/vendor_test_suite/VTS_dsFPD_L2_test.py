@@ -81,7 +81,7 @@ if "SUCCESS" in result.upper() and supported == "yes":
     words = module.split()
     words[0], words[-1] = words[-1], words[0]
     plugin_name = " ".join(words)
-    testcaseID="dsFPD L1"
+    testcaseID="dsFPD L2"
 
     testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
 
