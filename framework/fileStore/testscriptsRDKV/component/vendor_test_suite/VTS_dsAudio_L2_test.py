@@ -116,7 +116,7 @@ if "SUCCESS" in result.upper():
     #Set Custom List of TestCases
     testCaseList = Audio_L2_List
     #Set basepath of test
-    basePath = VTS_Binary_basePath + DeviceSettings_basePath
+    basePath =  DeviceSettings_basePath
     #SkipTestCaseList
     SkipTestCaseList = Audio_L2_SkipTestCaseList
     boxtype = obj.getDeviceBoxType();
