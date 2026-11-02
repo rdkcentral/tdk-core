@@ -177,6 +177,7 @@ fi
 
 if [ -f "/$tdk_package" ]; then
     start_tdk
+    echo "TDK Package installed successfully"
 else
     echo -e "Please copy the TDK_Package.tar.gz file to / folder in the device"
 fi
