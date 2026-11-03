@@ -1891,17 +1891,16 @@ compile_vkcube()
     compile_shaders
     cd $VULKAN_TOOLS_DIR/cube/
     if [[ $VULKAN_VERSION == "1.4.341" ]]; then
-	echo "Adding extra guards for 1.4.341 version"
-	fix_vkcube_swapchain_gate cube.c
+		echo "Adding extra guards for 1.4.341 version"
+		fix_vkcube_swapchain_gate cube.c
     fi
     $CC cube.c xdg-shell-protocol.c xdg-decoration-protocol.c -o vkcube     -DVK_USE_PLATFORM_WAYLAND_KHR     -lvulkan -lwayland-client -lpthread -lm >> "$LOG_FILE" 2>&1
-    cp cube.c ${ROOT_DIR}/cube_1_4_341_patched.c
     if [ -f $VULKAN_TOOLS_DIR/cube/vkcube ];then
         echo "Binary available in $VULKAN_TOOLS_DIR/cube/vkcube"
-	echo -e "\e[1;42m VKCUBE COMPILATION : SUCCESS \e[0m" | tee -a "$LOG_FILE"
-	vkcube_compiled="TRUE"
+		echo -e "\e[1;42m VKCUBE COMPILATION : SUCCESS \e[0m" | tee -a "$LOG_FILE"
+		vkcube_compiled="TRUE"
     else
-	echo -e "\e[1;41m VKCUBE COMPILATION : FAILURE \e[0m" | tee -a "$LOG_FILE"
+		echo -e "\e[1;41m VKCUBE COMPILATION : FAILURE \e[0m" | tee -a "$LOG_FILE"
 	exit 1
     fi
 }
