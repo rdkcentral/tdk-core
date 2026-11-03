@@ -48,7 +48,7 @@ To validate successive playback of a 4K HLS HEVC video stream in the HTML HLS vi
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator
+**Supported Models** : Video_Accelerator
 
 **Estimated duration** : 15 min
 

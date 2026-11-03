@@ -48,7 +48,7 @@ To validate successive playback of a DASH HEVC video stream in the HTML DASH vid
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator
+**Supported Models** : Video_Accelerator
 
 **Estimated duration** : 15 min
 

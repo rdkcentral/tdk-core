@@ -32,7 +32,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Apps_Successive_Playback_HLS_HEVC');
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Apps_Successive_Playback_DASH_HEVC');
 
 webkit_console_socket = None
 

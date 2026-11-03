@@ -52,4 +52,4 @@ progress_wait_time = 60
 requested_zorder = 2
 
 #Number of successive playback iterations for video streams
-Succesive_playback_iterations = 10
+Successive_playback_iterations = 10

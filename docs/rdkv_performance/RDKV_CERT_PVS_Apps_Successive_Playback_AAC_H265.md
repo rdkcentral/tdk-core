@@ -48,7 +48,7 @@ To validate successive playback of an H.265 (HEVC) video stream with AAC audio i
 <a name="head.Attributes"></a>
 ## Test Attributes
 
-**Supported Models** : RPI-Client, Video_Accelerator
+**Supported Models** : Video_Accelerator
 
 **Estimated duration** : 15 min
 
