@@ -55,7 +55,7 @@ if expectedResult in result.upper():
     
     appURL    = MediaValidationVariables.html_dash_test_app_url
     videoURL  = MediaValidationVariables.video_src_url_hevc
-    video_codec = "HLS_HEVC"
+    video_codec = "DASH_HEVC"
     setURLArgument("execID",str(obj.execID))
     setURLArgument("execDevId",str(obj.execDevId))
     setURLArgument("resultId",str(obj.resultId))
@@ -70,7 +70,7 @@ if expectedResult in result.upper():
     setURLArgument("autotest","true")
     appArguments = getURLArguments()
     # Getting the complete test app URL for stream
-    playback_iterations = PerformanceTestVariables.Succesive_playback_iterations
+    playback_iterations = PerformanceTestVariables.Successive_playback_iterations
     video_test_urls = []
     for i in range(playback_iterations):
         video_test_url = getTestURL(appURL,appArguments)
