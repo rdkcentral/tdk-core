@@ -17,84 +17,192 @@
 # limitations under the License.
 ##########################################################################
 
+# Usage: python player_apps_counter.py /path/to/scripts/directory
+
 import os
+import re
 import sys
 
-# Define keyword groups for different player types
-AAMP_KEYS = ["aamp"]
-SHAKA_KEYS = ["shaka"]
-HTML_KEYS = ["html"]
-DASH_KEYS = ["dash"]
-HLS_KEYS = ["hls"]
-SDK_KEYS = ["mp4", "hdr", "hevc_mkv", "mkv", "4k_vp9", "4k_av1"]
-SDK_EXCLUSIVE = ["4k_av1", "4k_vp9", "hevc_mkv"]  # Keywords exclusive to SDK, used to exclude DASH
+# Maps a player engine to its reporting bucket.
+PLAYER_BUCKET = {
+    "dashjs": "dash",
+    "hlsjs": "hls",
+    "shaka": "shaka",
+    "aamp": "aamp",
+    "sdk": "sdk",
+}
 
-# Rule 6 & 9: Dash extra codecs
-DASH_EXTRA_KEYS = [
-    "av1", "ec3", "ac3", "vp9", "audio_only", "ogg", "opus",
-    "hevc", "aac", "h263", "mpeg", "vp8"]
+# Default player for each codec, mirroring the codec_*
+CODEC_PLAYERS = {
+    "codec_dash_h264": "dashjs",
+    "codec_hls_h264": "hlsjs",
+    "codec_dash_hevc": "dashjs",
+    "codec_hls_hevc": "hlsjs",
+    "codec_dash_aac": "dashjs",
+    "codec_hls_aac": "hlsjs",
+    "codec_mpeg_ts": "hlsjs",
+    "codec_ac3": "dashjs",
+    "codec_ec3": "dashjs",
+    "codec_vp9": "dashjs",
+    "codec_opus": "dashjs",
+    "codec_av1": "dashjs",
+    "codec_h263": "sdk",
+    "codec_vp8": "sdk",
+    "codec_mp4": "sdk",
+    "codec_ogg": "sdk",
+    "codec_webm": "sdk",
+    "codec_mpeg": "sdk",
+    "codec_audio_aac": "dashjs",
+    "codec_audio_mp3": "sdk",
+    "codec_audio_dts": "sdk",
+    "codec_audio_m4a": "sdk",
+    "codec_audio_wav_pcm": "sdk",
+    "codec_mkv": "sdk",
+    "codec_4k_av1": "sdk",
+}
 
-# Rule 10: HLS extra keywords
-HLS_EXTRA_KEYS = ["mpeg_ts"]
+CODEC_REF_RE = re.compile(r"MediaValidationVariables\.(codec_[A-Za-z0-9_]+)")
 
 
 def identify_players(directory):
-    # Initialize player apps count dictionary
-    player_counts = {
-        "aamp": 0,
-        "shaka": 0,
+    counts = {
+        "total": 0,
+        "lightning": 0,
+        "lightning_animation": 0,
+        "lightning_shaka": 0,
+        "lightning_fps": 0,
+        "lightning_dash": 0,
+        "lightning_hls": 0,
+        "lightning_sdk": 0,
+        "lightning_aamp": 0,
         "html": 0,
-        "sdk": 0,
-        "dash": 0,
-        "hls": 0
+        "html_dash": 0,
+        "html_hls": 0,
+        "html_shaka": 0,
+        "html_successive": 0,
+        "html_fps": 0,
+        "html_aamp": 0,
+        "eme": 0,
+        "mse": 0,
+        "corrupted": 0,
+        "delay": 0,
     }
 
-    # Process each file in the directory
     for filename in sorted(os.listdir(directory)):
         file_path = os.path.join(directory, filename)
 
-        # Skip if not a file
-        if not os.path.isfile(file_path):
+        if not os.path.isfile(file_path) or not filename.endswith(".py"):
             continue
 
         name_lower = filename.lower()
-        matched_players = set()
+        counts["total"] += 1
 
-        # ---------------------------- Priority Rules ------------------------------
-        # Rule 13: If filename contains AAMP keyword, assign only AAMP player
-        if any(key in name_lower for key in AAMP_KEYS):
-            matched_players = {"aamp"}
-        # Rule 12: If filename contains Shaka keyword, assign only Shaka player
-        elif any(key in name_lower for key in SHAKA_KEYS):
-            matched_players = {"shaka"}
-        # Rule 8: If filename contains HTML keyword, assign only HTML player
-        elif any(key in name_lower for key in HTML_KEYS):
-            matched_players = {"html"}
-        # Rule 11: If filename contains 'fps' but not 'animation', assign SDK player
-        elif "fps" in name_lower and "animation" not in name_lower:
-            matched_players = {"sdk"}
-        # --------------------------- Normal Matching ---------------------------
+        # A script is counted as either HTML or Lightning, never both.
+        if "html" in name_lower:
+            counts["html"] += 1
+            if "dash" in name_lower:
+                counts["html_dash"] += 1
+            if "hls" in name_lower:
+                counts["html_hls"] += 1
+            if "shaka" in name_lower:
+                counts["html_shaka"] += 1
+            if "successive" in name_lower:
+                counts["html_successive"] += 1
+            if "fps" in name_lower:
+                counts["html_fps"] += 1
+            if "aamp" in name_lower:
+                counts["html_aamp"] += 1
         else:
-            if any(key in name_lower for key in SDK_KEYS):
-                matched_players.add("sdk")
-            if not any(ex in name_lower for ex in SDK_EXCLUSIVE):
-                if any(key in name_lower for key in DASH_KEYS + DASH_EXTRA_KEYS):
-                    matched_players.add("dash")
-            if any(key in name_lower for key in HLS_KEYS + HLS_EXTRA_KEYS):
-                matched_players.add("hls")
+            # Determine the player from the codec_* variables the script
+            # actually uses, rather than relying on the filename.
+            try:
+                with open(file_path, "r", encoding="utf-8", errors="ignore") as handle:
+                    content = handle.read()
+            except OSError:
+                content = ""
 
-        # Update player counts
-        for player in matched_players:
-            player_counts[player] += 1
+            referenced_codecs = set(CODEC_REF_RE.findall(content))
+            engines = {CODEC_PLAYERS[codec] for codec in referenced_codecs if codec in CODEC_PLAYERS}
+            buckets = {PLAYER_BUCKET[engine] for engine in engines if engine in PLAYER_BUCKET}
 
-    # ----------------- Output Results -----------------
-    print("\n Player Apps Count Summary")
-    print(f" Scanned Directory : {directory}\n")
-    total_count = sum(player_counts.values())
-    # Print count for each player type
-    for player, count in player_counts.items():
-        print(f" {player.upper():<5} : {count}")
-    print(f"\n Total Matched Files : {total_count}\n")
+            is_animation = "animation" in name_lower
+            is_shaka = "shaka" in name_lower
+            is_aamp = "aamp" in name_lower or "uve" in name_lower
+            name_dash = "dash" in name_lower
+            name_hls = "hls" in name_lower or "mpeg_ts" in name_lower
+
+            # Prefer the codec-resolved player; use filename tokens for scripts
+            # that pin the player themselves (SHAKA, AAMP, DASH SegmentBase).
+            has_dash = "dash" in buckets or name_dash
+            has_hls = "hls" in buckets or name_hls
+            has_sdk = "sdk" in buckets
+            has_shaka = "shaka" in buckets or is_shaka
+            has_aamp = "aamp" in buckets or is_aamp
+
+            # Conformance scripts have no player signal; report them separately
+            # instead of inflating the Lightning total.
+            identified = (
+                is_animation
+                or is_shaka
+                or is_aamp
+                or bool(referenced_codecs)
+                or has_dash
+                or has_hls
+                or has_sdk
+            )
+
+            if not identified:
+                if "eme" in name_lower:
+                    counts["eme"] += 1
+                elif "mse" in name_lower:
+                    counts["mse"] += 1
+            else:
+                counts["lightning"] += 1
+                if is_animation:
+                    counts["lightning_animation"] += 1
+                if has_shaka:
+                    counts["lightning_shaka"] += 1
+                if "fps" in name_lower and not is_animation:
+                    counts["lightning_fps"] += 1
+                if has_dash:
+                    counts["lightning_dash"] += 1
+                if has_hls:
+                    counts["lightning_hls"] += 1
+                if has_sdk:
+                    counts["lightning_sdk"] += 1
+                if has_aamp:
+                    counts["lightning_aamp"] += 1
+
+        # These tags are counted independently of the HTML/Lightning split.
+        if "corrupted" in name_lower:
+            counts["corrupted"] += 1
+        if "delay" in name_lower:
+            counts["delay"] += 1
+
+    print(f"\nTotal Scripts: {counts['total']}\n")
+
+    print(f"Lightning Player Scripts: {counts['lightning']}\n")
+    print(f"Lightning Animation Scripts: {counts['lightning_animation']}")
+    print(f"Lightning SHAKA Scripts: {counts['lightning_shaka']}")
+    print(f"Lightning FPS Scripts: {counts['lightning_fps']}")
+    print(f"Lightning DASH Scripts: {counts['lightning_dash']}")
+    print(f"Lightning HLS Scripts: {counts['lightning_hls']}")
+    print(f"Lightning SDK Scripts: {counts['lightning_sdk']}")
+    print(f"Lightning AAMP Scripts: {counts['lightning_aamp']}\n")
+
+    print(f"HTML Player Scripts: {counts['html']}\n")
+    print(f"HTML DASH Scripts: {counts['html_dash']}")
+    print(f"HTML HLS Scripts: {counts['html_hls']}")
+    print(f"HTML SHAKA Scripts: {counts['html_shaka']}")
+    print(f"HTML Successive Scripts: {counts['html_successive']}")
+    print(f"HTML FPS Scripts: {counts['html_fps']}")
+    print(f"HTML AAMP Scripts: {counts['html_aamp']}\n")
+
+    print(f"EME Scripts: {counts['eme']}")
+    print(f"MSE Scripts: {counts['mse']}\n")
+
+    print(f"Corrupted Scripts: {counts['corrupted']}")
+    print(f"Delay Scripts: {counts['delay']}\n")
 
 
 if __name__ == "__main__":
@@ -107,3 +215,4 @@ if __name__ == "__main__":
         sys.exit(1)
 
     identify_players(target_directory)
+
