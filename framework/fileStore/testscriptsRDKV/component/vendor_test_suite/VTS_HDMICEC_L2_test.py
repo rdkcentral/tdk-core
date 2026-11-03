@@ -116,7 +116,7 @@ if "SUCCESS" in result.upper():
     #Set TestCase Config
     binaryConfig = HDMICEC_SOURCE_binaryConfig if "SOURCE" in DEVICE_TYPE.upper() else HDMICEC_SINK_binaryConfig
     #Set basepath of test
-    basePath = VTS_Binary_basePath + HDMICEC_basePath
+    basePath =  HDMICEC_basePath
     #SkipTestCaseList
     SkipTestCaseList = HDMICEC_L2_SkipTestCaseList
     boxtype = obj.getDeviceBoxType();
