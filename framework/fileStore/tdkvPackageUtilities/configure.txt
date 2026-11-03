@@ -35,9 +35,7 @@ REALTEK_VENDOR_MANIFEST_REPO="https://code.rdkcentral.com/r/collaboration/soc/re
 BROADCOM_VENDOR_MANIFEST_REPO="https://code.rdkcentral.com/r/collaboration/soc/broadcom/vendor-manifest-rdke-broadcom"
 AMLOGIC_VENDOR_MANIFEST_REPO="https://code.rdkcentral.com/r/collaboration/soc/amlogic/vendor-manifest-rdke-amlogic"
 
-#Realtek OSS vendor layer containing vulkan-headers patches
-REALTEK_VULKAN_HEADERS_OSS_REPO="https://code.rdkcentral.com/r/collaboration/soc/realtek/yocto_oe/layers/meta-vendor-rdke-realtek-oss"
-
+#Platform vendor versions
 RPI_VENDOR_VERSION=4.11.1
 REALTEK_VENDOR_VERSION=4.9.0
 BROADCOM_VENDOR_VERSION=5.1.0
