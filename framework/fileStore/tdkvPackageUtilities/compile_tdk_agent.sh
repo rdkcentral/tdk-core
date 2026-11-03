@@ -1446,7 +1446,6 @@ clone_vulkan_tools() {
               ;;
     esac
     git checkout $vulkan_tools_srcrev >> "$LOG_FILE" 2>&1
-    apply_realtek_oss_patches "vulkan-tools"
     CUBE_FILE="$VULKAN_TOOLS_DIR/cube/cube.c"
 }
 
