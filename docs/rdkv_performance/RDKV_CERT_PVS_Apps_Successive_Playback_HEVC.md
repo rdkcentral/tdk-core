@@ -11,7 +11,7 @@ RDKV_CERT_PVS_Apps_Successive_Playback_HEVC
 
 <a name="head.Objective"></a>
 ## Objective
-To validate successive playback of an HEVC video stream in the HTML video application, where the same stream URL is queued once per iteration and played back-to-back, each playback ending with the configured close operation, for the number of iterations set in `Succesive_playback_iterations`. The test also validates that every stream plays successfully, that resource usage stays within limits after the last playback, and that the application terminates cleanly.
+To validate successive playback of an HEVC video stream in the HTML video application, where the same stream URL is queued once per iteration and played back-to-back, each playback ending with the configured close operation, for the number of iterations set in `Successive_playback_iterations`. The test also validates that every stream plays successfully, that resource usage stays within limits after the last playback, and that the application terminates cleanly.
 
 <a name="head.Precondition"></a>
 ## Preconditions
