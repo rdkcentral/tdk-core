@@ -91,21 +91,21 @@
     </testCase>
 
     <testCase testCaseId="PI_04" testCaseName="PlayerInfo_Get_Dolby_Atmos_MetaData" desc="Gets the Atmos capabilities of Sink">
-        <testCaseInfo testCaseType="direct" />
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Get_Dolby_Atmos_MetaData" method="Get_Dolby_Atmos_MetaData">
             <resultGeneration useMethodTag="playerinfo_validate_boolean_result" />
         </testStep>
     </testCase>
 
     <testCase testCaseId="PI_05" testCaseName="PlayerInfo_Get_Dolby_Sound_mode" desc="Checks the dolby sound mode">
-        <testCaseInfo testCaseType="direct" />
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Get_Dolby_SoundMode" method="Get_Dolby_SoundMode">
             <resultGeneration useMethodTag="playerinfo_check_results" expectedValues="Unknown,Mono,Stereo,Surround,Passthru,SoundmodeAuto" />
         </testStep>
     </testCase>
 
     <testCase testCaseId="PI_06" testCaseName="PlayerInfo_Enable_Disable_Audio_Atmos_Output" desc="Check whether audio atmos output is possible to enable and disable">
-        <testCaseInfo testCaseType="loop" />
+        <testCaseInfo testCaseType="loop" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Enable_Disable_Audio_Atmos_Output" testStepType="loop">
             <subtestStep subtestStepId="1" name="Enable_Disable_Audio_Atmos_Output" method="Set_Atmos_Output">
                 <params>
@@ -151,7 +151,7 @@
     </testCase>
 
     <testCase testCaseId="PI_08" testCaseName="PlayerInfo_Dolby_AudioMode_Changed_Event" desc="Checks for the audio mode changed event">
-        <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="audiomodes" />
+        <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true" pluginName="DisplaySettings">
             <resultGeneration useMethodTag="check_connected_audio_ports" arguments="check_value">
             </resultGeneration>
@@ -253,24 +253,25 @@
     </testCase>
 
     <testCase testCaseId="PI_10" testCaseName="PlayerInfo_Get_Dolby_Mode" desc="Get the dolby mode">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Get_Dolby_Mode" method="Get_Dolby_Mode">
             <resultGeneration useMethodTag="playerinfo_dolby_mode" />
         </testStep>
     </testCase>
 
     <testCase testCaseId="PI_11" testCaseName="PlayerInfo_Set_And_Get_Dolby_Mode" desc="Set and get all the supported dolby modes">
-        <testCaseInfo testCaseType="loop" />
-        <testStep testStepId="1" name="Get_Dolby_Mode" method="Get_Dolby_Mode">
+        <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
+        <testStep testStepId="1" name="Get_Dolby_Mode" method="Get_Dolby_Mode" revertGet="yes">
             <resultGeneration useMethodTag="playerinfo_dolby_mode" />
         </testStep>
         <testStep testStepId="2" name="Set_Dolby_Mode" testStepType="loop">
-            <subtestStep subtestStepId="1" name="Set_Dolby_Mode" method="Set_Dolby_Mode">
+            <subtestStep subtestStepId="1" name="Set_Dolby_Mode" method="Set_Dolby_Mode" revertSet="yes">
                 <params>
-                    <param tag="mode" useConfigFile="true" key="PLAYERINFO_DOLBY_MODE" iteration="true" />
+                    <param tag="mode" useConfigFile="true" key="PLAYERINFO_DOLBY_MODE" iteration="true" revertParam="yes" />
                 </params>
                 <resultGeneration useMethodTag="playerinfo_null_result_validation" />
             </subtestStep>
-            <subtestStep subtestStepId="2" name="Get_Dolby_Mode" method="Get_Dolby_Mode">
+            <subtestStep subtestStepId="2" name="Get_Dolby_Mode" method="Get_Dolby_Mode" revertFlag="yes">
                 <resultGeneration useMethodTag="playerinfo_dolby_mode">
                     <expectedValues useIterableValue="true" />
                 </resultGeneration>
@@ -278,8 +279,8 @@
         </testStep>
     </testCase>
 
-    <testCase testCaseId="PI_12" testCaseName="PlayerInfo_Set_Dolby_Mode_Invalid_Mode" desc="SetDolbyMode rejects an invalid mode value">
-        <testCaseInfo testCaseType="direct" />
+    <testCase testCaseId="PI_12" testCaseName="PlayerInfo_Set_Dolby_Mode_Invalid_Mode" desc="Setdolbyfeature rejects an invalid mode value">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Set_Dolby_Mode_Invalid_Mode" method="Set_Dolby_Mode">
             <params>
                 <param tag="mode" value="INVALID_MODE" />
@@ -288,8 +289,8 @@
         </testStep>
     </testCase>
 
-    <testCase testCaseId="PI_13" testCaseName="PlayerInfo_Set_Dolby_Mode_Empty_Mode" desc="SetDolbyMode rejects an empty mode value">
-        <testCaseInfo testCaseType="direct" />
+    <testCase testCaseId="PI_13" testCaseName="PlayerInfo_Set_Dolby_Mode_Empty_Mode" desc="Setdolbyfeature rejects an empty mode value">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Set_Dolby_Mode_Empty_Mode" method="Set_Dolby_Mode">
             <params>
                 <param tag="mode" value="" />
@@ -298,8 +299,8 @@
         </testStep>
     </testCase>
 
-    <testCase testCaseId="PI_14" testCaseName="PlayerInfo_Set_Dolby_Mode_Numeric_Mode" desc="SetDolbyMode rejects a numeric mode value">
-        <testCaseInfo testCaseType="direct" />
+    <testCase testCaseId="PI_14" testCaseName="PlayerInfo_Set_Dolby_Mode_Numeric_Mode" desc="Setdolbyfeature rejects a numeric mode value">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Set_Dolby_Mode_Numeric_Mode" method="Numeric_Dolby_Mode">
             <params>
                 <param tag="mode" value="12345" />
@@ -308,8 +309,8 @@
         </testStep>
     </testCase>
 
-    <testCase testCaseId="PI_15" testCaseName="PlayerInfo_Set_Dolby_Mode_Special_Character_Mode" desc="SetDolbyMode rejects special characters in the mode value">
-        <testCaseInfo testCaseType="direct" />
+    <testCase testCaseId="PI_15" testCaseName="PlayerInfo_Set_Dolby_Mode_Special_Character_Mode" desc="Setdolbyfeature rejects special characters in the mode value">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Set_Dolby_Mode_Special_Character_Mode" method="Set_Dolby_Mode">
             <params>
                 <param tag="mode" value="()^*!" />
@@ -318,15 +319,15 @@
         </testStep>
     </testCase>
 
-    <testCase testCaseId="PI_16" testCaseName="PlayerInfo_Set_Dolby_Mode_Without_Mode" desc="SetDolbyMode rejects invocation without the required mode parameter">
-        <testCaseInfo testCaseType="direct" />
+    <testCase testCaseId="PI_16" testCaseName="PlayerInfo_Set_Dolby_Mode_Without_Mode" desc="Setdolbyfeature rejects invocation without the required mode parameter">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Set_Dolby_Mode_Without_Mode" method="Set_Dolby_Mode">
             <resultGeneration useMethodTag="playerinfo_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
         </testStep>
     </testCase>
 
     <testCase testCaseId="PI_17" testCaseName="PlayerInfo_Set_Atmos_Output_Invalid_Enable" desc="SetAtmosOutput rejects an invalid enable value">
-        <testCaseInfo testCaseType="direct" />
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Set_Atmos_Output_Invalid_Enable" method="String_Set_Atmos_Output">
             <params>
                 <param tag="enable" value="invalid_enable" />
@@ -336,7 +337,7 @@
     </testCase>
 
     <testCase testCaseId="PI_18" testCaseName="PlayerInfo_Set_Atmos_Output_Empty_Enable" desc="SetAtmosOutput rejects an empty enable value">
-        <testCaseInfo testCaseType="direct" />
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Set_Atmos_Output_Empty_Enable" method="String_Set_Atmos_Output">
             <params>
                 <param tag="enable" value="" />
@@ -346,7 +347,7 @@
     </testCase>
 
     <testCase testCaseId="PI_19" testCaseName="PlayerInfo_Set_Atmos_Output_Numeric_Enable" desc="SetAtmosOutput rejects a numeric enable value">
-        <testCaseInfo testCaseType="direct" />
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Set_Atmos_Output_Numeric_Enable" method="Numeric_Set_Atmos_Output">
             <params>
                 <param tag="enable" value="12345" />
@@ -356,7 +357,7 @@
     </testCase>
 
     <testCase testCaseId="PI_20" testCaseName="PlayerInfo_Set_Atmos_Output_Special_Character_Enable" desc="SetAtmosOutput rejects special characters in the enable value">
-        <testCaseInfo testCaseType="direct" />
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Set_Atmos_Output_Special_Character_Enable" method="String_Set_Atmos_Output">
             <params>
                 <param tag="enable" value="()^*!" />
@@ -366,7 +367,7 @@
     </testCase>
 
     <testCase testCaseId="PI_21" testCaseName="PlayerInfo_Set_Atmos_Output_Without_Enable" desc="SetAtmosOutput rejects invocation without the required enable parameter">
-        <testCaseInfo testCaseType="direct" />
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="dolbyfeature" />
         <testStep testStepId="1" name="Set_Atmos_Output_Without_Enable" method="String_Set_Atmos_Output">
             <resultGeneration useMethodTag="playerinfo_negative_scenario_validation" expectedValues="ERROR_GENERAL" />
         </testStep>
