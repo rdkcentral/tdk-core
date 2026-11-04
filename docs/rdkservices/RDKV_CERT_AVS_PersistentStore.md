@@ -18,6 +18,50 @@ RDKV_CERT_AVS_PersistentStore
    - [PersistentStore_SetValue_And_GetValue_API_with_Empty_Namespce_Operations](#persistentstore_setvalue_and_getvalue_api_with_empty_namespce_operations)
    - [PersistentStore_GetStorage_NamespaceLimit_For_DeletedNamespace](#persistentstore_getstorage_namespacelimit_for_deletednamespace)
    - [PersistentStore_ActivateDeactivate_Event_Test](#persistentstore_activatedeactivate_event_test)
+   - [PersistentStore_SetValue_Invalid_Scope](#persistentstore_setvalue_invalid_scope)
+   - [PersistentStore_SetValue_Empty_Scope](#persistentstore_setvalue_empty_scope)
+   - [PersistentStore_SetValue_Numeric_Scope](#persistentstore_setvalue_numeric_scope)
+   - [PersistentStore_SetValue_Special_Scope](#persistentstore_setvalue_special_scope)
+   - [PersistentStore_SetValue_Invalid_TTL](#persistentstore_setvalue_invalid_ttl)
+   - [PersistentStore_SetValue_Empty_TTL](#persistentstore_setvalue_empty_ttl)
+   - [PersistentStore_SetValue_Negative_TTL](#persistentstore_setvalue_negative_ttl)
+   - [PersistentStore_SetValue_Special_TTL](#persistentstore_setvalue_special_ttl)
+   - [PersistentStore_SetValue_Account_Invalid_TTL](#persistentstore_setvalue_account_invalid_ttl)
+   - [PersistentStore_SetValue_Account_Empty_TTL](#persistentstore_setvalue_account_empty_ttl)
+   - [PersistentStore_SetValue_Account_Negative_TTL](#persistentstore_setvalue_account_negative_ttl)
+   - [PersistentStore_SetValue_Account_Special_TTL](#persistentstore_setvalue_account_special_ttl)
+   - [PersistentStore_GetValue_Invalid_Scope](#persistentstore_getvalue_invalid_scope)
+   - [PersistentStore_GetValue_Empty_Scope](#persistentstore_getvalue_empty_scope)
+   - [PersistentStore_GetValue_Numeric_Scope](#persistentstore_getvalue_numeric_scope)
+   - [PersistentStore_GetValue_Special_Scope](#persistentstore_getvalue_special_scope)
+   - [PersistentStore_GetKeys_Invalid_Scope](#persistentstore_getkeys_invalid_scope)
+   - [PersistentStore_GetKeys_Empty_Scope](#persistentstore_getkeys_empty_scope)
+   - [PersistentStore_GetKeys_Numeric_Scope](#persistentstore_getkeys_numeric_scope)
+   - [PersistentStore_GetKeys_Special_Scope](#persistentstore_getkeys_special_scope)
+   - [PersistentStore_DeleteKey_Invalid_Scope](#persistentstore_deletekey_invalid_scope)
+   - [PersistentStore_DeleteKey_Empty_Scope](#persistentstore_deletekey_empty_scope)
+   - [PersistentStore_DeleteKey_Numeric_Scope](#persistentstore_deletekey_numeric_scope)
+   - [PersistentStore_DeleteKey_Special_Scope](#persistentstore_deletekey_special_scope)
+   - [PersistentStore_DeleteNamespace_Invalid_Scope](#persistentstore_deletenamespace_invalid_scope)
+   - [PersistentStore_DeleteNamespace_Empty_Scope](#persistentstore_deletenamespace_empty_scope)
+   - [PersistentStore_DeleteNamespace_Numeric_Scope](#persistentstore_deletenamespace_numeric_scope)
+   - [PersistentStore_DeleteNamespace_Special_Scope](#persistentstore_deletenamespace_special_scope)
+   - [PersistentStore_GetNamespaces_Invalid_Scope](#persistentstore_getnamespaces_invalid_scope)
+   - [PersistentStore_GetNamespaces_Empty_Scope](#persistentstore_getnamespaces_empty_scope)
+   - [PersistentStore_GetNamespaces_Numeric_Scope](#persistentstore_getnamespaces_numeric_scope)
+   - [PersistentStore_GetNamespaces_Special_Scope](#persistentstore_getnamespaces_special_scope)
+   - [PersistentStore_GetStorageSize_Invalid_Scope](#persistentstore_getstoragesize_invalid_scope)
+   - [PersistentStore_GetStorageSize_Empty_Scope](#persistentstore_getstoragesize_empty_scope)
+   - [PersistentStore_GetStorageSize_Numeric_Scope](#persistentstore_getstoragesize_numeric_scope)
+   - [PersistentStore_GetStorageSize_Special_Scope](#persistentstore_getstoragesize_special_scope)
+   - [PersistentStore_SetNamespaceStorageLimit_Invalid_Scope](#persistentstore_setnamespacestoragelimit_invalid_scope)
+   - [PersistentStore_SetNamespaceStorageLimit_Empty_Scope](#persistentstore_setnamespacestoragelimit_empty_scope)
+   - [PersistentStore_SetNamespaceStorageLimit_Numeric_Scope](#persistentstore_setnamespacestoragelimit_numeric_scope)
+   - [PersistentStore_SetNamespaceStorageLimit_Special_Scope](#persistentstore_setnamespacestoragelimit_special_scope)
+   - [PersistentStore_GetNamespaceStorageLimit_Invalid_Scope](#persistentstore_getnamespacestoragelimit_invalid_scope)
+   - [PersistentStore_GetNamespaceStorageLimit_Empty_Scope](#persistentstore_getnamespacestoragelimit_empty_scope)
+   - [PersistentStore_GetNamespaceStorageLimit_Numeric_Scope](#persistentstore_getnamespacestoragelimit_numeric_scope)
+   - [PersistentStore_GetNamespaceStorageLimit_Special_Scope](#persistentstore_getnamespacestoragelimit_special_scope)
 4. [Plugin Post-conditions](#plugin-post-conditions)
 5. [Test Attributes](#test-attributes)
 
@@ -28,7 +72,7 @@ accessible via JSON-RPC under the callsign `org.rdk.PersistentStore` (version 1)
 
 ## Plugin Pre-conditions
 
-### Plugin Pre-condition 1: Activate_Plugins
+### Plugin Pre-condition 1: Activate_PersistentStore_Plugin
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
@@ -296,6 +340,799 @@ Validates statechange event on activating/deactivating the plugin
 | 4 | Activate org.rdk.PersistentStore plugin | Invoke activate on Controller with callsign: "org.rdk.PersistentStore"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.PersistentStore"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
 | 5 | Check state change event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `org.rdk.persistentstore` with state `"activated"` |
 | 6 | Check plugin active status | Invoke status on Controller for org.rdk.PersistentStore<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.PersistentStore"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+
+---
+
+<a id="persistentstore_setvalue_invalid_scope"></a>
+### TestCase Name
+PersistentStore_SetValue_Invalid_Scope
+
+### TestCase ID
+PS_13
+
+### TestCase Objective
+Set value rejects an invalid scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set value invalid scope | Invoke setValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", value: "Scope_Value", scope: "invalid_scope"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "value": "Scope_Value", "scope": "invalid_scope"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
+
+---
+
+<a id="persistentstore_setvalue_empty_scope"></a>
+### TestCase Name
+PersistentStore_SetValue_Empty_Scope
+
+### TestCase ID
+PS_14
+
+### TestCase Objective
+Set value rejects an empty scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set value empty scope | Invoke setValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", value: "Scope_Value", scope: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "value": "Scope_Value", "scope": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
+
+---
+
+<a id="persistentstore_setvalue_numeric_scope"></a>
+### TestCase Name
+PersistentStore_SetValue_Numeric_Scope
+
+### TestCase ID
+PS_15
+
+### TestCase Objective
+Set value rejects a numeric scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set value numeric scope | Invoke setValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", value: "Scope_Value", scope: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "value": "Scope_Value", "scope": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
+
+---
+
+<a id="persistentstore_setvalue_special_scope"></a>
+### TestCase Name
+PersistentStore_SetValue_Special_Scope
+
+### TestCase ID
+PS_16
+
+### TestCase Objective
+Set value rejects special characters in scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set value special scope | Invoke setValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", value: "Scope_Value", scope: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "value": "Scope_Value", "scope": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
+
+---
+
+<a id="persistentstore_setvalue_invalid_ttl"></a>
+### TestCase Name
+PersistentStore_SetValue_Invalid_TTL
+
+### TestCase ID
+PS_17
+
+### TestCase Objective
+Set value rejects an invalid TTL
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set value invalid TTL | Invoke setValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", value: "Scope_Value", scope: "device", ttl: "invalid_ttl"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "value": "Scope_Value", "scope": "device", "ttl": "invalid_ttl"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
+
+---
+
+<a id="persistentstore_setvalue_empty_ttl"></a>
+### TestCase Name
+PersistentStore_SetValue_Empty_TTL
+
+### TestCase ID
+PS_18
+
+### TestCase Objective
+Set value rejects an empty TTL
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set value empty TTL | Invoke setValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", value: "Scope_Value", scope: "device", ttl: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "value": "Scope_Value", "scope": "device", "ttl": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_setvalue_negative_ttl"></a>
+### TestCase Name
+PersistentStore_SetValue_Negative_TTL
+
+### TestCase ID
+PS_19
+
+### TestCase Objective
+Set value rejects a negative TTL
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set value negative TTL | Invoke setValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", value: "Scope_Value", scope: "device", ttl: -1<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "value": "Scope_Value", "scope": "device", "ttl": -1}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_setvalue_special_ttl"></a>
+### TestCase Name
+PersistentStore_SetValue_Special_TTL
+
+### TestCase ID
+PS_20
+
+### TestCase Objective
+Set value rejects special characters in TTL
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set value special TTL | Invoke setValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", value: "Scope_Value", scope: "device", ttl: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "value": "Scope_Value", "scope": "device", "ttl": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
+
+---
+
+<a id="persistentstore_setvalue_account_invalid_ttl"></a>
+### TestCase Name
+PersistentStore_SetValue_Account_Invalid_TTL
+
+### TestCase ID
+PS_21
+
+### TestCase Objective
+Set value rejects an invalid TTL
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set value account invalid TTL | Invoke setValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", value: "Scope_Value", scope: "account", ttl: "invalid_ttl"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "value": "Scope_Value", "scope": "account", "ttl": "invalid_ttl"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
+
+---
+
+<a id="persistentstore_setvalue_account_empty_ttl"></a>
+### TestCase Name
+PersistentStore_SetValue_Account_Empty_TTL
+
+### TestCase ID
+PS_22
+
+### TestCase Objective
+Set value rejects an empty TTL
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set value account empty TTL | Invoke setValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", value: "Scope_Value", scope: "account", ttl: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "value": "Scope_Value", "scope": "account", "ttl": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_setvalue_account_negative_ttl"></a>
+### TestCase Name
+PersistentStore_SetValue_Account_Negative_TTL
+
+### TestCase ID
+PS_23
+
+### TestCase Objective
+Set value rejects a negative TTL
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set value account negative TTL | Invoke setValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", value: "Scope_Value", scope: "account", ttl: -1<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "value": "Scope_Value", "scope": "account", "ttl": -1}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_setvalue_account_special_ttl"></a>
+### TestCase Name
+PersistentStore_SetValue_Account_Special_TTL
+
+### TestCase ID
+PS_24
+
+### TestCase Objective
+Set value rejects special characters in TTL
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set value account special TTL | Invoke setValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", value: "Scope_Value", scope: "account", ttl: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "value": "Scope_Value", "scope": "account", "ttl": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
+
+---
+
+<a id="persistentstore_getvalue_invalid_scope"></a>
+### TestCase Name
+PersistentStore_GetValue_Invalid_Scope
+
+### TestCase ID
+PS_25
+
+### TestCase Objective
+GetValue rejects an invalid scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get value invalid scope | Invoke getValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", scope: "invalid_scope"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "scope": "invalid_scope"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_NOT_EXIST` |
+
+---
+
+<a id="persistentstore_getvalue_empty_scope"></a>
+### TestCase Name
+PersistentStore_GetValue_Empty_Scope
+
+### TestCase ID
+PS_26
+
+### TestCase Objective
+GetValue rejects an empty scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get value empty scope | Invoke getValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", scope: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "scope": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_NOT_EXIST` |
+
+---
+
+<a id="persistentstore_getvalue_numeric_scope"></a>
+### TestCase Name
+PersistentStore_GetValue_Numeric_Scope
+
+### TestCase ID
+PS_27
+
+### TestCase Objective
+GetValue rejects a numeric scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get value numeric scope | Invoke getValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", scope: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "scope": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_NOT_EXIST` |
+
+---
+
+<a id="persistentstore_getvalue_special_scope"></a>
+### TestCase Name
+PersistentStore_GetValue_Special_Scope
+
+### TestCase ID
+PS_28
+
+### TestCase Objective
+GetValue rejects special characters in scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get value special scope | Invoke getValue on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", scope: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getValue", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "scope": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_NOT_EXIST` |
+
+---
+
+<a id="persistentstore_getkeys_invalid_scope"></a>
+### TestCase Name
+PersistentStore_GetKeys_Invalid_Scope
+
+### TestCase ID
+PS_29
+
+### TestCase Objective
+GetKeys rejects an invalid scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get keys invalid scope | Invoke getKeys on org.rdk.PersistentStore with namespace: "Scope_Namespace", scope: "invalid_scope"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getKeys", "params": {"namespace": "Scope_Namespace", "scope": "invalid_scope"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_getkeys_empty_scope"></a>
+### TestCase Name
+PersistentStore_GetKeys_Empty_Scope
+
+### TestCase ID
+PS_30
+
+### TestCase Objective
+GetKeys rejects an empty scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get keys empty scope | Invoke getKeys on org.rdk.PersistentStore with namespace: "Scope_Namespace", scope: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getKeys", "params": {"namespace": "Scope_Namespace", "scope": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_getkeys_numeric_scope"></a>
+### TestCase Name
+PersistentStore_GetKeys_Numeric_Scope
+
+### TestCase ID
+PS_31
+
+### TestCase Objective
+GetKeys rejects a numeric scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get keys numeric scope | Invoke getKeys on org.rdk.PersistentStore with namespace: "Scope_Namespace", scope: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getKeys", "params": {"namespace": "Scope_Namespace", "scope": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_getkeys_special_scope"></a>
+### TestCase Name
+PersistentStore_GetKeys_Special_Scope
+
+### TestCase ID
+PS_32
+
+### TestCase Objective
+GetKeys rejects special characters in scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get keys special scope | Invoke getKeys on org.rdk.PersistentStore with namespace: "Scope_Namespace", scope: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getKeys", "params": {"namespace": "Scope_Namespace", "scope": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_deletekey_invalid_scope"></a>
+### TestCase Name
+PersistentStore_DeleteKey_Invalid_Scope
+
+### TestCase ID
+PS_33
+
+### TestCase Objective
+DeleteKey rejects an invalid scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Delete key invalid scope | Invoke deleteKey on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", scope: "invalid_scope"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteKey", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "scope": "invalid_scope"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_deletekey_empty_scope"></a>
+### TestCase Name
+PersistentStore_DeleteKey_Empty_Scope
+
+### TestCase ID
+PS_34
+
+### TestCase Objective
+DeleteKey rejects an empty scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Delete key empty scope | Invoke deleteKey on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", scope: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteKey", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "scope": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_deletekey_numeric_scope"></a>
+### TestCase Name
+PersistentStore_DeleteKey_Numeric_Scope
+
+### TestCase ID
+PS_35
+
+### TestCase Objective
+DeleteKey rejects a numeric scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Delete key numeric scope | Invoke deleteKey on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", scope: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteKey", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "scope": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_deletekey_special_scope"></a>
+### TestCase Name
+PersistentStore_DeleteKey_Special_Scope
+
+### TestCase ID
+PS_36
+
+### TestCase Objective
+DeleteKey rejects special characters in scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Delete key special scope | Invoke deleteKey on org.rdk.PersistentStore with namespace: "Scope_Namespace", key: "Scope_Key", scope: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteKey", "params": {"namespace": "Scope_Namespace", "key": "Scope_Key", "scope": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_deletenamespace_invalid_scope"></a>
+### TestCase Name
+PersistentStore_DeleteNamespace_Invalid_Scope
+
+### TestCase ID
+PS_37
+
+### TestCase Objective
+DeleteNamespace rejects an invalid scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Delete namespace invalid scope | Invoke deleteNamespace on org.rdk.PersistentStore with namespace: "Scope_Namespace", scope: "invalid_scope"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteNamespace", "params": {"namespace": "Scope_Namespace", "scope": "invalid_scope"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_deletenamespace_empty_scope"></a>
+### TestCase Name
+PersistentStore_DeleteNamespace_Empty_Scope
+
+### TestCase ID
+PS_38
+
+### TestCase Objective
+DeleteNamespace rejects an empty scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Delete namespace empty scope | Invoke deleteNamespace on org.rdk.PersistentStore with namespace: "Scope_Namespace", scope: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteNamespace", "params": {"namespace": "Scope_Namespace", "scope": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_deletenamespace_numeric_scope"></a>
+### TestCase Name
+PersistentStore_DeleteNamespace_Numeric_Scope
+
+### TestCase ID
+PS_39
+
+### TestCase Objective
+DeleteNamespace rejects a numeric scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Delete namespace numeric scope | Invoke deleteNamespace on org.rdk.PersistentStore with namespace: "Scope_Namespace", scope: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteNamespace", "params": {"namespace": "Scope_Namespace", "scope": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_deletenamespace_special_scope"></a>
+### TestCase Name
+PersistentStore_DeleteNamespace_Special_Scope
+
+### TestCase ID
+PS_40
+
+### TestCase Objective
+DeleteNamespace rejects special characters in scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Delete namespace special scope | Invoke deleteNamespace on org.rdk.PersistentStore with namespace: "Scope_Namespace", scope: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.deleteNamespace", "params": {"namespace": "Scope_Namespace", "scope": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_getnamespaces_invalid_scope"></a>
+### TestCase Name
+PersistentStore_GetNamespaces_Invalid_Scope
+
+### TestCase ID
+PS_41
+
+### TestCase Objective
+GetNamespaces rejects an invalid scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get namespaces invalid scope | Invoke getNamespaces on org.rdk.PersistentStore with scope: "invalid_scope"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaces", "params": {"scope": "invalid_scope"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_getnamespaces_empty_scope"></a>
+### TestCase Name
+PersistentStore_GetNamespaces_Empty_Scope
+
+### TestCase ID
+PS_42
+
+### TestCase Objective
+GetNamespaces rejects an empty scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get namespaces empty scope | Invoke getNamespaces on org.rdk.PersistentStore with scope: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaces", "params": {"scope": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_getnamespaces_numeric_scope"></a>
+### TestCase Name
+PersistentStore_GetNamespaces_Numeric_Scope
+
+### TestCase ID
+PS_43
+
+### TestCase Objective
+GetNamespaces rejects a numeric scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get namespaces numeric scope | Invoke getNamespaces on org.rdk.PersistentStore with scope: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaces", "params": {"scope": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_getnamespaces_special_scope"></a>
+### TestCase Name
+PersistentStore_GetNamespaces_Special_Scope
+
+### TestCase ID
+PS_44
+
+### TestCase Objective
+GetNamespaces rejects special characters in scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get namespaces special scope | Invoke getNamespaces on org.rdk.PersistentStore with scope: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaces", "params": {"scope": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_getstoragesize_invalid_scope"></a>
+### TestCase Name
+PersistentStore_GetStorageSize_Invalid_Scope
+
+### TestCase ID
+PS_45
+
+### TestCase Objective
+GetStorageSizes rejects an invalid scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get storage size invalid scope | Invoke getStorageSize on org.rdk.PersistentStore with scope: "invalid_scope"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getStorageSize", "params": {"scope": "invalid_scope"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_getstoragesize_empty_scope"></a>
+### TestCase Name
+PersistentStore_GetStorageSize_Empty_Scope
+
+### TestCase ID
+PS_46
+
+### TestCase Objective
+GetStorageSizes rejects an empty scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get storage size empty scope | Invoke getStorageSize on org.rdk.PersistentStore with scope: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getStorageSize", "params": {"scope": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_getstoragesize_numeric_scope"></a>
+### TestCase Name
+PersistentStore_GetStorageSize_Numeric_Scope
+
+### TestCase ID
+PS_47
+
+### TestCase Objective
+GetStorageSizes rejects a numeric scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get storage size numeric scope | Invoke getStorageSize on org.rdk.PersistentStore with scope: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getStorageSize", "params": {"scope": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_getstoragesize_special_scope"></a>
+### TestCase Name
+PersistentStore_GetStorageSize_Special_Scope
+
+### TestCase ID
+PS_48
+
+### TestCase Objective
+GetStorageSizes rejects special characters in scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get storage size special scope | Invoke getStorageSize on org.rdk.PersistentStore with scope: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getStorageSize", "params": {"scope": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL` |
+
+---
+
+<a id="persistentstore_setnamespacestoragelimit_invalid_scope"></a>
+### TestCase Name
+PersistentStore_SetNamespaceStorageLimit_Invalid_Scope
+
+### TestCase ID
+PS_49
+
+### TestCase Objective
+setNamespaceStorageLimit rejects an invalid scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set storage limit invalid scope | Invoke setNamespaceStorageLimit on org.rdk.PersistentStore with namespace: "Scope_Namespace", storageLimit: 20, scope: "invalid_scope"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setNamespaceStorageLimit", "params": {"namespace": "Scope_Namespace", "storageLimit": 20, "scope": "invalid_scope"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
+
+---
+
+<a id="persistentstore_setnamespacestoragelimit_empty_scope"></a>
+### TestCase Name
+PersistentStore_SetNamespaceStorageLimit_Empty_Scope
+
+### TestCase ID
+PS_50
+
+### TestCase Objective
+setNamespaceStorageLimit rejects an empty scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set storage limit empty scope | Invoke setNamespaceStorageLimit on org.rdk.PersistentStore with namespace: "Scope_Namespace", storageLimit: 20, scope: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setNamespaceStorageLimit", "params": {"namespace": "Scope_Namespace", "storageLimit": 20, "scope": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
+
+---
+
+<a id="persistentstore_setnamespacestoragelimit_numeric_scope"></a>
+### TestCase Name
+PersistentStore_SetNamespaceStorageLimit_Numeric_Scope
+
+### TestCase ID
+PS_51
+
+### TestCase Objective
+setNamespaceStorageLimit rejects a numeric scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set storage limit numeric scope | Invoke setNamespaceStorageLimit on org.rdk.PersistentStore with namespace: "Scope_Namespace", storageLimit: 20, scope: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setNamespaceStorageLimit", "params": {"namespace": "Scope_Namespace", "storageLimit": 20, "scope": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
+
+---
+
+<a id="persistentstore_setnamespacestoragelimit_special_scope"></a>
+### TestCase Name
+PersistentStore_SetNamespaceStorageLimit_Special_Scope
+
+### TestCase ID
+PS_52
+
+### TestCase Objective
+setNamespaceStorageLimit rejects special characters in scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Set storage limit special scope | Invoke setNamespaceStorageLimit on org.rdk.PersistentStore with namespace: "Scope_Namespace", storageLimit: 20, scope: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.setNamespaceStorageLimit", "params": {"namespace": "Scope_Namespace", "storageLimit": 20, "scope": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_INVALID_INPUT_LENGTH` |
+
+---
+
+<a id="persistentstore_getnamespacestoragelimit_invalid_scope"></a>
+### TestCase Name
+PersistentStore_GetNamespaceStorageLimit_Invalid_Scope
+
+### TestCase ID
+PS_53
+
+### TestCase Objective
+getNamespaceStorageLimit rejects an invalid scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get storage limit invalid scope | Invoke getNamespaceStorageLimit on org.rdk.PersistentStore with namespace: "Scope_Namespace", scope: "invalid_scope"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaceStorageLimit", "params": {"namespace": "Scope_Namespace", "scope": "invalid_scope"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_NOT_EXIST` |
+
+---
+
+<a id="persistentstore_getnamespacestoragelimit_empty_scope"></a>
+### TestCase Name
+PersistentStore_GetNamespaceStorageLimit_Empty_Scope
+
+### TestCase ID
+PS_54
+
+### TestCase Objective
+getNamespaceStorageLimit rejects an empty scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get storage limit empty scope | Invoke getNamespaceStorageLimit on org.rdk.PersistentStore with namespace: "Scope_Namespace", scope: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaceStorageLimit", "params": {"namespace": "Scope_Namespace", "scope": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_NOT_EXIST` |
+
+---
+
+<a id="persistentstore_getnamespacestoragelimit_numeric_scope"></a>
+### TestCase Name
+PersistentStore_GetNamespaceStorageLimit_Numeric_Scope
+
+### TestCase ID
+PS_55
+
+### TestCase Objective
+getNamespaceStorageLimit rejects a numeric scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get storage limit numeric scope | Invoke getNamespaceStorageLimit on org.rdk.PersistentStore with namespace: "Scope_Namespace", scope: 12345<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaceStorageLimit", "params": {"namespace": "Scope_Namespace", "scope": 12345}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_NOT_EXIST` |
+
+---
+
+<a id="persistentstore_getnamespacestoragelimit_special_scope"></a>
+### TestCase Name
+PersistentStore_GetNamespaceStorageLimit_Special_Scope
+
+### TestCase ID
+PS_56
+
+### TestCase Objective
+getNamespaceStorageLimit rejects special characters in scope
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get storage limit special scope | Invoke getNamespaceStorageLimit on org.rdk.PersistentStore with namespace: "Scope_Namespace", scope: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.PersistentStore.1.getNamespaceStorageLimit", "params": {"namespace": "Scope_Namespace", "scope": "()^*!"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_NOT_EXIST` |
+
 
 ## Plugin Post-conditions
 
