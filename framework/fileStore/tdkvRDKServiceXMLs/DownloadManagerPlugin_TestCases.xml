@@ -183,7 +183,7 @@
             <params>
                 <param tag="fileLocator" value=""/>
             </params>
-            <resultGeneration useMethodTag="downloadmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+            <resultGeneration useMethodTag="downloadmanager_negative_scenario_validation" expectedValues="ERROR_GENERAL,Could not access requested service"/>
         </testStep>
     </testCase>
 
