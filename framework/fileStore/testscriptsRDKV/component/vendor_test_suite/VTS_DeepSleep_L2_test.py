@@ -116,7 +116,7 @@ if "SUCCESS" in result.upper():
     #Set Custom List of TestCases
     testCaseList = DeepSleep_L2_List
     #Set basepath of test
-    basePath = VTS_Binary_basePath + DeepSleep_basePath
+    basePath = DeepSleep_basePath
     #SkipTestCaseList
     SkipTestCaseList = DeepSleep_L2_SkipTestCaseList
     boxtype = obj.getDeviceBoxType();

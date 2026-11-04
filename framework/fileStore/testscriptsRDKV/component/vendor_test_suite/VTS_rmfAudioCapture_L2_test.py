@@ -114,7 +114,7 @@ if "SUCCESS" in result.upper():
     #Set Custom List of TestCases
     testCaseList = rmfAudioCapture_L2_List
     #Set basepath of test
-    basePath = VTS_Binary_basePath + rmfAudioCapture_basePath
+    basePath =  rmfAudioCapture_basePath
 
     #Configuring plugin name
     words = module.split()

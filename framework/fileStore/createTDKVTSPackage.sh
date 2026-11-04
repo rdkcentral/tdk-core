@@ -76,7 +76,7 @@ trap cleanup EXIT
 # ---------------------------------------------------------------------------
 declare -A MODULE_FILES
 MODULE_FILES[deepsleep_manager]="hal_test_iarmmgrs-deepsleep-hal deepsleepmanagerWakeUpSources.yaml"
-MODULE_FILES[device_settings]="hal_test_dshal Source_AudioSettings.yaml Source_VideoDevice.yaml Source_4K_VideoPort.yaml Source_4K_Display.yaml Source_HostSettings.yaml"
+MODULE_FILES[device_settings]="hal_test_dshal Source_AudioSettings.yaml Source_VideoDevice.yaml Source_4K_VideoPort.yaml Source_4K_Display.yaml Source_HostSettings.yaml Source_FPD.yaml"
 MODULE_FILES[hdmi_cec]="hal_test_RCECHal cec_responses.yml source_hdmiCEC.yml"
 MODULE_FILES[power_manager]="hal_test_iarmmgrs-power-hal source_powerManager.yaml"
 MODULE_FILES[rmf_audio_capture]="hal_test_rmfAudioCapture rmfAudioCaptureAuxNotSupported.yaml"

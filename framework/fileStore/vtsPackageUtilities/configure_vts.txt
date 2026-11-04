@@ -24,7 +24,7 @@ SDK_INSTALL_SCRIPT=
 #Mention the path from fileStore
 #If you want to install the SDK in fileStore/vtsPackageUtilities
 #Mention SDK_INSTALL_PATH=vtsPackageUtilities/RDK9_SDK/
-SDK_INSTALL_PATH=
+SDK_INSTALL_PATH=vtsPackageUtilities/RDK9_SDK/
 
 #HPK release version (valid tag in rdk-hpk-documentation).
 #The HAL Testing versions for each module are derived automatically from the
