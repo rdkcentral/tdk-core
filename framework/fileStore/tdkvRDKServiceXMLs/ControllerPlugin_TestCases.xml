@@ -13,736 +13,1154 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-
 <testPlugin pluginName="Controller" pluginVersion="1">
     <pluginPreRequisite>
-      <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+        <prerequisite requisiteId="1" requisiteName="Activate_System_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
-                  <param tag="plugin" value="org.rdk.System" indexOnly="true" />
+                    <param tag="plugin" value="org.rdk.System" indexOnly="true" />
                 </params>
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.System" />
             </testStep>
-            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
                 <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.System" />
                 <params>
-                  <param tag="callsign" value="org.rdk.System" />
+                    <param tag="callsign" value="org.rdk.System" />
                 </params>
             </testStep>
-            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
                 <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.System" />
                 <params>
-                  <param tag="plugin" value="org.rdk.System" indexOnly="true" />
+                    <param tag="plugin" value="org.rdk.System" indexOnly="true" />
                 </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.System" expectedValues="activated"/>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.System" expectedValues="activated" />
             </testStep>
-      </prerequisite>
-      <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false" >
-          <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
-          <event pluginName="Controller" eventName="Event_Controller_All" />
-      </prerequisite>
+        </prerequisite>
+
+        <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+            <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
+            <event pluginName="Controller" eventName="Event_Controller_All" />
+        </prerequisite>
     </pluginPreRequisite>
-    <testCase testCaseId="Controller_01" testCaseName="Controller_Start_Discovery"  desc="Starts the network discovery">
-      <testCaseInfo testCaseType="direct" configurableTest="true" testKey="CONTROLLER_SUPPORTED_FEATURES" useMethodTag="controller_check_feature_applicability" arguments="networkdiscovery"/>
-      <testStep testStepId="1" name="Start_Discovery" method="Start_Discovery" >
-        <params>
-          <param tag="ttl" value="2"/>
-        </params>
-      </testStep>
-       <testStep testStepId="2" name="Get_Discovery_Results" method="Discovery_Results" >
-        <resultGeneration useMethodTag="controller_check_discovery_result" />
-      </testStep>
-    </testCase>
-    <testCase testCaseId="Controller_02" testCaseName="Controller_Get_Subsystems_Status"  desc="Status of the subsystems">
-      <testCaseInfo testCaseType="direct"/>
-      <testStep testStepId="1" name="Subsystems_Status" method="Subsystems_Status">
-        <resultGeneration useMethodTag="controller_check_subsystems_status" />
-      </testStep>
-    </testCase>
-    <testCase testCaseId="Controller_03" testCaseName="Controller_Get_Process_Info"  desc="Gives information about the framework process">
-      <testCaseInfo testCaseType="direct"/>
-      <testStep testStepId="1" name="Process_Info" method="Process_Info">
-        <resultGeneration useMethodTag="controller_check_processinfo" />
-      </testStep>
-    </testCase>
-    <testCase testCaseId="Controller_04" testCaseName="Controller_Get_Environment_Variables"  desc="Gets the value of the environment variables">
-      <testCaseInfo testCaseType="loop"/>
-       <testStep testStepId="1" name="Check_Environment_Variables" testStepType="loop" >
-         <subtestStep subtestStepId="1" name="Get_Environment_Variable" method="Environment_Variable" >
-           <params>
-             <param tag="value"  iteration="true" useConfigFile="true" key="CONTROLLER_ENVIRONMENT_VARIABLES"  indexOnly="true"/>
-           </params>
-           <resultGeneration useMethodTag="controller_check_environment_variable_value"  />
-         </subtestStep>
-       </testStep>
-    </testCase>
-    <testCase testCaseId="Controller_05" testCaseName="Controller_Get_Active_Connections_Info"  desc="Gives information about the framework process">
-      <testCaseInfo testCaseType="direct"/>
-      <testStep testStepId="1" name="Get_Active_Connections_Info" method="Get_Active_Connections_Info">
-        <resultGeneration useMethodTag="controller_check_active_connection" />
-      </testStep>
-    </testCase>
-    <testCase testCaseId="Controller_06" testCaseName="Controller_Get_All_Plugins_Status"  desc="Gets the plugin current status">
-      <testCaseInfo testCaseType="loop" />
-      <testStep testStepId="1" name="Check_Plugins_Status" testStepType="loop">
-        <subtestStep subtestStepId="1" name="Check_Plugins_Status" method="Get_Plugin_Status" >
-          <params>
-            <param tag="callsign"  iteration="true" useConfigFile="true" key="Supported_Plugins"  indexOnly="true" />
-          </params>
-          <resultGeneration useMethodTag="controller_get_plugin_state">
-            <arguments value="check_status" useIterableArg="true"/>
-          </resultGeneration>
-        </subtestStep>
-      </testStep>
-    </testCase>
-    <testCase testCaseId="Controller_07" testCaseName="Controller_Get_DeviceInfo_Configuration"  desc="Gets the configuration of DeviceInfo plugin">
-      <testCaseInfo testCaseType="direct"/>
-      <testStep testStepId="1" name="Get_Configuration" method="Configuration">
-        <params>
-          <param tag="value" value="DeviceInfo" indexOnly="true"/>
-        </params>
-        <resultGeneration useMethodTag="controller_get_configuration"/>
-      </testStep>
-    </testCase>
-    
-    <testCase testCaseId="Controller_08" testCaseName="Controller_Store_Configuration"  desc="Stores the configuration">
-      <testCaseInfo testCaseType="direct"/>
-      <testStep testStepId="1" name="Store_Configuration" method="Store_Configuration">
-      </testStep>
+
+    <testCase testCaseId="Controller_01" testCaseName="Controller_Start_Discovery" desc="Starts the network discovery">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="CONTROLLER_SUPPORTED_FEATURES" useMethodTag="controller_check_feature_applicability" arguments="networkdiscovery" />
+        <testStep testStepId="1" name="Start_Discovery" method="Start_Discovery">
+            <params>
+                <param tag="ttl" value="2" />
+            </params>
+        </testStep>
+        <testStep testStepId="2" name="Get_Discovery_Results" method="Discovery_Results">
+            <resultGeneration useMethodTag="controller_check_discovery_result" />
+        </testStep>
     </testCase>
 
-    <testCase testCaseId="Controller_09" testCaseName="Controller_Delete_Directory_Contents"  desc="Removes contents of a directory from the persistent storage">
-      <testCaseInfo testCaseType="direct"/>
-      <testStep testStepId="1" name="Execute_Command" action="externalFnCall" >
-        <resultGeneration useMethodTag="Create_File">
-          <arguments useConfigFile="true" key="CONTROLLER_FILE_DELETE_PATH" />
-        </resultGeneration>
-      </testStep>
-      <testStep testStepId="2" name="Delete_Directory_Contents" method="Delete_Directory_Contents">
-        <params>
-          <param tag="path" value="TDK_TEST_FILE.txt" />
-        </params>
-      </testStep>
-      <testStep testStepId="3" name="Execute_Command" action="externalFnCall" >
-        <resultGeneration useMethodTag="Check_If_File_Exists"  expectedValues="File does not exist" >
-          <arguments useConfigFile="true" key="CONTROLLER_FILE_DELETE_PATH" />
-        </resultGeneration>
-      </testStep>
-    <testCasePostRequisite>
-         <postrequisite requisiteId="1" requisiteName="Delete_Test_files">
-            <testStep testStepId="1" name="Execute_Command" action="externalFnCall">
-                <resultGeneration useMethodTag="Delete_Test_File" >
-                    <arguments useConfigFile="true" key="CONTROLLER_FILE_DELETE_PATH" />
+    <testCase testCaseId="Controller_02" testCaseName="Controller_Get_Subsystems_Status" desc="Status of the subsystems">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Subsystems_Status" method="Subsystems_Status">
+            <resultGeneration useMethodTag="controller_check_subsystems_status" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_03" testCaseName="Controller_Get_Process_Info" desc="Gives information about the framework process">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Process_Info" method="Process_Info">
+            <resultGeneration useMethodTag="controller_check_processinfo" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_04" testCaseName="Controller_Get_Environment_Variables" desc="Gets the value of the environment variables">
+        <testCaseInfo testCaseType="loop" />
+        <testStep testStepId="1" name="Check_Environment_Variables" testStepType="loop">
+            <subtestStep subtestStepId="1" name="Get_Environment_Variable" method="Environment_Variable">
+                <params>
+                    <param tag="value" iteration="true" useConfigFile="true" key="CONTROLLER_ENVIRONMENT_VARIABLES" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_check_environment_variable_value" />
+            </subtestStep>
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_05" testCaseName="Controller_Get_Active_Connections_Info" desc="Gives information about the framework process">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Active_Connections_Info" method="Get_Active_Connections_Info">
+            <resultGeneration useMethodTag="controller_check_active_connection" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_06" testCaseName="Controller_Get_All_Plugins_Status" desc="Gets the plugin current status">
+        <testCaseInfo testCaseType="loop" />
+        <testStep testStepId="1" name="Check_Plugins_Status" testStepType="loop">
+            <subtestStep subtestStepId="1" name="Check_Plugins_Status" method="Get_Plugin_Status">
+                <params>
+                    <param tag="callsign" iteration="true" useConfigFile="true" key="Supported_Plugins" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state">
+                    <arguments value="check_status" useIterableArg="true" />
                 </resultGeneration>
-            </testStep>
-         </postrequisite>
-    </testCasePostRequisite>
+            </subtestStep>
+        </testStep>
     </testCase>
 
-    <testCase testCaseId="Controller_10" testCaseName="Controller_Get_Plugins_State"  desc="Checks the plugin status" >
-      <testCaseInfo testCaseType="loop"/>
-      <testStep testStepId="1" name="System_reboot" method="Reboot" rebootStep="yes" pluginName="System" >
-        <resultGeneration useMethodTag="system_check_set_operation"  />
-      </testStep>
-      <testStep testStepId="2" name="Check_Plugins_Status" testStepType="loop" delay="10" >
-        <subtestStep subtestStepId="1" name="Check_Plugins_Status" method="Get_Plugin_Status" >
-          <params>
-            <param tag="callsign"  iteration="true" useConfigFile="true" key="Supported_Plugins"  indexOnly="true" />
-          </params>
-          <resultGeneration useMethodTag="controller_check_default_plugin_state" >
-            <arguments value="check_default_state" useIterableArg="true"/>
-          </resultGeneration>
-        </subtestStep>
+    <testCase testCaseId="Controller_07" testCaseName="Controller_Get_DeviceInfo_Configuration" desc="Gets the configuration of DeviceInfo plugin">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Configuration" method="Configuration">
+            <params>
+                <param tag="value" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_configuration" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_08" testCaseName="Controller_Store_Configuration" desc="Stores the configuration">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Store_Configuration" method="Store_Configuration">
       </testStep>
     </testCase>
-     
-    <testCase testCaseId="Controller_11" testCaseName="Controller_Get_WPE_Process_Status"  desc="Checks whether WPE Process is running or not" >
-      <testCaseInfo testCaseType="loop"/>
-      <testStep testStepId="1" name="Check_WPE_Process" action="externalFnCall" >
-        <resultGeneration useMethodTag="Check_WPE_Process" >
-            <expectedValues useConfigFile="true" key="WPE_PROCESSES_LIST" />
-        </resultGeneration>
-      </testStep>
+
+    <testCase testCaseId="Controller_09" testCaseName="Controller_Delete_Directory_Contents" desc="Removes contents of a directory from the persistent storage">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Execute_Command" action="externalFnCall">
+            <resultGeneration useMethodTag="Create_File">
+                <arguments useConfigFile="true" key="CONTROLLER_FILE_DELETE_PATH" />
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Delete_Directory_Contents" method="Delete_Directory_Contents">
+            <params>
+                <param tag="path" value="TDK_TEST_FILE.txt" />
+            </params>
+        </testStep>
+        <testStep testStepId="3" name="Execute_Command" action="externalFnCall">
+            <resultGeneration useMethodTag="Check_If_File_Exists" expectedValues="File does not exist">
+                <arguments useConfigFile="true" key="CONTROLLER_FILE_DELETE_PATH" />
+            </resultGeneration>
+        </testStep>
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Delete_Test_files">
+                <testStep testStepId="1" name="Execute_Command" action="externalFnCall">
+                    <resultGeneration useMethodTag="Delete_Test_File">
+                        <arguments useConfigFile="true" key="CONTROLLER_FILE_DELETE_PATH" />
+                    </resultGeneration>
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
     </testCase>
-   
+
+    <testCase testCaseId="Controller_10" testCaseName="Controller_Get_Plugins_State" desc="Checks the plugin status">
+        <testCaseInfo testCaseType="loop" />
+        <testStep testStepId="1" name="System_reboot" method="Reboot" rebootStep="yes" pluginName="System">
+            <resultGeneration useMethodTag="system_check_set_operation" />
+        </testStep>
+        <testStep testStepId="2" name="Check_Plugins_Status" testStepType="loop" delay="10">
+            <subtestStep subtestStepId="1" name="Check_Plugins_Status" method="Get_Plugin_Status">
+                <params>
+                    <param tag="callsign" iteration="true" useConfigFile="true" key="Supported_Plugins" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_check_default_plugin_state">
+                    <arguments value="check_default_state" useIterableArg="true" />
+                </resultGeneration>
+            </subtestStep>
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_11" testCaseName="Controller_Get_WPE_Process_Status" desc="Checks whether WPE Process is running or not">
+        <testCaseInfo testCaseType="loop" />
+        <testStep testStepId="1" name="Check_WPE_Process" action="externalFnCall">
+            <resultGeneration useMethodTag="Check_WPE_Process">
+                <expectedValues useConfigFile="true" key="WPE_PROCESSES_LIST" />
+            </resultGeneration>
+        </testStep>
+    </testCase>
+
     <testCase testCaseId="Controller_12" testCaseName="Controller_StateChange_And_All_Events_For_DeviceInfo_plugin" desc="Checks the StateChange and All Events by activating and deactivating the DeviceInfo plugin">
-             <testCaseInfo testCaseType="direct" />
-             <testCasePreRequisite>
-                 <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
-                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                     <params>
-                       <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
-                   </testStep>
-                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
-                     <params>
-                       <param tag="callsign" value="DeviceInfo" />
-                     </params>
-                   </testStep>
-                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
-                     <params>
-                       <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-                   </testStep>
-                </prerequisite>
-      	     </testCasePreRequisite>
-             <testStep testStepId="1" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
-                  <params>
-                    <param tag="callsign"  value="DeviceInfo" />
-                  </params>
-	     </testStep>
-             <testStep testStepId="2" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated"/>
-	     </testStep>
-             <testStep testStepId="3" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" clear="false">
-              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="deviceinfo,deactivated,requested"/>
-             </testStep>
-             <testStep testStepId="4" name="Check_All_Event" event="Event_Controller_All" action="eventListener" >
-              <resultGeneration useMethodTag="controller_check_all_event" expectedValues="deviceinfo,deactivated,requested"/>
-             </testStep>
-             <testStep testStepId="5" name="Activate_DeviceInfo_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                  <params>
-                    <param tag="callsign" value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-	     </testStep>
-             <testStep testStepId="7" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" clear="false">
-              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="deviceinfo,activated,requested"/>
-             </testStep>
-             <testStep testStepId="8" name="Check_All_Event" event="Event_Controller_All" action="eventListener" delay="2" >
-              <resultGeneration useMethodTag="controller_check_all_event" expectedValues="deviceinfo,activated,requested"/>
-             </testStep>
+        <testCaseInfo testCaseType="direct" />
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+                <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
+                </testStep>
+                <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+        <testStep testStepId="1" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin" pluginName="Controller">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="2" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated" />
+        </testStep>
+        <testStep testStepId="3" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" clear="false">
+            <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="deviceinfo,deactivated,requested" />
+        </testStep>
+        <testStep testStepId="4" name="Check_All_Event" event="Event_Controller_All" action="eventListener">
+            <resultGeneration useMethodTag="controller_check_all_event" expectedValues="deviceinfo,deactivated,requested" />
+        </testStep>
+        <testStep testStepId="5" name="Activate_DeviceInfo_Plugin" method="Activate_Plugin" pluginName="Controller">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+        </testStep>
+        <testStep testStepId="7" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" clear="false">
+            <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="deviceinfo,activated,requested" />
+        </testStep>
+        <testStep testStepId="8" name="Check_All_Event" event="Event_Controller_All" action="eventListener" delay="2">
+            <resultGeneration useMethodTag="controller_check_all_event" expectedValues="deviceinfo,activated,requested" />
+        </testStep>
     </testCase>
-    <testCase testCaseId="Controller_13" testCaseName="Controller_Set_DeviceInfo_Plugin_Unavailable"  desc="Checks whether able to make DeviceInfo plugin unavailable">
-             <testCaseInfo testCaseType="direct"/>
-             <testCasePreRequisite>
-                 <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
-                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                     <params>
-                       <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
-                   </testStep>
-                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
-                     <params>
-                       <param tag="callsign" value="DeviceInfo" />
-                     </params>
-                   </testStep>
-                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
-                     <params>
-                       <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-                   </testStep>
-                </prerequisite>
-             </testCasePreRequisite>
-             <testStep testStepId="1" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin" >
-                  <params>
-                    <param tag="callsign"  value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="2" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated"/>
-             </testStep>
-             <testStep testStepId="3" name="Set_DeviceInfo_Plugin_Unavailable" method="Unavailable" >
-                  <params>
-                    <param tag="callsign"  value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="unavailable"/>
-             </testStep>
-             <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2">
-              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="deviceinfo,unavailable,requested"/>
-             </testStep>
-             <testStep testStepId="6" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin" >
-                  <params>
-                    <param tag="callsign"  value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="7" name="Check_PluginActive_Status" method="Get_Plugin_Status"  delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated"/>
-             </testStep>
-             <testStep testStepId="8" name="Activate_DeviceInfo_Plugin" method="Activate_Plugin" >
-                  <params>
-                    <param tag="callsign" value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="9" name="Check_PluginActive_Status" method="Get_Plugin_Status"  delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-	     </testStep>
-     <testCasePostRequisite>
-         <postrequisite requisiteId="1" requisiteName="Check_Device_Info_Plugin_State">
-            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                <params>
-                    <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
-            </testStep>
-            <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
-                <params>
-                   <param tag="callsign" value="DeviceInfo" />
-                </params>
-            </testStep>
-            <testStep testStepId="3" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
-                <params>
-                   <param tag="callsign" value="DeviceInfo" />
-                </params>
-            </testStep>
-            <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
-                <params>
-                   <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                 </params>
-                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-            </testStep>
-         </postrequisite>
-     </testCasePostRequisite>
-     </testCase>
-     <testCase testCaseId="Controller_14" testCaseName="Controller_Set_Device_Info_Plugin_Unavailable_In_Activated_State" desc="Checks whether able to make the plugin unavailable in activated state">
-             <testCaseInfo testCaseType="direct" />
-             <testCasePreRequisite>
-                 <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
-                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                     <params>
-                       <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
-                   </testStep>
-                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
-                     <params>
-                       <param tag="callsign" value="DeviceInfo" />
-                     </params>
-                   </testStep>
-                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
-                     <params>
-                       <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-                   </testStep>
-                </prerequisite>
-             </testCasePreRequisite>
-             <testStep testStepId="1" name="Set_DeviceInfo_Plugin_Unavailable" method="Unavailable" >
-                  <params>
-                    <param tag="callsign"  value="DeviceInfo" />
-                  </params>
-                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="The service is in an illegal state!!!.,5" />
-	     </testStep>
-     <testCasePostRequisite>
-         <postrequisite requisiteId="1" requisiteName="Check_Device_Info_Plugin_State">
-            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                <params>
-                    <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
-            </testStep>
-            <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
-                <params>
-                   <param tag="callsign" value="DeviceInfo" />
-                </params>
-            </testStep>
-            <testStep testStepId="3" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
-                <params>
-                   <param tag="callsign" value="DeviceInfo" />
-                </params>
-            </testStep>
-            <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
-                <params>
-                   <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                 </params>
-                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-            </testStep>
-         </postrequisite>
-     </testCasePostRequisite>
-     </testCase>
-     <testCase testCaseId="Controller_15" testCaseName="Controller_Set_DeviceInfo_Unavailable_And_Query_Plugin"  desc="Queries the DeviceInfo plugin APIs after setting it as unavailable">
-             <testCaseInfo testCaseType="direct"/>
-             <testCasePreRequisite>
-                 <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
-                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                     <params>
-                       <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
-                   </testStep>
-                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
-                     <params>
-                       <param tag="callsign" value="DeviceInfo" />
-                     </params>
-                   </testStep>
-                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
-                     <params>
-                       <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-                   </testStep>
-                </prerequisite>
-             </testCasePreRequisite>
-             <testStep testStepId="1" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin" >
-                  <params>
-                    <param tag="callsign"  value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="2" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated"/>
-             </testStep>
-             <testStep testStepId="3" name="Set_DeviceInfo_Plugin_Unavailable" method="Unavailable" >
-                  <params>
-                    <param tag="callsign"  value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="unavailable"/>
-             </testStep>
-             <testStep testStepId="5" name="Check_Json_Response_of_DeviceInfo_Plugin" method="Get_System_Info" pluginName="DeviceInfo" >
-	     	<resultGeneration useMethodTag="controller_check_error_message">
-                     <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
-                     <arguments value="deactivate_check_error_message"/>
-                 </resultGeneration>
-	     </testStep>
-             <testStep testStepId="6" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin" >
-                  <params>
-                    <param tag="callsign"  value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="7" name="Check_PluginActive_Status" method="Get_Plugin_Status"  delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated"/>
-             </testStep>
-             <testStep testStepId="8" name="Activate_DeviceInfo_Plugin" method="Activate_Plugin" >
-                  <params>
-                    <param tag="callsign" value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="9" name="Check_PluginActive_Status" method="Get_Plugin_Status"  delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-             </testStep>
-     <testCasePostRequisite>
-	 <postrequisite requisiteId="1" requisiteName="Check_Device_Info_Plugin_State">
-            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                <params>
-                    <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
-	    </testStep>
-            <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
-                <params>
-                   <param tag="callsign" value="DeviceInfo" />
-                </params>
-	    </testStep>
-            <testStep testStepId="3" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
-                <params>
-                   <param tag="callsign" value="DeviceInfo" />
-                </params>
-	    </testStep>
-            <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
-                <params>
-                   <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                 </params>
-                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-            </testStep>
-         </postrequisite>
-     </testCasePostRequisite>
-     </testCase>
-     <testCase testCaseId="Controller_16" testCaseName="Controller_Set_Controller_Plugin_Unavailable"  desc="Sets the controller plugin as unavailable and validate the error message">
-      <testCaseInfo testCaseType="direct"/>
-      <testStep testStepId="1" name="Set_Controller_Plugin_Unavailable" method="Unavailable">
-            <params>
-               <param tag="callsign" value="Controller" />
-            </params>
-            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="method invocation not allowed.,-32604"/>
-         </testStep>
-     </testCase>
-     <testCase testCaseId="Controller_17" testCaseName="Controller_Activate_Deactivate_Controller_Plugin" desc="Activates/Deactivates the controller plugin and validates the error code">
-       <testCaseInfo testCaseType="direct" />
-         <testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin" >
-            <params>
-               <param tag="callsign" value="Controller" />
-            </params>
-            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="method invocation not allowed.,-32604"/>
-         </testStep>
-         <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin" >
-            <params>
-               <param tag="callsign" value="Controller" />
-            </params>
-            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="method invocation not allowed.,-32604"/>
-         </testStep>
-     </testCase>
-     <testCase testCaseId="Controller_18" testCaseName="Controller_Invalid_Environment_Variable_Response"  desc="Passes the invalid environment variable and validates the error code">
-      <testCaseInfo testCaseType="direct"/>
-         <testStep testStepId="1" name="Get_Environment_Variable" method="Environment_Variable" >
-           <params>
-             <param tag="value" value="invalid" indexOnly="true"/>
-           </params>
-           <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22"  />
-         </testStep>
-     </testCase>
-     <testCase testCaseId="Controller_19" testCaseName="Controller_Deactivate_DeviceInfo_And_API_Response"  desc="Queries the DeviceInfo plugin APIs after deactivated it">
-             <testCaseInfo testCaseType="direct"/>
-             <testCasePreRequisite>
-                 <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
-                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                     <params>
-                       <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
-                   </testStep>
-                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
-                     <params>
-                       <param tag="callsign" value="DeviceInfo" />
-                     </params>
-                   </testStep>
-                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
-                     <params>
-                       <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-                   </testStep>
-                </prerequisite>
-             </testCasePreRequisite>
-             <testStep testStepId="1" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin" delay="1">
-                  <params>
-                    <param tag="callsign"  value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="2" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated"/>
-             </testStep>
-             <testStep testStepId="3" name="Check_DeviceInfo_API_Response" method="Get_System_Info" pluginName="DeviceInfo" >
-	     	<resultGeneration useMethodTag="controller_check_error_message">
-                     <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
-                     <arguments value="deactivate_check_error_message"/>
-                 </resultGeneration>
-	     </testStep>
-             <testStep testStepId="4" name="Activate_DeviceInfo_Plugin" method="Activate_Plugin" >
-                  <params>
-                    <param tag="callsign" value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="9" name="Check_PluginActive_Status" method="Get_Plugin_Status"  delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-             </testStep>
-     </testCase>
-     <testCase testCaseId="Controller_20" testCaseName="Controller_Give_Empty_Path_To_Delete_Directory_Contents"  desc="Give the empty path and validate the error message and code">
-      <testCaseInfo testCaseType="direct"/>
-      <testStep testStepId="1" name="Delete_Directory_Contents" method="Delete_Directory_Contents">
-        <params>
-          <param tag="path" value="" />
-        </params>
-        <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
-      </testStep>
-     </testCase>
-     <testCase testCaseId="Controller_21" testCaseName="Controller_Configuration_With_Empty_Value"  desc="Check if able to get the error message when querying configuration for empty value">
-      <testCaseInfo testCaseType="direct"/>
-      <testStep testStepId="1" name="Get_Configuration" method="Configuration">
-        <params>
-          <param tag="value" value="" indexOnly="true" />
-        </params>
-        <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="Could not access requested service"/>
-      </testStep>
-     </testCase>
-     <testCase testCaseId="Controller_22" testCaseName="Controller_Set_DeviceInfo_Plugin_Unavailable_And_Activate"  desc="To make deviceinfo plugin unavailable and validates the error message on activating the plugin">
-             <testCaseInfo testCaseType="direct"/>
-             <testCasePreRequisite>
-                 <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
-                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                     <params>
-                       <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
-                   </testStep>
-                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
-                     <params>
-                       <param tag="callsign" value="DeviceInfo" />
-                     </params>
-                   </testStep>
-                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
-                     <params>
-                       <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-                   </testStep>
-                </prerequisite>
-             </testCasePreRequisite>
-             <testStep testStepId="1" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin" >
-                  <params>
-                    <param tag="callsign"  value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="2" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated"/>
-             </testStep>
-             <testStep testStepId="3" name="Set_DeviceInfo_Plugin_Unavailable" method="Unavailable" >
-                  <params>
-                    <param tag="callsign"  value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="unavailable"/>
-             </testStep>
-             <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2">
-              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="deviceinfo,unavailable,requested"/>
-             </testStep>
-             <testStep testStepId="6" name="Activate_DeviceInfo_Plugin" method="Activate_Plugin" >
-                  <params>
-                    <param tag="callsign" value="DeviceInfo" />
-                  </params>
-                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="The service is in an illegal state!!!.,5" />
-             </testStep>
-             <testStep testStepId="7" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin" >
-                  <params>
-                    <param tag="callsign"  value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="8" name="Check_PluginActive_Status" method="Get_Plugin_Status"  delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated"/>
-             </testStep>
-             <testStep testStepId="9" name="Activate_DeviceInfo_Plugin" method="Activate_Plugin" >
-                  <params>
-                    <param tag="callsign" value="DeviceInfo" />
-                  </params>
-             </testStep>
-             <testStep testStepId="10" name="Check_PluginActive_Status" method="Get_Plugin_Status"  delay="1" >
-                <params>
-                  <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-             </testStep>
-     <testCasePostRequisite>
-         <postrequisite requisiteId="1" requisiteName="Check_Device_Info_Plugin_State">
-            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                <params>
-                    <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
-            </testStep>
-            <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
-                <params>
-                   <param tag="callsign" value="DeviceInfo" />
-                </params>
-            </testStep>
-            <testStep testStepId="3" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
-                <params>
-                   <param tag="callsign" value="DeviceInfo" />
-                </params>
-            </testStep>
-            <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
-                <params>
-                   <param tag="plugin" value="DeviceInfo" indexOnly="true" />
-                 </params>
-                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
-            </testStep>
-         </postrequisite>
-     </testCasePostRequisite>
-     </testCase>
-	 
-     <testCase testCaseId="Controller_23" testCaseName="Controller_Activate_Invalid_callsign" desc="Validate error message by activating with invalid callsign">
-	<testCaseInfo testCaseType="direct"/>
-	<testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin">
-	   <params>
-	  	<param tag="callsign" value="invalid" />
-	   </params>
-	   <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
-	</testStep>
-     </testCase>
 
-     <testCase testCaseId="Controller_24" testCaseName="Controller_Activate_Empty_callsign" desc="Validate error message by activating with empty callsign">        <testCaseInfo testCaseType="direct"/>
-	<testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin">
-	   <params>
-		<param tag="callsign" value=" " />
-	   </params>
-	   <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
-	</testStep>
-     </testCase>
+    <testCase testCaseId="Controller_13" testCaseName="Controller_Set_DeviceInfo_Plugin_Unavailable" desc="Checks whether able to make DeviceInfo plugin unavailable">
+        <testCaseInfo testCaseType="direct" />
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+                <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
+                </testStep>
+                <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+        <testStep testStepId="1" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="2" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated" />
+        </testStep>
+        <testStep testStepId="3" name="Set_DeviceInfo_Plugin_Unavailable" method="Unavailable">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="unavailable" />
+        </testStep>
+        <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2">
+            <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="deviceinfo,unavailable,requested" />
+        </testStep>
+        <testStep testStepId="6" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="7" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated" />
+        </testStep>
+        <testStep testStepId="8" name="Activate_DeviceInfo_Plugin" method="Activate_Plugin">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="9" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+        </testStep>
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Check_Device_Info_Plugin_State">
+                <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
+                </testStep>
+                <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="3" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
+    </testCase>
 
-     <testCase testCaseId="Controller_25" testCaseName="Controller_Deactivate_Invalid_callsign" desc="Validate error message by deactivating with invalid callsign">
-	<testCaseInfo testCaseType="direct"/>
-	<testStep testStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin">
-	   <params>
-		<param tag="callsign" value="invalid" />
-	   </params>
-	   <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
-	</testStep>
-      </testCase>
+    <testCase testCaseId="Controller_14" testCaseName="Controller_Set_Device_Info_Plugin_Unavailable_In_Activated_State" desc="Checks whether able to make the plugin unavailable in activated state">
+        <testCaseInfo testCaseType="direct" />
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+                <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
+                </testStep>
+                <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+        <testStep testStepId="1" name="Set_DeviceInfo_Plugin_Unavailable" method="Unavailable">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="The service is in an illegal state!!!.,5" />
+        </testStep>
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Check_Device_Info_Plugin_State">
+                <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
+                </testStep>
+                <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="3" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
+    </testCase>
 
-     <testCase testCaseId="Controller_26" testCaseName="Controller_Deactivate_empty_callsign" desc="Validate error message by deactivating with empty callsign">
-	<testCaseInfo testCaseType="direct"/>
-	<testStep testStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin">
-	   <params>
-		<param tag="callsign" value=" " />
-	   </params>
-	   <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
-	</testStep>
-     </testCase>
+    <testCase testCaseId="Controller_15" testCaseName="Controller_Set_DeviceInfo_Unavailable_And_Query_Plugin" desc="Queries the DeviceInfo plugin APIs after setting it as unavailable">
+        <testCaseInfo testCaseType="direct" />
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+                <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
+                </testStep>
+                <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+        <testStep testStepId="1" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="2" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated" />
+        </testStep>
+        <testStep testStepId="3" name="Set_DeviceInfo_Plugin_Unavailable" method="Unavailable">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="unavailable" />
+        </testStep>
+        <testStep testStepId="5" name="Check_Json_Response_of_DeviceInfo_Plugin" method="Get_System_Info" pluginName="DeviceInfo">
+            <resultGeneration useMethodTag="controller_check_error_message">
+                <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!." />
+                <arguments value="deactivate_check_error_message" />
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="6" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="7" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated" />
+        </testStep>
+        <testStep testStepId="8" name="Activate_DeviceInfo_Plugin" method="Activate_Plugin">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="9" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+        </testStep>
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Check_Device_Info_Plugin_State">
+                <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
+                </testStep>
+                <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="3" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
+    </testCase>
+
+    <testCase testCaseId="Controller_16" testCaseName="Controller_Set_Controller_Plugin_Unavailable" desc="Sets the controller plugin as unavailable and validate the error message">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Set_Controller_Plugin_Unavailable" method="Unavailable">
+            <params>
+                <param tag="callsign" value="Controller" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="method invocation not allowed.,-32604" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_17" testCaseName="Controller_Activate_Deactivate_Controller_Plugin" desc="Activates/Deactivates the controller plugin and validates the error code">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin">
+            <params>
+                <param tag="callsign" value="Controller" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="method invocation not allowed.,-32604" />
+        </testStep>
+        <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin">
+            <params>
+                <param tag="callsign" value="Controller" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="method invocation not allowed.,-32604" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_18" testCaseName="Controller_Invalid_Environment_Variable_Response" desc="Passes the invalid environment variable and validates the error code">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Environment_Variable" method="Environment_Variable">
+            <params>
+                <param tag="value" value="invalid" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_19" testCaseName="Controller_Deactivate_DeviceInfo_And_API_Response" desc="Queries the DeviceInfo plugin APIs after deactivated it">
+        <testCaseInfo testCaseType="direct" />
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+                <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
+                </testStep>
+                <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+        <testStep testStepId="1" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin" delay="1">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="2" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated" />
+        </testStep>
+        <testStep testStepId="3" name="Check_DeviceInfo_API_Response" method="Get_System_Info" pluginName="DeviceInfo">
+            <resultGeneration useMethodTag="controller_check_error_message">
+                <expectedValues value="Service is not active,ERROR_UNAVAILABLE,The service is in an illegal state!!!." />
+                <arguments value="deactivate_check_error_message" />
+            </resultGeneration>
+        </testStep>
+        <testStep testStepId="4" name="Activate_DeviceInfo_Plugin" method="Activate_Plugin">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="9" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_20" testCaseName="Controller_Give_Empty_Path_To_Delete_Directory_Contents" desc="Give the empty path and validate the error message and code">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Delete_Directory_Contents" method="Delete_Directory_Contents">
+            <params>
+                <param tag="path" value="" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_21" testCaseName="Controller_Configuration_With_Empty_Value" desc="Check if able to get the error message when querying configuration for empty value">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Configuration" method="Configuration">
+            <params>
+                <param tag="value" value="" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="Could not access requested service" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_22" testCaseName="Controller_Set_DeviceInfo_Plugin_Unavailable_And_Activate" desc="To make deviceinfo plugin unavailable and validates the error message on activating the plugin">
+        <testCaseInfo testCaseType="direct" />
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+                <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
+                </testStep>
+                <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceInfo" />
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+        <testStep testStepId="1" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="2" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated" />
+        </testStep>
+        <testStep testStepId="3" name="Set_DeviceInfo_Plugin_Unavailable" method="Unavailable">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="unavailable" />
+        </testStep>
+        <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2">
+            <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="deviceinfo,unavailable,requested" />
+        </testStep>
+        <testStep testStepId="6" name="Activate_DeviceInfo_Plugin" method="Activate_Plugin">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="The service is in an illegal state!!!.,5" />
+        </testStep>
+        <testStep testStepId="7" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="8" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated" />
+        </testStep>
+        <testStep testStepId="9" name="Activate_DeviceInfo_Plugin" method="Activate_Plugin">
+            <params>
+                <param tag="callsign" value="DeviceInfo" />
+            </params>
+        </testStep>
+        <testStep testStepId="10" name="Check_PluginActive_Status" method="Get_Plugin_Status" delay="1">
+            <params>
+                <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+        </testStep>
+        <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Check_Device_Info_Plugin_State">
+                <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" />
+                </testStep>
+                <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="3" name="Activate_Plugin" method="Activate_Plugin" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
+                    <params>
+                        <param tag="callsign" value="DeviceInfo" />
+                    </params>
+                </testStep>
+                <testStep testStepId="4" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isUnavailable,DeviceInfo" />
+                    <params>
+                        <param tag="plugin" value="DeviceInfo" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated" />
+                </testStep>
+            </postrequisite>
+        </testCasePostRequisite>
+    </testCase>
+
+    <testCase testCaseId="Controller_23" testCaseName="Controller_Activate_Invalid_Callsign" desc="Validate error message by activating with invalid callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin">
+            <params>
+                <param tag="callsign" value="invalid" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_24" testCaseName="Controller_Activate_Empty_Callsign" desc="Validate error message by activating with empty callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin">
+            <params>
+                <param tag="callsign" value=" " />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_25" testCaseName="Controller_Deactivate_Invalid_Callsign" desc="Validate error message by deactivating with invalid callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin">
+            <params>
+                <param tag="callsign" value="invalid" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_26" testCaseName="Controller_Deactivate_empty_Callsign" desc="Validate error message by deactivating with empty callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin">
+            <params>
+                <param tag="callsign" value=" " />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_27" testCaseName="Controller_Activate_Numeric_Callsign" desc="Validate activate with numeric callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Activate_Plugin" method="Numeric_Callsign_Activate_Plugin">
+            <params>
+                <param tag="callsign" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_28" testCaseName="Controller_Activate_Specialchar_Callsign" desc="Validate activate with special-character callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin">
+            <params>
+                <param tag="callsign" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_29" testCaseName="Controller_Activate_Without_Callsign" desc="Validate activate without callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin">
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_30" testCaseName="Controller_Deactivate_Numeric_Callsign" desc="Validate deactivate with numeric callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Deactivate_Plugin" method="Numeric_Callsign_Deactivate_Plugin">
+            <params>
+                <param tag="callsign" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_31" testCaseName="Controller_Deactivate_Specialchar_Callsign" desc="Validate deactivate with special-character callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin">
+            <params>
+                <param tag="callsign" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_32" testCaseName="Controller_Deactivate_Without_Callsign" desc="Validate deactivate without callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin">
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_33" testCaseName="Controller_Resume_Invalid_Callsign" desc="Validate resume with invalid callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Resume_Plugin" method="Resume_Plugin">
+            <params>
+                <param tag="callsign" value="invalid" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_34" testCaseName="Controller_Resume_Empty_Callsign" desc="Validate resume with empty callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Resume_Plugin" method="Resume_Plugin">
+            <params>
+                <param tag="callsign" value="" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_35" testCaseName="Controller_Resume_Numeric_Callsign" desc="Validate resume with numeric callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Resume_Plugin" method="Numeric_Callsign_Resume_Plugin">
+            <params>
+                <param tag="callsign" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_36" testCaseName="Controller_Resume_Specialchar_Callsign" desc="Validate resume with special-character callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Resume_Plugin" method="Resume_Plugin">
+            <params>
+                <param tag="callsign" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_37" testCaseName="Controller_Resume_Without_Callsign" desc="Validate resume without callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Resume_Plugin" method="Resume_Plugin">
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_38" testCaseName="Controller_Suspend_Invalid_Callsign" desc="Validate suspend with invalid callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Suspend_Plugin" method="Suspend_Plugin">
+            <params>
+                <param tag="callsign" value="invalid" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_39" testCaseName="Controller_Suspend_Empty_Callsign" desc="Validate suspend with empty callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Suspend_Plugin" method="Suspend_Plugin">
+            <params>
+                <param tag="callsign" value="" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_40" testCaseName="Controller_Suspend_Numeric_Callsign" desc="Validate suspend with numeric callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Suspend_Plugin" method="Numeric_Callsign_Suspend_Plugin">
+            <params>
+                <param tag="callsign" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_41" testCaseName="Controller_Suspend_Specialchar_Callsign" desc="Validate suspend with special-character callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Suspend_Plugin" method="Suspend_Plugin">
+            <params>
+                <param tag="callsign" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_42" testCaseName="Controller_Suspend_Without_Callsign" desc="Validate suspend without callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Suspend_Plugin" method="Suspend_Plugin">
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_43" testCaseName="Controller_Unavailable_Invalid_Callsign" desc="Validate unavailable with invalid callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Unavailable" method="Unavailable">
+            <params>
+                <param tag="callsign" value="invalid" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_44" testCaseName="Controller_Unavailable_Empty_Callsign" desc="Validate unavailable with empty callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Unavailable" method="Unavailable">
+            <params>
+                <param tag="callsign" value="" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_45" testCaseName="Controller_Unavailable_Numeric_Callsign" desc="Validate unavailable with numeric callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Unavailable" method="Numeric_Callsign_Unavailable">
+            <params>
+                <param tag="callsign" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_46" testCaseName="Controller_Unavailable_Specialchar_Callsign" desc="Validate unavailable with special-character callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Unavailable" method="Unavailable">
+            <params>
+                <param tag="callsign" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_47" testCaseName="Controller_Unavailable_Without_Callsign" desc="Validate unavailable without callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Unavailable" method="Unavailable">
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_48" testCaseName="Controller_Start_Discovery_Invalid_ttl" desc="Validate startdiscovery with invalid ttl">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Start_Discovery" method="String_TTL_Start_Discovery">
+            <params>
+                <param tag="ttl" value="invalid" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_GENERAL,1" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_49" testCaseName="Controller_Start_Discovery_Empty_ttl" desc="Validate startdiscovery with empty ttl">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Start_Discovery" method="String_TTL_Start_Discovery">
+            <params>
+                <param tag="ttl" value="" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_GENERAL,1" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_50" testCaseName="Controller_Start_Discovery_Numeric_ttl" desc="Validate startdiscovery with invalid numeric ttl">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Start_Discovery" method="Start_Discovery">
+            <params>
+                <param tag="ttl" value="-1" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_GENERAL,1" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_51" testCaseName="Controller_Start_Discovery_Specialchar_ttl" desc="Validate startdiscovery with special-character ttl">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Start_Discovery" method="String_TTL_Start_Discovery">
+            <params>
+                <param tag="ttl" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_GENERAL,1" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_52" testCaseName="Controller_Start_Discovery_Without_ttl" desc="Validate startdiscovery without ttl">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Start_Discovery" method="String_TTL_Start_Discovery">
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_GENERAL,1" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_53" testCaseName="Controller_Delete_Invalid_Path" desc="Validate delete with invalid path">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Delete_Directory_Contents" method="Delete_Directory_Contents">
+            <params>
+                <param tag="path" value="invalid/../path" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_54" testCaseName="Controller_Delete_Numeric_Path" desc="Validate delete with numeric path">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Delete_Directory_Contents" method="Numeric_Path_Delete_Directory_Contents">
+            <params>
+                <param tag="path" value="12345" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_55" testCaseName="Controller_Delete_Specialchar_Path" desc="Validate delete with special-character path">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Delete_Directory_Contents" method="Delete_Directory_Contents">
+            <params>
+                <param tag="path" value="()^*!" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_56" testCaseName="Controller_Delete_Without_Path" desc="Validate delete without path">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Delete_Directory_Contents" method="Delete_Directory_Contents">
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_57" testCaseName="Controller_Status_Invalid_Callsign" desc="Validate status with invalid callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Plugin_Status" method="Get_Plugin_Status">
+            <params>
+                <param tag="plugin" value="invalid" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_58" testCaseName="Controller_Status_Empty_Callsign" desc="Validate status with empty callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Plugin_Status" method="Get_Plugin_Status">
+            <params>
+                <param tag="plugin" value="" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_59" testCaseName="Controller_Status_Numeric_Callsign" desc="Validate status with numeric callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Plugin_Status" method="Get_Plugin_Status">
+            <params>
+                <param tag="plugin" value="12345" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_60" testCaseName="Controller_Status_Specialchar_Callsign" desc="Validate status with special-character callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Plugin_Status" method="Get_Plugin_Status">
+            <params>
+                <param tag="plugin" value="()^*!" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_61" testCaseName="Controller_Status_Without_Callsign" desc="Gets status without a callsign index">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Plugin_Status" method="Get_Plugin_Status">
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_62" testCaseName="Controller_Environment_Empty_Variable" desc="Validate environment with empty variable">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Environment_Variable" method="Environment_Variable">
+            <params>
+                <param tag="value" value="" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="Could not access requested service,-32603" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_63" testCaseName="Controller_Environment_Numeric_Variable" desc="Validate environment with numeric variable">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Environment_Variable" method="Environment_Variable">
+            <params>
+                <param tag="value" value="12345" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_64" testCaseName="Controller_Environment_Specialchar_Variable" desc="Validate environment with special-character variable">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Environment_Variable" method="Environment_Variable">
+            <params>
+                <param tag="value" value="()^*!" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_65" testCaseName="Controller_Environment_Without_Variable" desc="Validate environment without variable">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Environment_Variable" method="Environment_Variable">
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="Could not access requested service,-32603" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_66" testCaseName="Controller_Configuration_Invalid_Callsign" desc="Validate configuration with invalid callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Configuration" method="Configuration">
+            <params>
+                <param tag="value" value="invalid" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_67" testCaseName="Controller_Configuration_Numeric_Callsign" desc="Validate configuration with numeric callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Configuration" method="Configuration">
+            <params>
+                <param tag="value" value="12345" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_68" testCaseName="Controller_Configuration_Specialchar_Callsign" desc="Validate configuration with special-character callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Configuration" method="Configuration">
+            <params>
+                <param tag="value" value="()^*!" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY,22" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="Controller_69" testCaseName="Controller_Configuration_Without_Callsign" desc="Validate configuration without callsign">
+        <testCaseInfo testCaseType="direct" />
+        <testStep testStepId="1" name="Get_Configuration" method="Configuration">
+            <resultGeneration useMethodTag="controller_check_error_message" expectedValues="Could not access requested service,-32603" />
+        </testStep>
+    </testCase>
 </testPlugin>

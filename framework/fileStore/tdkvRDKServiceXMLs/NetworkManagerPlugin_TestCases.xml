@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!--
  If not stated otherwise in this file or this component's Licenses.txt file the
  following copyright and licenses apply:
@@ -16,7 +16,7 @@
 <testPlugin pluginName="NetworkManager" pluginVersion="1">
     <pluginPreRequisite>
         <!-- Activate NetworkManager plugin -->
-        <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+        <prerequisite requisiteId="1" requisiteName="Activate_NetworkManager_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
                     <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true"/>
@@ -37,7 +37,8 @@
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="activated"/>
             </testStep>
         </prerequisite>
-        <!-- Event Registration -->
+
+	<!-- Event Registration -->
         <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
             <event pluginName="NetworkManager" eventName="Event_On_Interface_StateChange"/>
             <event pluginName="NetworkManager" eventName="Event_On_AvailableSSIDs"/>
@@ -46,7 +47,7 @@
         </prerequisite>
     </pluginPreRequisite>
 
-    <!-- Test case 01 -->
+    <!-- Test case 1 -->
     <testCase testCaseId="NM_01" testCaseName="NetworkManager_Get_Device_Interfaces" desc="Gets list of interfaces supported by device">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Get_Device_Interfaces" method="NetworkManager_Get_Available_Interfaces">
@@ -54,7 +55,7 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 02 -->
+    <!-- Test case 2 -->
     <testCase testCaseId="NM_02" testCaseName="NetworkManager_Get_Primary_Interface" desc="Gets primary/default interface of the device">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Get_Device_Interfaces" method="NetworkManager_Get_Available_Interfaces" saveResult="true">
@@ -67,7 +68,7 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 03 -->
+    <!-- Test case 3 -->
     <testCase testCaseId="NM_03" testCaseName="NetworkManager_Validate_Public_IPv4_IP" desc="Validate public IPv4 IP address of the device">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Get_Public_IP_Address" action="externalFnCall" saveResult="true">
@@ -83,7 +84,7 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 04 -->
+    <!-- Test case 4 -->
     <testCase testCaseId="NM_04" testCaseName="NetworkManager_Ping_IPv4_Endpoint" desc="Pings the specified end point">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Ping_Endpoint" method="NetworkManager_Ping">
@@ -98,7 +99,7 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 05 -->
+    <!-- Test case 5 -->
     <testCase testCaseId="NM_05" testCaseName="NetworkManager_Trace_IPv4_Endpoint" desc="Traces the specified end point">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Trace_Endpoint" method="NetworkManager_Trace">
@@ -113,7 +114,7 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 06 -->
+    <!-- Test case 6 -->
     <testCase testCaseId="NM_06" testCaseName="NetworkManager_Internet_IPv4_Connectivity" desc="Seeks whether the device has internet connectivity">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Check_Internet_IPv4_Connectivity" method="NetworkManager_IsConnectedToInternet">
@@ -124,7 +125,7 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 07 -->
+    <!-- Test case 7 -->
     <testCase testCaseId="NM_07" testCaseName="NetworkManager_GetAvailableInterfaces_With_Interface_Toggle" desc="Verify that the GetAvailableInterfaces method returns the correct list of available interfaces when interface is enabled or disabled">
         <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
         <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true" revertGet="yes">
@@ -156,7 +157,7 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 08 -->
+    <!-- Test case 8 -->
     <testCase testCaseId="NM_08" testCaseName="NetworkManager_On_Interface_StateChange_Event" desc="Check if the event is triggered upon a change in the interface state">
         <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
         <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true" revertGet="yes">
@@ -187,7 +188,7 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 09 -->
+    <!-- Test case 9 -->
     <testCase testCaseId="NM_09" testCaseName="NetworkManager_Wifi_Start_Stop_Scan" desc="Check if the start and stop wifi scan methods can successfully initiate and stop the wifi scanning process">
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
         <testCasePreRequisite>
@@ -272,7 +273,6 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 13 -->
     <!-- SetPrimaryInterface method is deprecated and removed from the networkmanager plugin documentation, therefore, this testcase is commented out -->
     <!--testCase testCaseId="NM_13" testCaseName="NetworkManager_SetandGet_Primary/Default_Interface" desc="Check GetPrimaryInterface method returns the correct primary/default network interface after using the SetPrimaryInterface method">
         <testCaseInfo testCaseType="direct"/>
@@ -613,7 +613,6 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 24 -->
     <!-- SetPrimaryInterface method has been deprecated and removed from the networkmanager plugin documentation therefore, this testcase is commented out -->
     <!--testCase testCaseId="NM_24" testCaseName="NetworkManager_2.4GHz_Interface_Switch_Test"  desc="Check if the device can switch between ethernet and a 2.4GHz wifi network and vice versa">
     	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="IP_CHANGE_LIGHTNING_APP_SUPPORT" useMethodTag="wifi_check_feature_applicability" arguments="yes"/>
@@ -919,7 +918,6 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 27 -->
     <!-- SetPrimaryInterface method has been deprecated and removed from the networkmanager plugin documentation therefore, this testcase is commented out -->
     <!--testCase testCaseId="NM_27" testCaseName="NetworkManager_5GHz_Interface_Switch_Test"  desc="Check if the device can switch between ethernet and a 5GHz wifi network and vice versa">
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="IP_CHANGE_LIGHTNING_APP_SUPPORT" useMethodTag="wifi_check_feature_applicability" arguments="yes"/>
@@ -1136,7 +1134,6 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 32 -->
     <!-- SetPrimaryInterface method has been deprecated and removed from the networkmanager plugin documentation therefore, this testcase is commented out -->
     <!--testCase testCaseId="NM_32" testCaseName="NetworkManager_Set_Primary/Default_Interface_Twice" desc="check if the SetPrimaryInterface method successfully sets the primary interface when the interface is already set as primary" >
         <testCaseInfo testCaseType="direct"/>
@@ -1167,7 +1164,6 @@
         </testStep>
     </testCase-->
 
-    <!-- Test case 33 -->
     <!-- StartConnectivityMonitoring method has been deprecated and removed from the networkmanager plugin documentation, therefore, this testcase is commented out -->
     <!--testCase testCaseId="NM_33" testCaseName="NetworkManager_Start_And_Stop_Internet_Connectivity_Monitoring" desc="Check if able to start/stop the internet connectivity monitoring process for valid endpoint">
         <testCaseInfo testCaseType="direct"/>
@@ -1266,7 +1262,6 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 38 -->
     <!-- StartConnectivityMonitoring method has been deprecated and removed from the networkmanager plugin documentation, therefore, this testcase is commented out -->
     <!--testCase testCaseId="NM_38" testCaseName="NetworkManager_Start_Internet_Connectivity_Monitoring" desc="Check if able to start the internet connectivity monitoring process for valid endpoint">
         <testCaseInfo testCaseType="direct"/>
@@ -1284,7 +1279,6 @@
         </testStep>
     </testCase-->
 
-    <!-- Test case 39 -->
     <!-- StopConnectivityMonitoring method has been deprecated and removed from the networkmanager plugin documentation, therefore, this testcase is commented out -->
     <!--testCase testCaseId="NM_39" testCaseName="NetworkManager_Stop_Internet_Connectivity_Monitoring" desc="Check if able to stop the internet connectivity monitoring process for valid endpoint">
         <testCaseInfo testCaseType="direct"/>
@@ -2425,8 +2419,8 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 77 -->
     <!-- getAvailableStandbyModes method has been deprecated and removed from the system plugin documentation therefore, this testcase is modified -->
+    <!-- Test case 77 -->
     <testCase testCaseId="NM_77" testCaseName="NetworkManager_Primary_Interface_After_LightSleep" desc="Checks the primary interface after the device has been put in sleep mode and then woken up">
         <testCaseInfo testCaseType="setandget" revert="true"/>
         <testCasePreRequisite>
@@ -2607,7 +2601,7 @@
         </testStep>
     </testCase>
 
-    <!-- Test case 79-->
+    <!-- Test case 79 -->
     <testCase testCaseId="NM_79" testCaseName="NetworkManager_Connect_To_Known_SSID_5GHz" desc="Connects to a known 5GHz SSID and checks the connection">
         <testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
         <testCasePreRequisite>
@@ -3188,4 +3182,862 @@
             </resultGeneration>
         </testStep>
     </testCase>
+
+    <!-- Test case 93 -->
+    <testCase testCaseId="NM_93" testCaseName="NetworkManager_SetLogLevel_Invalid_Value" desc="Verify SetLogLevel rejects an invalid level value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Log_Level_Invalid_Value" method="NetworkManager_String_Set_Log_Level">
+                <params>
+                        <param tag="level" value="invalid_level"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 94 -->
+    <testCase testCaseId="NM_94" testCaseName="NetworkManager_SetLogLevel_Empty_Value" desc="Verify SetLogLevel rejects an empty level value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Log_Level_Empty_Value" method="NetworkManager_String_Set_Log_Level">
+                <params>
+                        <param tag="level" value=""/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 95 -->
+    <testCase testCaseId="NM_95" testCaseName="NetworkManager_SetLogLevel_Negative_Numeric_Value" desc="Verify SetLogLevel rejects a negative numeric level value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Log_Level_Negative_Numeric_Value" method="NetworkManager_Set_Log_Level">
+                <params>
+                        <param tag="level" value="-1"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 96 -->
+    <testCase testCaseId="NM_96" testCaseName="NetworkManager_SetLogLevel_Special_Character_Value" desc="Verify SetLogLevel rejects special characters in the level value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Log_Level_Special_Character_Value" method="NetworkManager_String_Set_Log_Level">
+                <params>
+                        <param tag="level" value="()^*!"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 97 -->
+    <testCase testCaseId="NM_97" testCaseName="NetworkManager_SetLogLevel_Without_Parameter" desc="Verify SetLogLevel rejects invocation without the required level parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Log_Level_Without_Parameter" method="NetworkManager_String_Set_Log_Level">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 98 -->
+    <testCase testCaseId="NM_98" testCaseName="NetworkManager_SetInterfaceState_Empty_Interface_Value" desc="Check if the SetInterfaceState method returns an error when an empty interface value is provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetInterfaceState_Empty_Interface_Value" method="NetworkManager_Set_Interface_State">
+                <params>
+                        <param tag="interface" value=""/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 99 -->
+    <testCase testCaseId="NM_99" testCaseName="NetworkManager_SetInterfaceState_Numeric_Interface_Value" desc="Check if the SetInterfaceState method returns an error when a numeric interface value is provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetInterfaceState_Numeric_Interface_Value" method="NetworkManager_Numeric_Interface_State">
+                <params>
+                        <param tag="interface" value="12345"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 100 -->
+    <testCase testCaseId="NM_100" testCaseName="NetworkManager_SetInterfaceState_Special_Character_Interface_Value" desc="Check if the SetInterfaceState method returns an error when special characters are provided in the interface value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetInterfaceState_Special_Character_Interface_Value" method="NetworkManager_Set_Interface_State">
+                <params>
+                        <param tag="interface" value="()^*!"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 101 -->
+    <testCase testCaseId="NM_101" testCaseName="NetworkManager_GetInterfaceState_Numeric_Interface_Value" desc="Check if the GetInterfaceState method returns an error when a numeric interface value is provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetInterfaceState_Numeric_Interface_Value" method="NetworkManager_Numeric_Get_Interface_State">
+                <params>
+                        <param tag="interface" value="12345"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 102 -->
+    <testCase testCaseId="NM_102" testCaseName="NetworkManager_GetInterfaceState_Special_Character_Interface_Value" desc="Check if the GetInterfaceState method returns an error when special characters are provided in the interface value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetInterfaceState_Special_Character_Interface_Value" method="NetworkManager_Get_Interface_State_Negative">
+                <params>
+                        <param tag="interface" value="()^*!"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 103 -->
+    <testCase testCaseId="NM_103" testCaseName="NetworkManager_GetIPSettings_Empty_Interface" desc="Check if the GetIPSettings method returns an error when an empty interface value is provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetIPSettings_Empty_Interface" method="NetworkManager_Get_IPSettings">
+                <params>
+                        <param tag="interface" value=""/>
+                        <param tag="ipversion" value="IPv4"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 104 -->
+    <testCase testCaseId="NM_104" testCaseName="NetworkManager_GetIPSettings_Numeric_Interface" desc="Check if the GetIPSettings method returns an error when a numeric interface value is provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetIPSettings_Numeric_Interface" method="NetworkManager_Numeric_Interface_Get_IPSettings">
+                <params>
+                        <param tag="interface" value="12345"/>
+                        <param tag="ipversion" value="IPv4"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 105 -->
+    <testCase testCaseId="NM_105" testCaseName="NetworkManager_GetIPSettings_Special_Character_Interface" desc="Check if the GetIPSettings method returns an error when special characters are provided in the interface value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetIPSettings_Special_Character_Interface" method="NetworkManager_Get_IPSettings">
+                <params>
+                        <param tag="interface" value="()^*!"/>
+                        <param tag="ipversion" value="IPv4"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 106 -->
+    <testCase testCaseId="NM_106" testCaseName="NetworkManager_GetIPSettings_Without_Interface" desc="Check if the GetIPSettings method succeeds using the default interface when the optional interface parameter is omitted">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetIPSettings_Without_Interface" method="NetworkManager_Get_IPSettings">
+                <params>
+                        <param tag="ipversion" value="IPv4"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 107 -->
+    <testCase testCaseId="NM_107" testCaseName="NetworkManager_GetIPSettings_Empty_IPVersion" desc="Check if the GetIPSettings method returns an error when an empty ipversion value is provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetIPSettings_Empty_IPVersion" method="NetworkManager_Get_IPSettings">
+                <params>
+                        <param tag="interface" value="eth0"/>
+                        <param tag="ipversion" value=""/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 108 -->
+    <testCase testCaseId="NM_108" testCaseName="NetworkManager_GetIPSettings_Numeric_IPVersion" desc="Check if the GetIPSettings method returns an error when a numeric ipversion value is provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetIPSettings_Numeric_IPVersion" method="NetworkManager_Numeric_IpVersion_Get_IPSettings">
+                <params>
+                        <param tag="interface" value="eth0"/>
+                        <param tag="ipversion" value="12345"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 109 -->
+    <testCase testCaseId="NM_109" testCaseName="NetworkManager_GetIPSettings_Special_Character_IPVersion" desc="Check if the GetIPSettings method returns an error when special characters are provided in the ipversion value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetIPSettings_Special_Character_IPVersion" method="NetworkManager_Get_IPSettings">
+                <params>
+                        <param tag="interface" value="eth0"/>
+                        <param tag="ipversion" value="()^*!"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 110 -->
+    <testCase testCaseId="NM_110" testCaseName="NetworkManager_GetIPSettings_Without_IPVersion" desc="Check if the GetIPSettings method succeeds using the default ipversion when the optional ipversion parameter is omitted">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetIPSettings_Without_IPVersion" method="NetworkManager_Get_IPSettings">
+                <params>
+                        <param tag="interface" value="eth0"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 111 -->
+    <testCase testCaseId="NM_111" testCaseName="NetworkManager_GetIPSettings_Invalid_Parameters" desc="Check if the GetIPSettings method returns an error when invalid values are provided for the parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetIPSettings_Invalid_Parameters" method="NetworkManager_Get_IPSettings">
+            <params>
+                <param tag="interface" value="invalid_interface"/>
+                <param tag="ipversion" value="invalid_ipversion"/>
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 112 -->
+    <testCase testCaseId="NM_112" testCaseName="NetworkManager_GetIPSettings_Without_Parameters" desc="Check if the GetIPSettings method returns an error when no parameters are provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetIPSettings_Without_Parameters" method="NetworkManager_Get_IPSettings">
+            <params/>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 113 -->
+    <testCase testCaseId="NM_113" testCaseName="NetworkManager_SetConnectivityTestEndpoints_Invalid_Endpoint" desc="Verify SetConnectivityTestEndpoints rejects an invalid endpoint value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Connectivity_Test_Endpoints_Invalid_Endpoint" method="NetworkManager_Set_Connectivity_Test_Endpoints">
+                <params>
+                        <param tag="endpoints" value="not_a_valid_url"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 114 -->
+    <testCase testCaseId="NM_114" testCaseName="NetworkManager_SetConnectivityTestEndpoints_Empty_Endpoints" desc="Verify SetConnectivityTestEndpoints rejects an empty endpoints value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Connectivity_Test_Endpoints_Empty_Endpoints" method="NetworkManager_Set_Connectivity_Test_Endpoints">
+                <params>
+                        <param tag="endpoints" value=""/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 115 -->
+    <testCase testCaseId="NM_115" testCaseName="NetworkManager_SetConnectivityTestEndpoints_Special_Character_Endpoint" desc="Verify SetConnectivityTestEndpoints rejects an endpoint containing special characters">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Connectivity_Test_Endpoints_Special_Character_Endpoint" method="NetworkManager_Set_Connectivity_Test_Endpoints">
+                <params>
+                        <param tag="endpoints" value="()^*!"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="NM_116" testCaseName="NetworkManager_SetConnectivityTestEndpoints_Without_Parameter" desc="Verify SetConnectivityTestEndpoints rejects invocation without the required endpoints parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Connectivity_Test_Endpoints_Without_Parameter" method="NetworkManager_Set_Connectivity_Test_Endpoints">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 117 -->
+    <testCase testCaseId="NM_117" testCaseName="NetworkManager_IsConnectedToInternet_Invalid_IPVersion" desc="Verify IsConnectedToInternet rejects an invalid ipversion value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Is_Connected_To_Internet_Invalid_IPVersion" method="NetworkManager_IsConnectedToInternet">
+                <params>
+                        <param tag="ipversion" value="invalid_ipversion"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 118 -->
+    <testCase testCaseId="NM_118" testCaseName="NetworkManager_IsConnectedToInternet_Empty_IPVersion" desc="Verify IsConnectedToInternet rejects an empty ipversion value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Is_Connected_To_Internet_Empty_IPVersion" method="NetworkManager_IsConnectedToInternet">
+                <params>
+                        <param tag="ipversion" value=""/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 119 -->
+    <testCase testCaseId="NM_119" testCaseName="NetworkManager_IsConnectedToInternet_Special_Character_IPVersion" desc="Verify IsConnectedToInternet rejects an ipversion containing special characters">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Is_Connected_To_Internet_Special_Character_IPVersion" method="NetworkManager_IsConnectedToInternet">
+                <params>
+                        <param tag="ipversion" value="()^*!"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="NM_120" testCaseName="NetworkManager_IsConnectedToInternet_Numeric_IPVersion" desc="Verify IsConnectedToInternet rejects a numeric ipversion value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Is_Connected_To_Internet_Numeric_IPVersion" method="NetworkManager_Numeric_IsConnectedToInternet">
+                <params>
+                        <param tag="ipversion" value="12345"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 121 -->
+    <testCase testCaseId="NM_121" testCaseName="NetworkManager_IsConnectedToInternet_Without_Parameter" desc="Verify IsConnectedToInternet rejects invocation without the required ipversion parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Is_Connected_To_Internet_Without_Parameter" method="NetworkManager_IsConnectedToInternet">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 122 -->
+    <testCase testCaseId="NM_122" testCaseName="NetworkManager_GetPublicIP_Invalid_IPVersion" desc="Verify GetPublicIP rejects an invalid ipversion value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Public_IP_Invalid_IPVersion" method="NetworkManager_Get_Public_IP">
+                <params>
+                        <param tag="ipversion" value="invalid_ipversion"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+     <!-- Test case 123 -->
+    <testCase testCaseId="NM_123" testCaseName="NetworkManager_GetPublicIP_Empty_IPVersion" desc="Verify GetPublicIP rejects an empty ipversion value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Public_IP_Empty_IPVersion" method="NetworkManager_Get_Public_IP">
+                <params>
+                        <param tag="ipversion" value=""/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 124 -->
+    <testCase testCaseId="NM_124" testCaseName="NetworkManager_GetPublicIP_Special_Character_IPVersion" desc="Verify GetPublicIP rejects an ipversion containing special characters">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Public_IP_Special_Character_IPVersion" method="NetworkManager_Get_Public_IP">
+                <params>
+                        <param tag="ipversion" value="()^*!"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 125 -->
+    <testCase testCaseId="NM_125" testCaseName="NetworkManager_GetPublicIP_Numeric_IPVersion" desc="Verify GetPublicIP rejects a numeric ipversion value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Public_IP_Numeric_IPVersion" method="NetworkManager_Numeric_Get_Public_IP">
+                <params>
+                        <param tag="ipversion" value="12345"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 126 -->
+    <testCase testCaseId="NM_126" testCaseName="NetworkManager_GetPublicIP_Without_Parameter" desc="Verify GetPublicIP rejects invocation without the required ipversion parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Public_IP_Without_Parameter" method="NetworkManager_Get_Public_IP">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 127 -->
+    <testCase testCaseId="NM_127" testCaseName="NetworkManager_Ping_Empty_Endpoint" desc="Verify Ping rejects an empty endpoint value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Ping_Empty_Endpoint" method="NetworkManager_Ping_Negative">
+                <params>
+                        <param tag="endpoint" value=""/>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="count" value="5"/>
+                </params>
+                <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="Could not access requested service"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 128 -->
+    <testCase testCaseId="NM_128" testCaseName="NetworkManager_Ping_Special_Character_Endpoint" desc="Verify Ping rejects special characters in the endpoint value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Ping_Special_Character_Endpoint" method="NetworkManager_Ping_Negative">
+                <params>
+                        <param tag="endpoint" value="()^*!"/>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="count" value="5"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 129 -->
+    <testCase testCaseId="NM_129" testCaseName="NetworkManager_Ping_Without_Endpoint" desc="Verify Ping rejects invocation without the endpoint parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Ping_Without_Endpoint" method="NetworkManager_Ping_Negative">
+                <params>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="count" value="5"/>
+                </params>
+                <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 130 -->
+    <testCase testCaseId="NM_130" testCaseName="NetworkManager_Ping_Empty_IPVersion" desc="Verify Ping rejects an empty ipversion value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Ping_Empty_IPVersion" method="NetworkManager_Ping_Negative">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="PING_IP"/>
+                        <param tag="ipversion" value=""/>
+                        <param tag="count" value="5"/>
+                </params>
+                <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="Could not access requested service"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 131 -->
+    <testCase testCaseId="NM_131" testCaseName="NetworkManager_Ping_Special_Character_IPVersion" desc="Verify Ping rejects special characters in the ipversion value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Ping_Special_Character_IPVersion" method="NetworkManager_Ping_Negative">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="PING_IP"/>
+                        <param tag="ipversion" value="()^*!"/>
+                        <param tag="count" value="5"/>
+                </params>
+                <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="Could not access requested service"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 132 -->
+    <testCase testCaseId="NM_132" testCaseName="NetworkManager_Ping_Without_IPVersion" desc="Verify Ping rejects invocation without the ipversion parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Ping_Without_IPVersion" method="NetworkManager_Ping_Negative">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="PING_IP"/>
+                        <param tag="count" value="5"/>
+                </params>
+                <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_TIMEDOUT"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 133 -->
+    <testCase testCaseId="NM_133" testCaseName="NetworkManager_Ping_Invalid_Count" desc="Verify Ping rejects an invalid count value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Ping_Invalid_Count" method="NetworkManager_Ping_Negative">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="PING_IP"/>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="count" value="invalid_count"/>
+                </params>
+                <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_TIMEDOUT"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 134 -->
+    <testCase testCaseId="NM_134" testCaseName="NetworkManager_Ping_Empty_Count" desc="Verify Ping rejects an empty count value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Ping_Empty_Count" method="NetworkManager_Ping_Negative">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="PING_IP"/>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="count" value=""/>
+                </params>
+                <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_TIMEDOUT"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 135 -->
+    <testCase testCaseId="NM_135" testCaseName="NetworkManager_Ping_Special_Character_Count" desc="Verify Ping rejects special characters in the count value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Ping_Special_Character_Count" method="NetworkManager_Ping_Negative">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="PING_IP"/>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="count" value="()^*!"/>
+                </params>
+                <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_TIMEDOUT"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 136 -->
+    <testCase testCaseId="NM_136" testCaseName="NetworkManager_Ping_Negative_Numeric_Count" desc="Verify Ping rejects a negative numeric count value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Ping_Negative_Numeric_Count" method="NetworkManager_Ping">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="PING_IP"/>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="count" value="-1"/>
+                </params>
+                <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_TIMEDOUT"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 137 -->
+    <testCase testCaseId="NM_137" testCaseName="NetworkManager_Ping_Without_Parameters" desc="Verify Ping rejects invocation without parameters">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Ping_Without_Parameters" method="NetworkManager_Ping_Negative">
+                <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 138 -->
+    <testCase testCaseId="NM_138" testCaseName="NetworkManager_Trace_Empty_Endpoint" desc="Verify Trace rejects an empty endpoint value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Trace_Empty_Endpoint" method="NetworkManager_Trace">
+                <params>
+                        <param tag="endpoint" value=""/>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="packets" value="1"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 139 -->
+    <testCase testCaseId="NM_139" testCaseName="NetworkManager_Trace_Special_Character_Endpoint" desc="Verify Trace rejects special characters in the endpoint value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Trace_Special_Character_Endpoint" method="NetworkManager_Trace">
+                <params>
+                        <param tag="endpoint" value="()^*!"/>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="packets" value="1"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 140 -->
+    <testCase testCaseId="NM_140" testCaseName="NetworkManager_Trace_Without_Endpoint" desc="Verify Trace rejects invocation without the endpoint parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Trace_Without_Endpoint" method="NetworkManager_Trace">
+                <params>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="packets" value="1"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 141 -->
+    <testCase testCaseId="NM_141" testCaseName="NetworkManager_Trace_Invalid_IPVersion" desc="Verify Trace rejects an invalid IP version value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Trace_Invalid_IPVersion" method="NetworkManager_Trace">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="TRACE_IP"/>
+                        <param tag="ipversion" value="invalid_ipversion"/>
+                        <param tag="packets" value="1"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 142 -->
+    <testCase testCaseId="NM_142" testCaseName="NetworkManager_Trace_Empty_IPVersion" desc="Verify Trace rejects an empty IP version value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Trace_Empty_IPVersion" method="NetworkManager_Trace">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="TRACE_IP"/>
+                        <param tag="ipversion" value=""/>
+                        <param tag="packets" value="1"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 143 -->
+    <testCase testCaseId="NM_143" testCaseName="NetworkManager_Trace_Special_Character_IPVersion" desc="Verify Trace rejects special characters in the IP version value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Trace_Special_Character_IPVersion" method="NetworkManager_Trace">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="TRACE_IP"/>
+                        <param tag="ipversion" value="()^*!"/>
+                        <param tag="packets" value="1"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 144 -->
+    <testCase testCaseId="NM_144" testCaseName="NetworkManager_Trace_Without_IPVersion" desc="Verify Trace rejects invocation without the IP version parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Trace_Without_IPVersion" method="NetworkManager_Trace">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="TRACE_IP"/>
+                        <param tag="packets" value="1"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 145 -->
+    <testCase testCaseId="NM_145" testCaseName="NetworkManager_Trace_Invalid_Packets" desc="Verify Trace rejects an invalid packets value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Trace_Invalid_Packets" method="NetworkManager_Trace_Negative">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="TRACE_IP"/>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="packets" value="invalid_packets"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 146 -->
+    <testCase testCaseId="NM_146" testCaseName="NetworkManager_Trace_Empty_Packets" desc="Verify Trace rejects an empty packets value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Trace_Empty_Packets" method="NetworkManager_Trace_Negative">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="TRACE_IP"/>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="packets" value=""/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 147 -->
+    <testCase testCaseId="NM_147" testCaseName="NetworkManager_Trace_Special_Character_Packets" desc="Verify Trace rejects special characters in the packets value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Trace_Special_Character_Packets" method="NetworkManager_Trace_Negative">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="TRACE_IP"/>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="packets" value="()^*!"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 148 -->
+    <testCase testCaseId="NM_148" testCaseName="NetworkManager_Trace_Negative_Numeric_Packets" desc="Verify Trace rejects a negative numeric packets value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Trace_Negative_Numeric_Packets" method="NetworkManager_Trace">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="TRACE_IP"/>
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="packets" value="-1"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 149 -->
+    <testCase testCaseId="NM_149" testCaseName="NetworkManager_StartWiFiScan_Invalid_Frequency" desc="Verify StartWiFiScan rejects an invalid frequency value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Start_Wifi_Scan_Invalid_Frequency" method="NetworkManager_Start_Wifi_Scan">
+                <params>
+                        <param tag="frequency" value="invalid_frequency"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 150 -->
+    <testCase testCaseId="NM_150" testCaseName="NetworkManager_StartWiFiScan_Invalid_SSIDs" desc="Verify StartWiFiScan rejects an invalid ssids value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Start_Wifi_Scan_Invalid_SSIDs" method="NetworkManager_Start_Wifi_Scan">
+                <params>
+                        <param tag="ssids" value="()^*!"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 151 -->
+    <testCase testCaseId="NM_151" testCaseName="NetworkManager_StartWiFiScan_Empty_SSIDs" desc="Verify StartWiFiScan rejects an empty ssids value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Start_Wifi_Scan_Empty_SSIDs" method="NetworkManager_Start_Wifi_Scan">
+                <params>
+                        <param tag="ssids" value=""/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+        <!-- Test case 152 -->
+    <testCase testCaseId="NM_152" testCaseName="NetworkManager_AddToKnownSSIDs_Invalid_Security" desc="Verify AddToKnownSSIDs rejects an invalid security value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="AddToKnownSSIDs_Invalid_Security" method="NetworkManager_AddToKnownSSIDs_Negative">
+                <params>
+                        <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                        <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+                        <param tag="security" value="invalid_security"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 153 -->
+    <testCase testCaseId="NM_153" testCaseName="NetworkManager_AddToKnownSSIDs_Empty_Security" desc="Verify AddToKnownSSIDs rejects an empty security value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="AddToKnownSSIDs_Empty_Security" method="NetworkManager_AddToKnownSSIDs_Negative">
+                <params>
+                        <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                        <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+                        <param tag="security" value=""/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 154 -->
+    <testCase testCaseId="NM_154" testCaseName="NetworkManager_AddToKnownSSIDs_Special_Character_Security" desc="Verify AddToKnownSSIDs rejects special characters in the security value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="AddToKnownSSIDs_Special_Character_Security" method="NetworkManager_AddToKnownSSIDs_Negative">
+                <params>
+                        <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                        <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+                        <param tag="security" value="()^*!"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 155 -->
+    <testCase testCaseId="NM_155" testCaseName="NetworkManager_AddToKnownSSIDs_Without_Security" desc="Verify AddToKnownSSIDs rejects invocation without the required security parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="AddToKnownSSIDs_Without_Security" method="NetworkManager_AddToKnownSSIDs">
+                <params>
+                        <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                        <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 156 -->
+    <testCase testCaseId="NM_156" testCaseName="NetworkManager_Connect_To_Known_SSID_Empty_SSID" desc="Verify ConnectToKnownSSID rejects an empty ssid value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Connect_To_Known_SSID_Empty_SSID" method="NetworkManager_ConnectToKnownSSID">
+                <params>
+                        <param tag="ssid" value=""/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 157 -->
+    <testCase testCaseId="NM_157" testCaseName="NetworkManager_Connect_To_Known_SSID_Without_Parameter" desc="Verify ConnectToKnownSSID rejects invocation without the required ssid parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Connect_To_Known_SSID_Without_Parameter" method="NetworkManager_ConnectToKnownSSID">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 158 -->
+    <testCase testCaseId="NM_158" testCaseName="NetworkManager_WifiConnect_Invalid_Security" desc="Verify WiFiConnect rejects an invalid security value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Wifi_Connect_Invalid_Security" method="NetworkManager_Wifi_Connect_Negative">
+                <params>
+                        <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                        <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+                        <param tag="security" value="invalid_security"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 159 -->
+    <testCase testCaseId="NM_159" testCaseName="NetworkManager_StartWPS_Invalid_Method" desc="Verify StartWPS rejects an invalid method value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Start_WPS_Invalid_Method" method="NetworkManager_Negative_Start_WPS">
+                <params>
+                        <param tag="method" value="invalid_method"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 160 -->
+    <testCase testCaseId="NM_160" testCaseName="NetworkManager_StartWPS_Without_Method" desc="Verify StartWPS rejects invocation without the required method parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Start_WPS_Without_Method" method="NetworkManager_Negative_Start_WPS">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 161 -->
+    <testCase testCaseId="NM_161" testCaseName="NetworkManager_SetHostname_Empty_Value" desc="Verify SetHostname rejects an empty hostname value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Hostname_Empty_Value" method="NetworkManager_SetHostname">
+                <params>
+                        <param tag="hostname" value=""/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 162 -->
+    <testCase testCaseId="NM_162" testCaseName="NetworkManager_SetHostname_Special_Character_Value" desc="Verify SetHostname rejects special characters in the hostname value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Hostname_Special_Character_Value" method="NetworkManager_SetHostname">
+                <params>
+                        <param tag="hostname" value="()^*!"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 163 -->
+    <testCase testCaseId="NM_163" testCaseName="NetworkManager_SetHostname_Without_Parameter" desc="Verify SetHostname rejects invocation without the required hostname parameter">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Hostname_Without_Parameter" method="NetworkManager_SetHostname">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 164 -->
+    <!--testCase testCaseId="NM_164" testCaseName="NetworkManager_SetInterfaceState_Invalid_Enabled_Value" desc="Check if the SetInterfaceState method returns an error when a valid interface is provided with an invalid enabled value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetInterfaceState_Invalid_Enabled_Value" method="NetworkManager_Set_Interface_State_Negative">
+                <params>
+                        <param tag="interface" value="eth0"/>
+                        <param tag="enabled" value="invalid"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase-->
+
+    <!-- Test case 165 -->
+    <!--testCase testCaseId="NM_165" testCaseName="NetworkManager_SetInterfaceState_Empty_Enabled_Value" desc="Check if the SetInterfaceState method returns an error when an empty enabled value is provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetInterfaceState_Empty_Enabled_Value" method="NetworkManager_Set_Interface_State_Negative">
+                <params>
+                        <param tag="interface" value="eth0"/>
+                        <param tag="enabled" value=""/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase-->
+
+    <!-- Test case 166 -->
+    <!--testCase testCaseId="NM_166" testCaseName="NetworkManager_SetInterfaceState_Numeric_Enabled_Value" desc="Check if the SetInterfaceState method returns an error when a numeric enabled value is provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetInterfaceState_Numeric_Enabled_Value" method="NetworkManager_Numeric_Enabled_Interface">
+                <params>
+                        <param tag="interface" value="eth0"/>
+                        <param tag="enabled" value="12345"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase-->
+
+    <!-- Test case 167 -->
+    <!--testCase testCaseId="NM_167" testCaseName="NetworkManager_SetInterfaceState_Special_Character_Enabled_Value" desc="Check if the SetInterfaceState method returns an error when special characters are provided in the enabled value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetInterfaceState_Special_Character_Enabled_Value" method="NetworkManager_Set_Interface_State_Negative">
+                <params>
+                        <param tag="interface" value="eth0"/>
+                        <param tag="enabled" value="()^*!"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase-->
 </testPlugin>
