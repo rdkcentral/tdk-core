@@ -157,7 +157,7 @@ Verify the behavior of setAVBlocked when an empty string is passed as appId and 
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set AV blocked empty AppId | Invoke setAVBlocked on org.rdk.ResourceManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ResourceManager.1.setAVBlocked", "params": {"appId": "", "blocked": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call returns a false success status |
+| 1 | Set AV blocked empty AppId | Invoke setAVBlocked on org.rdk.ResourceManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ResourceManager.1.setAVBlocked", "params": {"appId": "", "blocked": true}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
@@ -175,7 +175,7 @@ Verify the behavior of setAVBlocked when an empty string is passed as appId and 
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set AV blocked empty AppId false | Invoke setAVBlocked on org.rdk.ResourceManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ResourceManager.1.setAVBlocked", "params": {"appId": "", "blocked": false}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call returns a false success status |
+| 1 | Set AV blocked empty AppId false | Invoke setAVBlocked on org.rdk.ResourceManager with appId: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ResourceManager.1.setAVBlocked", "params": {"appId": "", "blocked": false}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
@@ -193,7 +193,7 @@ Verify the behavior of setAVBlocked when appId contains special characters and b
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set AV blocked special true | Invoke setAVBlocked on org.rdk.ResourceManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ResourceManager.1.setAVBlocked", "params": {"appId": "()^*!", "blocked": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call returns a false success status |
+| 1 | Set AV blocked special true | Invoke setAVBlocked on org.rdk.ResourceManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ResourceManager.1.setAVBlocked", "params": {"appId": "()^*!", "blocked": true}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
@@ -211,7 +211,7 @@ Verify the behavior of setAVBlocked when appId contains special characters and b
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set AV blocked special chars false | Invoke setAVBlocked on org.rdk.ResourceManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ResourceManager.1.setAVBlocked", "params": {"appId": "()^*!", "blocked": false}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call returns a false success status |
+| 1 | Set AV blocked special chars false | Invoke setAVBlocked on org.rdk.ResourceManager with appId: "()^*!"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ResourceManager.1.setAVBlocked", "params": {"appId": "()^*!", "blocked": false}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
@@ -229,7 +229,7 @@ Verify the behavior of setAVBlocked when appId is a very long string and blocked
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set AV blocked LongAppId true | Invoke setAVBlocked on org.rdk.ResourceManager with appId: "VeryLongStringForAppIdTestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ResourceManager.1.setAVBlocked", "params": {"appId": "VeryLongStringForAppIdTestingPurpose", "blocked": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call returns a false success status |
+| 1 | Set AV blocked LongAppId true | Invoke setAVBlocked on org.rdk.ResourceManager with appId: "VeryLongStringForAppIdTestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ResourceManager.1.setAVBlocked", "params": {"appId": "VeryLongStringForAppIdTestingPurpose", "blocked": true}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
@@ -247,7 +247,7 @@ Verify the behavior of setAVBlocked when appId is a very long string and blocked
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Set AV blocked LongAppId false | Invoke setAVBlocked on org.rdk.ResourceManager with appId: "VeryLongStringRepresentingAppId"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ResourceManager.1.setAVBlocked", "params": {"appId": "VeryLongStringRepresentingAppId", "blocked": false}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call returns a false success status |
+| 1 | Set AV blocked LongAppId false | Invoke setAVBlocked on org.rdk.ResourceManager with appId: "VeryLongStringRepresentingAppId"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.ResourceManager.1.setAVBlocked", "params": {"appId": "VeryLongStringRepresentingAppId", "blocked": false}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ---
 
