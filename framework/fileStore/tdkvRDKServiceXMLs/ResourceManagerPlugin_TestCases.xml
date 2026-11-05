@@ -226,7 +226,7 @@
                 <param tag="appId" value="" />
                 <param tag="blocked" value="true" />
             </params>
-            <resultGeneration useMethodTag="success_negative_status_validation"/>
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
 
@@ -238,7 +238,7 @@
                 <param tag="appId" value="" />
                 <param tag="blocked" value="false" />
             </params>
-            <resultGeneration useMethodTag="success_negative_status_validation"/>
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
 
@@ -250,7 +250,7 @@
                 <param tag="appId" value="()^*!" />
                 <param tag="blocked" value="true" />
             </params>
-            <resultGeneration useMethodTag="success_negative_status_validation"/>
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
 
@@ -262,7 +262,7 @@
                 <param tag="appId" value="()^*!" />
                 <param tag="blocked" value="false" />
             </params>
-            <resultGeneration useMethodTag="success_negative_status_validation"/>
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
 
@@ -274,7 +274,7 @@
                 <param tag="appId" value="VeryLongStringForAppIdTestingPurpose" />
                 <param tag="blocked" value="true" />
             </params>
-            <resultGeneration useMethodTag="success_negative_status_validation"/>
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
 
@@ -286,7 +286,7 @@
                 <param tag="appId" value="VeryLongStringRepresentingAppId" />
                 <param tag="blocked" value="false" />
             </params>
-            <resultGeneration useMethodTag="success_negative_status_validation"/>
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
 

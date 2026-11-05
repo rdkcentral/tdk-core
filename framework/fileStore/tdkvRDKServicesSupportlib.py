@@ -297,8 +297,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 else:
                     info["Test_Step_Status"] = "FAILURE"
 
-        # MessageControl Plugin Response result parser steps
-        elif tag == "messagecontrol_get_controls":
+        # MessagingControl Plugin Response result parser steps
+        elif tag == "messagingcontrol_get_controls":
             for value in result:
                 if str(value.get("module")).lower() == arg[1] and str(value.get("type")).lower() == arg[2] and str(value.get("category")).lower() == arg[3].lower():
                     info["enabled"] = value.get("enabled")
@@ -4693,11 +4693,15 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "rwm_get_zorder":
-            info = result
-            zOrder = result.get("zOrder")
-            if zOrder is not None and isinstance(zOrder, int) and zOrder >= 0:
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
+            try:
+                zOrder = result.get("zOrder")
+                info["zOrder"] = zOrder
+                if zOrder is not None and isinstance(zOrder, int) and zOrder >= 0:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["error"] = str(e)
                 info["Test_Step_Status"] = "FAILURE"
 
         # AppStorageManager Response result parser steps
@@ -5942,8 +5946,8 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults = list(testStepResults[0].values())[0]
             info["category"] = testStepResults[0].get("category")
  
-        # MessageControl Plugin Response result parser steps
-        elif tag == "messagecontrol_toggle_state":
+        # MessagingControl Plugin Response result parser steps
+        elif tag == "messagingcontrol_toggle_state":
             state = ""
             testStepResults = list(testStepResults[0].values())[0]
             if len(arg) != 0:
@@ -5958,8 +5962,8 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             elif str(state ).lower() == "false":
                 info["enabled"] = True
  
-        # MessageControl Plugin Response result parser steps
-        elif tag == "messagecontrol_get_original_state":
+        # MessagingControl Plugin Response result parser steps
+        elif tag == "messagingcontrol_get_original_state":
             state = ""
             testStepResults = list(testStepResults[0].values())[0]
             if len(arg) != 0:
@@ -7951,7 +7955,9 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                     info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "Check_disk_partition":
-            command = 'ls /dev/mmcblk0* | wc -l'
+            device_pattern = getDeviceConfig(basePath,'SYSTEM_PRIMARY_STORAGE_DEVICE_PATTERN',deviceName,deviceType)
+            command = "ls " + device_pattern + " | wc -l"
+            #command = 'ls /dev/mmcblk0* | wc -l'
             output = executeCommand(execInfo, command)
             output = str(output).split("\n")
             info["partition_count"] = int(output[1])

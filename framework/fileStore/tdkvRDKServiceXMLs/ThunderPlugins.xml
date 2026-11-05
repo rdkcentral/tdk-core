@@ -2713,8 +2713,8 @@
         </method>
     </plugin>
 
-    <!-- MessageControl Plugin Information -->
-    <plugin pluginName="MessageControl" serviceName="MessageControl" serviceVersion="1">
+    <!-- MessagingControl Plugin Information -->
+    <plugin pluginName="MessagingControl" serviceName="MessagingControl" serviceVersion="1">
         <method name="Get_Message_Controls" api="controls" type="method" desc="Provides access to retrieve a list of current message controls">
             <expectedValues>True,False</expectedValues>
         </method>
