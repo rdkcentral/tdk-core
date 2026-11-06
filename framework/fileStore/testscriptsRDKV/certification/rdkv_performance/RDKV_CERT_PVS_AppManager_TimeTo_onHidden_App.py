@@ -149,7 +149,7 @@ if expectedResult in result.upper():
                 print("Unable to terminate the app")
                     
         else:
-            tdkTestObj.setResultStatus("FAILURE")
+            obj.setLoadModuleStatus("FAILURE")
             print(f"\nFailed to launch {app_name}")
     else:
         print("The download manager is not active")

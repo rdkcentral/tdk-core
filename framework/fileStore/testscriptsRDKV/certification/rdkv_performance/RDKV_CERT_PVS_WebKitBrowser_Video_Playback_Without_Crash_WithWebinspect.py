@@ -176,7 +176,7 @@ if expectedResult in result.upper():
                 webinspectURL = None
 
                 try:
-                    webinspect_port = str(get_webinspect_port()).strip()
+                    webinspect_port = str(get_webinspect_port(app_name)).strip()
                 except Exception as error:
                     print(f"Unable to get WebInspect port: {error}")
                     tdkTestObj.setResultStatus("FAILURE")
