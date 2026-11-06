@@ -155,16 +155,16 @@ def init_module(libobj,port,deviceInfo):
 #-------------------------------------------------------------------
 #GET THE WEBINSPECT PORT FROM THE DEVICE LOG VIA SSH
 #-------------------------------------------------------------------
-def get_webinspect_port():
+def get_webinspect_port(app_name):
     try:
         # Get SSH parameters from configuration file
         ssh_params = rdkservice_getSSHParams(libObj.realpath, deviceIP)
         if ssh_params == "" or ssh_params == "{}":
             raise Exception("Failed to get SSH parameters from configuration")
         
-        ssh_params_dict = json.loads(ssh_params)
-        ssh_method = ssh_params_dict.get("ssh_method")
-        credentials = ssh_params_dict.get("credentials")
+        ssh_param_dict = json.loads(ssh_params)
+        ssh_method = ssh_param_dict.get("ssh_method")
+        credentials = ssh_param_dict.get("credentials")
         
         if not ssh_method or not credentials:
             raise Exception("SSH method or credentials not found in configuration")
@@ -466,7 +466,7 @@ def rdkservice_getBrowserScore_CSS3():
 
         # Get webinspect port with error handling
         try:
-            webinspect_port = get_webinspect_port()
+            webinspect_port = get_webinspect_port("com.rdkcentral.css3")
             print("\nWebinspect port retrieved: ", webinspect_port)
         except Exception as e:
             print("\nFailed to retrieve webinspect port:", e)
@@ -535,7 +535,7 @@ def rdkservice_getBrowserScore_Octane():
         browser_subcategory_list = BrowserPerformanceVariables.octane_test_subcategory_list
         # Get webinspect port with error handling
         try:
-            webinspect_port = get_webinspect_port()
+            webinspect_port = get_webinspect_port("com.rdkcentral.octane")
             print("\nWebinspect port retrieved: ", webinspect_port)
         except Exception as e:
             print("\nFailed to retrieve webinspect port:", e)
@@ -1328,7 +1328,7 @@ def rdkservice_getBrowserScore_AnimationBenchmark():
         browser_score_dict = {}
         # Get webinspect port with error handling
         try:
-            webinspect_port = get_webinspect_port()
+            webinspect_port = get_webinspect_port("com.rdkcentral.animation")
             print("\nWebinspect port retrieved: ", webinspect_port)
         except Exception as e:
             print("\nFailed to retrieve webinspect port:", e)
@@ -1411,7 +1411,7 @@ def rdkservice_getBrowserScore_Speedometer():
         browser_score_dict = {}
         # Get webinspect port with error handling
         try:
-            webinspect_port = get_webinspect_port()
+            webinspect_port = get_webinspect_port("com.rdkcentral.speedometer")
             print("\nWebinspect port retrieved: ", webinspect_port)
         except Exception as e:
             print("\nFailed to retrieve webinspect port:", e)
@@ -1463,7 +1463,7 @@ def rdkservice_getBrowserScore_MotionMark():
         browser_score_dict = {}
         # Get webinspect port with error handling
         try:
-            webinspect_port = get_webinspect_port()
+            webinspect_port = get_webinspect_port("com.rdkcentral.motion")
             print("\nWebinspect port retrieved: ", webinspect_port)
         except Exception as e:
             print("\nFailed to retrieve webinspect port:", e)
@@ -1588,7 +1588,7 @@ def rdkservice_getBrowserScore_Kraken():
         browser_score_dict = {}
         # Get webinspect port with error handling
         try:
-            webinspect_port = get_webinspect_port()
+            webinspect_port = get_webinspect_port("com.rdkcentral.kraken")
             print("\nWebinspect port retrieved: ", webinspect_port)
         except Exception as e:
             print("\nFailed to retrieve webinspect port:", e)
