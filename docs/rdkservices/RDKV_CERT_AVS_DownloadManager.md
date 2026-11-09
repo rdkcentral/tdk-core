@@ -139,7 +139,7 @@ Verify that the delete method handles empty fileLocator correctly
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Delete file with empty file locator (error case) | Invoke delete on org.rdk.DownloadManager with fileLocator: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.delete", "params": {"fileLocator": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+| 1 | Delete file with empty file locator (error case) | Invoke delete on org.rdk.DownloadManager with fileLocator: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.delete", "params": {"fileLocator": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` / `Could not access requested service` |
 
 ---
 

@@ -226,7 +226,7 @@ if "SUCCESS" in result.upper():
                             appId = inner["appId"]
                             newState = inner["newState"]
                             errorReason = inner["errorReason"]
-                            appInstanceId = inner["appInstanceId"]
+                            #appInstanceId = inner["appInstanceId"]
                             if appId == application_name and newState == "APP_STATE_ACTIVE" and errorReason == "APP_ERROR_NONE":
                                 print("SUCCESS : Application launch successful with correct lifecycle state")
                                 tdkTestObj.setResultStatus("SUCCESS")
@@ -246,7 +246,7 @@ if "SUCCESS" in result.upper():
                             print("Output of executing command : %s" %result)
                             result = result.splitlines()
                             for line in result:
-                                if appInstanceId in line.lower() and "running" in line.lower():
+                                if appId in line.lower() and "running" in line.lower():
                                     print("SUCCESS : Launched application is running in container mode")
                                     tdkTestObj.setResultStatus("SUCCESS")
                                     container_status = "TRUE"

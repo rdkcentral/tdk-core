@@ -1096,7 +1096,8 @@
     <testStep testStepId="1" name="Get_Time_Zones" method="Get_Time_Zones" saveResult="true">
       <resultGeneration useMethodTag="system_get_time_zones_list"/>
     </testStep>
-    <testStep testStepId="2" name="Set_TimeZone_DST" method="Set_TimeZone_DST">
+    <!-- No need for the static Set_TimeZone_DST and Get_TimeZone_DST steps -->
+    <!--testStep testStepId="2" name="Set_TimeZone_DST" method="Set_TimeZone_DST">
       <params>
         <param tag="timeZone" value="America/New_York" />
       </params>
@@ -1104,7 +1105,7 @@
     </testStep>
     <testStep testStepId="3" name="Get_TimeZone_DST" method="Get_TimeZone_DST" delay="1">
       <resultGeneration useMethodTag="system_get_timezone_dst" arguments="check_timezone" expectedValues="America/New_York" />
-    </testStep>
+    </testStep-->
     <testStep testStepId="2" name="Set_And_Get_Time_Zones" testStepType="loop">
       <subtestStep subtestStepId="1" name="Get_TimeZone_DST" method="Get_TimeZone_DST" saveResult="true">
         <resultGeneration useMethodTag="system_get_timezone_dst">

@@ -98,6 +98,7 @@ total_analysis_time = 0.0
 sshPort = 22
 sshParams = []
 deviceIP = ""
+vts_base_path = ""
 
 # Directory containing HAL test source files (used by failure analyzer).
 # by default points at the VTS_Source tree produced by vts_compile.sh.
@@ -191,6 +192,30 @@ def parseTestList(output):
                 # Append truncated part to previous line
                 current_test += " " + line
     return testList
+
+#------------------------------------------------------------------------
+# Function:    getVTSBasePath
+# Description: Returns the base path on the DUT where the VTS test
+#              packages are installed.
+# Parameters:
+#              - host: Device hostname/IP.
+#              - username: SSH username.
+#              - password: SSH password.
+#
+# Return:
+#              - str: Value of the global vts_base_path.
+#------------------------------------------------------------------------
+def getVTSBasePath(host,username,password):
+    global client
+    global session
+    global vts_base_path
+    sshPort = getDeviceConfigValues("SSH_PORT")
+    client,session = startSession(host,username,password,sshPort)
+    commands = [ "cat /opt/vts_installed_path" ]
+    output = executeCommands(session,commands);
+    vts_base_path = "\n".join(l for l in output.splitlines() if not re.match(r'^\s*root@\S+:.*[#$]', l)).strip()
+    print("VTS base path : ", vts_base_path)
+    return vts_base_path
 
 #------------------------------------------------------------------------
 # Function:    parseAsserts
@@ -917,28 +942,22 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
 def SetupPreRequisites(host, username, password, basePath, binaryName, binaryConfig, module, setupEnvironment = False):
     global client
     global session
-    try:
-        configuredPath = getDeviceConfigValues("VTS_BASE_PATH")
-        if configuredPath:
-            print("configuredPath : ", configuredPath)
-            moduleName = os.path.basename(os.path.normpath(basePath)) + "/"
-            basePath = configuredPath + moduleName
-            print("basePath : ", basePath)
-        else:
-            print("Using default basePath :  ", basePath)
-    except:
-        print("Using default basePath :  ", basePath)
-
-    binaryPath = "cd " + basePath + " ; ./" + binaryName
-    if binaryConfig:
-        binaryPath = binaryPath + " -p " + binaryConfig
+    global vts_base_path
     print("\n\n#---------------------------- Plugin Pre-requisite ----------------------------#")
     print("\nPre Requisite : Setting_up_VTS_binary\nPre Requisite No : 1")
     try:
-        sshPort = getDeviceConfigValues("SSH_PORT")
-        client,session = startSession(host,username,password,sshPort)
+        if not vts_base_path:
+            vts_base_path = getVTSBasePath(host,username,password)
+        elif session is None or session.closed:
+            sshPort = getDeviceConfigValues("SSH_PORT")
+            client,session = startSession(host,username,password,sshPort)
+        binary_base_path = vts_base_path + basePath
+        print("Binary Base Path = ", binary_base_path)
+        binaryPath = "cd " + binary_base_path + " ; ./" + binaryName
+        if binaryConfig:
+            binaryPath = binaryPath + " -p " + binaryConfig
         if setupEnvironment:
-            setupEnvironmentInSession(session,basePath)
+            setupEnvironmentInSession(session, binary_base_path)
         output = startBinary(session, binaryPath, module)
         testList = parseTestList(output)
         if not testList:

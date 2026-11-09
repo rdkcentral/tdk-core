@@ -1205,119 +1205,13 @@ compile_vkmark()
 
     echo "Compiling vkmark for $PLATFORM platform"
 
-    ############################################
+    ##################################################
     # Directories used to collect vkmark patches.
     # Patches from meta-rdk-oss-reference are applied
-    # first, followed by the platform SOC OSS patches.
-    ############################################
+    ##################################################
     VKMARK_REF_PATCHES_DIR="$ROOT_DIR/vkmark_patches_ref"
-    VKMARK_PLATFORM_PATCHES_DIR="$ROOT_DIR/vkmark_patches_platform"
-    rm -rf "$VKMARK_REF_PATCHES_DIR" "$VKMARK_PLATFORM_PATCHES_DIR"
-    mkdir -p "$VKMARK_REF_PATCHES_DIR" "$VKMARK_PLATFORM_PATCHES_DIR"
-
-    ############################################
-    # Platform Vendor Manifest
-    ############################################
-
-    case "$PLATFORM" in
-        RPI4)
-            VENDOR_MANIFEST_REPO=$RPI_VENDOR_MANIFEST_REPO
-            VENDOR_VERSION="$RPI_VENDOR_VERSION"
-	    SOC_OSS_REPO="meta-oss-vendor-raspberrypi"
-	    MAX_SOC_OSS_VERSION="4.1.3"
-            ;;
-        REALTEK)
-            VENDOR_MANIFEST_REPO=$REALTEK_VENDOR_MANIFEST_REPO
-            VENDOR_VERSION="$REALTEK_VENDOR_VERSION"
-	    SOC_OSS_REPO="meta-rdk-soc-realtek"
-	    MAX_SOC_OSS_VERSION="2.5.0"
-            ;;
-	BROADCOM)
-	    VENDOR_MANIFEST_REPO=$BROADCOM_VENDOR_MANIFEST_REPO
-            VENDOR_VERSION="$BROADCOM_VENDOR_VERSION"
-            SOC_OSS_REPO="meta-vendor-rdke-broadcom-oss"
-	    MAX_SOC_OSS_VERSION="3.3.6"
-            ;;
-        *)
-            echo "Unsupported platform: $PLATFORM"
-	    echo "PLATFORM needed for vkmark compilation"
-            return 1
-            ;;
-    esac
-
-    ############################################
-    # Clone Vendor Manifest
-    ############################################
-
-    git clone $VENDOR_MANIFEST_REPO.git >> "$LOG_FILE" 2>&1
-    REPO_NAME="${VENDOR_MANIFEST_REPO##*/}"
-    VENDOR_MANIFEST_REPO=$REPO_NAME
-    cd "$VENDOR_MANIFEST_REPO" || return 1
-
-    if [[ "$VENDOR_VERSION" != "default" && -n "$VENDOR_VERSION" ]]; then
-        git checkout "$VENDOR_VERSION" >> "$LOG_FILE" 2>&1
-    fi
-
-    ############################################
-    # Parse OSS Vendor Repo + Tag
-    ############################################
-
-    oss_vendor_line=$(grep -r --exclude-dir=.git --include="*.xml" "$SOC_OSS_REPO" .)
-    result=$(parse_project_line "$oss_vendor_line")
-
-    OSS_VENDOR_REPO_NAME="${result%%|*}"
-    tmp="${result#*|}"
-    OSS_VENDOR_REPO_TAG="${tmp%%|*}"
-
-    ####################################################################################
-    # vkmark recipe is removed after MAX_SOC_OSS_VERSION version
-    # Check if OSS_VENDOR_REPO_TAG obtained is less than or equal to MAX_SOC_OSS_VERSION
-    # if greater, set OSS_VENDOR_REPO_TAG to MAX_SOC_OSS_VERSION
-    ####################################################################################
-    version_gt() {
-        [ "$(printf '%s\n' "$1" "$2" | sort -V | tail -n1)" = "$1" ] && [ "$1" != "$2" ]
-    }
-
-    if version_gt "$OSS_VENDOR_REPO_TAG" "$MAX_SOC_OSS_VERSION"; then
-        echo -e "vkmark is not available in $OSS_VENDOR_REPO_NAME - $OSS_VENDOR_REPO_TAG proceeding with $MAX_SOC_OSS_VERSION"
-        OSS_VENDOR_REPO_TAG="$MAX_SOC_OSS_VERSION"
-    fi
-
-    OSS_VENDOR_REPO_URL="${result##*|}"
-
-    cd ..
-    rm -rf "$VENDOR_MANIFEST_REPO"
-
-    ############################################
-    # Clone OSS Vendor Repo
-    ############################################
-
-    echo -e "Proceeding with vkmark compilation for $PLATFORM with $OSS_VENDOR_REPO_NAME - $OSS_VENDOR_REPO_TAG"
-    git clone ${OSS_VENDOR_REPO_URL}.git >> "$LOG_FILE" 2>&1
-    cd "$OSS_VENDOR_REPO_NAME" 
-    git checkout "$OSS_VENDOR_REPO_TAG" >> "$LOG_FILE" 2>&1
-
-    ############################################
-    # Locate platform-specific vkmark patches
-    # (e.g. meta-rdk-soc-realtek may ship its own
-    #  vkmark directory with additional patches)
-    ############################################
-
-    vkmark_platform_recipe=$(find . -iname vkmark*.bbappend | head -n1)
-    if [[ -n "$vkmark_platform_recipe" ]]; then
-        plat_bbdir=$(dirname "$vkmark_platform_recipe")
-        plat_patch_file=$(find "$plat_bbdir" -iname "*.patch" | head -n1)
-        if [[ -n "$plat_patch_file" ]]; then
-            plat_patches_dir=$(dirname "$plat_patch_file")
-            cp "$plat_patches_dir"/*.patch "$VKMARK_PLATFORM_PATCHES_DIR"/ 2>/dev/null
-            echo "Collected platform-specific vkmark patches from $OSS_VENDOR_REPO_NAME"
-        fi
-    else
-        echo "No vkmark recipe/patches present in $OSS_VENDOR_REPO_NAME"
-    fi
-
-    cd "$ROOT_DIR"
-    rm -rf "$OSS_VENDOR_REPO_NAME"
+    rm -rf "$VKMARK_REF_PATCHES_DIR"
+    mkdir -p "$VKMARK_REF_PATCHES_DIR"
 
     ############################################
     # Fetch vkmark recipe + patches from
@@ -1339,7 +1233,7 @@ compile_vkmark()
     if [[ -z "$vkmark_recipe_path" ]]; then
         echo -e "\e[1;41m vkmark recipe not found in $OSS_REFERENCE_REPO_NAME - $OSS_VERSION \e[0m" | tee -a "$LOG_FILE"
         cd "$ROOT_DIR"
-        rm -rf "$OSS_REFERENCE_REPO_NAME" "$VKMARK_REF_PATCHES_DIR" "$VKMARK_PLATFORM_PATCHES_DIR"
+        rm -rf "$OSS_REFERENCE_REPO_NAME" "$VKMARK_REF_PATCHES_DIR"
         return 1
     fi
     echo "vkmark recipe: $vkmark_recipe_path"
@@ -1367,8 +1261,6 @@ compile_vkmark()
 
     ############################################
     # Apply Patches
-    # Order: meta-rdk-oss-reference patches first,
-    #        then platform SOC OSS patches
     ############################################
 
     apply_patches_from_dir() {
@@ -1386,9 +1278,8 @@ compile_vkmark()
     }
 
     apply_patches_from_dir "$VKMARK_REF_PATCHES_DIR" "$OSS_REFERENCE_REPO_NAME"
-    apply_patches_from_dir "$VKMARK_PLATFORM_PATCHES_DIR" "$OSS_VENDOR_REPO_NAME"
     echo "vkmark source code patched"
-    rm -rf "$VKMARK_REF_PATCHES_DIR" "$VKMARK_PLATFORM_PATCHES_DIR"
+    rm -rf "$VKMARK_REF_PATCHES_DIR"
     vkmark_sourceCode_set="TRUE"
 
     ############################################
@@ -1450,113 +1341,6 @@ compile_vkmark()
 }
 
 ############################################
-# Apply Realtek OSS patches for a given recipe
-# Fetches patches for the requested recipe (e.g.
-# vulkan-headers, vulkan-tools) from the Realtek
-# OSS vendor layer (meta-vendor-rdke-realtek-oss)
-# and applies them to the source in the current dir.
-# $1 - recipe base name (e.g. vulkan-headers, vulkan-tools)
-# Must be called from within the target source dir.
-# Only runs for the REALTEK platform.
-############################################
-apply_realtek_oss_patches() {
-    [[ "$PLATFORM" != "REALTEK" ]] && return 0
-
-    local recipe_base="$1"
-    local target_source_dir="$PWD"
-    local patches_dir="$ROOT_DIR/${recipe_base}_patches_realtek"
-    rm -rf "$patches_dir"
-    mkdir -p "$patches_dir"
-
-    cd "$ROOT_DIR"
-
-    ############################################
-    # Resolve OSS layer version from realtek
-    # manifest via meta-vendor-rdke-realtek-oss
-    # (e.g. 2.3.0)
-    ############################################
-    local manifest_repo_name="${REALTEK_VENDOR_MANIFEST_REPO##*/}"
-    rm -rf "$manifest_repo_name"
-    git clone ${REALTEK_VENDOR_MANIFEST_REPO}.git >> "$LOG_FILE" 2>&1
-    cd "$manifest_repo_name" || { cd "$target_source_dir"; return 0; }
-    if [[ "$REALTEK_VENDOR_VERSION" != "default" && -n "$REALTEK_VENDOR_VERSION" ]]; then
-        git checkout "$REALTEK_VENDOR_VERSION" >> "$LOG_FILE" 2>&1
-    fi
-
-    local oss_layer_name="${REALTEK_VULKAN_HEADERS_OSS_REPO##*/}"
-    local soc_line result tmp oss_layer_tag
-    soc_line=$(grep -r --exclude-dir=.git --include="*.xml" "$oss_layer_name" .)
-    result=$(parse_project_line "$soc_line")
-    tmp="${result#*|}"
-    oss_layer_tag="${tmp%%|*}"
-
-    cd "$ROOT_DIR"
-    rm -rf "$manifest_repo_name"
-
-    if [[ -z "$oss_layer_tag" ]]; then
-        echo "Could not resolve OSS layer version for $recipe_base patches, skipping"
-        cd "$target_source_dir"
-        rm -rf "$patches_dir"
-        return 0
-    fi
-
-    ############################################
-    # Clone OSS vendor layer and collect patches
-    ############################################
-    echo "Cloning $oss_layer_name - $oss_layer_tag for $recipe_base patches"
-    rm -rf "$oss_layer_name"
-    git clone ${REALTEK_VULKAN_HEADERS_OSS_REPO}.git >> "$LOG_FILE" 2>&1
-    cd "$oss_layer_name" || { cd "$target_source_dir"; rm -rf "$patches_dir"; return 0; }
-    git checkout "$oss_layer_tag" >> "$LOG_FILE" 2>&1
-
-    local recipe_file recipe_bbdir found_base patch_dir
-    recipe_file=$(find . -iname "${recipe_base}*.bb" | head -n1)
-    if [[ -n "$recipe_file" ]]; then
-        recipe_bbdir=$(dirname "$recipe_file")
-        # Recipe base name without version/extension, e.g. vulkan-headers_1.4.303.bb -> vulkan-headers
-        found_base=$(basename "$recipe_file")
-        found_base="${found_base%.bb}"
-        found_base="${found_base%%_*}"
-        # Patches are stored in a subfolder named after the recipe (Yocto FILESEXTRAPATHS layout)
-        if [[ -d "$recipe_bbdir/$found_base" ]]; then
-            patch_dir="$recipe_bbdir/$found_base"
-        else
-            patch_dir="$recipe_bbdir"
-        fi
-        shopt -s nullglob
-        local collected=( "$patch_dir"/*.patch )
-        shopt -u nullglob
-        if [ ${#collected[@]} -gt 0 ]; then
-            cp "${collected[@]}" "$patches_dir"/ 2>/dev/null
-            echo "Collected $recipe_base patches from $oss_layer_name ($patch_dir)"
-        else
-            echo "No $recipe_base patches found in $oss_layer_name"
-        fi
-    else
-        echo "No $recipe_base recipe found in $oss_layer_name"
-    fi
-
-    cd "$ROOT_DIR"
-    rm -rf "$oss_layer_name"
-
-    ############################################
-    # Apply patches to the target source
-    ############################################
-    cd "$target_source_dir"
-    shopt -s nullglob
-    local patch_list=( "$patches_dir"/*.patch )
-    shopt -u nullglob
-    if [ ${#patch_list[@]} -gt 0 ]; then
-        for p in "${patch_list[@]}"; do
-            echo "Applying $recipe_base patch $(basename "$p")"
-            patch -p1 < "$p" >> "$LOG_FILE" 2>&1
-        done
-        echo "$recipe_base source patched"
-    fi
-    rm -rf "$patches_dir"
-}
-
-############################################
 # Copy Vulkan headers into sysroot
 ############################################
 install_vulkan_headers() {
@@ -1591,7 +1375,18 @@ install_vulkan_headers() {
               ;;
     esac
     git checkout $vulkan_header_srcrev >> "$LOG_FILE" 2>&1
-    apply_realtek_oss_patches "vulkan-headers"
+    if [[ $VULKAN_VERSION == "1.4.303" ]];then
+          echo "Vulkan header version is 1.4.303"
+	  echo "Adding patch from meta-rdk-oss-reference"
+	  git clone https://github.com/rdkcentral/meta-rdk-oss-reference >> "$LOG_FILE" 2>&1
+	  cd meta-rdk-oss-reference
+	  git checkout $OSS_VERSION >> "$LOG_FILE" 2>&1
+	  cp "$(find . -name '0001-Add-operator-eq-and-neq-to-all-handle-classes.patch' -print -quit)" ..
+	  cd ..; rm -rf meta-rdk-oss-reference
+	  patch -p1 < 0001-Add-operator-eq-and-neq-to-all-handle-classes.patch
+	  echo "Patched headers"
+    fi
+
     cp -r include/vulkan $SDKTARGETSYSROOT/usr/include/
     cp -r include/vk_video $SDKTARGETSYSROOT/usr/include/
     mkdir -p $SDKTARGETSYSROOT/usr/share/vulkan/registry
@@ -1651,7 +1446,6 @@ clone_vulkan_tools() {
               ;;
     esac
     git checkout $vulkan_tools_srcrev >> "$LOG_FILE" 2>&1
-    apply_realtek_oss_patches "vulkan-tools"
     CUBE_FILE="$VULKAN_TOOLS_DIR/cube/cube.c"
 }
 
@@ -2034,8 +1828,41 @@ setup_glslang_validator() {
     echo "Downloaded glslangValidator"
 }
 
+###################################################################################
+# 13. Patch vkcube 1.4.341 cube.c to run without xdg-shell (Westeros); idempotent
+###################################################################################
+fix_vkcube_swapchain_gate() {
+    local f="${1:?usage: patch_cube_westeros cube.c}"
+    [ -f "$f" ] || { echo "no such file: $f" >&2; return 1; }
+
+    if grep -q "WESTEROS_NO_XDG_PATCH" "$f"; then
+        echo "already patched: $f"; return 0
+    fi
+    cp "$f" "$f.orig" || return 1
+
+    sed -i \
+      -e '/^static void demo_create_wayland_window/,/wl_surface_commit(demo->window);/{
+/wl_surface_commit(demo->window);/i\
+#if !defined(XDG_WM_BASE_PROTO)\
+    /* WESTEROS_NO_XDG_PATCH: no xdg-shell on Westeros, so no configure event will arrive */\
+    demo->xdg_surface_has_been_configured = 1;\
+#endif
+}' \
+      -e 's/^\([[:space:]]*\)xdg_toplevel_destroy(demo->xdg_toplevel);/\1if (demo->xdg_toplevel) xdg_toplevel_destroy(demo->xdg_toplevel);/' \
+      -e 's/^\([[:space:]]*\)xdg_surface_destroy(demo->xdg_surface);/\1if (demo->xdg_surface) xdg_surface_destroy(demo->xdg_surface);/' \
+      -e 's/^\([[:space:]]*\)xdg_wm_base_destroy(demo->xdg_wm_base);/\1if (demo->xdg_wm_base) xdg_wm_base_destroy(demo->xdg_wm_base);/' \
+      -e 's/^\([[:space:]]*\)xdg_toplevel_move(demo->xdg_toplevel,/\1if (demo->xdg_toplevel) xdg_toplevel_move(demo->xdg_toplevel,/' \
+      "$f"
+
+    if ! { grep -q "WESTEROS_NO_XDG_PATCH" "$f" \
+       && grep -q "if (demo->xdg_toplevel) xdg_toplevel_destroy" "$f"; }; then
+        echo "patch failed: patterns did not match in $f; restoring original" >&2
+        mv "$f.orig" "$f"; return 1
+    fi
+}
+
 ############################################
-# 13. vkcube compilation main function
+# 14. vkcube compilation main function
 ############################################
 compile_vkcube()
 {
@@ -2063,13 +1890,17 @@ compile_vkcube()
     generate_wayland_headers_minimal
     compile_shaders
     cd $VULKAN_TOOLS_DIR/cube/
+    if [[ $VULKAN_VERSION == "1.4.341" ]]; then
+		echo "Adding extra guards for 1.4.341 version"
+		fix_vkcube_swapchain_gate cube.c
+    fi
     $CC cube.c xdg-shell-protocol.c xdg-decoration-protocol.c -o vkcube     -DVK_USE_PLATFORM_WAYLAND_KHR     -lvulkan -lwayland-client -lpthread -lm >> "$LOG_FILE" 2>&1
     if [ -f $VULKAN_TOOLS_DIR/cube/vkcube ];then
         echo "Binary available in $VULKAN_TOOLS_DIR/cube/vkcube"
-	echo -e "\e[1;42m VKCUBE COMPILATION : SUCCESS \e[0m" | tee -a "$LOG_FILE"
-	vkcube_compiled="TRUE"
+		echo -e "\e[1;42m VKCUBE COMPILATION : SUCCESS \e[0m" | tee -a "$LOG_FILE"
+		vkcube_compiled="TRUE"
     else
-	echo -e "\e[1;41m VKCUBE COMPILATION : FAILURE \e[0m" | tee -a "$LOG_FILE"
+		echo -e "\e[1;41m VKCUBE COMPILATION : FAILURE \e[0m" | tee -a "$LOG_FILE"
 	exit 1
     fi
 }

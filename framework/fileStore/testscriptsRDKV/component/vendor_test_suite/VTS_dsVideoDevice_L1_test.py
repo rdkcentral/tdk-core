@@ -116,7 +116,7 @@ if "SUCCESS" in result.upper():
     #Set Custom List of TestCases
     testCaseList = VideoDevice_L1_List
     #Set basepath of test
-    basePath = VTS_Binary_basePath + DeviceSettings_basePath
+    basePath =  DeviceSettings_basePath
     #SkipTestCaseList
     SkipTestCaseList = VideoDevice_L1_SkipTestCaseList
     boxtype = obj.getDeviceBoxType();
