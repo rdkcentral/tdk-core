@@ -19,18 +19,9 @@
 
 #The values mentioned here are sample values for reference purpose only, whuich can be replaced as per the requirement
 
-WEBCONFIG_URL = "https://webconfig.rdkcentral.com/app1/"
+# Suite Specific Configuration
 
-#Lan Subdoc Configurations
-LAN_IP = "10.0.0.1"
-LAN_SUBNET_MASK = "255.255.255.0"
-DHCP_START_IP = "10.0.0.8"
-DHCP_END_IP = "10.0.0.240"
-LEASE_TIME = 7200
-DHCP_SERVER_ENABLE = "true"
 
-#Port Forwarding Subdoc Configurations
-INTERNAL_CLIENT = "10.0.0.111"
 EXTERNAL_PORT_END_RANGE = "23"
 PORTFORWARDING_ENABLE = "true"
 EXTERNAL_PORT = "23"
@@ -65,3 +56,4 @@ SSID_ADVERTISEMENT_ENABLED_6g =  True
 ENCRYPTION_METHOD_6g = "AES"
 SECURITY_MODE_ENABLED_6g = "WPA3-Personal"
 SECURITY_PASSPHRASE_6g = "rdkm@1234"
+

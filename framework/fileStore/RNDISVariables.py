@@ -17,20 +17,12 @@
 # limitations under the License.
 ##########################################################################
 
-# RNDIS Interface Configuration
-ANDROID_WAN_INTERFACE = "usb0"
-IOS_WAN_INTERFACE = "eth0"
+# Suite Specific Configuration
 
 # Data Model Parameters
 DM_WAN_IP = "Device.DeviceInfo.X_COMCAST-COM_WAN_IP"
 DM_WAN_MAC = "Device.DeviceInfo.X_COMCAST-COM_WAN_MAC"
 
-# Regex/String patterns for parsing
-INET_ADDR_PATTERN = "inet addr"
-HWADDR_PATTERN = "HWaddr"
-
-# Ping Test Configuration
-PING_TARGET = "www.google.com"
 PING_COUNT = 10
 
 # Cellular Interface Data Model Parameters
@@ -66,8 +58,6 @@ EXPECTED_CONTROL_INTERFACE_STATUS = "OPENED"
 MONITORING_DURATION = 300  # 5 minutes in seconds
 MONITORING_INTERVAL = 30   # Check every 30 seconds
 
-# Host Table Data Model Parameters
-DM_HOSTS_HOST_NUMBER_OF_ENTRIES = "Device.Hosts.HostNumberOfEntries"
 
 # Expected Host Table Values
 EXPECTED_LAYER1_INTERFACE_ETHERNET = "Ethernet"
