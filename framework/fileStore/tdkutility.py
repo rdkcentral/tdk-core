@@ -131,36 +131,16 @@ def getInstanceNumber(paramName,index):
         return 0
     return instanceNumber
 
-def readtdkbConfigFile(self):
+def readtdkbConfigFile(obj):
 
-# Reads config file and returns the value.
+# Compatibility wrapper for existing Broadband callers.
+# The implementation is maintained in tdkbFrameworkUtility.py.
 
-# Syntax      : OBJ.readtdkbConfigFile()
-# Description : Reads config file and returns the value.
-# Parameters  : configFile - Name of config file.
-# Return Value: value given in the config file
-
-    configFile = self.realpath + "fileStore/" + "tdkb.config"
-    print("Configuration File Found : ", configFile)
-    sys.stdout.flush()
-    HostName="";
-
-    # Checking if file exists
-    fileCheck = os.path.isfile(configFile)
-    if (fileCheck):
-        for line in open(configFile).readlines():
-            if "HOST_NAME" in line:
-                HostName=line.split("=")[1].strip();
-                print("Host name is %s" %HostName);
-        if HostName == "":
-            return "NULL"
-    else:
-        print("Configuration File does not exist.")
-        sys.stdout.flush()
-        exit()
-    return HostName;
+    from tdkbFrameworkUtility import readtdkbConfigFile as readBroadbandConfig
+    return readBroadbandConfig(obj)
 
 ########## End of Function ##########
+
 
 def getMultipleParameterValues(obj,paramList):
 
