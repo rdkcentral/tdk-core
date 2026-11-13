@@ -305,6 +305,30 @@ def launchApp(obj,app_id):
         print(f"\nFailed to launch the app: {app_id}\n")
         return "FAILURE"
 
+# Function to get the instanceId of a loaded app irrespective of its lifecycleState
+def getAppInstanceId(obj,app_id):
+    tdkTestObj = obj.createTestStep('rdkservice_getValue')
+    tdkTestObj.addParameter("method","org.rdk.AppManager.getLoadedApps")
+    tdkTestObj.executeTestCase("SUCCESS")
+    result = tdkTestObj.getResult()
+    details = tdkTestObj.getResultDetails()
+    instance_id = None
+    if result == "SUCCESS":
+        try:
+            apps = ast.literal_eval(details)
+        except (ValueError, SyntaxError):
+            apps = []
+        for app in apps:
+            if isinstance(app,dict) and app.get("appId") == app_id:
+                instance_id = app.get("appInstanceId")
+                break
+    tdkTestObj.setResultStatus("SUCCESS" if instance_id else "FAILURE")
+    if instance_id is not None:
+        print("\nSuccessfully obtained the app instance id: " + instance_id)
+    else:
+        print("\nFailed to get the app instance id. Please check whether the app is present in loaded apps list")
+    return instance_id
+
 def checkProcEntry(obj,validation_dict):
     tdkTestObj = obj.createTestStep('rdkv_media_checkProcEntry')
     tdkTestObj.addParameter("sshMethod",validation_dict["ssh_method"])
