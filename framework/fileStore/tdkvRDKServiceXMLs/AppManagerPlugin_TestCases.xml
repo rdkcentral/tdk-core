@@ -1680,6 +1680,8 @@
 
     <!-- AppManager L2 Testcases -->
     <!-- TestCase L2_01 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect; therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="AM_L2_01" testCaseName="AppManager_App_Lock_Launch_Terminate_Unlock_Operations" desc="Verify that an app can be launched successfully after performing lock operation on the device">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
@@ -1732,8 +1734,11 @@
             <resultGeneration useMethodTag="app_packagemanager_null_result_validation"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase L2_02 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect; therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="AM_L2_02" testCaseName="AppManager_App_Launch_Terminate_Lock_Unlock_Operations" desc="Verify that an app can be launch, terminate, lock and unlock successfully">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
@@ -1786,8 +1791,11 @@
             <resultGeneration useMethodTag="app_packagemanager_null_result_validation"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase L2_03 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect; therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="AM_L2_03" testCaseName="AppManager_App_Launch_Kill_Lock_Unlock_Operations" desc="Verify that an app can be launch, kill, lock and unlock successfully">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
@@ -1840,8 +1848,11 @@
             <resultGeneration useMethodTag="app_packagemanager_null_result_validation"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase L2_04 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect; therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="AM_L2_04" testCaseName="AppManager_App_Launch_Close_Lock_Unlock_Operations" desc="Verify that an app can be launch, close, lock and unlock successfully">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
@@ -1905,9 +1916,10 @@
             </postrequisite>
         </testCasePostRequisite>
     </testCase>
+    -->
 
-    <!-- TestCase L2_05 -->
-    <testCase testCaseId="AM_L2_05" testCaseName="AppManager_On_AppLifecycleStateChanged_Event_After_Close" desc="Verify that appLifecycleStateChanged event is received with correct parameters when an app is launched, closed">
+    <!-- TestCase L2_01 -->
+    <testCase testCaseId="AM_L2_01" testCaseName="AppManager_On_AppLifecycleStateChanged_Event_After_Close" desc="Verify that appLifecycleStateChanged event is received with correct parameters when an app is launched, closed">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
@@ -1956,8 +1968,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase L2_06 -->
-    <testCase testCaseId="AM_L2_06" testCaseName="AppManager_On_AppLifecycleStateChanged_Event_After_Kill" desc="Verify that appLifecycleStateChanged event is received with correct parameters when an app is launched, killed">
+    <!-- TestCase L2_02 -->
+    <testCase testCaseId="AM_L2_02" testCaseName="AppManager_On_AppLifecycleStateChanged_Event_After_Kill" desc="Verify that appLifecycleStateChanged event is received with correct parameters when an app is launched, killed">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
@@ -2000,8 +2012,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase L2_07 -->
-    <testCase testCaseId="AM_L2_07" testCaseName="AppManager_On_AppLifecycleStateChanged_Event_After_Terminate" desc="Verify that appLifecycleStateChanged event is received with correct parameters when an app is launched, terminated">
+    <!-- TestCase L2_03 -->
+    <testCase testCaseId="AM_L2_03" testCaseName="AppManager_On_AppLifecycleStateChanged_Event_After_Terminate" desc="Verify that appLifecycleStateChanged event is received with correct parameters when an app is launched, terminated">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
@@ -2044,8 +2056,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase L2_08 -->
-    <testCase testCaseId="AM_L2_08" testCaseName="AppManager_App_Launch_Twice" desc="Check that an app can be launched successfully after terminating the app which is launched previously">
+    <!-- TestCase L2_04 -->
+    <testCase testCaseId="AM_L2_04" testCaseName="AppManager_App_Launch_Twice" desc="Check that an app can be launched successfully after terminating the app which is launched previously">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
@@ -2100,8 +2112,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase L2_09 -->
-    <testCase testCaseId="AM_L2_09" testCaseName="AppManager_Get_Loaded_Apps_After_Launch" desc="Verify that the launched app is reflected in the list of loaded apps">
+    <!-- TestCase L2_05 -->
+    <testCase testCaseId="AM_L2_05" testCaseName="AppManager_Get_Loaded_Apps_After_Launch" desc="Verify that the launched app is reflected in the list of loaded apps">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
@@ -2149,8 +2161,8 @@
         </testCasePostRequisite>
     </testCase>
 
-    <!-- TestCase L2_10 -->
-    <testCase testCaseId="AM_L2_10" testCaseName="AppManager_Get_Loaded_Apps_After_Close" desc="Verify that the closed app is no longer reflected in the list of loaded apps">
+    <!-- TestCase L2_06 -->
+    <testCase testCaseId="AM_L2_06" testCaseName="AppManager_Get_Loaded_Apps_After_Close" desc="Verify that the closed app is no longer reflected in the list of loaded apps">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
@@ -2204,8 +2216,8 @@
         </testCasePostRequisite>
     </testCase>
 
-    <!-- TestCase L2_11 -->
-    <testCase testCaseId="AM_L2_11" testCaseName="AppManager_Get_Loaded_Apps_After_Kill" desc="Verify that the killed app is no longer reflected in the list of loaded apps">
+    <!-- TestCase L2_07 -->
+    <testCase testCaseId="AM_L2_07" testCaseName="AppManager_Get_Loaded_Apps_After_Kill" desc="Verify that the killed app is no longer reflected in the list of loaded apps">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">
@@ -2248,8 +2260,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase L2_12 -->
-    <testCase testCaseId="AM_L2_12" testCaseName="AppManager_Get_Loaded_Apps_After_Terminate" desc="Verify that the terminated app is no longer reflected in the list of loaded apps">
+    <!-- TestCase L2_08 -->
+    <testCase testCaseId="AM_L2_08" testCaseName="AppManager_Get_Loaded_Apps_After_Terminate" desc="Verify that the terminated app is no longer reflected in the list of loaded apps">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Terminate_Existing_App">

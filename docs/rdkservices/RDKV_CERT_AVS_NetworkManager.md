@@ -108,7 +108,7 @@ accessible via JSON-RPC under the callsign `org.rdk.NetworkManager` (version 1)
 
 ## Plugin Pre-conditions
 
-### Plugin Pre-condition 1: Activate_Plugin
+### Plugin Pre-condition 1: Activate_NetworkManager_Plugin
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
@@ -1042,8 +1042,9 @@ Check the wifi state change event on connecting to the wifi ssid
 | 3 | Stop wifi scan | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan stopped successfully  |
 | 4 | Connect to WiFi network | Invoke WiFiConnect on org.rdk.NetworkManager with ssid: "<WIFI_SSID_NAME>", passphrase: "<WIFI_PASSPHRASE>", security: "<WIFI_SECURITY_MODE>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiConnect", "params": {"ssid": "<WIFI_SSID_NAME>", "passphrase": "<WIFI_PASSPHRASE>", "security": "<WIFI_SECURITY_MODE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi connected successfully  |
 | 5 | Check on WiFiStateChange event | Listen for Event_On_WiFiStateChange event (wait 10s) | Verify that `success` : `true` `state`: `4`, `status`: `WIFI_STATE_CONNECTING`  |
-| 6 | Check get connected SSID | Invoke GetConnectedSSID on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetConnectedSSID"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` connected SSID returned  |
-| 7 | Disconnect from WiFi network | Invoke WiFiDisconnect on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi disconnected successfully  |
+| 6 | Check on WiFiStateChange event | Listen for Event_On_WiFiStateChange event | Verify that `success` : `true` `state`: `5`, `status`: `WIFI_STATE_CONNECTED`  |
+| 7 | Check get connected SSID | Invoke GetConnectedSSID on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetConnectedSSID"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` connected SSID returned  |
+| 8 | Disconnect from WiFi network | Invoke WiFiDisconnect on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi disconnected successfully  |
 
 ---
 
@@ -1216,39 +1217,6 @@ NetworkManager_GetIPSettings_With_Invalid_Parameter
 NM_46
 
 ### TestCase Objective
-Validates statechange event on activating/deactivating the plugin
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Activate_Plugins
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Deactivate network plugin | Invoke deactivate on Controller with callsign: "org.rdk.NetworkManager"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check state change event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `org.rdk.networkmanager` with state `"deactivated"` |
-| 3 | Check plugin active status | Invoke status on Controller for org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
-| 4 | Activate network plugin | Invoke activate on Controller with callsign: "org.rdk.NetworkManager"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 5 | Check state change event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `org.rdk.networkmanager` with state `"activated"` |
-| 6 | Check plugin active status | Invoke status on Controller for org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
-
----
-
-<a id="networkmanager_setinterfacestate_without_interface_parameter"></a>
-### TestCase Name
-NetworkManager_SetInterfaceState_Without_Interface_Parameter
-
-### TestCase ID
-NM_47
-
-### TestCase Objective
 Check if the GetIPSettings method returns an error when invalid interface parameter is provided
 
 ### Test Steps
@@ -1259,46 +1227,12 @@ Check if the GetIPSettings method returns an error when invalid interface parame
 
 ---
 
-<a id="networkmanager_setinterfacestate_with_invalid_parameters"></a>
+<a id="networkmanager_setinterfacestate_without_interface_parameter"></a>
 ### TestCase Name
-NetworkManager_SetInterfaceState_With_Invalid_Parameters
+NetworkManager_SetInterfaceState_Without_Interface_Parameter
 
 ### TestCase ID
-NM_48
-
-### TestCase Objective
-Verify that the WifiConnect method returns an error when the plugin is in a deactivated state
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Activate_Plugins
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Deactivate NetworkManager plugin | Invoke deactivate on Controller with callsign: "org.rdk.NetworkManager"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
-| 2 | Check state change event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `org.rdk.networkmanager` with state `"deactivated"` |
-| 3 | Check plugin active status | Invoke status on Controller for org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
-| 4 | Check NetworkManager wifi connect API response | Invoke WiFiConnect on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiConnect"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
-| 5 | Activate NetworkManager plugin | Invoke activate on Controller with callsign: "org.rdk.NetworkManager"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
-| 6 | Check state change event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `org.rdk.networkmanager` with state `"activated"` |
-| 7 | Check plugin active status | Invoke status on Controller for org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
-
----
-
-<a id="networkmanager_add_and_remove_ssid"></a>
-### TestCase Name
-NetworkManager_Add_and_Remove_SSID
-
-### TestCase ID
-NM_49
+NM_47
 
 ### TestCase Objective
 Check if the SetInterfaceState method returns an error when interface parameter is not provided
@@ -1311,12 +1245,12 @@ Check if the SetInterfaceState method returns an error when interface parameter 
 
 ---
 
-<a id="networkmanager_setstunendpoint_with_invalid_endpoint"></a>
+<a id="networkmanager_setinterfacestate_with_invalid_parameters"></a>
 ### TestCase Name
-NetworkManager_SetStunEndpoint_With_Invalid_Endpoint
+NetworkManager_SetInterfaceState_With_Invalid_Parameters
 
 ### TestCase ID
-NM_50
+NM_48
 
 ### TestCase Objective
 Check if the SetInterfaceState method returns an error when both interface and enabled parameters are provided with invalid values
@@ -1329,12 +1263,12 @@ Check if the SetInterfaceState method returns an error when both interface and e
 
 ---
 
-<a id="networkmanager_setstunendpoint_with_invalid_port"></a>
+<a id="networkmanager_add_and_remove_ssid"></a>
 ### TestCase Name
-NetworkManager_SetStunEndpoint_With_Invalid_Port
+NetworkManager_Add_and_Remove_SSID
 
 ### TestCase ID
-NM_51
+NM_49
 
 ### TestCase Objective
 Check that an SSID can be added and then removed successfully
@@ -1364,12 +1298,12 @@ Check that an SSID can be added and then removed successfully
 
 ---
 
-<a id="networkmanager_setstunendpoint_without_endpoint"></a>
+<a id="networkmanager_setstunendpoint_with_invalid_endpoint"></a>
 ### TestCase Name
-NetworkManager_SetStunEndpoint_Without_Endpoint
+NetworkManager_SetStunEndpoint_With_Invalid_Endpoint
 
 ### TestCase ID
-NM_52
+NM_50
 
 ### TestCase Objective
 Check if the SetStunEndpoint method throws an error when an invalid endpoint parameter is passed
@@ -1382,12 +1316,12 @@ Check if the SetStunEndpoint method throws an error when an invalid endpoint par
 
 ---
 
-<a id="networkmanager_setstunendpoint_without_port"></a>
+<a id="networkmanager_setstunendpoint_with_invalid_port"></a>
 ### TestCase Name
-NetworkManager_SetStunEndpoint_Without_Port
+NetworkManager_SetStunEndpoint_With_Invalid_Port
 
 ### TestCase ID
-NM_53
+NM_51
 
 ### TestCase Objective
 Check if the SetStunEndpoint method throws an error when an invalid port parameter is passed
@@ -1400,12 +1334,12 @@ Check if the SetStunEndpoint method throws an error when an invalid port paramet
 
 ---
 
-<a id="networkmanager_setstunendpoint_without_parameters"></a>
+<a id="networkmanager_setstunendpoint_without_endpoint"></a>
 ### TestCase Name
-NetworkManager_SetStunEndpoint_Without_Parameters
+NetworkManager_SetStunEndpoint_Without_Endpoint
 
 ### TestCase ID
-NM_54
+NM_52
 
 ### TestCase Objective
 Check if the SetStunEndpoint method throws an error when endpoint parameter is not passed
@@ -1418,12 +1352,12 @@ Check if the SetStunEndpoint method throws an error when endpoint parameter is n
 
 ---
 
-<a id="networkmanager_addtoknownssids_with_empty_ssid"></a>
+<a id="networkmanager_setstunendpoint_without_port"></a>
 ### TestCase Name
-NetworkManager_AddToKnownSSIDs_With_Empty_SSID
+NetworkManager_SetStunEndpoint_Without_Port
 
 ### TestCase ID
-NM_55
+NM_53
 
 ### TestCase Objective
 Check if the SetStunEndpoint method throws an error when port parameter is not passed
@@ -1436,12 +1370,12 @@ Check if the SetStunEndpoint method throws an error when port parameter is not p
 
 ---
 
-<a id="networkmanager_addtoknownssids_with_empty_passphrase"></a>
+<a id="networkmanager_setstunendpoint_without_parameters"></a>
 ### TestCase Name
-NetworkManager_AddToKnownSSIDs_With_Empty_Passphrase
+NetworkManager_SetStunEndpoint_Without_Parameters
 
 ### TestCase ID
-NM_56
+NM_54
 
 ### TestCase Objective
 Check if the SetStunEndpoint method throws an error when parameters are not passed
@@ -1454,12 +1388,12 @@ Check if the SetStunEndpoint method throws an error when parameters are not pass
 
 ---
 
-<a id="networkmanager_addtoknownssids_with_empty_ssid_passphrase"></a>
+<a id="networkmanager_addtoknownssids_with_empty_ssid"></a>
 ### TestCase Name
-NetworkManager_AddToKnownSSIDs_With_Empty_SSID_Passphrase
+NetworkManager_AddToKnownSSIDs_With_Empty_SSID
 
 ### TestCase ID
-NM_57
+NM_55
 
 ### TestCase Objective
 Check if the AddToKnownSSIDs method returns an error when the SSID parameter is empty
@@ -1472,12 +1406,12 @@ Check if the AddToKnownSSIDs method returns an error when the SSID parameter is 
 
 ---
 
-<a id="networkmanager_addtoknownssids_without_parameters"></a>
+<a id="networkmanager_addtoknownssids_with_empty_passphrase"></a>
 ### TestCase Name
-NetworkManager_AddToKnownSSIDs_Without_Parameters
+NetworkManager_AddToKnownSSIDs_With_Empty_Passphrase
 
 ### TestCase ID
-NM_58
+NM_56
 
 ### TestCase Objective
 Check if the AddToKnownSSIDs method returns an error when the passphrase parameter is empty
@@ -1490,12 +1424,12 @@ Check if the AddToKnownSSIDs method returns an error when the passphrase paramet
 
 ---
 
-<a id="networkmanager_setipsettings_with_empty_interface"></a>
+<a id="networkmanager_addtoknownssids_with_empty_ssid_passphrase"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Empty_Interface
+NetworkManager_AddToKnownSSIDs_With_Empty_SSID_Passphrase
 
 ### TestCase ID
-NM_59
+NM_57
 
 ### TestCase Objective
 Check if the AddToKnownSSIDs method returns an error when the SSID and passphrase parameters are empty
@@ -1508,12 +1442,12 @@ Check if the AddToKnownSSIDs method returns an error when the SSID and passphras
 
 ---
 
-<a id="networkmanager_setipsettings_with_invalid_interface"></a>
+<a id="networkmanager_addtoknownssids_without_parameters"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Invalid_Interface
+NetworkManager_AddToKnownSSIDs_Without_Parameters
 
 ### TestCase ID
-NM_60
+NM_58
 
 ### TestCase Objective
 Check if the AddToKnownSSIDs method returns an error when parameters are not provided
@@ -1526,12 +1460,12 @@ Check if the AddToKnownSSIDs method returns an error when parameters are not pro
 
 ---
 
-<a id="networkmanager_setipsettings_with_empty_ipversion"></a>
+<a id="networkmanager_setipsettings_with_empty_interface"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Empty_Ipversion
+NetworkManager_SetIPSettings_With_Empty_Interface
 
 ### TestCase ID
-NM_61
+NM_59
 
 ### TestCase Objective
 Check if the SetIPSettings method returns an error when the interface parameter is empty
@@ -1544,12 +1478,12 @@ Check if the SetIPSettings method returns an error when the interface parameter 
 
 ---
 
-<a id="networkmanager_setipsettings_with_invalid_ipversion"></a>
+<a id="networkmanager_setipsettings_with_invalid_interface"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Invalid_Ipversion
+NetworkManager_SetIPSettings_With_Invalid_Interface
 
 ### TestCase ID
-NM_62
+NM_60
 
 ### TestCase Objective
 Check if the SetIPSettings method returns an error when the interface parameter is invalid
@@ -1562,12 +1496,12 @@ Check if the SetIPSettings method returns an error when the interface parameter 
 
 ---
 
-<a id="networkmanager_setipsettings_with_invalid_ipaddress"></a>
+<a id="networkmanager_setipsettings_with_empty_ipversion"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Invalid_Ipaddress
+NetworkManager_SetIPSettings_With_Empty_Ipversion
 
 ### TestCase ID
-NM_63
+NM_61
 
 ### TestCase Objective
 Check if the SetIPSettings method returns an error when the ipversion parameter is empty
@@ -1580,12 +1514,12 @@ Check if the SetIPSettings method returns an error when the ipversion parameter 
 
 ---
 
-<a id="networkmanager_setipsettings_with_invalid_gateway"></a>
+<a id="networkmanager_setipsettings_with_invalid_ipversion"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Invalid_Gateway
+NetworkManager_SetIPSettings_With_Invalid_Ipversion
 
 ### TestCase ID
-NM_64
+NM_62
 
 ### TestCase Objective
 Check if the SetIPSettings method returns an error when the ipversion parameter is invalid
@@ -1598,12 +1532,12 @@ Check if the SetIPSettings method returns an error when the ipversion parameter 
 
 ---
 
-<a id="networkmanager_setipsettings_with_invalid_primarydns"></a>
+<a id="networkmanager_setipsettings_with_invalid_ipaddress"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Invalid_PrimaryDNS
+NetworkManager_SetIPSettings_With_Invalid_Ipaddress
 
 ### TestCase ID
-NM_65
+NM_63
 
 ### TestCase Objective
 Check if the SetIPSettings method returns an error when the ipaddress parameter is invalid
@@ -1616,12 +1550,12 @@ Check if the SetIPSettings method returns an error when the ipaddress parameter 
 
 ---
 
-<a id="networkmanager_setipsettings_with_invalid_secondarydns"></a>
+<a id="networkmanager_setipsettings_with_invalid_gateway"></a>
 ### TestCase Name
-NetworkManager_SetIPSettings_With_Invalid_SecondaryDNS
+NetworkManager_SetIPSettings_With_Invalid_Gateway
 
 ### TestCase ID
-NM_66
+NM_64
 
 ### TestCase Objective
 Check if the SetIPSettings method returns an error when the gateway parameter is invalid
@@ -1634,12 +1568,12 @@ Check if the SetIPSettings method returns an error when the gateway parameter is
 
 ---
 
-<a id="networkmanager_ssid_frequency_checker_2.4ghz"></a>
+<a id="networkmanager_setipsettings_with_invalid_primarydns"></a>
 ### TestCase Name
-NetworkManager_SSID_Frequency_Checker_2.4GHz
+NetworkManager_SetIPSettings_With_Invalid_PrimaryDNS
 
 ### TestCase ID
-NM_67
+NM_65
 
 ### TestCase Objective
 Check if the SetIPSettings method returns an error when the primarydns parameter is invalid
@@ -1652,12 +1586,12 @@ Check if the SetIPSettings method returns an error when the primarydns parameter
 
 ---
 
-<a id="networkmanager_ssid_frequency_checker_5ghz"></a>
+<a id="networkmanager_setipsettings_with_invalid_secondarydns"></a>
 ### TestCase Name
-NetworkManager_SSID_Frequency_Checker_5GHz
+NetworkManager_SetIPSettings_With_Invalid_SecondaryDNS
 
 ### TestCase ID
-NM_68
+NM_66
 
 ### TestCase Objective
 Check if the SetIPSettings method returns an error when the secondarydns parameter is invalid
@@ -1670,6 +1604,68 @@ Check if the SetIPSettings method returns an error when the secondarydns paramet
 
 ---
 
+<a id="networkmanager_ssid_frequency_checker_2.4ghz"></a>
+### TestCase Name
+NetworkManager_SSID_Frequency_Checker_2.4GHz
+
+### TestCase ID
+NM_67
+
+### TestCase Objective
+Scan for 2.4GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs event are on the 2.4GHz band
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Enable_Wifi_Interface
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get interface state | Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 2 | Set interface state | *(Conditional statement executed only if previous step condition is met)*<br>Set Interface State on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.SetInterfaceState", "params": {"interface": "wlan0", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Interface State set successfully  |
+| 3 | Get interface state | *(Conditional statement executed only if previous step condition is met)*<br>Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 4 | Disconnect from WiFi network | Wi Fi Disconnect on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi disconnected successfully  |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with frequencies: ["2.4"]<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequencies": ["2.4"]}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
+| 2 | Check on AvailableSSIDs event | Listen for Event_On_AvailableSSIDs event (wait 5s) | Ensure the `onAvailableSSIDs` event is received with `2.4` found in the scanned SSID list |
+| 3 | Stop wifi scan | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan stopped successfully  |
+
+---
+
+<a id="networkmanager_ssid_frequency_checker_5ghz"></a>
+### TestCase Name
+NetworkManager_SSID_Frequency_Checker_5GHz
+
+### TestCase ID
+NM_68
+
+### TestCase Objective
+Scan for 5GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs event are on the 5GHz band
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Enable_Wifi_Interface
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get interface state | Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 2 | Set interface state | *(Conditional statement executed only if previous step condition is met)*<br>Set Interface State on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.SetInterfaceState", "params": {"interface": "wlan0", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Interface State set successfully  |
+| 3 | Get interface state | *(Conditional statement executed only if previous step condition is met)*<br>Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 4 | Disconnect from WiFi network | Wi Fi Disconnect on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi disconnected successfully  |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with frequencies: ["5"]<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequencies": ["5"]}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
+| 2 | Check on AvailableSSIDs event | Listen for Event_On_AvailableSSIDs event (wait 5s) | Ensure the `onAvailableSSIDs` event is received with `5` found in the scanned SSID list |
+| 3 | Stop wifi scan | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan stopped successfully  |
+
+---
+
 <a id="networkmanager_scan_specific_ssid_2.4ghz"></a>
 ### TestCase Name
 NetworkManager_Scan_Specific_SSID_2.4GHz
@@ -1678,23 +1674,26 @@ NetworkManager_Scan_Specific_SSID_2.4GHz
 NM_69
 
 ### TestCase Objective
-Check if the GetAvailableInterfaces method returns an error when the plugin is in a deactivated state
+This test case checks if NetworkManager can scan for a specific SSID on the 2.4GHz band and confirm its presence
 
 ### TestCase Pre-condition
 
-#### TestCase Pre-condition 1: Deactivate_Plugin
+#### TestCase Pre-condition 1: Enable_Wifi_Interface
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+| 1 | Get interface state | Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 2 | Set interface state | *(Conditional statement executed only if previous step condition is met)*<br>Set Interface State on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.SetInterfaceState", "params": {"interface": "wlan0", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Interface State set successfully  |
+| 3 | Get interface state | *(Conditional statement executed only if previous step condition is met)*<br>Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 4 | Disconnect from WiFi network | Wi Fi Disconnect on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi disconnected successfully  |
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check GetAvailableInterfaces API response | Invoke GetAvailableInterfaces on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetAvailableInterfaces"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with ssids: ["<WIFI_SSID_NAME>"], frequencies: ["2.4"]<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequencies": ["2.4"], "ssids": ["<WIFI_SSID_NAME>"]}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
+| 2 | Check on AvailableSSIDs event | Listen for Event_On_AvailableSSIDs event (wait 5s) | Ensure the `onAvailableSSIDs` event is received and the SSID list is validated |
+| 3 | Stop wifi scan | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan stopped successfully  |
 
 ---
 
@@ -1706,23 +1705,26 @@ NetworkManager_Scan_Specific_SSID_5GHz
 NM_70
 
 ### TestCase Objective
-Check if the GetPrimaryInterface method returns an error when the plugin is in a deactivated state
+This test case checks if NetworkManager can scan for a specific SSID on the 5GHz band and confirm its presence
 
 ### TestCase Pre-condition
 
-#### TestCase Pre-condition 1: Deactivate_Plugin
+#### TestCase Pre-condition 1: Enable_Wifi_Interface
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+| 1 | Get interface state | Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 2 | Set interface state | *(Conditional statement executed only if previous step condition is met)*<br>Set Interface State on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.SetInterfaceState", "params": {"interface": "wlan0", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Interface State set successfully  |
+| 3 | Get interface state | *(Conditional statement executed only if previous step condition is met)*<br>Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
+| 4 | Disconnect from WiFi network | Wi Fi Disconnect on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi disconnected successfully  |
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check GetPrimaryInterface API response | Invoke GetPrimaryInterface on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetPrimaryInterface"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with ssids: ["<WIFI_SSID_NAME_5GHZ>"], frequencies: ["5"]<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequencies": ["5"], "ssids": ["<WIFI_SSID_NAME_5GHZ>"]}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
+| 2 | Check on AvailableSSIDs event | Listen for Event_On_AvailableSSIDs event (wait 5s) | Ensure the `onAvailableSSIDs` event is received and the SSID list is validated |
+| 3 | Stop wifi scan | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan stopped successfully  |
 
 ---
 
@@ -1734,23 +1736,13 @@ NetworkManager_Trace_Empty_Endpoint
 NM_71
 
 ### TestCase Objective
-Check if the GetPublicIP method returns an error when the plugin is in a deactivated state
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Deactivate_Plugin
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+Traces the empty endpoint
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check GetPublicIP API response | Invoke GetPublicIP on org.rdk.NetworkManager with ipversion: "IPv4"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetPublicIP", "params": {"ipversion": "IPv4"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+| 1 | Trace empty endpoint | Invoke Trace on org.rdk.NetworkManager with endpoint: "", ipversion: "IPv4", packets: 10<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.Trace", "params": {"endpoint": "", "ipversion": "IPv4", "packets": 10}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -1762,23 +1754,13 @@ NetworkManager_Trace_Without_Parameter
 NM_72
 
 ### TestCase Objective
-Check if the Ping method returns an error when the plugin is in a deactivated state
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Deactivate_Plugin
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+Check if the Trace method returns an error when parameters are not provided
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check ping API response | Invoke Ping on org.rdk.NetworkManager with endpoint: "<PING_IP>", ipversion: "IPv4", count: 10<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.Ping", "params": {"endpoint": "<PING_IP>", "ipversion": "IPv4", "count": 10}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+| 1 | Trace without parameter | Invoke Trace on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.Trace"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -1790,23 +1772,13 @@ NetworkManager_Wifi_Connect_Without_Parameter
 NM_73
 
 ### TestCase Objective
-Check if the Trace method returns an error when the plugin is in a deactivated state
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Deactivate_Plugin
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+Check if the WifiConnect method returns an error when parameter is not provided
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check trace API response | Invoke Trace on org.rdk.NetworkManager with endpoint: "<TRACE_IP>", ipversion: "IPv4", count: 10<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.Trace", "params": {"endpoint": "<TRACE_IP>", "ipversion": "IPv4", "count": 10}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+| 1 | Wifi connect without parameter | Invoke WiFiConnect on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiConnect"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
 
 ---
 
@@ -1818,23 +1790,13 @@ NetworkManager_Get_Public_IPv6_IP
 NM_74
 
 ### TestCase Objective
-Check if the IsConnectedToInternet method returns an error when the plugin is in a deactivated state
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Deactivate_Plugin
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+Validate public IPv6 IP address of the device
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check IsConnectedToInternet API response | Invoke IsConnectedToInternet on org.rdk.NetworkManager with ipversion: "IPv4"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.IsConnectedToInternet", "params": {"ipversion": "IPv4"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+| 1 | Get public IPv6 IP | Invoke GetPublicIP on org.rdk.NetworkManager with ipversion: "IPv6"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetPublicIP", "params": {"ipversion": "IPv6"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` public IP address returned  |
 
 ---
 
@@ -1846,23 +1808,13 @@ NetworkManager_Internet_IPv6_Connectivity
 NM_75
 
 ### TestCase Objective
-Check if the GetInterfaceState method returns an error when the plugin is in a deactivated state
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Deactivate_Plugin
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+Seeks whether the device has internet connectivity
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check GetInterfaceState API response | Invoke GetInterfaceState on org.rdk.NetworkManager with interface: "eth0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "eth0"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+| 1 | Check Internet IPv6 connectivity | Invoke IsConnectedToInternet on org.rdk.NetworkManager with ipversion: "IPv6"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.IsConnectedToInternet", "params": {"ipversion": "IPv6"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API returns `true` as the expected result  |
 
 ---
 
@@ -1874,23 +1826,13 @@ NetworkManager_Get_IPSettings_IPv6
 NM_76
 
 ### TestCase Objective
-Check if the SetInterfaceState method returns an error when the plugin is in a deactivated state
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Deactivate_Plugin
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+Gets the IP setting for the given interface
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check SetInterfaceState API response | Invoke SetInterfaceState on org.rdk.NetworkManager with interface: "eth0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.SetInterfaceState", "params": {"interface": "eth0", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+| 1 | Get IP settings for network interface | Invoke GetIPSettings on org.rdk.NetworkManager with interface: "<NETWORKMANAGER_INTERFACE_DETAILS>", ipversion: "IPv6"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetIPSettings", "params": {"interface": "<NETWORKMANAGER_INTERFACE_DETAILS>", "ipversion": "IPv6"}}' http://127.0.0.1:9998/jsonrpc` | Verify that IP settings are returned successfully |
 
 ---
 
@@ -1902,24 +1844,40 @@ NetworkManager_Primary_Interface_After_LightSleep
 NM_77
 
 ### TestCase Objective
-Check if the StopWiFiScan method returns an error when the plugin is in a deactivated state
+Checks the primary interface after the device has been put in sleep mode and then woken up
 
 ### TestCase Pre-condition
 
-#### TestCase Pre-condition 1: Deactivate_Plugin
+#### TestCase Pre-condition 1: Activate_System_Plugin
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+| 1 | Check plugin active status | Check active status of System plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate System plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.System"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of System plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
 
 ### Test Steps
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Check StopWiFiScan API response | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+| 1 | Check power state | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the power state is returned successfully |
+| 2 | Set power state | *(Conditional statement executed only if previous step condition is met)*<br>Invoke setPowerState on org.rdk.System with standbyReason: "<value>", powerState: "ON"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "<value>", "powerState": "ON"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the power state is set successfully |
+| 3 | Get device interfaces | Invoke GetAvailableInterfaces on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetAvailableInterfaces"}' http://127.0.0.1:9998/jsonrpc` | Verify that the available interfaces are returned successfully |
+| 4 | Get Primary/Default interface | Invoke GetPrimaryInterface on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetPrimaryInterface"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` returned `interface` is one of the values retrieved in step 3  |
+| 5 | Set power state | Invoke setPowerState on org.rdk.System with standbyReason: "<value>", powerState: "STANDBY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "<value>", "powerState": "STANDBY"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the power state is set successfully |
+| 6 | Get power state | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned power state is `STANDBY` as expected  |
+| 7 | Set power state | Invoke setPowerState on org.rdk.System with standbyReason: "<value>", powerState: "ON"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "<value>", "powerState": "ON"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the power state is set successfully |
+| 8 | Get power state | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned power state is `ON` as expected  |
+| 9 | Get Primary/Default interface | Invoke GetPrimaryInterface on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetPrimaryInterface"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` primary interface matches value from step 4  |
 
+### TestCase Post-condition
+
+#### TestCase Post-condition 1: Reverting_PowerState_ON
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check power state | Get Power State from System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the power state is returned successfully |
+| 2 | Set power state | *(Conditional statement executed only if previous step condition is met)*<br>Set Power State on System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "<value>", "powerState": "ON"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the power state is set successfully |
 ---
 
 <a id="networkmanager_connect_to_known_ssid_2-4ghz"></a>
@@ -2027,6 +1985,325 @@ NetworkManager_ActivateDeactivate_Event_Test
 NM_81
 
 ### TestCase Objective
+Validates statechange event on activating/deactivating the plugin
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Activate_Plugins
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Deactivate network plugin | Invoke deactivate on Controller with callsign: "org.rdk.NetworkManager"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `org.rdk.networkmanager` with state `"deactivated"` |
+| 3 | Check plugin active status | Invoke status on Controller for org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+| 4 | Activate network plugin | Invoke activate on Controller with callsign: "org.rdk.NetworkManager"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
+| 5 | Check state change event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `org.rdk.networkmanager` with state `"activated"` |
+| 6 | Check plugin active status | Invoke status on Controller for org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+
+---
+
+<a id="networkmanager_wifi_connect_error"></a>
+### TestCase Name
+NetworkManager_Wifi_Connect_Error
+
+### TestCase ID
+NM_82
+
+### TestCase Objective
+Verify that the WifiConnect method returns an error when the plugin is in a deactivated state
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Activate_Plugins
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Deactivate NetworkManager plugin | Invoke deactivate on Controller with callsign: "org.rdk.NetworkManager"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is disabled successfully |
+| 2 | Check state change event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `org.rdk.networkmanager` with state `"deactivated"` |
+| 3 | Check plugin active status | Invoke status on Controller for org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+| 4 | Check NetworkManager wifi connect API response | Invoke WiFiConnect on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiConnect"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+| 5 | Activate NetworkManager plugin | Invoke activate on Controller with callsign: "org.rdk.NetworkManager"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the feature is enabled successfully |
+| 6 | Check state change event | Listen for Event_Controller_State_Changed event (wait 2s) | Verify that the `statechange` event is received for callsign `org.rdk.networkmanager` with state `"activated"` |
+| 7 | Check plugin active status | Invoke status on Controller for org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
+
+---
+
+<a id="networkmanager_getavailableinterfaces_error"></a>
+### TestCase Name
+NetworkManager_GetAvailableInterfaces_Error
+
+### TestCase ID
+NM_83
+
+### TestCase Objective
+Check if the GetAvailableInterfaces method returns an error when the plugin is in a deactivated state
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Deactivate_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check GetAvailableInterfaces API response | Invoke GetAvailableInterfaces on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetAvailableInterfaces"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+
+---
+
+<a id="networkmanager_getprimaryinterface_error"></a>
+### TestCase Name
+NetworkManager_GetPrimaryInterface_Error
+
+### TestCase ID
+NM_84
+
+### TestCase Objective
+Check if the GetPrimaryInterface method returns an error when the plugin is in a deactivated state
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Deactivate_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check GetPrimaryInterface API response | Invoke GetPrimaryInterface on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetPrimaryInterface"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+
+---
+
+<a id="networkmanager_getpublicip_error"></a>
+### TestCase Name
+NetworkManager_GetPublicIP_Error
+
+### TestCase ID
+NM_85
+
+### TestCase Objective
+Check if the GetPublicIP method returns an error when the plugin is in a deactivated state
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Deactivate_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check GetPublicIP API response | Invoke GetPublicIP on org.rdk.NetworkManager with ipversion: "IPv4"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetPublicIP", "params": {"ipversion": "IPv4"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+
+---
+
+<a id="networkmanager_ping_error"></a>
+### TestCase Name
+NetworkManager_Ping_Error
+
+### TestCase ID
+NM_86
+
+### TestCase Objective
+Check if the Ping method returns an error when the plugin is in a deactivated state
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Deactivate_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check ping API response | Invoke Ping on org.rdk.NetworkManager with endpoint: "<PING_IP>", ipversion: "IPv4", count: 10<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.Ping", "params": {"endpoint": "<PING_IP>", "ipversion": "IPv4", "count": 10}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+
+---
+
+<a id="networkmanager_trace_error"></a>
+### TestCase Name
+NetworkManager_Trace_Error
+
+### TestCase ID
+NM_87
+
+### TestCase Objective
+Check if the Trace method returns an error when the plugin is in a deactivated state
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Deactivate_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check trace API response | Invoke Trace on org.rdk.NetworkManager with endpoint: "<TRACE_IP>", ipversion: "IPv4", count: 10<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.Trace", "params": {"endpoint": "<TRACE_IP>", "ipversion": "IPv4", "count": 10}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+
+---
+
+<a id="networkmanager_isconnectedtointernet_error"></a>
+### TestCase Name
+NetworkManager_IsConnectedToInternet_Error
+
+### TestCase ID
+NM_88
+
+### TestCase Objective
+Check if the IsConnectedToInternet method returns an error when the plugin is in a deactivated state
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Deactivate_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check IsConnectedToInternet API response | Invoke IsConnectedToInternet on org.rdk.NetworkManager with ipversion: "IPv4"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.IsConnectedToInternet", "params": {"ipversion": "IPv4"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+
+---
+
+<a id="networkmanager_getinterfacestate_error"></a>
+### TestCase Name
+NetworkManager_GetInterfaceState_Error
+
+### TestCase ID
+NM_89
+
+### TestCase Objective
+Check if the GetInterfaceState method returns an error when the plugin is in a deactivated state
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Deactivate_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check GetInterfaceState API response | Invoke GetInterfaceState on org.rdk.NetworkManager with interface: "eth0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "eth0"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+
+---
+
+<a id="networkmanager_setinterfacestate_error"></a>
+### TestCase Name
+NetworkManager_SetInterfaceState_Error
+
+### TestCase ID
+NM_90
+
+### TestCase Objective
+Check if the SetInterfaceState method returns an error when the plugin is in a deactivated state
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Deactivate_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check SetInterfaceState API response | Invoke SetInterfaceState on org.rdk.NetworkManager with interface: "eth0"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.SetInterfaceState", "params": {"interface": "eth0", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+
+---
+
+<a id="networkmanager_stopwifiscan_error"></a>
+### TestCase Name
+NetworkManager_StopWiFiScan_Error
+
+### TestCase ID
+NM_91
+
+### TestCase Objective
+Check if the StopWiFiScan method returns an error when the plugin is in a deactivated state
+
+### TestCase Pre-condition
+
+#### TestCase Pre-condition 1: Deactivate_Plugin
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check plugin active status | Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
+| 2 | Deactivate plugin | *(Conditional statement executed only if previous step condition is met)*<br>Deactivate NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.deactivate", "params": {"callsign": "org.rdk.NetworkManager"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is deactivated successfully |
+| 3 | Check plugin active status | *(Conditional statement executed only if previous step condition is met)*<br>Check active status of NetworkManager plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.NetworkManager"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is deactivated |
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Check StopWiFiScan API response | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
+
+---
+
+<a id="networkmanager_wifidisconnect_error"></a>
+### TestCase Name
+NetworkManager_WiFiDisconnect_Error
+
+### TestCase ID
+NM_92
+
+### TestCase Objective
 Check if the WiFiDisconnect method returns an error when the plugin is in a deactivated state
 
 ### TestCase Pre-condition
@@ -2045,282 +2322,7 @@ Check if the WiFiDisconnect method returns an error when the plugin is in a deac
 | --- | --- | --- | --- |
 | 1 | Check WiFiDisconnect API response | Invoke WiFiDisconnect on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `Service is not active` / `ERROR_UNAVAILABLE` / `The service is in an illegal state!!!.` |
 
----
 
-<a id="networkmanager_wifi_connect_error"></a>
-### TestCase Name
-NetworkManager_Wifi_Connect_Error
-
-### TestCase ID
-NM_82
-
-### TestCase Objective
-Scan for 2.4GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs event are on the 2.4GHz band
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Enable_Wifi_Interface
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Get interface state | Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
-| 2 | Set interface state | *(Conditional statement executed only if previous step condition is met)*<br>Set Interface State on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.SetInterfaceState", "params": {"interface": "wlan0", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Interface State set successfully  |
-| 3 | Get interface state | *(Conditional statement executed only if previous step condition is met)*<br>Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
-| 4 | Disconnect from WiFi network | Wi Fi Disconnect on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi disconnected successfully  |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with frequency: 2.4<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequency": 2.4}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
-| 2 | Check on AvailableSSIDs event | Listen for Event_On_AvailableSSIDs event (wait 5s) | Ensure the `onAvailableSSIDs` event is received with `2.4` found in the scanned SSID list |
-| 3 | Stop wifi scan | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan stopped successfully  |
-
----
-
-<a id="networkmanager_getavailableinterfaces_error"></a>
-### TestCase Name
-NetworkManager_GetAvailableInterfaces_Error
-
-### TestCase ID
-NM_83
-
-### TestCase Objective
-Scan for 5GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs event are on the 5GHz band
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Enable_Wifi_Interface
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Get interface state | Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
-| 2 | Set interface state | *(Conditional statement executed only if previous step condition is met)*<br>Set Interface State on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.SetInterfaceState", "params": {"interface": "wlan0", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Interface State set successfully  |
-| 3 | Get interface state | *(Conditional statement executed only if previous step condition is met)*<br>Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
-| 4 | Disconnect from WiFi network | Wi Fi Disconnect on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi disconnected successfully  |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with frequency: 5<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequency": 5}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
-| 2 | Check on AvailableSSIDs event | Listen for Event_On_AvailableSSIDs event (wait 5s) | Ensure the `onAvailableSSIDs` event is received with `5` found in the scanned SSID list |
-| 3 | Stop wifi scan | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan stopped successfully  |
-
----
-
-<a id="networkmanager_getprimaryinterface_error"></a>
-### TestCase Name
-NetworkManager_GetPrimaryInterface_Error
-
-### TestCase ID
-NM_84
-
-### TestCase Objective
-This test case checks if NetworkManager can scan for a specific SSID on the 2.4GHz band and confirm its presence
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Enable_Wifi_Interface
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Get interface state | Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
-| 2 | Set interface state | *(Conditional statement executed only if previous step condition is met)*<br>Set Interface State on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.SetInterfaceState", "params": {"interface": "wlan0", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Interface State set successfully  |
-| 3 | Get interface state | *(Conditional statement executed only if previous step condition is met)*<br>Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
-| 4 | Disconnect from WiFi network | Wi Fi Disconnect on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi disconnected successfully  |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with ssids: "<WIFI_SSID_NAME>", frequency: 2.4<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequency": 2.4, "ssids": "<WIFI_SSID_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
-| 2 | Check on AvailableSSIDs event | Listen for Event_On_AvailableSSIDs event (wait 5s) | Ensure the `onAvailableSSIDs` event is received and the SSID list is validated |
-| 3 | Stop wifi scan | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan stopped successfully  |
-
----
-
-<a id="networkmanager_getpublicip_error"></a>
-### TestCase Name
-NetworkManager_GetPublicIP_Error
-
-### TestCase ID
-NM_85
-
-### TestCase Objective
-This test case checks if NetworkManager can scan for a specific SSID on the 5GHz band and confirm its presence
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Enable_Wifi_Interface
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Get interface state | Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
-| 2 | Set interface state | *(Conditional statement executed only if previous step condition is met)*<br>Set Interface State on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.SetInterfaceState", "params": {"interface": "wlan0", "enabled": true}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` Interface State set successfully  |
-| 3 | Get interface state | *(Conditional statement executed only if previous step condition is met)*<br>Get Interface State from NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetInterfaceState", "params": {"interface": "wlan0"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
-| 4 | Disconnect from WiFi network | Wi Fi Disconnect on NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiDisconnect"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi disconnected successfully  |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with ssids: "<WIFI_SSID_NAME_5GHZ>", frequency: 5<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequency": 5, "ssids": "<WIFI_SSID_NAME_5GHZ>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
-| 2 | Check on AvailableSSIDs event | Listen for Event_On_AvailableSSIDs event (wait 5s) | Ensure the `onAvailableSSIDs` event is received and the SSID list is validated |
-| 3 | Stop wifi scan | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan stopped successfully  |
-
----
-
-<a id="networkmanager_ping_error"></a>
-### TestCase Name
-NetworkManager_Ping_Error
-
-### TestCase ID
-NM_86
-
-### TestCase Objective
-Traces the empty endpoint
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Trace empty endpoint | Invoke Trace on org.rdk.NetworkManager with endpoint: "", ipversion: "IPv4", packets: 10<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.Trace", "params": {"endpoint": "", "ipversion": "IPv4", "packets": 10}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
-
----
-
-<a id="networkmanager_trace_error"></a>
-### TestCase Name
-NetworkManager_Trace_Error
-
-### TestCase ID
-NM_87
-
-### TestCase Objective
-Check if the Trace method returns an error when parameters are not provided
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Trace without parameter | Invoke Trace on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.Trace"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
-
----
-
-<a id="networkmanager_isconnectedtointernet_error"></a>
-### TestCase Name
-NetworkManager_IsConnectedToInternet_Error
-
-### TestCase ID
-NM_88
-
-### TestCase Objective
-Check if the WifiConnect method returns an error when parameter is not provided
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Wifi connect without parameter | Invoke WiFiConnect on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.WiFiConnect"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
-
----
-
-<a id="networkmanager_getinterfacestate_error"></a>
-### TestCase Name
-NetworkManager_GetInterfaceState_Error
-
-### TestCase ID
-NM_89
-
-### TestCase Objective
-Validate public IPv6 IP address of the device
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Get public IPv6 IP | Invoke GetPublicIP on org.rdk.NetworkManager with ipversion: "IPv6"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetPublicIP", "params": {"ipversion": "IPv6"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` public IP address returned  |
-
----
-
-<a id="networkmanager_setinterfacestate_error"></a>
-### TestCase Name
-NetworkManager_SetInterfaceState_Error
-
-### TestCase ID
-NM_90
-
-### TestCase Objective
-Seeks whether the device has internet connectivity
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check Internet IPv6 connectivity | Invoke IsConnectedToInternet on org.rdk.NetworkManager with ipversion: "IPv6"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.IsConnectedToInternet", "params": {"ipversion": "IPv6"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API returns `true` as the expected result  |
-
----
-
-<a id="networkmanager_stopwifiscan_error"></a>
-### TestCase Name
-NetworkManager_StopWiFiScan_Error
-
-### TestCase ID
-NM_91
-
-### TestCase Objective
-Gets the IP setting for the given interface
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Get IP settings for network interface | Invoke GetIPSettings on org.rdk.NetworkManager with interface: "<NETWORKMANAGER_INTERFACE_DETAILS>", ipversion: "IPv6"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetIPSettings", "params": {"interface": "<NETWORKMANAGER_INTERFACE_DETAILS>", "ipversion": "IPv6"}}' http://127.0.0.1:9998/jsonrpc` | Verify that IP settings are returned successfully |
-
----
-
-<a id="networkmanager_wifidisconnect_error"></a>
-### TestCase Name
-NetworkManager_WiFiDisconnect_Error
-
-### TestCase ID
-NM_92
-
-### TestCase Objective
-Checks the primary interface after the device has been put in sleep mode and then woken up
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Activate_System_Plugin
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check plugin active status | Check active status of System plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify that the plugin state is returned successfully |
-| 2 | Activate plugin | *(Conditional statement executed only if plugin is currently deactivated)*<br>Activate System plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.activate", "params": {"callsign": "org.rdk.System"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the plugin is activated successfully |
-| 3 | Check plugin active status | *(Conditional statement executed only if plugin is activated in step 2)*<br>Check active status of System plugin<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "Controller.1.status@org.rdk.System"}' http://127.0.0.1:9998/jsonrpc` | Verify plugin state is activated |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check power state | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the power state is returned successfully |
-| 2 | Set power state | *(Conditional statement executed only if previous step condition is met)*<br>Invoke setPowerState on org.rdk.System with standbyReason: "<value>", powerState: "ON"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "<value>", "powerState": "ON"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the power state is set successfully |
-| 3 | Get device interfaces | Invoke GetAvailableInterfaces on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetAvailableInterfaces"}' http://127.0.0.1:9998/jsonrpc` | Verify that the available interfaces are returned successfully |
-| 4 | Get Primary/Default interface | Invoke GetPrimaryInterface on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetPrimaryInterface"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` returned `interface` is one of the values retrieved in step 3  |
-| 5 | Set power state | Invoke setPowerState on org.rdk.System with standbyReason: "<value>", powerState: "STANDBY"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "<value>", "powerState": "STANDBY"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the power state is set successfully |
-| 6 | Get power state | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned power state is `STANDBY` as expected  |
-| 7 | Set power state | Invoke setPowerState on org.rdk.System with standbyReason: "<value>", powerState: "ON"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "<value>", "powerState": "ON"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the power state is set successfully |
-| 8 | Get power state | Invoke getPowerState on org.rdk.System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the returned power state is `ON` as expected  |
-| 9 | Get Primary/Default interface | Invoke GetPrimaryInterface on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.GetPrimaryInterface"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` primary interface matches value from step 4  |
-
-### TestCase Post-condition
-
-#### TestCase Post-condition 1: Reverting_PowerState_ON
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check power state | Get Power State from System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.getPowerState"}' http://127.0.0.1:9998/jsonrpc` | Verify that the power state is returned successfully |
-| 2 | Set power state | *(Conditional statement executed only if previous step condition is met)*<br>Set Power State on System<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setPowerState", "params": {"standbyReason": "<value>", "powerState": "ON"}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the power state is set successfully |
 
 ## Plugin Post-conditions
 

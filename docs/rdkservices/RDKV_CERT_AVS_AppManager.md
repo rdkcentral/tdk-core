@@ -115,10 +115,6 @@ RDKV_CERT_AVS_AppManager
    - [AppManager_HibernateSystemApp_Numeric_AppId](#appmanager_hibernatesystemapp_numeric_appid)
    - [AppManager_HibernateSystemApp_Without_Param](#appmanager_hibernatesystemapp_without_param)
    - [AppManager_Max_Inactive_Ramusage](#appmanager_max_inactive_ramusage)
-   - [AppManager_App_Lock_Launch_Terminate_Unlock_Operations](#appmanager_app_lock_launch_terminate_unlock_operations)
-   - [AppManager_App_Launch_Terminate_Lock_Unlock_Operations](#appmanager_app_launch_terminate_lock_unlock_operations)
-   - [AppManager_App_Launch_Kill_Lock_Unlock_Operations](#appmanager_app_launch_kill_lock_unlock_operations)
-   - [AppManager_App_Launch_Close_Lock_Unlock_Operations](#appmanager_app_launch_close_lock_unlock_operations)
    - [AppManager_On_AppLifecycleStateChanged_Event_After_Close](#appmanager_on_applifecyclestatechanged_event_after_close)
    - [AppManager_On_AppLifecycleStateChanged_Event_After_Kill](#appmanager_on_applifecyclestatechanged_event_after_kill)
    - [AppManager_On_AppLifecycleStateChanged_Event_After_Terminate](#appmanager_on_applifecyclestatechanged_event_after_terminate)
@@ -2309,144 +2305,12 @@ Verify the successful retrieval of the maximum inactive ram usage
 
 ---
 
-<a id="appmanager_app_lock_launch_terminate_unlock_operations"></a>
-### TestCase Name
-AppManager_App_Lock_Launch_Terminate_Unlock_Operations
-
-### TestCase ID
-AM_L2_01
-
-### TestCase Objective
-Verify that an app can be launched successfully after performing lock operation on the device
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Terminate_Existing_App
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check loaded apps | Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
-| 2 | Terminate app valid param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate app on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Lock package valid parameters | Invoke lock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 2 | Launch app after lock | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 3 | Check app launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
-| 4 | Terminate app valid param | Invoke terminateApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 5 | Unlock package for management | Invoke unlock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
-
-<a id="appmanager_app_launch_terminate_lock_unlock_operations"></a>
-### TestCase Name
-AppManager_App_Launch_Terminate_Lock_Unlock_Operations
-
-### TestCase ID
-AM_L2_02
-
-### TestCase Objective
-Verify that an app can be launch, terminate, lock and unlock successfully
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Terminate_Existing_App
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check loaded apps | Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
-| 2 | Terminate app valid param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate app on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Launch app before lock | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 2 | Check app launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
-| 3 | Terminate app valid param | Invoke terminateApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 4 | Lock package valid parameters | Invoke lock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 5 | Unlock package for management | Invoke unlock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
-
-<a id="appmanager_app_launch_kill_lock_unlock_operations"></a>
-### TestCase Name
-AppManager_App_Launch_Kill_Lock_Unlock_Operations
-
-### TestCase ID
-AM_L2_03
-
-### TestCase Objective
-Verify that an app can be launch, kill, lock and unlock successfully
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Terminate_Existing_App
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check loaded apps | Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
-| 2 | Terminate app valid param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate app on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Launch app before lock | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 2 | Check app launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
-| 3 | Kill app valid param | Invoke killApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.killApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 4 | Lock package valid parameters | Invoke lock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 5 | Unlock package for management | Invoke unlock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
-
-<a id="appmanager_app_launch_close_lock_unlock_operations"></a>
-### TestCase Name
-AppManager_App_Launch_Close_Lock_Unlock_Operations
-
-### TestCase ID
-AM_L2_04
-
-### TestCase Objective
-Verify that an app can be launch, close, lock and unlock successfully
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Terminate_Existing_App
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check loaded apps | Get loaded apps from AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
-| 2 | Terminate app valid param | *(Conditional statement executed only if package/app is currently present)*<br>Terminate app on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Launch app before lock | Invoke launchApp on org.rdk.AppManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.launchApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 2 | Check app launched | Invoke getLoadedApps on org.rdk.AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.getLoadedApps"}' http://127.0.0.1:9998/jsonrpc` | Verify that the loaded apps information is returned successfully |
-| 3 | Close app valid params | Invoke closeApp on org.rdk.LifecycleManager with appId: "<PACKAGEMANAGER_APPLICATION_NAME>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.LifecycleManager.1.closeApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 4 | Lock package valid parameters | Invoke lock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 5 | Unlock package for management | Invoke unlock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
-### TestCase Post-condition
-
-#### TestCase Post-condition 1: Terminate_the_Launched_App
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Terminate app valid param | Terminate app on AppManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppManager.1.terminateApp", "params": {"appId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
-
 <a id="appmanager_on_applifecyclestatechanged_event_after_close"></a>
 ### TestCase Name
 AppManager_On_AppLifecycleStateChanged_Event_After_Close
 
 ### TestCase ID
-AM_L2_05
+AM_L2_01
 
 ### TestCase Objective
 Verify that appLifecycleStateChanged event is received with correct parameters when an app is launched, closed
@@ -2477,7 +2341,7 @@ Verify that appLifecycleStateChanged event is received with correct parameters w
 AppManager_On_AppLifecycleStateChanged_Event_After_Kill
 
 ### TestCase ID
-AM_L2_06
+AM_L2_02
 
 ### TestCase Objective
 Verify that appLifecycleStateChanged event is received with correct parameters when an app is launched, killed
@@ -2507,7 +2371,7 @@ Verify that appLifecycleStateChanged event is received with correct parameters w
 AppManager_On_AppLifecycleStateChanged_Event_After_Terminate
 
 ### TestCase ID
-AM_L2_07
+AM_L2_03
 
 ### TestCase Objective
 Verify that appLifecycleStateChanged event is received with correct parameters when an app is launched, terminated
@@ -2537,7 +2401,7 @@ Verify that appLifecycleStateChanged event is received with correct parameters w
 AppManager_App_Launch_Twice
 
 ### TestCase ID
-AM_L2_08
+AM_L2_04
 
 ### TestCase Objective
 Check that an app can be launched successfully after terminating the app which is launched previously
@@ -2569,7 +2433,7 @@ Check that an app can be launched successfully after terminating the app which i
 AppManager_Get_Loaded_Apps_After_Launch
 
 ### TestCase ID
-AM_L2_09
+AM_L2_05
 
 ### TestCase Objective
 Verify that the launched app is reflected in the list of loaded apps
@@ -2606,7 +2470,7 @@ Verify that the launched app is reflected in the list of loaded apps
 AppManager_Get_Loaded_Apps_After_Close
 
 ### TestCase ID
-AM_L2_10
+AM_L2_06
 
 ### TestCase Objective
 Verify that the closed app is no longer reflected in the list of loaded apps
@@ -2644,7 +2508,7 @@ Verify that the closed app is no longer reflected in the list of loaded apps
 AppManager_Get_Loaded_Apps_After_Kill
 
 ### TestCase ID
-AM_L2_11
+AM_L2_07
 
 ### TestCase Objective
 Verify that the killed app is no longer reflected in the list of loaded apps
@@ -2674,7 +2538,7 @@ Verify that the killed app is no longer reflected in the list of loaded apps
 AppManager_Get_Loaded_Apps_After_Terminate
 
 ### TestCase ID
-AM_L2_12
+AM_L2_08
 
 ### TestCase Objective
 Verify that the terminated app is no longer reflected in the list of loaded apps
