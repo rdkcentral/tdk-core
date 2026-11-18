@@ -1629,7 +1629,7 @@ Scan for 2.4GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs e
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with frequencies: 2.4<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequencies": 2.4}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
+| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with frequencies: ["2.4"]<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequencies": ["2.4"]}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
 | 2 | Check on AvailableSSIDs event | Listen for Event_On_AvailableSSIDs event (wait 5s) | Ensure the `onAvailableSSIDs` event is received with `2.4` found in the scanned SSID list |
 | 3 | Stop wifi scan | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan stopped successfully  |
 
@@ -1660,7 +1660,7 @@ Scan for 5GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs eve
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with frequencies: 5<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequencies": 5}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
+| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with frequencies: ["5"]<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequencies": ["5"]}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
 | 2 | Check on AvailableSSIDs event | Listen for Event_On_AvailableSSIDs event (wait 5s) | Ensure the `onAvailableSSIDs` event is received with `5` found in the scanned SSID list |
 | 3 | Stop wifi scan | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan stopped successfully  |
 
@@ -1691,7 +1691,7 @@ This test case checks if NetworkManager can scan for a specific SSID on the 2.4G
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with ssids: "<WIFI_SSID_NAME>", frequencies: 2.4<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequencies": 2.4, "ssids": "<WIFI_SSID_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
+| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with ssids: ["<WIFI_SSID_NAME>"], frequencies: ["2.4"]<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequencies": ["2.4"], "ssids": ["<WIFI_SSID_NAME>"]}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
 | 2 | Check on AvailableSSIDs event | Listen for Event_On_AvailableSSIDs event (wait 5s) | Ensure the `onAvailableSSIDs` event is received and the SSID list is validated |
 | 3 | Stop wifi scan | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan stopped successfully  |
 
@@ -1722,7 +1722,7 @@ This test case checks if NetworkManager can scan for a specific SSID on the 5GHz
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with ssids: "<WIFI_SSID_NAME_5GHZ>", frequencies: 5<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequencies": 5, "ssids": "<WIFI_SSID_NAME_5GHZ>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
+| 1 | Start wifi scan | Invoke StartWiFiScan on org.rdk.NetworkManager with ssids: ["<WIFI_SSID_NAME_5GHZ>"], frequencies: ["5"]<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StartWiFiScan", "params": {"frequencies": ["5"], "ssids": ["<WIFI_SSID_NAME_5GHZ>"]}}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan started successfully  |
 | 2 | Check on AvailableSSIDs event | Listen for Event_On_AvailableSSIDs event (wait 5s) | Ensure the `onAvailableSSIDs` event is received and the SSID list is validated |
 | 3 | Stop wifi scan | Invoke StopWiFiScan on org.rdk.NetworkManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.NetworkManager.1.StopWiFiScan"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` WiFi Scan stopped successfully  |
 
