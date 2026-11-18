@@ -1427,6 +1427,7 @@
   </testCase>
 
   <!-- Test case 48 -->
+  <!-- The platform team confirmed that an empty region is a valid input, the test case validation has been modified to use success_status_validation -->
   <testCase testCaseId="SYS_48" testCaseName="System_Set_Valid_Territory_And_Set_Empty_Region" desc="Check whether able to set valid territory and empty region to set territory API">
     <testCaseInfo testCaseType="direct"/>
     <testStep testStepId="1" name="System_Set_Valid_Territory_And_Set_Empty_Region" method="System_Set_Territory">
@@ -1434,7 +1435,7 @@
         <param tag="territory" value="CHN" />
         <param tag="region" value="" />
       </params>
-      <resultGeneration useMethodTag="system_check_negative_scenario"/>
+      <resultGeneration useMethodTag="success_status_validation"/>
     </testStep>
   </testCase>
 

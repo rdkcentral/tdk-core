@@ -1147,7 +1147,7 @@ Check whether able to set valid territory and empty region to set territory API
 
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
-| 1 | System set valid territory and set empty region | Invoke setTerritory on org.rdk.System with territory: "CHN", region: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "CHN", "region": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setTerritory` returns an error response with `success: false` for valid territory `"CHN"` with empty region  |
+| 1 | System set valid territory and set empty region | Invoke setTerritory on org.rdk.System with territory: "CHN", region: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.System.1.setTerritory", "params": {"territory": "CHN", "region": ""}}' http://127.0.0.1:9998/jsonrpc` | Verify that `setTerritory` returns `success`: `true` for valid territory `"CHN"` with empty region  |
 
 ---
 

@@ -349,7 +349,7 @@ Verify if the sendstandbymessage method returns an error when the hdmicec driver
 | 1 | Get CEC enabled state | Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set CEC enabled state | *(Conditional statement executed only if previous step condition is met)*<br>Invoke setEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setEnabled", "params": {"enabled": false}}' http://127.0.0.1:9998/jsonrpc` | Confirm that the enabled state is set successfully |
 | 3 | Get CEC enabled state | *(Conditional statement executed only if previous step condition is met)*<br>Invoke getEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
-| 4 | Check send standby message | Invoke sendStandbyMessage on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
+| 4 | Check send standby message | Invoke sendStandbyMessage on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.sendStandbyMessage"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL`  |
 
 ### TestCase Post-condition
 
@@ -452,7 +452,7 @@ Verify if the performOTPAction method returns an error when the OTP action is no
 | 1 | Get OTP enabled | Invoke getOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `enabled` state returned  |
 | 2 | Set OTP enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke setOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.setOTPEnabled", "params": {"enabled": false}}' http://127.0.0.1:9998/jsonrpc` | Confirm that OTP enabled state is set successfully |
 | 3 | Get OTP enabled | *(Conditional statement executed only if previous step condition is met)*<br>Invoke getOTPEnabled on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.getOTPEnabled"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` : `true` `disabled` state returned  |
-| 4 | Check perform OTP action | Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | Verify that `success` is `false` (expected error response)  |
+| 4 | Check perform OTP action | Invoke performOTPAction on org.rdk.HdmiCecSource<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.HdmiCecSource.1.performOTPAction"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error `ERROR_GENERAL`  |
 
 ### TestCase Post-condition
 

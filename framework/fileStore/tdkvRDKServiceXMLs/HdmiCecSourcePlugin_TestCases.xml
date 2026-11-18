@@ -300,6 +300,7 @@
     </testCase>
 
     <!-- Test case 08 -->
+    <!-- The platform team confirmed that ERROR_GENERAL is the expected response, so the test case validation is being updated accordingly -->
     <testCase testCaseId="HdmiCecSource_08" testCaseName="HdmiCecSource_Send_Standby_Message_Error_When_HdmiCec_Driver_Not_Enabled" desc="Verify if the sendstandbymessage method returns an error when the hdmicec driver is not enabled">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
@@ -327,7 +328,7 @@
           <resultGeneration useMethodTag="hdmicec2_get_enabled_status" expectedValues="False"/>
         </testStep>
         <testStep testStepId="4" name="Check_Send_Standby_Message" method="HdmiCecSource_Send_Standby_Message" delay="5">
-            <resultGeneration useMethodTag="system_check_negative_scenario"/>
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
 
 	<testCasePostRequisite>
@@ -397,6 +398,7 @@
     </testCase>
 
     <!-- Test case 12 -->
+    <!-- The platform team confirmed that ERROR_GENERAL is the expected response, so the test case validation is being updated accordingly -->
     <testCase testCaseId="HdmiCecSource_12" testCaseName="HdmiCecSource_Perform_OTP_Action_Error_When_OTP_Action_Not_Enabled" desc="Verify if the performOTPAction method returns an error when the OTP action is not enabled">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
@@ -424,7 +426,7 @@
           <resultGeneration useMethodTag="hdmicec2_get_enabled_status" expectedValues="False"/>
         </testStep>
         <testStep testStepId="4" name="Check_Perform_OTP_Action" method="HdmiCecSource_Perform_OTP_Action" delay="5">
-            <resultGeneration useMethodTag="system_check_negative_scenario"/>
+            <resultGeneration useMethodTag="error_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
 
 	<testCasePostRequisite>

@@ -260,6 +260,8 @@
 
 
     <!-- TestCase 09 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_09" testCaseName="AppPackageManager_Unlock_Package_EmptyParameters" desc="Verify that the unlock method handles empty parameters correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Unlock_Package_EmptyParameters" method="Unlock_Package">
@@ -270,8 +272,11 @@
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 10 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_10" testCaseName="AppPackageManager_Unlock_Package_InvalidPackageId_EmptyVersion" desc="Verify that the unlock method handles invalid packageId with empty version correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Unlock_Package_InvalidPackageId_EmptyVersion" method="Unlock_Package">
@@ -282,8 +287,11 @@
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 11 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_11" testCaseName="AppPackageManager_Unlock_Package_EmptyPackageId_InvalidVersion" desc="Verify that the unlock method handles empty packageId with invalid version correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Unlock_Package_EmptyPackageId_InvalidVersion" method="Unlock_Package">
@@ -294,8 +302,11 @@
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 12 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_12" testCaseName="AppPackageManager_GetLockedInfo_EmptyParameters" desc="Verify that the getLockedInfo method handles empty parameters correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="GetLockedInfo_EmptyParameters" method="Get_Locked_Info">
@@ -306,8 +317,11 @@
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 13 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_13" testCaseName="AppPackageManager_GetLockedInfo_InvalidPackageId_EmptyVersion" desc="Verify that the getLockedInfo method handles invalid packageId with empty version correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="GetLockedInfo_InvalidPackageId_EmptyVersion" method="Get_Locked_Info">
@@ -318,8 +332,11 @@
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 14 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_14" testCaseName="AppPackageManager_GetLockedInfo_EmptyPackageId_InvalidVersion" desc="Verify that the getLockedInfo method handles empty packageId with invalid version correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="GetLockedInfo_EmptyPackageId_InvalidVersion" method="Get_Locked_Info">
@@ -330,9 +347,10 @@
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
         </testStep>
     </testCase>
+    -->
 
-    <!-- TestCase 15 -->
-    <testCase testCaseId="PM_15" testCaseName="AppPackageManager_Uninstall_TwoTimes" desc="Verify uninstall method with valid parameters and perform two consecutive uninstall operations">
+    <!-- TestCase 09 -->
+    <testCase testCaseId="PM_09" testCaseName="AppPackageManager_Uninstall_TwoTimes" desc="Verify uninstall method with valid parameters and perform two consecutive uninstall operations">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <preRequisite requisiteId="1" requisiteName="Uninstall_Existing_Package_Before_Install">
@@ -405,8 +423,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 16 -->
-    <testCase testCaseId="PM_16" testCaseName="AppPackageManager_Install_EmptyParameters" desc="Verify that the install method handles empty parameters correctly">
+    <!-- TestCase 10 -->
+    <testCase testCaseId="PM_10" testCaseName="AppPackageManager_Install_EmptyParameters" desc="Verify that the install method handles empty parameters correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Install_EmptyParameters" method="Install_Package">
             <params>
@@ -421,6 +439,8 @@
     </testCase>
 
     <!-- TestCase 17 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_17" testCaseName="AppPackageManager_Lock_Package_EmptyParameters" desc="Verify that the lock method handles empty parameters correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Lock_Package_EmptyParameters" method="Lock_Package">
@@ -432,8 +452,11 @@
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 18 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_18" testCaseName="AppPackageManager_Lock_Package_InvalidParameters" desc="Verify that the lock method handles invalid parameters correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Lock_Package_InvalidParameters" method="Lock_Package">
@@ -445,9 +468,10 @@
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="Could not access requested service"/>
         </testStep>
     </testCase>
+    -->
     
-    <!-- TestCase 19 -->
-    <testCase testCaseId="PM_19" testCaseName="AppPackageManager_Package_State_After_Install" desc="Verify that the package state method works correctly after installing a package with valid parameters">
+    <!-- TestCase 11 -->
+    <testCase testCaseId="PM_11" testCaseName="AppPackageManager_Package_State_After_Install" desc="Verify that the package state method works correctly after installing a package with valid parameters">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <preRequisite requisiteId="1" requisiteName="Uninstall_Existing_Package_Before_Install">
@@ -505,8 +529,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 20 -->
-    <testCase testCaseId="PM_20" testCaseName="AppPackageManager_Package_State_After_Uninstall" desc="Verify that the package state method works correctly after uninstalling a package with valid parameters">
+    <!-- TestCase 12 -->
+    <testCase testCaseId="PM_12" testCaseName="AppPackageManager_Package_State_After_Uninstall" desc="Verify that the package state method works correctly after uninstalling a package with valid parameters">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <preRequisite requisiteId="1" requisiteName="Uninstall_Existing_Package_Before_Install">
@@ -575,8 +599,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 21 -->
-    <testCase testCaseId="PM_21" testCaseName="AppPackageManager_Config_ValidParameters" desc="Verify that the config method works correctly with valid parameters">
+    <!-- TestCase 13 -->
+    <testCase testCaseId="PM_13" testCaseName="AppPackageManager_Config_ValidParameters" desc="Verify that the config method works correctly with valid parameters">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <preRequisite requisiteId="1" requisiteName="Check_Existing_Package_Before_Install">
@@ -636,8 +660,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 22 -->
-    <testCase testCaseId="PM_22" testCaseName="AppPackageManager_Config_EmptyParameters" desc="Verify that the config method handles empty parameters correctly">
+    <!-- TestCase 14 -->
+    <testCase testCaseId="PM_14" testCaseName="AppPackageManager_Config_EmptyParameters" desc="Verify that the config method handles empty parameters correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Config_EmptyParameters" method="config">
             <params>
@@ -648,8 +672,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 23 -->
-    <testCase testCaseId="PM_23" testCaseName="AppPackageManager_Config_InvalidParameters" desc="Verify that the config method handles invalid parameters correctly">
+    <!-- TestCase 15 -->
+    <testCase testCaseId="PM_15" testCaseName="AppPackageManager_Config_InvalidParameters" desc="Verify that the config method handles invalid parameters correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Config_InvalidParameters" method="config">
             <params>
@@ -660,8 +684,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 24 -->
-    <testCase testCaseId="PM_24" testCaseName="AppPackageManager_Config_EmptyPackageId_ValidVersion" desc="Verify that the config method handles empty packageId with valid version correctly">
+    <!-- TestCase 16 -->
+    <testCase testCaseId="PM_16" testCaseName="AppPackageManager_Config_EmptyPackageId_ValidVersion" desc="Verify that the config method handles empty packageId with valid version correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Config_EmptyPackageId_ValidVersion" method="config">
             <params>
@@ -672,8 +696,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 25 -->
-    <testCase testCaseId="PM_25" testCaseName="AppPackageManager_Config_ValidPackageId_EmptyVersion" desc="Verify that the config method handles valid packageId with empty version correctly">
+    <!-- TestCase 17 -->
+    <testCase testCaseId="PM_17" testCaseName="AppPackageManager_Config_ValidPackageId_EmptyVersion" desc="Verify that the config method handles valid packageId with empty version correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Config_ValidPackageId_EmptyVersion" method="config">
             <params>
@@ -685,6 +709,8 @@
     </testCase>
 
     <!-- TestCase 26 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_26" testCaseName="AppPackageManager_Lock_Package_ValidParameters" desc="Verify that the lock method works correctly with valid parameters">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
@@ -760,8 +786,11 @@
             </postrequisite>
         </testCasePostRequisite>
     </testCase>
+    -->
 
     <!-- TestCase 27 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_27" testCaseName="AppPackageManager_Lock_Package_EmptyPackageId" desc="Verify that the lock method handles empty packageId correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Lock_Package_EmptyPackageId" method="Lock_Package">
@@ -773,8 +802,11 @@
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 28 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_28" testCaseName="AppPackageManager_Lock_Package_EmptyVersion" desc="Verify that the lock method handles empty version correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Lock_Package_EmptyVersion" method="Lock_Package">
@@ -786,8 +818,11 @@
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 29 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_29" testCaseName="AppPackageManager_Lock_Package_EmptyLockReason" desc="Verify that the lock method handles empty lockReason correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Lock_Package_EmptyLockReason" method="Lock_Package">
@@ -799,8 +834,11 @@
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 30 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_30" testCaseName="AppPackageManager_Lock_Package_InvalidPackageId" desc="Verify that the lock method handles invalid packageId correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Lock_Package_InvalidPackageId" method="Lock_Package">
@@ -812,8 +850,11 @@
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 31 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_31" testCaseName="AppPackageManager_Lock_Package_InvalidVersion" desc="Verify that the lock method handles invalid version correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Lock_Package_InvalidVersion" method="Lock_Package">
@@ -825,16 +866,22 @@
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 32 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_32" testCaseName="AppPackageManager_Lock_Package_NoParameters" desc="Verify that the lock method handles missing parameters correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Lock_Package_NoParameters" method="Lock_Package">
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 33 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_33" testCaseName="AppPackageManager_Unlock_Package_ValidParameters" desc="Verify that the unlock method works correctly with valid parameters">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
@@ -908,16 +955,22 @@
             <resultGeneration useMethodTag="app_packagemanager_null_result_validation"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 34 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_34" testCaseName="AppPackageManager_Unlock_Package_NoParameters" desc="Verify that the unlock method handles missing parameters correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="Unlock_Package_NoParameters" method="Unlock_Package">
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
+    -->
 
     <!-- TestCase 35 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_35" testCaseName="AppPackageManager_GetLockedInfo_ValidParameters" desc="Verify that the getLockedInfo method works correctly with valid parameters">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
@@ -1003,17 +1056,21 @@
             </postrequisite>
         </testCasePostRequisite>
     </testCase>
+    -->
 
     <!-- TestCase 36 -->
+    <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore, the related test case is being commented out -->
+    <!--
     <testCase testCaseId="PM_36" testCaseName="AppPackageManager_GetLockedInfo_NoParameters" desc="Verify that the getLockedInfo method handles missing parameters correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="GetLockedInfo_NoParameters" method="Get_Locked_Info">
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>
         </testStep>
     </testCase>
+    -->
 
-    <!-- TestCase 37 -->
-    <testCase testCaseId="PM_37" testCaseName="AppPackageManager_On_AppInstallationStatus_Event" desc="Verify that the appInstallationStatus event is triggered with correct status during app installation and uninstallation">
+    <!-- TestCase 18 -->
+    <testCase testCaseId="PM_18" testCaseName="AppPackageManager_On_AppInstallationStatus_Event" desc="Verify that the appInstallationStatus event is triggered with correct status during app installation and uninstallation">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Check_Existing_Package_Before_Install">
@@ -1091,8 +1148,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 38 -->
-    <testCase testCaseId="PM_38" testCaseName="AppPackageManager_GetPackageState_ValidPackageId_InvalidVersion" desc="Verify that the getPackageState method handles valid packageId with invalid version correctly">
+    <!-- TestCase 19 -->
+    <testCase testCaseId="PM_19" testCaseName="AppPackageManager_GetPackageState_ValidPackageId_InvalidVersion" desc="Verify that the getPackageState method handles valid packageId with invalid version correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="GetPackageState_ValidPackageId_InvalidVersion" method="Package_State">
             <params>
@@ -1103,8 +1160,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 39 -->
-    <testCase testCaseId="PM_39" testCaseName="AppPackageManager_GetPackageState_InvalidPackageId_ValidVersion" desc="Verify that the getPackageState method handles invalid packageId with valid version correctly">
+    <!-- TestCase 20 -->
+    <testCase testCaseId="PM_20" testCaseName="AppPackageManager_GetPackageState_InvalidPackageId_ValidVersion" desc="Verify that the getPackageState method handles invalid packageId with valid version correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="GetPackageState_InvalidPackageId_ValidVersion" method="Package_State">
             <params>
@@ -1115,8 +1172,8 @@
         </testStep>
     </testCase>
 
-    <!-- TestCase 40 -->
-    <testCase testCaseId="PM_40" testCaseName="AppPackageManager_GetPackageState_NoParameters" desc="Verify that the getPackageState method handles missing parameters correctly">
+    <!-- TestCase 21 -->
+    <testCase testCaseId="PM_21" testCaseName="AppPackageManager_GetPackageState_NoParameters" desc="Verify that the getPackageState method handles missing parameters correctly">
         <testCaseInfo testCaseType="direct"/>
         <testStep testStepId="1" name="GetPackageState_NoParameters" method="Package_State">
             <resultGeneration useMethodTag="app_packagemanager_negative_scenario_validation" expectedValues="ERROR_GENERAL"/>

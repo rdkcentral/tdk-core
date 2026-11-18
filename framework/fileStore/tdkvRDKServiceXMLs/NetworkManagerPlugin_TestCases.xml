@@ -16,7 +16,7 @@
 <testPlugin pluginName="NetworkManager" pluginVersion="1">
     <pluginPreRequisite>
         <!-- Activate NetworkManager plugin -->
-        <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+        <prerequisite requisiteId="1" requisiteName="Activate_NetworkManager_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
                     <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true"/>
@@ -37,6 +37,7 @@
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="activated"/>
             </testStep>
         </prerequisite>
+
         <!-- Event Registration -->
         <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
             <event pluginName="NetworkManager" eventName="Event_On_Interface_StateChange"/>
@@ -2203,7 +2204,7 @@
         </testCasePreRequisite>
         <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
             <params>
-                <param tag="frequency" value="2.4"/>
+                <param tag="frequencies" value="2.4"/>
             </params>
             <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
@@ -2250,7 +2251,7 @@
         </testCasePreRequisite>
         <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
             <params>
-                <param tag="frequency" value="5"/>
+                <param tag="frequencies" value="5"/>
             </params>
             <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
@@ -2297,7 +2298,7 @@
         </testCasePreRequisite>
         <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
             <params>
-                <param tag="frequency" value="2.4"/>
+                <param tag="frequencies" value="2.4"/>
                 <param tag="ssids" useConfigFile="true" key="WIFI_SSID_NAME"/>
             </params>
             <resultGeneration useMethodTag="success_status_validation"/>
@@ -2347,7 +2348,7 @@
         </testCasePreRequisite>
         <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan" delay="3">
             <params>
-                <param tag="frequency" value="5"/>
+                <param tag="frequencies" value="5"/>
                 <param tag="ssids" useConfigFile="true" key="WIFI_SSID_NAME_5GHZ"/>
             </params>
             <resultGeneration useMethodTag="success_status_validation"/>
