@@ -107,8 +107,6 @@ The app is configured through URL query parameters (see [runtime.ts](src/config/
 | `specVersion` | latest (`9.0.0`) | Firebolt schema validator spec version to load |
 | `excludeMethods` | — | Comma-separated methods to exclude; wildcards allowed (`Device.version,Network.*`) |
 | `reportPublishUrl` | `DEFAULT_REPORT_PUBLISH_URL` | Report upload endpoint (see [Publishing](#publishing)) |
-| `reportingId` | — | Prefix for report file names (falls back to the MAC address, then `appId`) |
-| `appId` | `firebolt-certification` | Application identifier |
 | `standalone` | `false` | **Set to `true`** to run as the on-screen validation app, without any external test server |
 | `autoRun` | `false` | On launch, run the suite for all modules and publish the reports (see [Automatic run](#automatic-run)) |
 
