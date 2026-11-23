@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="theme-color" content="#f4f7fb" />
+    <title>Firebolt Certification</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      // Resolves the Firebolt gateway endpoint before the app loads: the __firebolt_endpoint URL parameter wins,
+      // then an endpoint injected by the device launcher, then the default. Firebolt Certification's own JSON-RPC client
+      // (src/firebolt/JsonRpcClient.ts) connects to window.__firebolt.endpoint.
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var override = params.get('__firebolt_endpoint');
+        window.__firebolt = window.__firebolt || {};
+        if (override || !window.__firebolt.endpoint) {
+          window.__firebolt.endpoint = override || 'ws://127.0.0.1:3473';
+        }
+        // Firebolt Certification targets Firebolt RDK8+ only: always request compliant JSON-RPC (RPCv2),
+        // so the gateway replies to subscriptions with result: null, not the 1.x {listening, event}.
+        var url = new URL(window.__firebolt.endpoint);
+        url.searchParams.set('RPCv2', 'true');
+        window.__firebolt.endpoint = url.toString();
+      })();
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

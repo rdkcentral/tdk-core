@@ -1,0 +1,28 @@
+{
+  "name": "firebolt-certification",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "postinstall": "npm run generate:sdk",
+    "generate:sdk": "node scripts/generate-firebolt-sdk.mjs",
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "build:clean": "npm ci && npm run build && rm -rf node_modules",
+    "preview": "vite preview --host 0.0.0.0",
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "firebolt-generator": "https://codeload.github.com/rdkcentral/firebolt-js-client/tar.gz/d93b83094e5ef5abdc591a6077b19553eee6c1e2",
+    "preact": "10.29.8"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "2.10.6",
+    "@types/node": "^20.19.43",
+    "typescript": "7.0.2",
+    "vite": "6.4.3",
+    "vitest": "2.1.9"
+  }
+}
