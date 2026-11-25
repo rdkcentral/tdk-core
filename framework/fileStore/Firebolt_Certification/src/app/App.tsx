@@ -27,6 +27,7 @@ import { Sidebar } from '../components/Sidebar';
 import { StatusPill } from '../components/StatusPill';
 import { Panel } from '../components/Panel';
 import { Icon } from '../components/Icons';
+import tdkLogo from '../assets/tdk-logo-report.png';
 import { installSpatialNavigation, focusSelector } from '../components/SpatialNavigation';
 import { certificationEngine, validateSubscriptionReply } from '../core/CertificationEngine';
 import { schemaValidator } from '../schema/SchemaValidator';
@@ -196,7 +197,7 @@ function Header({
       <div class="brand">
         <img
           class="brand-logo"
-          src={`${import.meta.env.BASE_URL}assets/tdk-logo.png`}
+          src={tdkLogo}
           alt=""
           onError={(e: any) => {
             e.currentTarget.style.display = 'none';
