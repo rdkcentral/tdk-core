@@ -23,7 +23,13 @@
 
 import { describe, expect, it, vi } from 'vitest';
 vi.mock('../config/runtime', () => ({ runtimeConfig: { logLevel: 'ERROR', fireboltEndpoint: 'ws://127.0.0.1:3473' } }));
-import { JsonRpcClient, notificationPayload, wireMethodName, withRpcV2 } from '../firebolt/JsonRpcClient';
+import {
+  JsonRpcClient,
+  UNSUBSCRIBE_NOT_SENT,
+  notificationPayload,
+  wireMethodName,
+  withRpcV2
+} from '../firebolt/JsonRpcClient';
 
 function fakeSocket() {
   const listeners: Record<string, Array<(e: any) => void>> = {};
@@ -172,7 +178,7 @@ describe('JsonRpcClient (Firebolt JSON-RPC)', () => {
     const s2 = c.subscribe('Device.onNameChanged', b);
     sock.reply({ jsonrpc: '2.0', id: 2, result: null });
     await s2;
-    await c.unsubscribe('Device.onNameChanged', a);
+    await expect(c.unsubscribe('Device.onNameChanged', a)).resolves.toBe(UNSUBSCRIBE_NOT_SENT);
     expect(sock.sent).toHaveLength(2);
     sock.reply({ jsonrpc: '2.0', method: 'device.onNameChanged', params: { value: 'Kitchen' } });
     expect(a).not.toHaveBeenCalled();

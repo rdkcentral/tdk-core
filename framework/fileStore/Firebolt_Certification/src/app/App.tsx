@@ -36,7 +36,7 @@ import { pubSubClient } from '../pubsub/PubSubClient';
 import { runtimeConfig } from '../config/runtime';
 import { openRpcService } from '../schema/OpenRpcService';
 import { eventManager } from '../firebolt/EventManager';
-import { initializeFromFireboltParameters, resolveCurrentAppId } from '../core/Bootstrap';
+import { dispatchLaunchTask, initializeFromFireboltParameters, resolveCurrentAppId } from '../core/Bootstrap';
 import { isEventMethod, safeStringify } from '../utils/helpers';
 import { groupMethodsByModule, methodKey, type ModuleGroup } from '../utils/methodGroups';
 import { publishReport, resolveReportPublishUrl } from '../reports/ReportExporter';
@@ -84,7 +84,7 @@ export function App() {
     const offState = eventBus.on<ConnectionState>('pubsub-state', setPubSubState);
     const offResult = eventBus.on<ExecutionResult>('execution', setLastResult);
     void (async () => {
-      await initializeFromFireboltParameters();
+      const launchTask = await initializeFromFireboltParameters();
       // standalone mode runs sanity testing locally and skips the Pub/Sub connection
       // and the live appId lookup used only to correlate Pub/Sub topics.
       if (runtimeConfig.standalone) {
@@ -107,6 +107,7 @@ export function App() {
         setFireboltState('error');
         setFireboltError(errorReason(err) || 'Unknown error');
       }
+      if (launchTask) await dispatchLaunchTask(launchTask);
       // Provider registration is intentionally not started from the UI.
       // Legacy provider commands remain in CommandRouter for backward compatibility.
     })();

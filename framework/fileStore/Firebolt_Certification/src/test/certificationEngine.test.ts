@@ -98,6 +98,40 @@ describe('runSuite module scope', () => {
     expect(report.methodsNotRun).toBe(2);
   });
 
+  it('rejects a run whose scope has no methods instead of reporting an empty pass', async () => {
+    await expect(certificationEngine.runSuite({ modules: ['NoSuchModule'], mode: 'Transport' })).rejects.toThrow(
+      'No OpenRPC methods are available'
+    );
+    const next = await certificationEngine.runSuite({ modules: ['Account'], mode: 'Transport' });
+    expect(next.results.map((r) => r.method)).toEqual(['Account.id']);
+  });
+
+  it('waits for a stopped run to finish its in-flight case before starting the next run', async () => {
+    let release!: () => void;
+    const gate = new Promise<void>((resolve) => (release = resolve));
+    const calls: string[] = [];
+    invoke.mockImplementationOnce(async ({ method, mode }: any) => {
+      calls.push(`first:${method}`);
+      await gate;
+      calls.push(`first-done:${method}`);
+      return { id: method, method, mode, status: 'PASS', durationMs: 1, timestamp: Date.now(), response: 'ok' };
+    });
+    const first = certificationEngine.runSuite({ modules: ['Device'], mode: 'Transport' });
+    await vi.waitFor(() => expect(invoke).toHaveBeenCalledTimes(1));
+    const second = certificationEngine.runSuite({ modules: ['Account'], mode: 'Transport' });
+    await new Promise((r) => setTimeout(r, 10));
+    expect(invoke).toHaveBeenCalledTimes(1);
+    invoke.mockImplementationOnce(async ({ method, mode }: any) => {
+      calls.push(`next:${method}`);
+      return { id: method, method, mode, status: 'PASS', durationMs: 1, timestamp: Date.now(), response: 'ok' };
+    });
+    release();
+    const [firstReport, secondReport] = await Promise.all([first, second]);
+    expect(calls).toEqual(['first:Device.version', 'first-done:Device.version', 'next:Account.id']);
+    expect(firstReport.interrupted).toBe(true);
+    expect(secondReport.interrupted).toBeUndefined();
+  });
+
   it('does not mark a run that tested every method as interrupted', async () => {
     const report = await certificationEngine.runSuite({ modules: ['Device'], mode: 'Transport' });
     expect(report.interrupted).toBeUndefined();
@@ -233,6 +267,15 @@ describe('runSuite module scope', () => {
         'unsubscribe reply: expected null, received {"listening":false}'
       ]);
       expect(result.failureReason[0]).toBe('Expected null, received {"listening":false}.');
+    });
+
+    it('fails the unsubscribe row when {listen: false} was not sent because another listener is active', async () => {
+      unsubscribe.mockResolvedValueOnce({ wireUnsubscribeSent: false, listenersRemoved: 1, error: null });
+      const report = await run();
+      expect(subscribeRow(report).status).toBe('PASS');
+      const result = unsubscribeRow(report);
+      expect(result.status).toBe('FAIL');
+      expect(result.schemaValidation.errors[0]).toContain('{listen: false} was not sent');
     });
 
     it('fails the unsubscribe row when the unsubscribe request errors', async () => {

@@ -53,6 +53,8 @@ interface Pending {
 
 const OPEN = 1;
 const MAX_QUEUED = 200;
+/** unsubscribe() result when {listen: false} was not sent because other handlers still use the subscription. */
+export const UNSUBSCRIBE_NOT_SENT: unique symbol = Symbol('unsubscribe-not-sent');
 
 /** "Accessibility.highContrastUI" → "accessibility.highContrastUI" (module lower-cased, as the Firebolt gateway expects). */
 export function wireMethodName(qualified: string): string {
@@ -152,6 +154,7 @@ export class JsonRpcClient {
 
   /**
    * Removes a handler; when it was the last one for the event (or none is given), sends {listen: false}. `force` always sends it.
+   * Returns UNSUBSCRIBE_NOT_SENT when only the local handler was removed because other handlers still need the subscription.
    * If the request fails, the removed handlers are restored so the caller can retry.
    */
   async unsubscribe(event: string, handler?: NotificationHandler, timeoutMs = 10000, force = false): Promise<unknown> {
@@ -160,7 +163,7 @@ export class JsonRpcClient {
     let removed: NotificationHandler[] = [];
     if (set && handler) {
       if (set.delete(handler)) removed = [handler];
-      if (set.size && !force) return null;
+      if (set.size && !force) return UNSUBSCRIBE_NOT_SENT;
     }
     if (set && !handler) removed = [...set];
     if (set && (!handler || !set.size)) this.handlers.delete(key);

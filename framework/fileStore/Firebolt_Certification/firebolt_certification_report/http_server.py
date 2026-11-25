@@ -117,7 +117,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
                     self.send_header("Content-type", "text/html")
                 else:
                     self.send_header("Content-type", "application/octet-stream")
-                    self.send_header("Content-Disposition", f'attachment; filename="{os.path.basename(path)}"')
+                    self.send_header("Content-Disposition", f"attachment; filename*=UTF-8''{quote(os.path.basename(path), safe='')}")
                 self.end_headers()
                 self.wfile.write(file.read())
         else:

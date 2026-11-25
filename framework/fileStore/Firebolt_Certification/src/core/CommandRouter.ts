@@ -66,11 +66,11 @@ export class CommandRouter {
           return { report: params.params === 'language' ? navigator.language : document.visibilityState };
         case 'callMethod':
         case 'firebolt.invoke':
-          return this.callMethod(message, standalone);
+          return await this.callMethod(message, standalone);
         case 'getMethodResponse':
           return { report: certificationEngine.getMethodResponse(params.method) };
         case 'registerEvent':
-          return this.registerEvent(message, standalone);
+          return await this.registerEvent(message, standalone);
         case 'getEventResponse':
           return this.getEventResponse(message, standalone);
         case 'clearEventHandler':
@@ -86,9 +86,9 @@ export class CommandRouter {
         case 'stopLifecycleRecording':
           return this.lifecycleRecord(false, params.appId);
         case 'callLifecycle':
-          return this.callLifecycle(message, standalone);
+          return await this.callLifecycle(message, standalone);
         case 'runTest':
-          return this.runTest(message);
+          return await this.runTest(message);
         case 'getReports':
           return { report: certificationEngine.getSuites() };
         case 'getReport':
@@ -96,7 +96,7 @@ export class CommandRouter {
         case 'generateReport':
           return this.generateReport(params.reportId || params.id, params.format);
         case 'publishReport':
-          return this.publishReport(params.reportId || params.id, params.format);
+          return await this.publishReport(params.reportId || params.id, params.format);
         default:
           return { error: 'Invalid request. Provide valid method' };
       }

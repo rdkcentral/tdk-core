@@ -25,7 +25,7 @@
 import type { CommunicationMode, EventRecord } from '../types';
 import { transportAdapter } from './TransportAdapter';
 import { sdkAdapter } from './SdkAdapter';
-import type { NotificationHandler } from './JsonRpcClient';
+import { UNSUBSCRIBE_NOT_SENT, type NotificationHandler } from './JsonRpcClient';
 import { openRpcService } from '../schema/OpenRpcService';
 import { schemaValidator } from '../schema/SchemaValidator';
 import { entriesToObject, normalizeError, uid } from '../utils/helpers';
@@ -126,12 +126,14 @@ export class EventManager {
     let missing = false;
     let error: unknown = null;
     let removed = 0;
+    let notSent = 0;
     for (const entry of entries) {
       try {
         const r = entry.unsubscribe
           ? await entry.unsubscribe()
           : await transportAdapter.unsubscribe(entry.event, entry.handler, 10000);
-        if (r === undefined) missing = true;
+        if (r === UNSUBSCRIBE_NOT_SENT) notSent++;
+        else if (r === undefined) missing = true;
         else if (r !== null) reply = r;
         this.listeners.delete(entry.key);
         removed++;
@@ -141,6 +143,16 @@ export class EventManager {
         error = normalizeError(e);
       }
     }
+    // Only local handlers were removed: there is no gateway reply to report, so none is fabricated.
+    if (removed && notSent === removed)
+      return {
+        eventName,
+        params: { listen: false },
+        listenersRemoved: removed,
+        wireUnsubscribeSent: false,
+        result: `Listener removed locally; {listen: false} was not sent because another listener for ${eventName} is still active`,
+        error
+      };
     if (reply === null && missing) reply = undefined;
     return {
       eventName,
@@ -175,7 +187,13 @@ export class EventManager {
   async clearAll(): Promise<string> {
     const keys = [...this.listeners.keys()];
     for (const key of keys) await this.clear(key);
-    return keys.length ? 'Cleared Listeners' : 'No active listeners';
+    // clear() keeps listeners whose unsubscribe failed, so anything left was not cleared.
+    const remaining = keys.filter((key) => this.listeners.has(key)).length;
+    return remaining
+      ? `Unable to clear ${remaining} listener(s)`
+      : keys.length
+        ? 'Cleared Listeners'
+        : 'No active listeners';
   }
 }
 export const eventManager = new EventManager();

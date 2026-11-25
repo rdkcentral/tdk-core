@@ -262,4 +262,12 @@ describe('SDK mode requires the device FireboltServiceManager client', () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect(stop).toHaveBeenCalledOnce();
   });
+
+  it('reports listeners that clearAll could not unsubscribe instead of claiming success', async () => {
+    await eventManager.register('Device.onNameChanged', {}, 'Transport');
+    transportUnsubscribe.mockRejectedValueOnce(new Error('socket closed'));
+    expect(await eventManager.clearAll()).toBe('Unable to clear 1 listener(s)');
+    expect(eventManager.getAll()).toHaveLength(1);
+    expect(await eventManager.clearAll()).toBe('Cleared Listeners');
+  });
 });

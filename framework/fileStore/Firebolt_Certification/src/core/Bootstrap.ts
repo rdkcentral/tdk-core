@@ -24,9 +24,12 @@
 import { fireboltAdapter } from '../firebolt/FireboltAdapter';
 import { applyRuntimeParams, runtimeConfig } from '../config/runtime';
 import { commandRouter } from './CommandRouter';
+import { openRpcService } from '../schema/OpenRpcService';
 import { logger } from '../utils/Logger';
+import type { FireboltCertificationCommand } from '../types';
 
-export async function initializeFromFireboltParameters(): Promise<void> {
+/** Applies launch parameters and returns the launch task (if any) for the caller to dispatch once initialization is done. */
+export async function initializeFromFireboltParameters(): Promise<FireboltCertificationCommand | undefined> {
   try {
     const result = await fireboltAdapter.invoke({
       method: 'Parameters.initialization',
@@ -50,13 +53,21 @@ export async function initializeFromFireboltParameters(): Promise<void> {
       appId: runtimeConfig.appId,
       pubSubUrl: runtimeConfig.pubSubUrl
     });
-    if (query?.task)
-      window.setTimeout(() => {
-        void commandRouter.handle(query);
-      }, 1000);
+    return query?.task ? query : undefined;
   } catch (error) {
     logger.warn('Parameters.initialization unavailable; using URL/default runtime config', error);
   }
+  return undefined;
+}
+
+/** Dispatches the launch task; must be called only after schemas/runtime are initialized. */
+export async function dispatchLaunchTask(task: FireboltCertificationCommand): Promise<void> {
+  // Without a method catalog a runTest would produce an empty, falsely passing report.
+  if (!openRpcService.getMethods().length) {
+    logger.error(`Launch task "${task.task}" not run: OpenRPC method catalog failed to load`);
+    return;
+  }
+  await commandRouter.handle(task);
 }
 
 export async function resolveCurrentAppId(): Promise<void> {

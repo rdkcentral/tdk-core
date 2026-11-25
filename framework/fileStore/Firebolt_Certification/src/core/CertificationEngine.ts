@@ -65,6 +65,7 @@ export class CertificationEngine {
   private methodResponses = new Map<string, { result: unknown; error: unknown }>();
   private suites: CertificationSuiteReport[] = [];
   private currentAbort: AbortController | null = null;
+  private activeRun: Promise<void> = Promise.resolve();
 
   async initializeSchemas(): Promise<void> {
     await openRpcService.loadAll();
@@ -129,15 +130,32 @@ export class CertificationEngine {
     this.currentAbort = null;
   }
 
+  // A new run stops the previous one, then waits for its in-flight case and event cleanup to settle
+  // so API calls and subscribe/unsubscribe operations from two runs never interleave.
   async runSuite(options: CertificationRunOptions): Promise<CertificationSuiteReport> {
     this.stopSuite();
-    this.currentAbort = new AbortController();
-    const signal = this.currentAbort.signal;
+    const controller = new AbortController();
+    this.currentAbort = controller;
+    const previous = this.activeRun;
+    const run = previous.then(() => this.executeSuite(options, controller.signal));
+    this.activeRun = run.then(
+      () => undefined,
+      () => undefined
+    );
+    try {
+      return await run;
+    } finally {
+      if (this.currentAbort === controller) this.currentAbort = null;
+    }
+  }
+
+  private async executeSuite(options: CertificationRunOptions, signal: AbortSignal): Promise<CertificationSuiteReport> {
     const started = Date.now();
     const moduleFilter = options.modules?.length ? new Set(options.modules.map((m) => m.toLowerCase())) : null;
     const methods = openRpcService
       .getMethods()
       .filter((m) => !moduleFilter || moduleFilter.has(m.module.toLowerCase()));
+    if (!methods.length) throw new Error('No OpenRPC methods are available for the requested certification scope.');
     const methodTotal = methods.length;
     let methodIndex = 0;
     let methodsCompleted = 0;
@@ -195,7 +213,6 @@ export class CertificationEngine {
     this.suites.unshift(report);
     if (this.suites.length > 20) this.suites.length = 20;
     eventBus.emit('suite-complete', report);
-    if (this.currentAbort?.signal === signal) this.currentAbort = null;
     return report;
   }
 
@@ -263,7 +280,11 @@ export class CertificationEngine {
       ? [
           `${UNSUBSCRIBE_REPLY_ERROR}: request failed (${(unsub.error as { message?: string }).message ?? JSON.stringify(unsub.error)})`
         ]
-      : unsub?.sdkManaged
+      : unsub?.wireUnsubscribeSent === false
+        ? [
+            `${UNSUBSCRIBE_REPLY_ERROR}: {listen: false} was not sent because another listener for ${method.name} is active (Events page or Pub/Sub); unsubscribe could not be certified`
+          ]
+        : unsub?.sdkManaged
         ? []
         : validateSubscriptionReply(unsubscribeReply).errors.map(
             (e) => UNSUBSCRIBE_REPLY_ERROR + e.slice(SUBSCRIPTION_REPLY_ERROR.length)
