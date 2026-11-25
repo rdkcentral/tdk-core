@@ -1,3 +1,26 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file Tests for CertificationEngine: module scoping, SDK/Transport mode handling and event subscribe/unsubscribe results.
+ */
+
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { OpenRpcMethod } from '../types';
 
@@ -61,6 +84,23 @@ describe('runSuite module scope', () => {
     clear.mockClear();
     unsubscribe.mockClear();
     getResponse.mockReturnValue([]);
+  });
+
+  it('marks a stopped run as interrupted, even when every executed case passed', async () => {
+    invoke.mockImplementationOnce(async ({ method, mode }: any) => {
+      certificationEngine.stopSuite();
+      return { id: method, method, mode, status: 'PASS', durationMs: 1, timestamp: Date.now(), response: 'ok' };
+    });
+    const report = await certificationEngine.runSuite({ modules: ['Device'], mode: 'Transport' });
+    expect(report.results.map((r) => `${r.method}:${r.status}`)).toEqual(['Device.version:PASS']);
+    expect(report.summary.failed).toBe(0);
+    expect(report.interrupted).toBe(true);
+    expect(report.methodsNotRun).toBe(2);
+  });
+
+  it('does not mark a run that tested every method as interrupted', async () => {
+    const report = await certificationEngine.runSuite({ modules: ['Device'], mode: 'Transport' });
+    expect(report.interrupted).toBeUndefined();
   });
 
   it("runs only the selected module of Firebolt Certification's OpenRPC", async () => {
@@ -202,6 +242,16 @@ describe('runSuite module scope', () => {
       expect(result.schemaValidation.errors).toEqual(['unsubscribe reply: request failed (boom)']);
     });
 
+    it.each([
+      ['the unsubscribe reply has no result', { unsubscribeReply: undefined, error: null }],
+      ['the listener was already cleared and no request was sent', { result: 'No active listener' }]
+    ])('fails the unsubscribe row when %s', async (_, reply) => {
+      unsubscribe.mockResolvedValueOnce(reply);
+      const result = unsubscribeRow(await run());
+      expect(result.status).toBe('FAIL');
+      expect(result.schemaValidation.errors).toEqual(['unsubscribe reply: expected null, received no result']);
+    });
+
     it('ignores received notifications: only the subscribe and unsubscribe replies decide the results', async () => {
       getResponse.mockReturnValue([{ value: 5, schemaValidation: { valid: false, errors: ['/ must be string'] } }]);
       const report = await run();
@@ -221,7 +271,7 @@ describe('runSuite module scope', () => {
       expect(unsubscribe).not.toHaveBeenCalled();
     });
 
-    it('fails (RDK8+) the subscribe row when the reply is the Firebolt 1.x {listening, event} instead of null', async () => {
+    it('fails the subscribe row when the reply is the Firebolt 1.x {listening, event} instead of null', async () => {
       const legacy = { listening: true, event: 'device.onNameChanged' };
       register.mockResolvedValueOnce({
         eventListenerId: 'L1',
@@ -241,7 +291,7 @@ describe('runSuite module scope', () => {
 });
 
 describe('direct invoke of an event method (APIs / FCS callMethod)', () => {
-  it('validates the reply as an RDK8+ subscription reply (null), not against the notification schema', async () => {
+  it('validates the reply as a subscription reply (null), not against the notification schema', async () => {
     const { validateSubscriptionReply } = await import('../core/CertificationEngine');
     expect(validateSubscriptionReply(null)).toEqual({ valid: true, errors: [] });
     expect(validateSubscriptionReply({ listening: true, event: 'accessibility.onHighContrastUIChanged' }).valid).toBe(

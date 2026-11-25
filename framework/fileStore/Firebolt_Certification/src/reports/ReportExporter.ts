@@ -1,3 +1,26 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file Exports suite reports as JSON, HTML and Excel files, downloads them and uploads them to the report server.
+ */
+
 import { DEFAULT_REPORT_PUBLISH_URL, runtimeConfig } from '../config/runtime';
 import { safeStringify } from '../utils/helpers';
 import type { CertificationSuiteReport, ExecutionResult, ReportFormat, ReportPublishResult } from '../types';
@@ -28,9 +51,15 @@ export function reportFileName(report: CertificationSuiteReport, format: ReportF
   return `${prefix}-refAppExecReport-${stamp(report.endedAt)}.${format}`;
 }
 
+/** A stopped run is reported as INTERRUPTED, never PASSED, because the remaining methods were not tested. */
+export function overallStatus(report: CertificationSuiteReport): 'PASSED' | 'FAILED' | 'INTERRUPTED' {
+  if (report.interrupted) return 'INTERRUPTED';
+  return report.results.some((r) => r.status === 'FAIL') ? 'FAILED' : 'PASSED';
+}
+
 /**
  * JSON report: the same grouping and columns as the HTML page and the Excel module sheets (Sl No, Method,
- * Description, Status, Log), grouped by module. `stats`/`suites` are kept for Mocha-style FCS/downstream
+ * Description, Status, Log), grouped by module. `stats`/`suites` are kept for Mocha-style downstream
  * compatibility; the old flat `results` array is replaced by `modules`.
  */
 export function generateReportJson(report: CertificationSuiteReport): string {
@@ -42,6 +71,8 @@ export function generateReportJson(report: CertificationSuiteReport): string {
     fireboltSchemaValidatorSpecVersion: report.specVersion,
     startedAt: report.startedAt,
     endedAt: report.endedAt,
+    overallStatus: overallStatus(report),
+    ...(report.interrupted ? { interrupted: true, methodsNotRun: report.methodsNotRun } : {}),
     summary: report.summary,
     modules,
     stats: report.stats,
@@ -49,7 +80,7 @@ export function generateReportJson(report: CertificationSuiteReport): string {
   });
 }
 
-const pretty = (value: unknown) => JSON.stringify(value, null, 2) ?? String(value);
+const pretty = (value: unknown) => safeStringify(value) ?? String(value);
 
 export function exampleText(r: ExecutionResult): string {
   return r.exampleResponse === undefined ? '' : pretty(r.exampleResponse);
@@ -248,7 +279,7 @@ export function generateReportHtml(
         `<button type="button" class="dd-opt" role="option" aria-selected="false" data-value="${escapeHtml(m)}">${escapeHtml(m)} (${moduleCounts.get(m)})</button>`
     )
     .join('');
-  const allModules = `All modules (${report.results.length})`;
+  const allModules = `All modules`;
   const card = (label: string, value: number, statusValue: string, cls: string) =>
     `<button type="button" class="card ${cls}${statusValue ? '' : ' active'}" data-status="${statusValue}" title="${statusValue ? `Show only ${label.toLowerCase()} results` : 'Show all results'}">${label}<b>${value}</b></button>`;
   const rows = report.results
@@ -268,16 +299,16 @@ export function generateReportHtml(
 <html lang="en"${theme === 'light' ? ' class="light"' : ''}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Firebolt Certification Report</title>
 <style>${HTML_STYLE}</style></head>
 <body><button type="button" class="tool theme-toggle" id="f-theme" aria-label="Switch theme"><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button><div class="report-head">${showLogo ? `<img class="report-logo" src="${LOGO_DATA_URI}" alt="TDK logo">` : ''}<div class="report-title"><h1>Firebolt Certification Report</h1>
-<div class="meta">${escapeHtml(report.mode)}${report.specVersion ? ` · Firebolt Schema Validator specVersion ${escapeHtml(report.specVersion)}` : ''} · Started ${escapeHtml(formatTime(report.startedAt))} · Finished ${escapeHtml(formatTime(report.endedAt))} · Duration ${escapeHtml(formatDuration(report.endedAt - report.startedAt))} · ${moduleCounts.size} module${moduleCounts.size === 1 ? '' : 's'} tested · Overall <span class="badge ${summary.failed ? 'fail' : 'pass'}">${summary.failed ? 'FAILED' : 'PASSED'}</span></div></div></div>
+<div class="meta">${escapeHtml(report.mode)}${report.specVersion ? ` · Firebolt Schema Validator specVersion ${escapeHtml(report.specVersion)}` : ''} · Started ${escapeHtml(formatTime(report.startedAt))} · Finished ${escapeHtml(formatTime(report.endedAt))} · Duration ${escapeHtml(formatDuration(report.endedAt - report.startedAt))} · ${moduleCounts.size} module${moduleCounts.size === 1 ? '' : 's'} tested · Overall <span class="badge ${overallStatus(report) === 'PASSED' ? 'pass' : 'fail'}">${overallStatus(report)}</span>${report.interrupted ? ` · Stopped before ${report.methodsNotRun ?? 0} method${report.methodsNotRun === 1 ? '' : 's'} could be tested` : ''}</div></div></div>
 <div class="summary">${card('Total', summary.total, '', 'total')}${card('Pass', summary.passed, 'PASS', 'pass')}${card('Fail', summary.failed, 'FAIL', 'fail')}</div>
 <div class="toolbar">
   <label for="f-module">Module</label><div class="dd" id="f-module-dd"><button type="button" class="tool dd-btn" id="f-module" aria-haspopup="listbox" aria-expanded="false" data-value=""><span class="dd-label">${allModules}</span><span class="dd-caret">▾</span></button><div class="dd-menu" role="listbox" hidden><button type="button" class="dd-opt selected" role="option" aria-selected="true" data-value="">${allModules}</button>${moduleOptions}</div></div>
-  <input id="f-search" type="search" placeholder="Search method, description or log…" aria-label="Search">
+  <input id="f-search" type="search" placeholder="Search API/event, description or log…" aria-label="Search">
   <button type="button" class="tool" id="f-toggle" aria-pressed="false">Expand all</button>
   <span class="count" id="f-count"></span>
 </div>
 <div class="table-wrap"><table><colgroup><col style="width:60px"><col style="width:20%"><col style="width:24%"><col style="width:90px"><col></colgroup>
-<thead><tr><th class="sl">Sl No</th><th>Method</th><th>Description</th><th>Status</th><th>Log</th></tr></thead>
+<thead><tr><th class="sl">Sl No</th><th>APIs/Events</th><th>Description</th><th>Status</th><th>Log</th></tr></thead>
 <tbody>${rows}</tbody></table></div>
 <div class="empty" id="f-empty" hidden>No results match the current filters.</div>
 <script>${HTML_SCRIPT}</script>
@@ -367,7 +398,7 @@ function moduleSheet(name: string, results: ExecutionResult[]): XlsxSheet {
     columnWidths: [7, 42, 50, 11, 90],
     rowHeights: { 0: 22 },
     rows: [
-      ['Sl No', 'Method', 'Description', 'Status', 'Log'].map((value) => ({ value, style: 'header' as const })),
+      ['Sl No', 'APIs/Events', 'Description', 'Status', 'Log'].map((value) => ({ value, style: 'header' as const })),
       ...results.map((r, i) => [
         { value: i + 1, style: 'number' as const },
         methodLabel(r),
@@ -418,7 +449,9 @@ function summarySheet(
   detail('Finished', formatTime(report.endedAt));
   detail('Duration', formatDuration(report.endedAt - report.startedAt));
   detail('Modules tested', String(modules.length));
-  detail('Overall status', overall.failed ? { value: 'FAILED', style: 'fail' } : { value: 'PASSED', style: 'pass' });
+  const status = overallStatus(report);
+  detail('Overall status', { value: status, style: status === 'PASSED' ? 'pass' : 'fail' });
+  if (report.interrupted) detail('Methods not run', String(report.methodsNotRun ?? 0));
 
   section('Results by module');
   add(

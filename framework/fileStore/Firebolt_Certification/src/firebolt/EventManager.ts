@@ -1,3 +1,27 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file Registers and clears Firebolt event listeners and records each notification, validated against the event's
+ * OpenRPC result schema.
+ */
+
 import type { CommunicationMode, EventRecord } from '../types';
 import { transportAdapter } from './TransportAdapter';
 import { sdkAdapter } from './SdkAdapter';
@@ -22,7 +46,7 @@ export class EventManager {
 
   /**
    * Subscribes ({listen: true}) and records every notification, validated against the event's OpenRPC result schema.
-   * eventListenerResponse.subscriptionReply holds the gateway's raw reply (RDK8+ requires null).
+   * eventListenerResponse.subscriptionReply holds the gateway's raw reply (must be null).
    */
   async register(
     event: string,
@@ -90,32 +114,38 @@ export class EventManager {
     }));
   }
 
-  /** UI unsubscribe: sends {listen: false} and reports exactly what was sent and what the device replied (RDK8+: null). */
+  /** UI unsubscribe: sends {listen: false} and reports exactly what was sent and what the device replied (expected: null). */
   async unsubscribe(listenerOrEvent: string): Promise<any> {
     const entries = [...this.listeners.values()].filter(
       (l) => l.key === listenerOrEvent || l.event.toLowerCase() === listenerOrEvent.toLowerCase()
     );
     if (!entries.length) return { result: 'No active listener (already unsubscribed or never subscribed)' };
-    const single = entries.length === 1 || entries.some((l) => l.key === listenerOrEvent);
     const eventName = entries[0].event;
+    // Reported reply, in order of precedence: a non-null (malformed) reply, then a missing one, then null.
     let reply: unknown = null;
+    let missing = false;
     let error: unknown = null;
+    let removed = 0;
     for (const entry of entries) {
       try {
         const r = entry.unsubscribe
           ? await entry.unsubscribe()
-          : await transportAdapter.unsubscribe(entry.event, entry.handler, 10000, single);
-        if (r !== null && r !== undefined) reply = r;
+          : await transportAdapter.unsubscribe(entry.event, entry.handler, 10000);
+        if (r === undefined) missing = true;
+        else if (r !== null) reply = r;
+        this.listeners.delete(entry.key);
+        removed++;
       } catch (e) {
+        // Keep the entry (and its cleanup handle) so the unsubscribe can be retried.
         logger.warn(`Unable to unsubscribe ${entry.event}`, e);
         error = normalizeError(e);
       }
-      this.listeners.delete(entry.key);
     }
+    if (reply === null && missing) reply = undefined;
     return {
       eventName,
       params: { listen: false },
-      listenersRemoved: entries.length,
+      listenersRemoved: removed,
       unsubscribeReply: reply,
       sdkManaged: entries.every((entry) => entry.sdkManaged),
       error
@@ -132,11 +162,12 @@ export class EventManager {
       try {
         if (entry.unsubscribe) await entry.unsubscribe();
         else await transportAdapter.unsubscribe(entry.event, entry.handler);
+        this.listeners.delete(entry.key);
       } catch (e) {
+        // Keep the entry (and its cleanup handle) so clearing can be retried.
         logger.warn(`Unable to clear ${entry.event}`, e);
         errors.push(normalizeError(e));
       }
-      this.listeners.delete(entry.key);
     }
     return errors.length ? { cleared: entries.length - errors.length, errors } : true;
   }

@@ -1,7 +1,28 @@
+##########################################################################
+# If not stated otherwise in this file or this component's Licenses.txt
+# file the following copyright and licenses apply:
+#
+# Copyright 2026 RDK Management
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##########################################################################
+
 import http.server
+from html import escape
 import socketserver
 import json
 import os
+import threading
 from urllib.parse import urlparse, unquote, quote
 
 # Set the directory you want to serve files from. The app uploads the JSON, HTML and Excel reports here.
@@ -35,7 +56,14 @@ SERVICE_NAME = "firebolt-certification-report"
 PORT = int(os.environ.get("FIREBOLT_CERTIFICATION_REPORT_PORT", "8090"))
 
 
+MAX_UPLOAD_BYTES = int(os.environ.get("FIREBOLT_CERTIFICATION_REPORT_MAX_UPLOAD_BYTES", str(100 * 1024 * 1024)))
+REQUEST_TIMEOUT = float(os.environ.get("FIREBOLT_CERTIFICATION_REPORT_REQUEST_TIMEOUT", "30"))
+CHUNK_SIZE = 64 * 1024
+
+
 class MyHandler(http.server.SimpleHTTPRequestHandler):
+    # Socket read/write timeout so a stalled client cannot hold a handler forever.
+    timeout = REQUEST_TIMEOUT
 
     def end_headers(self):
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -69,7 +97,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
                 # Relative links keep working when the server is proxied under a path prefix (e.g. /firebolt-reports/).
                 # HTML reports open in the browser; the extra link downloads them like the JSON and Excel reports.
                 items = "".join(
-                    f"<li><a href='reports/{fmt}/{quote(f)}'>{f}</a>"
+                    f"<li><a href='reports/{fmt}/{quote(f)}'>{escape(f)}</a>"
                     + (f" (<a href='reports/{fmt}/{quote(f)}?download=1'>download</a>)" if fmt == "html" else "")
                     + "</li>"
                     for f in files
@@ -93,7 +121,7 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(file.read())
         else:
-            super().do_GET()
+            self.send_error(404, "Report not found")
 
     def do_POST(self):
         # Save posted reports under the configured reports directory.
@@ -102,17 +130,44 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
         if "refAppExecReport" in filename and format_of(filename):
             filepath = find_report(filename)
 
-            # Read the data from the POST request and save it to the file.
-            content_length = int(self.headers["Content-Length"])
-            post_data = self.rfile.read(content_length)
+            try:
+                content_length = int(self.headers.get("Content-Length", ""))
+            except ValueError:
+                content_length = -1
+            if content_length < 0:
+                self.send_error(400, "Valid Content-Length required")
+                return
+            if content_length > MAX_UPLOAD_BYTES:
+                self.send_error(413, "Upload too large")
+                return
 
-            with open(filepath, "wb") as file:
-                file.write(post_data)
+            # Stream to a temp file so a partial or stalled upload never replaces an existing report.
+            tmp_path = f"{filepath}.{os.getpid()}.{threading.get_ident()}.part"
+            try:
+                with open(tmp_path, "wb") as file:
+                    remaining = content_length
+                    while remaining > 0:
+                        chunk = self.rfile.read(min(CHUNK_SIZE, remaining))
+                        if not chunk:
+                            raise ConnectionError("client closed before sending full body")
+                        file.write(chunk)
+                        remaining -= len(chunk)
+                os.replace(tmp_path, filepath)
+            except (OSError, ConnectionError):
+                # Includes socket timeouts (TimeoutError is an OSError).
+                if os.path.exists(tmp_path):
+                    os.remove(tmp_path)
+                self.close_connection = True
+                try:
+                    self.send_error(408, "Upload incomplete or timed out")
+                except OSError:
+                    pass
+                return
 
             self.send_response(200)
             self.send_header("Content-type", "text/html")
             self.end_headers()
-            self.wfile.write(f"<html><body><h1>File {filename} uploaded successfully.</h1></body></html>".encode())
+            self.wfile.write(f"<html><body><h1>File {escape(filename)} uploaded successfully.</h1></body></html>".encode())
         else:
             self.send_response(400)
             self.end_headers()
@@ -120,8 +175,10 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
 
 
 # Allow quick restarts without waiting for the previous socket to expire.
-class ReusableTCPServer(socketserver.TCPServer):
+# Threaded so one slow client cannot block uploads, downloads and health checks.
+class ReusableTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     allow_reuse_address = True
+    daemon_threads = True
 
 
 MAX_PORT_TRIES = int(os.environ.get("FIREBOLT_CERTIFICATION_REPORT_PORT_TRIES", "20"))

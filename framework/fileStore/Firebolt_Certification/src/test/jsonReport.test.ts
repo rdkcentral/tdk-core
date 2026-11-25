@@ -1,5 +1,28 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file Tests for the JSON report format (per-module grouping and counts).
+ */
+
 import { describe, expect, it, vi } from 'vitest';
-import { generateReportJson } from '../reports/ReportExporter';
+import { generateReportHtml, generateReportJson, generateReportXlsx } from '../reports/ReportExporter';
 import type { CertificationSuiteReport, ExecutionResult } from '../types';
 
 vi.mock('../config/runtime', () => ({
@@ -122,5 +145,28 @@ describe('JSON report', () => {
 
   it('has no pending/skipped fields', () => {
     expect(generateReportJson(report)).not.toMatch(/"(pending|skipped|pendingTests)"/i);
+  });
+
+  it('reports a stopped all-passing run as INTERRUPTED, never PASSED, in JSON, HTML and Excel', () => {
+    const passing = results.filter((r) => r.status === 'PASS');
+    const partial: CertificationSuiteReport = {
+      ...report,
+      results: passing,
+      summary: { total: 1, passed: 1, failed: 0, durationMs: 1 },
+      interrupted: true,
+      methodsNotRun: 3
+    };
+    expect(JSON.parse(generateReportJson(partial))).toMatchObject({
+      overallStatus: 'INTERRUPTED',
+      interrupted: true,
+      methodsNotRun: 3
+    });
+    const html = generateReportHtml(partial);
+    expect(html).toContain('>INTERRUPTED</span>');
+    expect(html).not.toContain('>PASSED</span>');
+    const xlsx = new TextDecoder().decode(generateReportXlsx(partial));
+    expect(xlsx).toContain('INTERRUPTED');
+    expect(xlsx).not.toContain('>PASSED<');
+    expect(JSON.parse(generateReportJson({ ...partial, interrupted: undefined })).overallStatus).toBe('PASSED');
   });
 });

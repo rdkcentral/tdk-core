@@ -1,4 +1,25 @@
-// Minimal dependency-free .xlsx (Office Open XML) writer: inline-string cells packed into an uncompressed ZIP.
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// Minimal .xlsx (Office Open XML) writer: inline-string cells packed into an uncompressed ZIP by fflate.
+
+import { zipSync, type Zippable } from 'fflate';
 
 /** Built-in cell styles; see STYLES for the matching cellXfs entries (same order). */
 export type XlsxStyle =
@@ -236,74 +257,9 @@ function packageFiles(sheets: XlsxSheet[]): Array<[string, string]> {
   ];
 }
 
-const CRC_TABLE = (() => {
-  const table = new Uint32Array(256);
-  for (let n = 0; n < 256; n++) {
-    let c = n;
-    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
-    table[n] = c >>> 0;
-  }
-  return table;
-})();
-
-function crc32(data: Uint8Array): number {
-  let crc = 0xffffffff;
-  for (let i = 0; i < data.length; i++) crc = CRC_TABLE[(crc ^ data[i]) & 0xff] ^ (crc >>> 8);
-  return (crc ^ 0xffffffff) >>> 0;
-}
-
-// Uncompressed ("stored") ZIP archive.
-function zip(files: Array<[string, Uint8Array]>): Uint8Array {
-  const locals: Uint8Array[] = [];
-  const centrals: Uint8Array[] = [];
-  let offset = 0;
-  for (const [name, data] of files) {
-    const nameBytes = encoder.encode(name);
-    const crc = crc32(data);
-    const local = new Uint8Array(30 + nameBytes.length);
-    const lv = new DataView(local.buffer);
-    lv.setUint32(0, 0x04034b50, true);
-    lv.setUint16(4, 20, true);
-    lv.setUint16(6, 0x0800, true);
-    lv.setUint32(14, crc, true);
-    lv.setUint32(18, data.length, true);
-    lv.setUint32(22, data.length, true);
-    lv.setUint16(26, nameBytes.length, true);
-    local.set(nameBytes, 30);
-    const central = new Uint8Array(46 + nameBytes.length);
-    const cv = new DataView(central.buffer);
-    cv.setUint32(0, 0x02014b50, true);
-    cv.setUint16(4, 20, true);
-    cv.setUint16(6, 20, true);
-    cv.setUint16(8, 0x0800, true);
-    cv.setUint32(16, crc, true);
-    cv.setUint32(20, data.length, true);
-    cv.setUint32(24, data.length, true);
-    cv.setUint16(28, nameBytes.length, true);
-    cv.setUint32(42, offset, true);
-    central.set(nameBytes, 46);
-    locals.push(local, data);
-    centrals.push(central);
-    offset += local.length + data.length;
-  }
-  const centralSize = centrals.reduce((s, c) => s + c.length, 0);
-  const end = new Uint8Array(22);
-  const ev = new DataView(end.buffer);
-  ev.setUint32(0, 0x06054b50, true);
-  ev.setUint16(8, files.length, true);
-  ev.setUint16(10, files.length, true);
-  ev.setUint32(12, centralSize, true);
-  ev.setUint32(16, offset, true);
-  const parts = [...locals, ...centrals, end];
-  const out = new Uint8Array(parts.reduce((s, p) => s + p.length, 0));
-  let pos = 0;
-  for (const p of parts) {
-    out.set(p, pos);
-    pos += p.length;
-  }
-  return out;
-}
-
 export function buildXlsx(sheets: XlsxSheet[]): Uint8Array {
-  return zip(packageFiles(sheets).map(([name, content]) => [name, encoder.encode(content)]));
+  const files: Zippable = {};
+  for (const [name, content] of packageFiles(sheets)) files[name] = encoder.encode(content);
+  // Stored (uncompressed) entries keep the package simple to inspect; .xlsx readers accept either.
+  return zipSync(files, { level: 0 });
 }

@@ -2,7 +2,7 @@
 
 A Firebolt API certification app for RDK devices. It invokes Firebolt APIs on the device, validates every response against the Firebolt OpenRPC schema, and produces JSON, HTML and Excel certification reports.
 
-The app is built with **Preact**, **TypeScript** and **Vite**, runs in WPEWebKit, and is designed for remote-control (RCU) navigation. It runs on its own (`standalone=true`): you test and validate from the on-screen UI, with no external test server.
+The app is built with **Preact**, **TypeScript** and **Vite**, runs in WPEWebKit, and is designed for remote-control (RCU) navigation.
 
 ---
 
@@ -19,7 +19,6 @@ The app is built with **Preact**, **TypeScript** and **Vite**, runs in WPEWebKit
 - [Architecture](#architecture)
 - [Project structure](#project-structure)
 - [Troubleshooting](#troubleshooting)
-- [License](#license)
 
 ---
 
@@ -122,7 +121,7 @@ http://<host>:5173/?standalone=true&__firebolt_endpoint=ws://127.0.0.1:3473&repo
 [runtime.ts](src/config/runtime.ts) also defines:
 
 - `DEFAULT_REPORT_PUBLISH_URL`: the report server used when `reportPublishUrl` is not supplied. **Set this to your own report server.**
-- `EXCLUDED_METHODS`: methods that are always excluded from the UI and from suite runs.
+- `EXCLUDED_METHODS`: methods that are always excluded from the UI and from suite runs. By default this is `Lifecycle2.close`, because closing the app would end the session.
 - `CONNECTIVITY_PROBE_METHOD`: the parameterless API called once at launch to check the Firebolt connection (any non-error reply counts as connected).
 
 ### Report server environment variables
@@ -132,7 +131,6 @@ http://<host>:5173/?standalone=true&__firebolt_endpoint=ws://127.0.0.1:3473&repo
 | `FIREBOLT_CERTIFICATION_REPORT_PORT` | `8090` | Report server port |
 | `FIREBOLT_CERTIFICATION_REPORT_PORT_TRIES` | `20` | Number of ports to try if the port is busy |
 | `FIREBOLT_CERTIFICATION_REPORT_SERVER` | — | Set to `0` to run `npm run dev` or `npm run preview` without the report server |
-| `PYTHON` | `python3` | Python interpreter for the report server |
 
 ---
 
@@ -141,9 +139,9 @@ http://<host>:5173/?standalone=true&__firebolt_endpoint=ws://127.0.0.1:3473&repo
 | Page | Purpose |
 | --- | --- |
 | **APIs** | Select a module and an API, choose a parameter set and a mode, invoke it and view the response. |
+| **Events** | Register and clear event listeners and review received notifications. |
 | **Suites** | Run validation for all modules or one module, in Transport or SDK mode. Results are paginated for device performance. |
 | **Reports** | Browse past runs, then generate and publish JSON, HTML or Excel reports. |
-| **Events** | Register and clear event listeners and review received notifications. |
 
 ### Remote control
 
@@ -256,7 +254,7 @@ https://<host>/firebolt-certification/index.html
 
 ### Firebolt transport
 
-- The app uses its own JSON-RPC 2.0 client ([JsonRpcClient.ts](src/firebolt/JsonRpcClient.ts)) and follows the [Firebolt RDK8 JSON-RPC specification](https://rdkcentral.github.io/rdk-core-specs/video/rdk8/firebolt-json-rpc.html).
+- The app uses its own JSON-RPC 2.0 client ([JsonRpcClient.ts](src/firebolt/JsonRpcClient.ts)) and follows the [Firebolt JSON-RPC specification](https://rdkcentral.github.io/rdk-core-specs/video/rdk8/firebolt-json-rpc.html).
 - The endpoint is resolved in [index.html](index.html), in this order: the `__firebolt_endpoint` parameter, then an endpoint injected by the launcher, then `ws://127.0.0.1:3473`.
 - Events are subscribed with `{"listen": true}` and unsubscribed with `{"listen": false}`. Both must reply `result: null`; any other reply is reported as a failure. Notifications are validated against the event's OpenRPC `result` schema.
 
@@ -281,7 +279,7 @@ The spec is versioned as [public/specs/firebolt_schema_validator-&lt;version&gt;
     ├── app/          # Pages and main UI (App.tsx)
     ├── components/   # Shared UI components and spatial navigation
     ├── config/       # Launch parameters and defaults
-    ├── core/         # CertificationEngine, EventBus, Bootstrap (CommandRouter is for the future FCS mode)
+    ├── core/         # CertificationEngine, EventBus, Bootstrap, CommandRouter (Pub/Sub commands)
     ├── firebolt/     # JSON-RPC client, Transport/SDK adapters, event manager
     ├── schema/       # OpenRPC loading and AJV validation
     ├── reports/      # Report building, failure explanations, JSON/HTML/Excel export
@@ -289,7 +287,7 @@ The spec is versioned as [public/specs/firebolt_schema_validator-&lt;version&gt;
     ├── lifecycle/    # Lifecycle handling (not used in standalone mode)
     ├── providers/    # Provider handling (not used in standalone mode)
     ├── extensions/   # Extension registry for vendor hooks
-    ├── utils/        # Logging, helpers, censoring
+    ├── utils/        # Logging and helpers
     ├── styles/       # Global CSS and theme tokens
     └── test/         # Vitest unit tests
 ```
@@ -305,12 +303,6 @@ The spec is versioned as [public/specs/firebolt_schema_validator-&lt;version&gt;
 | `[report-server] failed to start` | Install Python 3, or set `PYTHON` to your interpreter. |
 | App opens on port 5174 instead of 5173 | Port 5173 is busy; use the URL printed in the terminal. |
 | Device cannot open the app | Use the machine's IP address rather than `localhost`, and allow ports 5173 and 8090 through the firewall. |
-| Top bar shows a red "FCS" status | Add `standalone=true` to the launch URL. |
+| Top bar shows a red "Firebolt_Certification_Framework" status | Add `standalone=true` to the launch URL. |
 | Reports are not received | Set `reportPublishUrl=http://<machine-ip>:8090/`, or update `DEFAULT_REPORT_PUBLISH_URL`. |
 | `SdkMethodNotAvailable` | The device SDK does not provide that API. Use Transport mode or update the device SDK. |
-
----
-
-## License
-
-Licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for attribution.

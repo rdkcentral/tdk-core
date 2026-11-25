@@ -1,25 +1,15 @@
+
 {
-  "openrpc": "1.2.6",
+  "openrpc": "1.2.4",
   "info": {
-    "title": "RDK8 + RDK9 Firebolt Core API (curated subset)",
+    "title": "Firebolt-9 API schema",
     "version": "9.0.0",
-    "description": "OpenRPC document combining the RDK Core Specs 'Firebolt 8 API Spec', 'Firebolt 8 JSON-RPC Specification' and 'Firebolt 9 Core API Specification' (rdk-core-specs/video/rdk8 and rdk9). Methods tagged x-since 8.0.0 are part of Firebolt 8 and carried forward into RDK9; x-since 9.0.0 methods are new in RDK9. TextToSpeech is deprecated in 9.0.0 in favour of SpeechSynthesis. Methods marked x-approved:false are not yet approved in the Firebolt 9 specification. Wire format follows JSON-RPC 2.0 (RPCv2=true): method and parameter names are case sensitive, params is always an object (by-name) and is omitted when a method has no parameters; a method with no return value responds with result null. Event methods (on*) take a required listen parameter; their result schema is the notification payload, and x-notification describes the on-the-wire notification params ({\"value\": x} for primitives, the object itself for objects, an array for lists). Every closed object schema sets additionalProperties:false so undocumented properties fail validation. Load in Firebolt Certification via the coreOpenRpcUrl launch parameter, e.g. ?coreOpenRpcUrl=/specs/firebolt_schema_validator-9.0.0.json"
-  },
-  "externalDocs": {
-    "description": "Firebolt 8 JSON-RPC Specification (RDK8)",
-    "url": "https://rdkcentral.github.io/rdk-core-specs/video/rdk8/firebolt-json-rpc.html"
+    "description": "OpenRPC document for the RDK Core Specs 'Firebolt 9 Core API Specification' (rdk-core-specs/video/rdk9). TextToSpeech methods are tagged deprecated in favour of SpeechSynthesis (x-alternative). Wire format follows JSON-RPC 2.0 (RPCv2=true): method and parameter names are case sensitive, params is always an object (by-name) and is omitted when a method has no parameters; a method with no return value responds with result null. Event methods (on*) take a required listen parameter; their result schema is the notification payload, and x-notification describes the on-the-wire notification params ({\"value\": x} for primitives, the object itself for objects, an array for lists). Every closed object schema sets additionalProperties:false so undocumented properties fail validation. Load in Firebolt Certification via the coreOpenRpcUrl launch parameter, e.g. ?coreOpenRpcUrl=/specs/firebolt_schema_validator-9.0.0.json"
   },
   "methods": [
     {
       "name": "Accessibility.audioDescription",
       "summary": "Returns the audio description setting of the device",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -45,13 +35,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "8.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -157,13 +142,6 @@
       "name": "Accessibility.closedCaptionsSettings",
       "summary": "Returns closed captions settings: enabled, and a list of zero or more preferred languages in decreasing order of preference",
       "description": "preferredLanguages is [] if not initialized, otherwise a list of one or more ISO 639-2/B codes",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -195,13 +173,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "8.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -301,13 +274,6 @@
     {
       "name": "Accessibility.highContrastUI",
       "summary": "Returns the high contrast UI device setting",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -333,13 +299,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "8.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -444,13 +405,6 @@
     {
       "name": "Accessibility.voiceGuidanceSettings",
       "summary": "Returns voice guidance settings: enabled, rate, and navigationHints",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -480,13 +434,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "8.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -588,13 +537,6 @@
     {
       "name": "Actions.start",
       "summary": "Send an intent to the platform. Argument is a JSON document",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "intent",
@@ -647,13 +589,6 @@
     {
       "name": "Actions.intent",
       "summary": "Returns the intent that was most recently received from the platform, as a JSON document. Typically called after transitioning to the active lifecycle state",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -691,13 +626,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "9.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -813,13 +743,6 @@
     {
       "name": "Advertising.advertisingId",
       "summary": "Returns the IFA (Identifier for Advertising)",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -845,13 +768,6 @@
     {
       "name": "Device.uid",
       "summary": "Returns a persistent unique UUID for the current app and device. Reset when the app or device is reset",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -873,13 +789,6 @@
     {
       "name": "Device.deviceClass",
       "summary": "Returns the class of the device",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -901,13 +810,6 @@
     {
       "name": "Device.uptime",
       "summary": "Returns the number of seconds since most recent device boot, including any time spent during deep sleep",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -929,13 +831,6 @@
     {
       "name": "Device.timeInActiveState",
       "summary": "Returns the number of seconds since the device transitioned to the ON power state",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -964,13 +859,6 @@
     {
       "name": "Device.chipsetId",
       "summary": "Returns chipset ID as a printable string, e.g. 'BCM72180'",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -994,13 +882,6 @@
       "name": "Device.hdr",
       "summary": "Returns the HDR standards supported by the attached TV or the integral display",
       "description": "OTT/STB device: supported by the device and indicated by the EDID of the attached TV. TV: supported by the device.",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -1031,13 +912,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "8.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -1141,13 +1017,6 @@
     {
       "name": "Device.dolbyAtmosExperienceAvailable",
       "summary": "Returns whether the user would get a Dolby Atmos experience if a Dolby Atmos track were played now",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -1173,13 +1042,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "9.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -1284,13 +1148,6 @@
     {
       "name": "Device.osName",
       "summary": "Returns the operating system name as defined by the operator",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -1312,13 +1169,6 @@
     {
       "name": "Device.osVersion",
       "summary": "Returns the operating system version as defined by the operator",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -1340,13 +1190,6 @@
     {
       "name": "Device.firmware",
       "summary": "Returns a string that identifies the firmware image of the device",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -1369,13 +1212,6 @@
     {
       "name": "Device.name",
       "summary": "Returns the device friendly name, used by network services (DIAL, Miracast, AirPlay) for device discovery",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -1402,13 +1238,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "9.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -1515,13 +1346,6 @@
     {
       "name": "Discovery.watched",
       "summary": "Notify the platform that content has been partially or completely watched",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "entityId",
@@ -1607,13 +1431,6 @@
       "name": "Display.size",
       "summary": "Returns the physical dimensions of the connected or integral display, in centimeters",
       "description": "Returns 0, 0 on an OTT/STB device when a display is not connected over HDMI. Typical values: 43\" - 97, 56; 55\" - 123, 71; 65\" - 145, 83",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -1639,13 +1456,6 @@
       "name": "Display.maxResolution",
       "summary": "Returns the physical/native resolution of the connected or integral display, in pixels",
       "description": "Returns 0, 0 on an OTT/STB device when a display is not connected over HDMI. Typical values: 1280x720, 1920x1080, 3840x2160",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -1671,13 +1481,6 @@
       "name": "Display.edid",
       "summary": "Returns the EDID (and extensions) of the connected or integral display, as a Base64 encoded string",
       "description": "Returns an empty string on an OTT/STB device when a display is not connected over HDMI",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -1700,13 +1503,6 @@
       "name": "Display.colorimetry",
       "summary": "Returns an unordered list of colorimetry values supported by the attached TV or integral display",
       "description": "Returns one or more colorimetry values supported by the attached TV or integral display",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -1735,13 +1531,6 @@
       "name": "Display.videoResolutions",
       "summary": "Returns an unordered list of HD video resolutions and frame rates supported by the attached TV or integral display",
       "description": "Returns an empty list if no TV is attached",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -1771,13 +1560,6 @@
       "name": "Lifecycle2.close",
       "summary": "Request the platform to deactivate the app, and possibly take further action",
       "description": "window.close() maps to unload; window.minimize() maps to deactivate. The module is named Lifecycle in the C++ Client Library.",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "type",
@@ -1813,13 +1595,6 @@
       "name": "Lifecycle2.state",
       "summary": "Returns the current lifecycle state of the app",
       "description": "The first lifecycle state that can be observed by an app/runtime is initializing. Apps/runtimes should ordinarily use state change notifications rather than this method.",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -1845,13 +1620,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "8.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -1954,13 +1724,6 @@
     {
       "name": "Localization.country",
       "summary": "Returns the country, e.g. US, CA, GB, BE",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -1986,13 +1749,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "8.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -2098,13 +1856,6 @@
       "name": "Localization.preferredAudioLanguages",
       "summary": "A list of zero or more languages in order of decreasing preference",
       "description": "Typically two languages are present. A language may be repeated in the list. [] if not initialized.",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -2133,13 +1884,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "8.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -2239,13 +1985,6 @@
     {
       "name": "Localization.presentationLanguage",
       "summary": "The presentation language of the device, e.g. en-US",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -2271,13 +2010,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "8.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -2382,13 +2116,6 @@
     {
       "name": "Localization.timeZone",
       "summary": "Returns the current time zone in IANA format, e.g. America/New_York",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -2414,13 +2141,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "9.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -2526,13 +2248,6 @@
       "name": "Metrics.ready",
       "summary": "Inform the platform that the app is minimally usable",
       "description": "Called automatically by Lifecycle.ready()",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -2555,13 +2270,6 @@
       "name": "Metrics.signIn",
       "summary": "Log a sign in event",
       "description": "Called by Discovery.signIn()",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -2584,13 +2292,6 @@
       "name": "Metrics.signOut",
       "summary": "Log a sign out event",
       "description": "Called by Discovery.signOut()",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -2612,13 +2313,6 @@
     {
       "name": "Metrics.startContent",
       "summary": "Inform the platform that your user has started content",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "entityId",
@@ -2667,13 +2361,6 @@
     {
       "name": "Metrics.stopContent",
       "summary": "Inform the platform that your user has stopped content",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "entityId",
@@ -2722,13 +2409,6 @@
     {
       "name": "Metrics.page",
       "summary": "Inform the platform that your user has navigated to a page or view",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "pageId",
@@ -2772,13 +2452,6 @@
     {
       "name": "Metrics.error",
       "summary": "Inform the platform of an error that has occurred in your app",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "type",
@@ -2873,13 +2546,6 @@
     {
       "name": "Metrics.mediaLoadStart",
       "summary": "Called when setting the URL of a media asset to play, in order to infer load time",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "entityId",
@@ -2924,13 +2590,6 @@
     {
       "name": "Metrics.mediaPlay",
       "summary": "Called when media playback should start due to autoplay, user-initiated play, or unpausing",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "entityId",
@@ -2975,13 +2634,6 @@
     {
       "name": "Metrics.mediaPlaying",
       "summary": "Called when media playback actually starts due to autoplay, user-initiated play, unpausing, or recovering from a buffering interruption",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "entityId",
@@ -3026,13 +2678,6 @@
     {
       "name": "Metrics.mediaPause",
       "summary": "Called when media playback will pause due to an intentional pause operation",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "entityId",
@@ -3077,13 +2722,6 @@
     {
       "name": "Metrics.mediaWaiting",
       "summary": "Called when media playback will halt due to a network, buffer, or other unintentional constraint",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "entityId",
@@ -3128,13 +2766,6 @@
     {
       "name": "Metrics.mediaSeeking",
       "summary": "Called when a seek is initiated during media playback",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "entityId",
@@ -3191,13 +2822,6 @@
     {
       "name": "Metrics.mediaSeeked",
       "summary": "Called when a seek is completed during media playback",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "entityId",
@@ -3254,13 +2878,6 @@
     {
       "name": "Metrics.mediaRateChanged",
       "summary": "Called when the playback rate of media is changed",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "entityId",
@@ -3317,13 +2934,6 @@
     {
       "name": "Metrics.mediaRenditionChanged",
       "summary": "Called when the playback rendition (e.g. bitrate, dimensions, profile) is changed",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "entityId",
@@ -3413,13 +3023,6 @@
     {
       "name": "Metrics.mediaEnded",
       "summary": "Called when playback has stopped because the end of the media was reached",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "entityId",
@@ -3464,13 +3067,6 @@
     {
       "name": "Metrics.event",
       "summary": "Inform the platform of 1st party distributor metrics data",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "schema",
@@ -3528,13 +3124,6 @@
     {
       "name": "Metrics.appInfo",
       "summary": "Inform the platform about an app's build info",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "build",
@@ -3570,13 +3159,6 @@
     {
       "name": "Network.connected",
       "summary": "Returns whether the device has a usable network connection",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "8.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -3602,13 +3184,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "8.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -3714,13 +3291,6 @@
       "name": "SpeechSynthesis.voices",
       "summary": "Returns a list of available voices",
       "description": "A voice or a language can be repeated in the list. At most one voice is the default for each language.",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -3757,13 +3327,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "9.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -3870,13 +3435,6 @@
       "name": "SpeechSynthesis.speak",
       "summary": "Requests the system to speak an utterance. Returns an utteranceId if accepted",
       "description": "Any utterance currently being spoken is interrupted (onUtteranceEvent interrupted) and events for the new request are raised using onUtteranceEvent. For Voice Guidance, supply plain text with lang, or a well-formed SSML document.",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "text",
@@ -3981,13 +3539,6 @@
       "name": "SpeechSynthesis.cancel",
       "summary": "Stop the utterance",
       "description": "Raises onUtteranceEvent(interrupted) if the utterance was synthesizing, playing or paused. Returns without error in all utterance states, or if the utterance has finished.",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "utteranceId",
@@ -4030,13 +3581,6 @@
       "name": "SpeechSynthesis.pause",
       "summary": "Pause the utterance",
       "description": "Raises onUtteranceEvent(paused) if the utterance was synthesizing or playing. Returns without error in all utterance states, or if the utterance has finished.",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "utteranceId",
@@ -4079,13 +3623,6 @@
       "name": "SpeechSynthesis.resume",
       "summary": "Resume a paused or synthesizing utterance",
       "description": "Raises onUtteranceEvent(resumed) if the utterance had previously been paused while playing. Returns without error in all utterance states, or if the utterance has finished.",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "utteranceId",
@@ -4131,13 +3668,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "9.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -4236,13 +3768,6 @@
     {
       "name": "Stats.memoryUsage",
       "summary": "Returns information about container memory usage, in bytes",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -4272,16 +3797,10 @@
       "description": "TTS_Status, not success, indicates success of the call. Raises onSpeechInterrupted if speaking is interrupted.",
       "tags": [
         {
-          "name": "since",
-          "x-since": "8.0.0"
-        },
-        {
           "name": "deprecated",
-          "x-since": "9.0.0",
           "x-alternative": "SpeechSynthesis"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "text",
@@ -4325,16 +3844,10 @@
       "summary": "Stop speaking if an utterance is currently being spoken. Raises onSpeechInterrupted if speaking was interrupted",
       "tags": [
         {
-          "name": "since",
-          "x-since": "8.0.0"
-        },
-        {
           "name": "deprecated",
-          "x-since": "9.0.0",
           "x-alternative": "SpeechSynthesis"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "speechid",
@@ -4379,16 +3892,10 @@
           "name": "event"
         },
         {
-          "name": "since",
-          "x-since": "8.0.0"
-        },
-        {
           "name": "deprecated",
-          "x-since": "9.0.0",
           "x-alternative": "SpeechSynthesis"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -4492,16 +3999,10 @@
           "name": "event"
         },
         {
-          "name": "since",
-          "x-since": "8.0.0"
-        },
-        {
           "name": "deprecated",
-          "x-since": "9.0.0",
           "x-alternative": "SpeechSynthesis"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -4605,16 +4106,10 @@
           "name": "event"
         },
         {
-          "name": "since",
-          "x-since": "8.0.0"
-        },
-        {
           "name": "deprecated",
-          "x-since": "9.0.0",
           "x-alternative": "SpeechSynthesis"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -4718,16 +4213,10 @@
           "name": "event"
         },
         {
-          "name": "since",
-          "x-since": "8.0.0"
-        },
-        {
           "name": "deprecated",
-          "x-since": "9.0.0",
           "x-alternative": "SpeechSynthesis"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -4826,13 +4315,6 @@
       "name": "VideoOutput.resolution",
       "summary": "Returns the width and height of the video signal on the video output, in pixels",
       "description": "OTT/STB device: the video resolution over HDMI. TV device: the resolution of the panel.",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -4861,13 +4343,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "9.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -4968,13 +4445,6 @@
       "name": "VideoOutput.hdcp",
       "summary": "Returns the current state of output protection on the video output",
       "description": "OTT/STB device: the negotiated HDCP version, or none if no encrypted connection has been made. TV device: direct.",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -5000,13 +4470,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "9.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -5112,13 +4577,6 @@
       "name": "VideoOutput.cecState",
       "summary": "Returns whether the output of the OTT/STB device is actively being displayed on the TV",
       "description": "active - TV is on and the device is the active source; inactive - TV is off or the device is not the active source; unsupported - CEC not enabled on the TV. TV device: returns Wrong device class error.",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -5151,13 +4609,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "9.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -5263,13 +4716,6 @@
       "name": "VideoOutput.refreshRate",
       "summary": "Returns the refresh rate of the video signal on the video output, in Hz",
       "description": "OTT/STB device: the refresh rate, or 0 if no TV is attached. TV device: the compositor refresh rate used for the integrated display.",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -5295,13 +4741,8 @@
       "tags": [
         {
           "name": "event"
-        },
-        {
-          "name": "since",
-          "x-since": "9.0.0"
         }
       ],
-      "paramStructure": "by-name",
       "params": [
         {
           "name": "listen",
@@ -5406,13 +4847,6 @@
     {
       "name": "VideoOutput.colorDepth",
       "summary": "Returns the video color depth being used on the video output, in bits",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -5434,13 +4868,6 @@
     {
       "name": "VideoOutput.colorFormat",
       "summary": "Returns the current color format of the video signal on the active video output port or integrated display",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -5462,13 +4889,6 @@
     {
       "name": "VideoOutput.colorimetry",
       "summary": "Returns the current colorimetry value of the video signal on the active video output port or integrated display",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -5490,13 +4910,6 @@
     {
       "name": "VideoOutput.dynamicRange",
       "summary": "Returns the current dynamic range format of the video signal on the video output",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -5518,13 +4931,6 @@
     {
       "name": "VideoOutput.quantizationRange",
       "summary": "Returns the quantization range used on the video output",
-      "tags": [
-        {
-          "name": "since",
-          "x-since": "9.0.0"
-        }
-      ],
-      "paramStructure": "by-name",
       "params": [],
       "result": {
         "name": "value",
@@ -5560,16 +4966,6 @@
         "title": "Unsigned",
         "description": "32-bit unsigned integer (Firebolt 'unsigned' type)",
         "type": "integer",
-        "minimum": 0,
-        "maximum": 4294967295
-      },
-      "NullableUnsigned": {
-        "title": "NullableUnsigned",
-        "description": "32-bit unsigned integer, or null when the value is not available",
-        "type": [
-          "integer",
-          "null"
-        ],
         "minimum": 0,
         "maximum": 4294967295
       },
@@ -5823,23 +5219,6 @@
           "2160p60"
         ]
       },
-      "ApiVersion": {
-        "title": "ApiVersion",
-        "type": "object",
-        "properties": {
-          "major": {
-            "$ref": "#/components/schemas/Unsigned"
-          },
-          "minor": {
-            "$ref": "#/components/schemas/Unsigned"
-          }
-        },
-        "required": [
-          "major",
-          "minor"
-        ],
-        "additionalProperties": false
-      },
       "LifecycleState": {
         "title": "LifecycleState",
         "type": "string",
@@ -5992,379 +5371,6 @@
         ],
         "additionalProperties": false
       },
-      "Volume": {
-        "title": "Volume",
-        "type": "integer",
-        "minimum": 0,
-        "maximum": 100,
-        "description": "Volume level, 0 to 100 inclusive"
-      },
-      "AudioPort": {
-        "title": "AudioPort",
-        "type": "string",
-        "enum": [
-          "speakers",
-          "spdif",
-          "analog",
-          "hdmi",
-          "bluetooth"
-        ],
-        "description": "spdif represents coax and/or optical. On a TV device, hdmi represents ARC and eARC"
-      },
-      "AudioPortList": {
-        "title": "AudioPortList",
-        "description": "Unordered list of connected audio ports",
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/AudioPort"
-        }
-      },
-      "NetworkInterface": {
-        "title": "NetworkInterface",
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1,
-            "description": "Interface name, e.g. wlan0"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "wired",
-              "wifi"
-            ]
-          },
-          "protocol": {
-            "type": "string",
-            "enum": [
-              "unknown",
-              "100base_tx",
-              "1000base_t",
-              "802_11ac",
-              "802_11ax",
-              "802_11be"
-            ],
-            "description": "Physical layer protocol supported by the interface; unknown by default"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "connected": {
-            "type": "boolean",
-            "description": "Link layer status"
-          },
-          "preferred": {
-            "type": "boolean",
-            "description": "true if the interface is used for network traffic"
-          }
-        },
-        "required": [
-          "name",
-          "type",
-          "protocol",
-          "enabled",
-          "connected",
-          "preferred"
-        ],
-        "additionalProperties": false
-      },
-      "NetworkInterfaceList": {
-        "title": "NetworkInterfaceList",
-        "description": "Unordered list of one or more physical network interfaces",
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/NetworkInterface"
-        },
-        "minItems": 1
-      },
-      "InterfaceStatus": {
-        "title": "InterfaceStatus",
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1,
-            "description": "Interface name, e.g. wlan0"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "connected": {
-            "type": "boolean"
-          },
-          "preferred": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "name",
-          "enabled",
-          "connected",
-          "preferred"
-        ],
-        "additionalProperties": false
-      },
-      "IPv4Address": {
-        "title": "IPv4Address",
-        "type": "string",
-        "format": "ipv4",
-        "pattern": "^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])$"
-      },
-      "IPv6Address": {
-        "title": "IPv6Address",
-        "type": "string",
-        "format": "ipv6",
-        "pattern": "^[0-9A-Fa-f:.]*:[0-9A-Fa-f:.]*$"
-      },
-      "InterfaceIpConfig": {
-        "title": "InterfaceIpConfig",
-        "type": "object",
-        "properties": {
-          "ipv4Address": {
-            "type": "string",
-            "pattern": "^(((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9]))?$",
-            "description": "IPv4 address of the interface (\"\" when no address is assigned - see assumptions)"
-          },
-          "ipv4DNSAddresses": {
-            "type": "array",
-            "description": "Ordered list of zero or more IPv4 DNS server addresses",
-            "items": {
-              "$ref": "#/components/schemas/IPv4Address"
-            }
-          },
-          "ipv6Addresses": {
-            "type": "array",
-            "description": "Ordered list of zero or more IPv6 addresses",
-            "items": {
-              "$ref": "#/components/schemas/IPv6Address"
-            }
-          },
-          "ipv6DNSAddresses": {
-            "type": "array",
-            "description": "Ordered list of zero or more IPv6 DNS server addresses",
-            "items": {
-              "$ref": "#/components/schemas/IPv6Address"
-            }
-          }
-        },
-        "required": [
-          "ipv4Address",
-          "ipv4DNSAddresses",
-          "ipv6Addresses",
-          "ipv6DNSAddresses"
-        ],
-        "additionalProperties": false
-      },
-      "InterfaceIpConfigList": {
-        "title": "InterfaceIpConfigList",
-        "description": "Unordered list of one or more IP configurations",
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/InterfaceIpConfig"
-        },
-        "minItems": 1
-      },
-      "InterfaceStats": {
-        "title": "InterfaceStats",
-        "type": "object",
-        "description": "Present when an interface is connected. Attributes are null if not available",
-        "properties": {
-          "txPackets": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "txError": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "txDropped": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "txFifoErrors": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "txCarrierErrors": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "rxPackets": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "rxError": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "rxDropped": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "rxFifoErrors": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "rxFrameErrors": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "linkTxBitRate": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "linkRxBitRate": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          }
-        },
-        "required": [
-          "txPackets",
-          "txError",
-          "txDropped",
-          "txFifoErrors",
-          "txCarrierErrors",
-          "rxPackets",
-          "rxError",
-          "rxDropped",
-          "rxFifoErrors",
-          "rxFrameErrors",
-          "linkTxBitRate",
-          "linkRxBitRate"
-        ],
-        "additionalProperties": false
-      },
-      "WirelessStats": {
-        "title": "WirelessStats",
-        "type": "object",
-        "description": "Present when an interface of type wifi is connected. Attributes are null if not available",
-        "properties": {
-          "wirelessFrequency": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0,
-            "maximum": 4294967295,
-            "description": "MHz"
-          },
-          "wirelessQuality": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0,
-            "maximum": 96,
-            "description": "Current SNR in dB, 0 to 96 inclusive"
-          },
-          "wirelessSignal": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": -96,
-            "maximum": 0,
-            "description": "dBm, -96 (weakest) to 0 (strongest) inclusive"
-          },
-          "wirelessTxBitrate": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0,
-            "maximum": 4294967295,
-            "description": "Tx rate in Mbps"
-          },
-          "wirelessRxBitrate": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0,
-            "maximum": 4294967295,
-            "description": "Rx rate in Mbps"
-          },
-          "wirelessInactiveTime": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0,
-            "maximum": 4294967295,
-            "description": "Milliseconds since last activity"
-          },
-          "wirelessRxBytes": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "wirelessRxPackets": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "wirelessRxDropped": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "wirelessTxBytes": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "wirelessTxPackets": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "wirelessTxRetries": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "wirelessTxFailed": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          },
-          "wirelessExpectedThroughput": {
-            "$ref": "#/components/schemas/NullableUnsigned"
-          }
-        },
-        "required": [
-          "wirelessFrequency",
-          "wirelessQuality",
-          "wirelessSignal",
-          "wirelessTxBitrate",
-          "wirelessRxBitrate",
-          "wirelessInactiveTime",
-          "wirelessRxBytes",
-          "wirelessRxPackets",
-          "wirelessRxDropped",
-          "wirelessTxBytes",
-          "wirelessTxPackets",
-          "wirelessTxRetries",
-          "wirelessTxFailed",
-          "wirelessExpectedThroughput"
-        ],
-        "additionalProperties": false
-      },
-      "InterfaceStatistics": {
-        "title": "InterfaceStatistics",
-        "type": "object",
-        "properties": {
-          "interfaceStats": {
-            "$ref": "#/components/schemas/InterfaceStats"
-          },
-          "wirelessStats": {
-            "$ref": "#/components/schemas/WirelessStats"
-          }
-        },
-        "required": [],
-        "additionalProperties": false
-      },
-      "InterfaceDetails": {
-        "title": "InterfaceDetails",
-        "type": "object",
-        "description": "May convey sensitive / personally identifiable information",
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1,
-            "description": "Interface name, e.g. wlan0"
-          },
-          "ssid": {
-            "type": "string",
-            "minLength": 1,
-            "description": "SSID of the access point; provided for a wifi interface if connected"
-          },
-          "bssid": {
-            "type": "string",
-            "pattern": "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$",
-            "description": "BSSID (MAC) of the access point; provided for a wifi interface if connected"
-          }
-        },
-        "required": [
-          "name"
-        ],
-        "additionalProperties": false
-      },
       "Voice": {
         "title": "Voice",
         "type": "object",
@@ -6497,56 +5503,6 @@
           "speechid",
           "TTS_Status",
           "success"
-        ],
-        "additionalProperties": false
-      },
-      "TTSSpeechStateResult": {
-        "title": "TTSSpeechStateResult",
-        "type": "object",
-        "properties": {
-          "speechstate": {
-            "type": "string",
-            "enum": [
-              "SPEECH_PENDING",
-              "SPEECH_IN_PROGRESS",
-              "SPEECH_PAUSED",
-              "SPEECH_NOT_FOUND"
-            ]
-          },
-          "TTS_Status": {
-            "$ref": "#/components/schemas/TTSStatus"
-          },
-          "success": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "speechstate",
-          "TTS_Status",
-          "success"
-        ],
-        "additionalProperties": false
-      },
-      "TTSListVoicesResult": {
-        "title": "TTSListVoicesResult",
-        "type": "object",
-        "properties": {
-          "TTS_Status": {
-            "$ref": "#/components/schemas/TTSStatus"
-          },
-          "voices": {
-            "type": "array",
-            "description": "Ordered list of one or more human-readable voice names",
-            "items": {
-              "type": "string",
-              "minLength": 1
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "TTS_Status",
-          "voices"
         ],
         "additionalProperties": false
       },
@@ -6753,16 +5709,6 @@
           "none"
         ]
       },
-      "KeyList": {
-        "title": "KeyList",
-        "description": "Unordered list of one or more keys, each the JS event.key value defined in the Firebolt Key Codes Specification",
-        "type": "array",
-        "items": {
-          "type": "string",
-          "minLength": 1
-        },
-        "minItems": 1
-      },
       "JsonRpcId": {
         "title": "JsonRpcId",
         "type": [
@@ -6919,7 +5865,6 @@
     "specification": "https://www.jsonrpc.org/specification",
     "connection": "The Firebolt Client Library connects to the Firebolt API Gateway with the RPCv2=true query parameter and uses only compliant JSON-RPC 2.0",
     "caseSensitive": true,
-    "paramStructure": "by-name",
     "specificErrors": [
       {
         "name": "Wrong device class",

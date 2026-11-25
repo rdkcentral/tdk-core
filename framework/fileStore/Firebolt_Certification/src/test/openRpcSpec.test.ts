@@ -1,3 +1,26 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file Tests the bundled OpenRPC spec itself: examples validate, and positive/negative values match the schemas.
+ */
+
 import { describe, expect, it } from 'vitest';
 import spec from '../../public/specs/firebolt_schema_validator-9.0.0.json';
 import { schemaValidator } from '../schema/SchemaValidator';
@@ -29,7 +52,7 @@ function withUndocumentedProperty(value: any, schema: any): any | undefined {
   return undefined;
 }
 
-describe('RDK8 + RDK9 Firebolt OpenRPC spec', () => {
+describe('Firebolt OpenRPC spec', () => {
   it('gives every method at least one example', () => {
     expect(methods.filter((m) => !m.examples?.length).map((m) => m.name)).toEqual([]);
   });
@@ -85,17 +108,13 @@ describe('RDK8 + RDK9 Firebolt OpenRPC spec', () => {
 
   it('rejects empty strings where a value is required, but accepts them where the spec allows', () => {
     const result = (name: string) => byName(name).result.schema;
-    for (const name of [
-      'Device.osName',
-      'Device.osVersion',
-      'Device.firmware',
-      'Device.name',
-      'Device.onNameChanged'
-    ]) {
+    for (const name of ['Device.firmware', 'Device.name', 'Device.onNameChanged']) {
       expect(valid('', result(name)), `${name} accepted ""`).toBe(false);
     }
     expect(valid([''], result('Localization.preferredAudioLanguages'))).toBe(false);
     expect(valid('', result('Localization.country'))).toBe(true);
+    expect(valid('', result('Device.osName'))).toBe(true);
+    expect(valid('', result('Device.osVersion'))).toBe(true);
   });
 
   it('accepts documented edge values', () => {
@@ -104,9 +123,9 @@ describe('RDK8 + RDK9 Firebolt OpenRPC spec', () => {
     expect(valid([], result('Localization.preferredAudioLanguages'))).toBe(true);
   });
 
-  it('rejects an empty Display.colorimetry response', () => {
+  it('accepts an empty Display.colorimetry response', () => {
     const schema = byName('Display.colorimetry').result.schema;
-    expect(valid([], schema)).toBe(false);
+    expect(valid([], schema)).toBe(true);
     expect(valid(['bt709'], schema)).toBe(true);
   });
 

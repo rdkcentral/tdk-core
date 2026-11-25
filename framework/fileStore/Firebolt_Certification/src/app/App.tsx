@@ -1,3 +1,27 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file Main UI: header, sidebar and the APIs, Suites, Events and Reports pages. Loads the OpenRPC spec, runs
+ * certification through CertificationEngine and shows, exports and publishes reports.
+ */
+
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Sidebar } from '../components/Sidebar';
 import { StatusPill } from '../components/StatusPill';
@@ -60,7 +84,7 @@ export function App() {
     const offResult = eventBus.on<ExecutionResult>('execution', setLastResult);
     void (async () => {
       await initializeFromFireboltParameters();
-      // standalone mode runs sanity testing locally and skips the FCS Pub/Sub connection
+      // standalone mode runs sanity testing locally and skips the Pub/Sub connection
       // and the live appId lookup used only to correlate Pub/Sub topics.
       if (runtimeConfig.standalone) {
         setPubSubState('disabled');
@@ -82,8 +106,8 @@ export function App() {
         setFireboltState('error');
         setFireboltError(errorReason(err) || 'Unknown error');
       }
-      // Provider registration is intentionally not started from the UI in Firebolt Certification 2.1.
-      // Legacy FCS provider commands remain in CommandRouter for backward compatibility.
+      // Provider registration is intentionally not started from the UI.
+      // Legacy provider commands remain in CommandRouter for backward compatibility.
     })();
     return () => {
       offState();
@@ -192,7 +216,7 @@ function Header({
         />
         {!runtimeConfig.standalone && (
           <StatusPill
-            label={`FCS  ${pretty(fcs)}`}
+            label={`Firebolt_Certification_Framework  ${pretty(fcs)}`}
             status={fcs === 'connected' ? 'ok' : fcs === 'connecting' ? 'warn' : 'bad'}
           />
         )}
@@ -570,7 +594,11 @@ function SuitesPage({
       });
       setReport(generated);
       setProgress('');
-      if (runtimeConfig.reportPublishUrl) {
+      if (generated.interrupted) {
+        // A stopped run is partial, so it is never published as a completed certification.
+        setProgress(`Stopped · ${generated.methodsNotRun ?? 0} method(s) not tested`);
+        setPublishNote('Run was stopped: the partial report was not published.');
+      } else if (runtimeConfig.reportPublishUrl) {
         await resolveReportPublishUrl();
         const published = await Promise.all(
           (['json', 'html', 'xlsx'] as const).map((format) => publishReport(generated, format))
@@ -768,7 +796,7 @@ function Reports({ theme }: { theme: UiTheme }) {
                   <span>{new Date(report.endedAt).toLocaleString()}</span>
                   <small>
                     {report.summary.passed} pass · {report.summary.failed} fail · {report.summary.total} total
-                  </small>
+                    {report.interrupted ? ' · interrupted' : ''}                  </small>
                 </button>
               ))
             ) : (

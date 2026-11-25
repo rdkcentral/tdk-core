@@ -1,3 +1,27 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file Core runner: invokes each OpenRPC method/example (and event subscribe/unsubscribe) through the selected
+ * mode, validates responses against the schema and SLA and collects the results for a suite report.
+ */
+
 import type {
   CertificationRunOptions,
   CertificationSuiteReport,
@@ -14,7 +38,6 @@ import { eventBus } from './EventBus';
 import { eventManager } from '../firebolt/EventManager';
 import { logger } from '../utils/Logger';
 import { CONNECTIVITY_PROBE_METHOD } from '../config/runtime';
-import { censor } from '../utils/Censor';
 import { describeSchema } from '../reports/schemaSummary';
 import {
   SUBSCRIPTION_REPLY_ERROR,
@@ -27,7 +50,7 @@ import {
 
 const DEFAULT_SLA = 300;
 
-/** Firebolt RDK8+ JSON-RPC: a successful subscribe/unsubscribe reply is result: null. */
+/** Firebolt JSON-RPC: a successful subscribe/unsubscribe reply is result: null. */
 export function validateSubscriptionReply(reply: unknown): ValidationResult {
   if (reply === null) return { valid: true, errors: [] };
   return {
@@ -57,9 +80,8 @@ export class CertificationEngine {
     logger.info(`Executing ${method} via ${mode}`);
     const result = await fireboltAdapter.invoke({ method, params, mode, timeoutMs });
     const schemaMethod = openRpcService.getMethod(result.method);
-    if (result.response !== undefined) result.response = censor(result.method, result.response);
     if (validate && result.status === 'PASS' && schemaMethod && isEventMethod(schemaMethod.raw)) {
-      // Calling an on* method directly is a subscribe/unsubscribe request: RDK8+ replies with result: null.
+      // Calling an on* method directly is a subscribe/unsubscribe request: the gateway replies with result: null.
       // The OpenRPC result schema describes the notification payload, not this reply.
       const sdkAcknowledgement =
         mode === 'SDK' &&
@@ -118,16 +140,21 @@ export class CertificationEngine {
       .filter((m) => !moduleFilter || moduleFilter.has(m.module.toLowerCase()));
     const methodTotal = methods.length;
     let methodIndex = 0;
+    let methodsCompleted = 0;
     const results: ExecutionResult[] = [];
     for (const method of methods) {
       if (signal.aborted) break;
       methodIndex++;
       const cases = this.examplesFor(method);
+      let complete = true;
       if (!cases.length) {
         results.push(...(await this.runCase(method, this.defaultParams(method), undefined, options)));
       } else {
         for (const example of cases) {
-          if (signal.aborted) break;
+          if (signal.aborted) {
+            complete = false;
+            break;
+          }
           const params = entriesToObject(
             (example.params || []).map((p: any) => [p.name, p.value] as [string, unknown])
           );
@@ -139,6 +166,7 @@ export class CertificationEngine {
           results.push(...caseResults);
         }
       }
+      if (complete) methodsCompleted++;
       eventBus.emit('suite-progress', { completed: results.length, current: method.name, methodIndex, methodTotal });
     }
     const byName = new Map<string, OpenRpcMethod>();
@@ -159,14 +187,19 @@ export class CertificationEngine {
     const title = `Firebolt ${options.mode} Validation - ${scope}`;
     const report = buildSuiteReport(title, options.mode, started, results);
     report.specVersion = openRpcService.specVersion() || undefined;
+    // A stopped run is partial: mark it so reports never present it as a completed (PASSED) certification.
+    if (methodsCompleted < methodTotal) {
+      report.interrupted = true;
+      report.methodsNotRun = methodTotal - methodsCompleted;
+    }
     this.suites.unshift(report);
     if (this.suites.length > 20) this.suites.length = 20;
     eventBus.emit('suite-complete', report);
-    this.currentAbort = null;
+    if (this.currentAbort?.signal === signal) this.currentAbort = null;
     return report;
   }
 
-  // Subscribes ({listen: true}) then unsubscribes ({listen: false}); each reply must be null (RDK8+) and is reported as its own row.
+  // Subscribes ({listen: true}) then unsubscribes ({listen: false}); each reply must be null and is reported as its own row.
   // Notification payloads are not validated.
   private async runEventCase(
     method: OpenRpcMethod,
@@ -225,7 +258,7 @@ export class CertificationEngine {
     });
 
     const [unsub, unsubscribeMs] = await timed(() => eventManager.unsubscribe(registration.eventListenerId));
-    const unsubscribeReply = unsub?.unsubscribeReply ?? null;
+    const unsubscribeReply = unsub?.unsubscribeReply;
     const unsubErrors = unsub?.error
       ? [
           `${UNSUBSCRIBE_REPLY_ERROR}: request failed (${(unsub.error as { message?: string }).message ?? JSON.stringify(unsub.error)})`
@@ -275,7 +308,8 @@ export class CertificationEngine {
       'code' in result.error &&
       typeof result.error.code === 'string' &&
       result.error.code.startsWith('Sdk');
-    if (expectedError && !sdkSetupError) {
+    const infrastructureError =result.error && typeof result.error === 'object' && 'code' in result.error && ['TimeOutError', 'ConnectionError'].includes(String(result.error.code));
+    if (expectedError && !sdkSetupError && !infrastructureError) {
       if (!result.error) {
         result.status = 'FAIL';
         result.schemaValidation = { valid: false, errors: ['Expected error, received result'] };
@@ -287,7 +321,6 @@ export class CertificationEngine {
       result.schemaValidation = schemaValidator.validateError(result.error);
       result.status = 'FAIL';
     } else if (method.resultSchema) {
-      result.response = censor(method.name, result.response);
       result.schemaValidation = schemaValidator.validate(result.response, method.resultSchema);
       result.status = result.schemaValidation.valid ? 'PASS' : 'FAIL';
     }

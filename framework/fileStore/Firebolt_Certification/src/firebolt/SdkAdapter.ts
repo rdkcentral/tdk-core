@@ -1,8 +1,32 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file SDK mode: waits for the device's window.FireboltServiceManager and calls its API wrappers through the
+ * upstream certification runner.
+ */
+
 import { runner } from '../../.firebolt-sdk/runner.js';
 import methodShapes from '../../.firebolt-sdk/method-shapes.json';
-import { openRpcService } from '../schema/OpenRpcService';
-import { entriesToObject, positionalParams, withTimeout } from '../utils/helpers';
-import { logger } from '../utils/Logger';
+import { openRpcService } from '../schema/OpenRpcService.js';
+import { entriesToObject, positionalParams, withTimeout } from '../utils/helpers.js';
+import { logger } from '../utils/Logger.js';
 
 export type SdkMethod = (...args: unknown[]) => unknown;
 export type FireboltClient = Record<string, Record<string, SdkMethod>>;
@@ -213,7 +237,7 @@ export class SdkAdapter {
       sdkManaged: true,
       reply: { subscriptionAccepted: true },
       unsubscribe: async () => {
-        await unsubscribe();
+        await withTimeout(Promise.resolve().then(() => unsubscribe()), timeoutMs);
         return { unsubscribed: true };
       }
     };

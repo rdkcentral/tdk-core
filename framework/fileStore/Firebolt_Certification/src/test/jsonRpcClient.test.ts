@@ -1,3 +1,26 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file Tests for JsonRpcClient: connection, params, errors, timeouts, reconnects and event subscriptions.
+ */
+
 import { describe, expect, it, vi } from 'vitest';
 vi.mock('../config/runtime', () => ({ runtimeConfig: { logLevel: 'ERROR', fireboltEndpoint: 'ws://127.0.0.1:3473' } }));
 import { JsonRpcClient, notificationPayload, wireMethodName, withRpcV2 } from '../firebolt/JsonRpcClient';
@@ -47,7 +70,7 @@ function client() {
   return { c, sock, connects: () => connects };
 }
 
-describe('JsonRpcClient (Firebolt RDK8+ JSON-RPC)', () => {
+describe('JsonRpcClient (Firebolt JSON-RPC)', () => {
   it('connects once with RPCv2=true and the jsonrpc sub-protocol, queues until open, and omits empty params', async () => {
     const { c, sock, connects } = client();
     const p = c.call('Device.name', {});
@@ -154,6 +177,24 @@ describe('JsonRpcClient (Firebolt RDK8+ JSON-RPC)', () => {
     sock.reply({ jsonrpc: '2.0', method: 'device.onNameChanged', params: { value: 'Kitchen' } });
     expect(a).not.toHaveBeenCalled();
     expect(b).toHaveBeenCalledWith('Kitchen', expect.anything());
+  });
+
+  it('keeps the handler registered when the unsubscribe request fails, so it can be retried', async () => {
+    const { c, sock } = client();
+    sock.open();
+    const a = vi.fn();
+    const s = c.subscribe('Device.onNameChanged', a);
+    sock.reply({ jsonrpc: '2.0', id: 1, result: null });
+    await s;
+    const un = c.unsubscribe('Device.onNameChanged', a);
+    sock.reply({ jsonrpc: '2.0', id: 2, error: { code: -32603, message: 'boom' } });
+    await expect(un).rejects.toMatchObject({ message: 'boom' });
+    sock.reply({ jsonrpc: '2.0', method: 'device.onNameChanged', params: { value: 'Kitchen' } });
+    expect(a).toHaveBeenCalledTimes(1);
+    const retry = c.unsubscribe('Device.onNameChanged', a);
+    expect(sock.sent[2]).toMatchObject({ method: 'device.onNameChanged', params: { listen: false } });
+    sock.reply({ jsonrpc: '2.0', id: 3, result: null });
+    await expect(retry).resolves.toBeNull();
   });
 
   it('helpers', () => {

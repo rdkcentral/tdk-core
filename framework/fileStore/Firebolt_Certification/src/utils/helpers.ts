@@ -1,3 +1,26 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file General helpers: ids, timeouts, error normalization, safe JSON stringify and event method/param utilities.
+ */
+
 export function uid(prefix = 'firebolt-certification'): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
@@ -50,7 +73,7 @@ export function safeStringify(value: unknown, space = 2): string {
     }
   }
 }
-/** Prefix of the validation error recorded when a subscription reply is not the RDK8+ result: null. */
+/** Prefix of the validation error recorded when a subscription reply is not result: null. */
 export const SUBSCRIPTION_REPLY_ERROR = 'subscription reply';
 export const UNSUBSCRIBE_REPLY_ERROR = 'unsubscribe reply';
 export function isEventMethod(method: any): boolean {

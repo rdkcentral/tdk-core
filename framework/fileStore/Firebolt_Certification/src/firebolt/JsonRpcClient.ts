@@ -1,5 +1,24 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 // Firebolt Certification's own Firebolt JSON-RPC 2.0 client over WebSocket. It replaces the @firebolt-js/sdk Transport and
-// implements the Firebolt RDK8+ JSON-RPC specification:
+// implements the Firebolt JSON-RPC specification:
 //   https://rdkcentral.github.io/rdk-core-specs/video/rdk8/firebolt-json-rpc.html
 // - Connects with RPCv2=true and the "jsonrpc" WebSocket sub-protocol.
 // - A call without parameters omits "params"; otherwise "params" is an object (never an array).
@@ -41,7 +60,7 @@ export function wireMethodName(qualified: string): string {
   return dot < 0 ? qualified : `${qualified.slice(0, dot).toLowerCase()}${qualified.slice(dot)}`;
 }
 
-/** Firebolt Certification targets Firebolt RDK8+ only, so it always asks the gateway for compliant JSON-RPC. */
+/** Firebolt Certification always asks the gateway for compliant JSON-RPC. */
 export function withRpcV2(endpoint: string): string {
   try {
     const url = new URL(endpoint);
@@ -99,6 +118,7 @@ export class JsonRpcClient {
         timeoutMs > 0
           ? setTimeout(() => {
               this.pending.delete(id);
+              this.queue = this.queue.filter((data) => JSON.parse(data).id !== id);
               reject({ code: 'TimeOutError', message: `Timed out in ${timeoutMs} ms.` });
             }, timeoutMs)
           : null;
@@ -107,7 +127,7 @@ export class JsonRpcClient {
     });
   }
 
-  /** Sends {listen: true} and resolves with the gateway's subscription reply (RDK8+: null). */
+  /** Sends {listen: true} and resolves with the gateway's subscription reply (expected: null). */
   async subscribe(
     event: string,
     handler: NotificationHandler,
@@ -130,16 +150,37 @@ export class JsonRpcClient {
     }
   }
 
-  /** Removes a handler; when it was the last one for the event (or none is given), sends {listen: false}. `force` always sends it. */
+  /**
+   * Removes a handler; when it was the last one for the event (or none is given), sends {listen: false}. `force` always sends it.
+   * If the request fails, the removed handlers are restored so the caller can retry.
+   */
   async unsubscribe(event: string, handler?: NotificationHandler, timeoutMs = 10000, force = false): Promise<unknown> {
     const key = wireMethodName(event).toLowerCase();
     const set = this.handlers.get(key);
+    let removed: NotificationHandler[] = [];
     if (set && handler) {
-      set.delete(handler);
-      if (set.size) return force ? this.call(event, { listen: false }, timeoutMs) : null;
+      if (set.delete(handler)) removed = [handler];
+      if (set.size && !force) return null;
     }
-    this.handlers.delete(key);
-    return this.call(event, { listen: false }, timeoutMs);
+    if (set && !handler) removed = [...set];
+    if (set && (!handler || !set.size)) this.handlers.delete(key);
+    try {
+      return await this.call(event, { listen: false }, timeoutMs);
+    } catch (error) {
+      this.restoreHandlers(key, removed);
+      throw error;
+    }
+  }
+
+  private restoreHandlers(key: string, handlers: NotificationHandler[]): void {
+    if (!handlers.length) return;
+    // A subscribe may have created a new set for this event while the request was in flight.
+    let set = this.handlers.get(key);
+    if (!set) {
+      set = new Set();
+      this.handlers.set(key, set);
+    }
+    for (const h of handlers) set.add(h);
   }
 
   private send(data: string): void {

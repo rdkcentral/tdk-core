@@ -1,3 +1,26 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file Tests for failure explanations and the HTML report layout (module filter, event rows).
+ */
+
 import { describe, expect, it, vi } from 'vitest';
 import { explainFailure } from '../reports/failureExplanation';
 import { buildSuiteReport } from '../reports/ReportBuilder';
@@ -108,7 +131,6 @@ describe('failure explanations', () => {
       }
     };
     expect(text(r)).toContain('Expected null, received {"listening":true}.');
-    expect(text(r)).not.toContain('RDK8+');
   });
   it('explains slow responses and ignores passing results', () => {
     const slow: ExecutionResult = {
@@ -147,7 +169,7 @@ describe('report output', () => {
   });
   it('shows the failure reason in the HTML Log cell, after the actual response', () => {
     const html = generateReportHtml(buildSuiteReport('t', 'SDK', Date.now(), results));
-    expect(html).toContain('<th class="sl">Sl No</th><th>Method</th><th>Description</th><th>Status</th><th>Log</th>');
+    expect(html).toContain('<th class="sl">Sl No</th><th>APIs/Events</th><th>Description</th><th>Status</th><th>Log</th>');
     expect(html).not.toContain('<th>Duration</th>');
     expect(html).not.toContain('<th>Example</th>');
     expect(html.indexOf('>Actual response</div>')).toBeLessThan(html.indexOf('>Failure reason</div>'));
@@ -247,9 +269,9 @@ describe('HTML report layout', () => {
       r('Accessibility.audioDescription', 'PASS')
     ])
   );
-  it('offers a module filter with per-module counts, sorted by name', () => {
+  it('offers a module filter with per-module counts (none on "All modules"), sorted by name', () => {
     expect(html).toContain(
-      'data-value="">All modules (3)</button><button type="button" class="dd-opt" role="option" aria-selected="false" data-value="Accessibility">Accessibility (1)</button><button type="button" class="dd-opt" role="option" aria-selected="false" data-value="Device">Device (2)</button>'
+      'data-value="">All modules</button><button type="button" class="dd-opt" role="option" aria-selected="false" data-value="Accessibility">Accessibility (1)</button><button type="button" class="dd-opt" role="option" aria-selected="false" data-value="Device">Device (2)</button>'
     );
     expect(html).toContain('data-module="Device" data-status="FAIL"');
   });

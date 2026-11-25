@@ -1,10 +1,33 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file Loads the versioned OpenRPC spec, resolves $refs and exposes its methods, schemas and example parameter sets.
+ */
+
 import latestOpenRpc from '../../public/specs/firebolt_schema_validator-9.0.0.json';
 import { buildExclusionMatcher, getConfiguredExclusions, runtimeConfig } from '../config/runtime';
 import type { OpenRpcDocument, OpenRpcMethod, OpenRpcParameterSet } from '../types';
 import { logger } from '../utils/Logger';
 import { entriesToObject } from '../utils/helpers';
 
-// Firebolt Certification certifies only against its own OpenRPC (Firebolt RDK8+).
+// Firebolt Certification certifies only against its own OpenRPC.
 // At launch the spec is read from the server that hosts Firebolt Certification (public/specs/…), so editing that file only needs an app
 // reload. The copy bundled at build time is used if it cannot be fetched.
 // Spec files are versioned: specs/firebolt_schema_validator-<version>.json. LATEST_SPEC_VERSION is used unless the
