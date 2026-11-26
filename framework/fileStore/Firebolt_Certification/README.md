@@ -101,9 +101,10 @@ The app is configured through URL query parameters (see [runtime.ts](src/config/
 
 | Parameter | Default | Description |
 | --- | --- | --- |
-| `__firebolt_endpoint` | `ws://127.0.0.1:3473` | Firebolt gateway WebSocket. `RPCv2=true` is always added. |
+| `__firebolt_endpoint` | `ws://127.0.0.1:3473` | Firebolt gateway WebSocket. Used as given. |
 | `communicationMode` | `Transport` | `Transport` or `SDK` |
-| `specVersion` | latest (`9.0.0`) | Firebolt schema validator spec version to load |
+| `version` | latest (`M155`) | TDK monthly tag of the Firebolt schema validator spec to load, e.g. `M155`. Can be given alone; the Firebolt version is then looked up in `specs/index.json` |
+| `fireboltVersion` | latest (`9.0.0`) | Firebolt version of the spec to load, e.g. `9.0.0`. Can be given alone; the newest matching TDK tag is then looked up in `specs/index.json` |
 | `excludeMethods` | — | Comma-separated methods to exclude; wildcards allowed (`Device.version,Network.*`) |
 | `reportPublishUrl` | `DEFAULT_REPORT_PUBLISH_URL` | Report upload endpoint (see [Publishing](#publishing)) |
 | `standalone` | `false` | **Set to `true`** to run as the on-screen validation app, without any external test server |
@@ -162,11 +163,11 @@ Parameters always come from the OpenRPC spec: first the method's examples, then 
 
 | Format | Contents |
 | --- | --- |
-| **JSON** | Run metadata (`id`, `title`, `mode`, `fireboltSchemaValidatorSpecVersion`, start and end times), `summary`, and per-module `modules[]` with `total`, `passed`, `failed`, `passRate` and `results` (`slNo`, `method`, `description`, `status`, `log`). Mocha-style `stats` and `suites` blocks are kept for downstream tools. |
-| **HTML** | A self-contained, interactive page with module and status filters, search, and expandable log cells. |
-| **Excel** | A Summary sheet plus one sheet per module (Sl No, Method, Description, Status, Log). |
+| **JSON** | Run metadata (`id`, `title`, `mode`, `version`, start and end times), `summary` (`totalTestCases`, `passed`, `failed`, `validatedApis`, `validatedEvents`, `durationMs`), and per-module `modules[]` with `totalTestCases`, `passed`, `failed`, `validatedApis`, `validatedEvents`, `passRate` and `results` (`slNo`, `method`, `description`, `status`, `log`). Mocha-style `stats` and `suites` blocks are kept for downstream tools. |
+| **HTML** | A self-contained, interactive page with module and status filters, search, expandable log cells, Validated APIs / Validated Events counts, and a Passed/Failed success-rate donut chart. |
+| **Excel** | A Summary sheet (per-module Total test cases, Passed, Failed, Validated APIs, Validated events, Pass rate) and a Success rate doughnut chart of the Passed/Failed totals to the right of the tables, plus one sheet per module (Sl No, Method, Description, Status, Log). |
 
-Each result's log includes the method, parameters, expected response format, actual response, failure reason (for failures) and the sample response from the spec. Every report records the **Firebolt Schema Validator specVersion** used for the run.
+Each result's log includes the method, parameters, expected response format, actual response, failure reason (for failures) and the sample response from the spec. Validated API and event counts are distinct methods: an event counts once even though it has Subscribe and Unsubscribe rows. Every report names the **Firebolt Schema Validator** and records the **Version** (TDK monthly tag) used for the run.
 
 Report files are named `<reportingId | appId>-refAppExecReport-<UTC timestamp>.<json|html|xlsx>`.
 
@@ -249,12 +250,12 @@ https://<host>/firebolt-certification/index.html
         FireboltAdapter                 OpenRpcService + AJV            ReportBuilder
      Transport │ SDK                    (schema validation)          JSON / HTML / Excel
               │                                                           │
-   Firebolt gateway (:3473, RPCv2)                                 Report server
+   Firebolt gateway (:3473)                                        Report server
 ```
 
 ### Firebolt transport
 
-- The app uses its own JSON-RPC 2.0 client ([JsonRpcClient.ts](src/firebolt/JsonRpcClient.ts)) and follows the [Firebolt JSON-RPC specification](https://rdkcentral.github.io/rdk-core-specs/video/rdk8/firebolt-json-rpc.html).
+- The app uses its own JSON-RPC 2.0 client ([JsonRpcClient.ts](src/firebolt/JsonRpcClient.ts)). It connects to the endpoint as given, with the `jsonrpc` WebSocket sub-protocol.
 - The endpoint is resolved in [index.html](index.html), in this order: the `__firebolt_endpoint` parameter, then an endpoint injected by the launcher, then `ws://127.0.0.1:3473`.
 - Events are subscribed with `{"listen": true}` and unsubscribed with `{"listen": false}`. Both must reply `result: null`; any other reply is reported as a failure. Notifications are validated against the event's OpenRPC `result` schema.
 
@@ -264,7 +265,13 @@ https://<host>/firebolt-certification/index.html
 
 ### OpenRPC specification
 
-The spec is versioned as [public/specs/firebolt_schema_validator-&lt;version&gt;.json](public/specs/firebolt_schema_validator-9.0.0.json). It is fetched from the host at launch (`cache: 'no-store'`); if the fetch fails, the copy bundled at build time is used. To add a version, add the file and update `LATEST_SPEC_VERSION` in [OpenRpcService.ts](src/schema/OpenRpcService.ts).
+The spec is named by Firebolt version and TDK monthly tag as [public/specs/firebolt_schema_validator_&lt;fireboltVersion&gt;_&lt;releaseVersion&gt;.json](public/specs/firebolt_schema_validator_9.0.0_M155.json), and its `info` block records both (`version` is the TDK monthly tag, e.g. `M155`; `firebolt-version` is the Firebolt version, e.g. `9.0.0`). It is fetched from the host at launch (`cache: 'no-store'`).
+
+- With neither `version` nor `fireboltVersion`, the latest spec is loaded; if the fetch fails, the copy bundled at build time is used.
+- With both, that file is loaded directly. With only one, the first matching entry in [public/specs/index.json](public/specs/index.json) supplies the other.
+- When a version is requested, a missing file, a missing index entry or an unreadable index stops the load with an error; the bundled copy is never used in its place.
+
+To add a spec, add the file, list it in `index.json` (newest first) and bump `LATEST_RELEASE_VERSION` (and `FIREBOLT_VERSION` if it changed) in [OpenRpcService.ts](src/schema/OpenRpcService.ts).
 
 ---
 

@@ -123,6 +123,30 @@ describe('Excel report', () => {
       expect(summary).not.toContain(gone);
     expect(text).not.toContain('<tabColor');
   });
+  it('draws a Passed/Failed success chart on the Summary sheet, linked to the Total row', () => {
+    expect(text).not.toContain('Overall success');
+    // Right of the Results by module table (column I), level with its heading row (row 12), legend under the doughnut.
+    expect(text).toContain('<xdr:from><xdr:col>8</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>11</xdr:row>');
+    expect(text).toContain('<c:legendPos val="b"/>');
+    expect(text).toContain('<drawing r:id="rId1"/>');
+    expect(text).toContain('/xl/charts/chart1.xml');
+    expect(text).toContain('xl/worksheets/_rels/sheet1.xml.rels');
+    expect(text).toContain('Target="../charts/chart1.xml"');
+    const chart = text.slice(text.indexOf('xl/charts/chart1.xml<?xml'));
+    expect(chart).toContain('<c:doughnutChart>');
+    expect(chart).toContain('Success rate 50.0%');
+    expect(chart).toContain("<c:f>'Summary'!$C$13:$D$13</c:f>");
+    expect(chart).toContain("<c:f>'Summary'!$C$16:$D$16</c:f>");
+    expect(chart).toContain('<c:pt idx="0"><c:v>Passed</c:v></c:pt><c:pt idx="1"><c:v>Failed</c:v></c:pt>');
+    expect(chart).toContain('<c:pt idx="0"><c:v>1</c:v></c:pt><c:pt idx="1"><c:v>1</c:v></c:pt>');
+    // Module sheets get no drawing.
+    expect(text).not.toContain('sheet2.xml.rels');
+  });
+  it('omits the chart when there are no results', () => {
+    const empty = new TextDecoder().decode(generateReportXlsx(buildSuiteReport('x', 'SDK', Date.now(), [])));
+    expect(empty).not.toContain('chart1.xml');
+    expect(empty).not.toContain('<drawing ');
+  });
   it('uses the .xlsx file name', () => {
     expect(reportFileName(report, 'xlsx')).toMatch(/^firebolt-certification-refAppExecReport-\d{8}-\d{6}\.xlsx$/);
   });

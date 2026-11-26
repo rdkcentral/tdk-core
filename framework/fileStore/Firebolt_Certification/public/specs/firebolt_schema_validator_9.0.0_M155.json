@@ -3,8 +3,9 @@
   "openrpc": "1.2.4",
   "info": {
     "title": "Firebolt-9 API schema",
-    "version": "9.0.0",
-    "description": "OpenRPC document for the RDK Core Specs 'Firebolt 9 Core API Specification' (rdk-core-specs/video/rdk9). TextToSpeech methods are tagged deprecated in favour of SpeechSynthesis (x-alternative). Wire format follows JSON-RPC 2.0 (RPCv2=true): method and parameter names are case sensitive, params is always an object (by-name) and is omitted when a method has no parameters; a method with no return value responds with result null. Event methods (on*) take a required listen parameter; their result schema is the notification payload, and x-notification describes the on-the-wire notification params ({\"value\": x} for primitives, the object itself for objects, an array for lists). Every closed object schema sets additionalProperties:false so undocumented properties fail validation. Load in Firebolt Certification via the coreOpenRpcUrl launch parameter, e.g. ?coreOpenRpcUrl=/specs/firebolt_schema_validator-9.0.0.json"
+    "version": "M155",
+    "firebolt-version": "9.0.0",
+    "description": "OpenRPC document for the RDK Core Specs 'Firebolt 9 Core API Specification' (rdk-core-specs/video/rdk9). TextToSpeech methods are tagged deprecated in favour of SpeechSynthesis (x-alternative). Wire format follows JSON-RPC 2.0: method and parameter names are case sensitive, params is always an object (by-name) and is omitted when a method has no parameters; a method with no return value responds with result null. Event methods (on*) take a required listen parameter; their result schema is the notification payload, and x-notification describes the on-the-wire notification params ({\"value\": x} for primitives, the object itself for objects, an array for lists). Every closed object schema sets additionalProperties:false so undocumented properties fail validation. Load in Firebolt Certification via the coreOpenRpcUrl launch parameter, e.g. ?coreOpenRpcUrl=/specs/firebolt_schema_validator_9.0.0_M155.json"
   },
   "methods": [
     {
@@ -5863,7 +5864,7 @@
   },
   "x-jsonrpc": {
     "specification": "https://www.jsonrpc.org/specification",
-    "connection": "The Firebolt Client Library connects to the Firebolt API Gateway with the RPCv2=true query parameter and uses only compliant JSON-RPC 2.0",
+    "connection": "The Firebolt Client Library connects to the Firebolt API Gateway and uses only compliant JSON-RPC 2.0",
     "caseSensitive": true,
     "specificErrors": [
       {

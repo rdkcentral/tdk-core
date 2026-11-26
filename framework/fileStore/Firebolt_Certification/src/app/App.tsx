@@ -39,7 +39,7 @@ import { eventManager } from '../firebolt/EventManager';
 import { dispatchLaunchTask, initializeFromFireboltParameters, resolveCurrentAppId } from '../core/Bootstrap';
 import { isEventMethod, safeStringify } from '../utils/helpers';
 import { groupMethodsByModule, methodKey, type ModuleGroup } from '../utils/methodGroups';
-import { publishReport, resolveReportPublishUrl } from '../reports/ReportExporter';
+import { publishReport, resolveReportPublishUrl, resolveAutomationContext } from '../reports/ReportExporter';
 import { explainFailure } from '../reports/failureExplanation';
 import { describeSchema } from '../reports/schemaSummary';
 import { ReportFrame, suppressTransitions, type UiTheme } from '../components/ReportFrame';
@@ -439,7 +439,7 @@ function ApisPage({
                         </button>
                       </div>
                     )}
-                    <pre class="code parameter-code">{parameterSet ? safeStringify(parameterSet.params) : '{}'}</pre>
+                    <pre class="code parameter-code" {...READABLE_BOX}>{parameterSet ? safeStringify(parameterSet.params) : '{}'}</pre>
                     {!parameterSet?.usable && <p class="warning-text">{parameterSet?.reason}</p>}
                   </div>
                   <button
@@ -587,6 +587,11 @@ function SuitesPage({
     // Subscribe before the suite starts: an effect would attach after the first method already logged, dropping its lines.
     const stopLogs = eventBus.on<ExecutionResult>('execution', (r) => setLiveLogs((prev) => [r, ...prev.slice(0, 499)]));
     try {
+      if (runtimeConfig.autoRun) {
+        // Find the report server's actual port first, then fetch this device's TDK reportingId so report names match the execution.
+        await resolveReportPublishUrl();
+        await resolveAutomationContext();
+      }
       // Runs Firebolt Certification's OpenRPC; module scope is applied per method inside runSuite.
       const generated = await certificationEngine.runSuite({
         modules: allSelected ? undefined : selectedModules,
@@ -777,10 +782,7 @@ function Reports({ theme }: { theme: UiTheme }) {
 
   return (
     <div class="page">
-      <PageTitle
-        title="Reports"
-        subtitle="Generated certification reports. JSON is Mochawesome-compatible; HTML is self-contained."
-      />
+      <PageTitle title="Reports" />
       <div class="split report-split">
         <Panel className="report-list-panel">
           <h3>Generated Reports</h3>

@@ -119,13 +119,13 @@ describe('JSON report', () => {
 
   it('gives each module the same counts as the Excel Summary sheet, plus a pass rate', () => {
     expect(json.modules.find((m: any) => m.module === 'Device')).toMatchObject({
-      total: 1,
+      totalTestCases: 1,
       passed: 0,
       failed: 1,
       passRate: 0
     });
     expect(json.modules.find((m: any) => m.module === 'Accessibility')).toMatchObject({
-      total: 1,
+      totalTestCases: 1,
       passed: 1,
       failed: 0,
       passRate: 1
@@ -133,18 +133,70 @@ describe('JSON report', () => {
   });
 
   it('keeps id/title/summary/stats/suites for FCS/Mocha-style compatibility', () => {
-    expect(json).toMatchObject({ id: 'r1', title: report.title, mode: 'SDK', summary: report.summary });
+    expect(json).toMatchObject({
+      id: 'r1',
+      title: report.title,
+      mode: 'SDK',
+      summary: { totalTestCases: 2, passed: 1, failed: 1, durationMs: 1 }
+    });
+    expect(json.summary.total).toBeUndefined();
+    expect(json.modules[0].total).toBeUndefined();
+    expect(generateReportHtml(report)).toContain('Total test cases<b>2</b>');
+    expect(new TextDecoder().decode(generateReportXlsx(report))).toContain('>Total test cases<');
     expect(json.stats.tests).toBe(2);
     expect(json.suites[0].tests).toHaveLength(2);
   });
 
-  it('labels the spec version as fireboltSchemaValidatorSpecVersion', () => {
-    expect(json.fireboltSchemaValidatorSpecVersion).toBe('9.0.0');
+  it('labels the spec version as version in JSON, HTML and Excel', () => {
+    expect(json.version).toBe('9.0.0');
     expect(json.specVersion).toBeUndefined();
+    expect(json.fireboltSchemaValidatorSpecVersion).toBeUndefined();
+    expect(generateReportHtml(report)).toContain('SDK · Firebolt Schema Validator · Version 9.0.0 · Overall');
+    const xlsx = new TextDecoder().decode(generateReportXlsx(report));
+    expect(xlsx).toContain('>Firebolt Schema Validator<');
+    expect(xlsx).toContain('>Version<');
+    expect(xlsx).not.toContain('specVersion');
   });
 
   it('has no pending/skipped fields', () => {
     expect(generateReportJson(report)).not.toMatch(/"(pending|skipped|pendingTests)"/i);
+  });
+
+  it('shows a Passed/Failed success donut in the HTML summary', () => {
+    const html = generateReportHtml(report);
+    expect(html).toContain('aria-label="Success rate 50.0%: 1 passed, 1 failed"');
+    expect(html).toContain('class="ok" cx="21" cy="21" r="15.9155" fill="none" stroke-width="5" stroke-dasharray="50.00 50.00" stroke-dashoffset="25.00"');
+    expect(html).toContain('class="ko" cx="21" cy="21" r="15.9155" fill="none" stroke-width="5" stroke-dasharray="50.00 50.00" stroke-dashoffset="-25.00"');
+    const allPass = generateReportHtml({ ...report, summary: { ...report.summary, passed: 2, failed: 0 } });
+    expect(allPass).toContain('>100.0%<');
+    expect(allPass).not.toContain('class="ko" cx');
+  });
+
+  it('counts distinct validated APIs and events (Subscribe + Unsubscribe = one event) in JSON, HTML and Excel', () => {
+    const [api, event] = results;
+    const mixed: CertificationSuiteReport = {
+      ...report,
+      results: [
+        api,
+        { ...api, id: '3', exampleName: 'Second example' },
+        { ...api, id: '4', method: 'Device.id' },
+        event,
+        { ...event, id: '5', eventAction: 'unsubscribe', params: { listen: false } }
+      ]
+    };
+    const out = JSON.parse(generateReportJson(mixed));
+    expect(out.summary).toMatchObject({ validatedApis: 2, validatedEvents: 1 });
+    expect(out.modules.find((m: any) => m.module === 'Device')).toMatchObject({ validatedApis: 2, validatedEvents: 0 });
+    expect(out.modules.find((m: any) => m.module === 'Accessibility')).toMatchObject({
+      validatedApis: 0,
+      validatedEvents: 1
+    });
+    const html = generateReportHtml(mixed);
+    expect(html).toContain('Validated APIs<b>2</b>');
+    expect(html).toContain('Validated Events<b>1</b>');
+    const xlsx = new TextDecoder().decode(generateReportXlsx(mixed));
+    expect(xlsx).toContain('>Validated APIs<');
+    expect(xlsx).toContain('>Validated events<');
   });
 
   it('reports a stopped all-passing run as INTERRUPTED, never PASSED, in JSON, HTML and Excel', () => {

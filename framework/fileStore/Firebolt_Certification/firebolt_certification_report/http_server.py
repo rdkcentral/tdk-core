@@ -19,11 +19,14 @@
 
 import http.server
 from html import escape
+import ipaddress
 import socketserver
 import json
 import os
+import re
 import threading
-from urllib.parse import urlparse, unquote, quote
+import time
+from urllib.parse import urlparse, unquote, quote, parse_qs
 
 # Set the directory you want to serve files from. The app uploads the JSON, HTML and Excel reports here.
 directory = os.path.join(os.path.dirname(os.path.abspath(__file__)), "reports")
@@ -53,6 +56,20 @@ def find_report(filename):
 
 
 SERVICE_NAME = "firebolt-certification-report"
+
+LOG_FILE = os.environ.get("FIREBOLT_CERTIFICATION_REPORT_LOG", os.path.join(os.path.dirname(directory), "server.log"))
+log_lock = threading.Lock()
+
+
+def log(message):
+    line = time.strftime("%Y-%m-%d %H:%M:%S ") + message
+    print(line, flush=True)
+    try:
+        with log_lock, open(LOG_FILE, "a") as file:
+            file.write(line + "\n")
+    except OSError:
+        pass
+
 PORT = int(os.environ.get("FIREBOLT_CERTIFICATION_REPORT_PORT", "8090"))
 
 
@@ -64,6 +81,16 @@ CHUNK_SIZE = 64 * 1024
 class MyHandler(http.server.SimpleHTTPRequestHandler):
     # Socket read/write timeout so a stalled client cannot hold a handler forever.
     timeout = REQUEST_TIMEOUT
+
+    def log_message(self, format, *args):
+        log("%s - %s" % (self.client_address[0], format % args))
+
+    def json_response(self, status, value):
+        self.send_response(status)
+        self.send_header("Content-type", "application/json")
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(json.dumps(value).encode())    
 
     def end_headers(self):
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -81,7 +108,25 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         parsed_url = urlparse(self.path)
         path = unquote(parsed_url.path)
-        if path == "/health":
+        if path == "/automation/context":
+            try:
+                address = normalize_ip(parse_qs(parsed_url.query)["deviceIp"][0])
+            except (KeyError, ValueError):
+                self.json_response(400, {"error": "A valid deviceIp query parameter is required"})
+                return
+            with self.server.automation_lock:
+                run = self.server.automation_runs.get(address)
+                log(f"[automation] context requested by {address}; registered devices: "
+                      f"{sorted(self.server.automation_runs)}")
+                if not run or run["expires"] <= time.monotonic():
+                    status, result = 404, {"error": "No TDK execution registered for this device IP"}
+                elif run["claimed"]:
+                    status, result = 409, {"error": "TDK execution already claimed; start a new execution"}
+                else:
+                    run["claimed"] = True
+                    status, result = 200, {"reportingId": run["reportingId"]}
+            self.json_response(status, result)
+        elif path == "/health":
             # Lets the app find this server when it had to move off the default port.
             self.send_response(200)
             self.send_header("Content-type", "application/json")
@@ -126,6 +171,30 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         # Save posted reports under the configured reports directory.
         parsed_url = urlparse(self.path)
+
+        if parsed_url.path == "/automation/runs":
+            try:
+                data = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+                address = normalize_ip(data["deviceIp"])
+                reporting_id = data["reportingId"]
+                timeout = data["timeout"]
+                if not isinstance(reporting_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,160}", reporting_id):
+                    raise ValueError("Invalid reportingId")
+                if type(timeout) is not int or not 1 <= timeout <= 86400:
+                    raise ValueError("timeout must be between 1 and 86400 seconds")
+            except (KeyError, TypeError, ValueError) as error:
+                self.json_response(400, {"error": str(error)})
+                return
+            with self.server.automation_lock:
+                # The TDK script only registers once the device is idle, so an older entry is a leftover
+                # from an interrupted run and is replaced.
+                self.server.automation_runs[address] = {
+                    "reportingId": reporting_id, "expires": time.monotonic() + timeout, "claimed": False
+                }
+                log(f"[automation] registered {reporting_id} for device {address}")
+            self.json_response(201, {"reportingId": reporting_id})
+            return
+
         filename = os.path.basename(unquote(parsed_url.path))
         if "refAppExecReport" in filename and format_of(filename):
             filepath = find_report(filename)
@@ -173,12 +242,38 @@ class MyHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(b"Bad Request: expected a refAppExecReport .json, .html or .xlsx file name.")
 
+    def do_DELETE(self):
+        prefix = "/automation/runs/"
+        path = urlparse(self.path).path
+        removed = False
+        if path.startswith(prefix):
+            reporting_id = path[len(prefix):]
+            with self.server.automation_lock:
+                for address, run in list(self.server.automation_runs.items()):
+                    if run["reportingId"] == reporting_id:
+                        del self.server.automation_runs[address]
+                        removed = True
+                        break
+        if removed:
+            self.json_response(200, {"removed": True})
+        else:
+            self.json_response(404, {"error": "TDK execution not found"})
+
+def normalize_ip(address):
+    ip = ipaddress.ip_address(address)
+    return str(ip.ipv4_mapped if isinstance(ip, ipaddress.IPv6Address) and ip.ipv4_mapped else ip)
 
 # Allow quick restarts without waiting for the previous socket to expire.
 # Threaded so one slow client cannot block uploads, downloads and health checks.
 class ReusableTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     allow_reuse_address = True
     daemon_threads = True
+
+    def __init__(self, *args, **kwargs):
+        # TDK executions registered per device IP; shared by all handler threads, so guarded by the lock.
+        self.automation_lock = threading.Lock()
+        self.automation_runs = {}
+        super().__init__(*args, **kwargs)
 
 
 MAX_PORT_TRIES = int(os.environ.get("FIREBOLT_CERTIFICATION_REPORT_PORT_TRIES", "20"))

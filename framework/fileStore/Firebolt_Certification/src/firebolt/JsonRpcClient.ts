@@ -17,10 +17,8 @@
  * limitations under the License.
  */
 
-// Firebolt Certification's own Firebolt JSON-RPC 2.0 client over WebSocket. It replaces the @firebolt-js/sdk Transport and
-// implements the Firebolt JSON-RPC specification:
-//   https://rdkcentral.github.io/rdk-core-specs/video/rdk8/firebolt-json-rpc.html
-// - Connects with RPCv2=true and the "jsonrpc" WebSocket sub-protocol.
+// Firebolt Certification's own Firebolt JSON-RPC 2.0 client over WebSocket. It replaces the @firebolt-js/sdk Transport.
+// - Connects to the configured endpoint as given, with the "jsonrpc" WebSocket sub-protocol.
 // - A call without parameters omits "params"; otherwise "params" is an object (never an array).
 // - Subscribe/unsubscribe: call the on* method with {"listen": true|false}; a successful reply is result: null.
 // - Notifications are JSON-RPC messages without an id: {"method": "module.onSomething", "params": {...}}.
@@ -60,17 +58,6 @@ export const UNSUBSCRIBE_NOT_SENT: unique symbol = Symbol('unsubscribe-not-sent'
 export function wireMethodName(qualified: string): string {
   const dot = qualified.indexOf('.');
   return dot < 0 ? qualified : `${qualified.slice(0, dot).toLowerCase()}${qualified.slice(dot)}`;
-}
-
-/** Firebolt Certification always asks the gateway for compliant JSON-RPC. */
-export function withRpcV2(endpoint: string): string {
-  try {
-    const url = new URL(endpoint);
-    url.searchParams.set('RPCv2', 'true');
-    return url.toString();
-  } catch {
-    return endpoint;
-  }
 }
 
 /** Turns notification params into the payload described by the event's OpenRPC result schema. */
@@ -195,7 +182,7 @@ export class JsonRpcClient {
 
   private connect(): SocketLike {
     if (this.socket) return this.socket;
-    const url = withRpcV2(this.endpoint());
+    const url = this.endpoint();
     const socket = this.socketFactory(url, ['jsonrpc']);
     this.socket = socket;
     socket.addEventListener('open', () => {

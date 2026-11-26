@@ -27,8 +27,7 @@ import {
   JsonRpcClient,
   UNSUBSCRIBE_NOT_SENT,
   notificationPayload,
-  wireMethodName,
-  withRpcV2
+  wireMethodName
 } from '../firebolt/JsonRpcClient';
 
 function fakeSocket() {
@@ -77,11 +76,11 @@ function client() {
 }
 
 describe('JsonRpcClient (Firebolt JSON-RPC)', () => {
-  it('connects once with RPCv2=true and the jsonrpc sub-protocol, queues until open, and omits empty params', async () => {
+  it('connects once to the endpoint as given with the jsonrpc sub-protocol, queues until open, and omits empty params', async () => {
     const { c, sock, connects } = client();
     const p = c.call('Device.name', {});
     const q = c.call('Device.id');
-    expect(sock.url).toBe('ws://127.0.0.1:3473/?RPCv2=true');
+    expect(sock.url).toBe('ws://127.0.0.1:3473');
     expect(sock.protocols).toEqual(['jsonrpc']);
     expect(sock.sent).toEqual([]);
     sock.open();
@@ -205,7 +204,6 @@ describe('JsonRpcClient (Firebolt JSON-RPC)', () => {
 
   it('helpers', () => {
     expect(wireMethodName('Accessibility.highContrastUI')).toBe('accessibility.highContrastUI');
-    expect(withRpcV2('ws://h:1?RPCv2=false&s=1')).toBe('ws://h:1/?RPCv2=true&s=1');
     expect(notificationPayload({ value: 42 })).toBe(42);
     expect(notificationPayload({ enabled: true, rate: 1 })).toEqual({ enabled: true, rate: 1 });
     expect(notificationPayload(['a'])).toEqual(['a']);

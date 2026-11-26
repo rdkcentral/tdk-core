@@ -35,7 +35,8 @@ export interface RuntimeConfig {
   pubSubSubscribeSuffix: string;
   pubSubPublishSuffix: string;
   communicationMode: CommunicationMode;
-  specVersion: string;
+  version: string;
+  fireboltVersion: string;
   logLevel: string;
   standalone: boolean;
   autoRun: boolean;

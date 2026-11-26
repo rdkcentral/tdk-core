@@ -97,7 +97,8 @@ export const runtimeConfig: RuntimeConfig = {
   pubSubSubscribeSuffix: q('pubSubSubscribeSuffix', q('pubsub_subscribe_suffix', '_FCS')),
   pubSubPublishSuffix: q('pubSubPublishSuffix', q('pubsub_publish_suffix', '_FCA')),
   communicationMode: mode(),
-  specVersion: q('specVersion', ''),
+  version: q('version', ''),
+  fireboltVersion: q('fireboltVersion', ''),
   logLevel: q('logLevel', 'INFO').toUpperCase(),
   standalone: qb('standalone', false),
   // Runs the suite for all modules on launch and publishes the reports (Suites page "Run" without a key press).

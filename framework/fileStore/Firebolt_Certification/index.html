@@ -38,11 +38,6 @@
         if (override || !window.__firebolt.endpoint) {
           window.__firebolt.endpoint = override || 'ws://127.0.0.1:3473';
         }
-        // Firebolt Certification always requests compliant JSON-RPC (RPCv2),
-        // so the gateway replies to subscriptions with result: null, not the 1.x {listening, event}.
-        var url = new URL(window.__firebolt.endpoint);
-        url.searchParams.set('RPCv2', 'true');
-        window.__firebolt.endpoint = url.toString();
       })();
     </script>
     <script type="module" src="/src/main.tsx"></script>

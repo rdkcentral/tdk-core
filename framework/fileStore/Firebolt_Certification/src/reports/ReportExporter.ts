@@ -25,7 +25,14 @@ import { DEFAULT_REPORT_PUBLISH_URL, runtimeConfig } from '../config/runtime';
 import { safeStringify } from '../utils/helpers';
 import type { CertificationSuiteReport, ExecutionResult, ReportFormat, ReportPublishResult } from '../types';
 import LOGO_DATA_URI from '../assets/tdk-logo-report.png?inline';
-import { buildXlsx, safeSheetName, type XlsxCell, type XlsxSheet, type XlsxStyle } from './XlsxWriter';
+import {
+  buildXlsx,
+  safeSheetName,
+  type XlsxCell,
+  type XlsxDoughnutChart,
+  type XlsxSheet,
+  type XlsxStyle
+} from './XlsxWriter';
 
 function escapeHtml(value: unknown): string {
   return String(value ?? '')
@@ -68,12 +75,18 @@ export function generateReportJson(report: CertificationSuiteReport): string {
     id: report.id,
     title: report.title,
     mode: report.mode,
-    fireboltSchemaValidatorSpecVersion: report.specVersion,
+    version: report.specVersion,
     startedAt: report.startedAt,
     endedAt: report.endedAt,
     overallStatus: overallStatus(report),
     ...(report.interrupted ? { interrupted: true, methodsNotRun: report.methodsNotRun } : {}),
-    summary: report.summary,
+    summary: {
+      totalTestCases: report.summary.total,
+      passed: report.summary.passed,
+      failed: report.summary.failed,
+      ...validatedCounts(report.results),
+      durationMs: report.summary.durationMs
+    },
     modules,
     stats: report.stats,
     suites: report.suites
@@ -96,6 +109,20 @@ export const methodLabel = (r: ExecutionResult) =>
   r.eventAction ? `${r.method} (${r.eventAction === 'subscribe' ? 'Subscribe' : 'Unsubscribe'})` : r.method;
 
 const moduleOf = (r: ExecutionResult) => r.method.split('.')[0] || 'Other';
+
+export interface ValidatedCounts {
+  validatedApis: number;
+  validatedEvents: number;
+}
+
+/** Distinct APIs and events validated; an event's Subscribe and Unsubscribe rows count as one event. */
+export function validatedCounts(results: ExecutionResult[]): ValidatedCounts {
+  const apis = new Set<string>();
+  const events = new Set<string>();
+  for (const r of results) (r.eventAction ? events : apis).add(r.method);
+  for (const e of events) apis.delete(e);
+  return { validatedApis: apis.size, validatedEvents: events.size };
+}
 
 /** Groups results by Firebolt module, alphabetically, matching the Excel module sheets and the HTML module filter. */
 function groupByModule(results: ExecutionResult[]): Array<{ module: string; results: ExecutionResult[] }> {
@@ -120,9 +147,9 @@ interface JsonModuleResult {
   status: ExecutionResult['status'];
   log: JsonLogSection[];
 }
-interface JsonModule {
+interface JsonModule extends ValidatedCounts {
   module: string;
-  total: number;
+  totalTestCases: number;
   passed: number;
   failed: number;
   passRate: number | null;
@@ -133,7 +160,10 @@ function toJsonModule(module: string, results: ExecutionResult[]): JsonModule {
   const counts = countResults(results);
   return {
     module,
-    ...counts,
+    totalTestCases: counts.total,
+    passed: counts.passed,
+    failed: counts.failed,
+    ...validatedCounts(results),
     passRate: passRateNumber(counts),
     results: results.map((r, i) => ({
       slNo: i + 1,
@@ -167,14 +197,24 @@ html.light{--bg:#eceef0;--surface:#f5f6f7;--surface-2:#e6e9ec;--row-hover:#e6e9e
 const HTML_STYLE = `${REPORT_TOKENS}
 *{box-sizing:border-box}body{position:relative;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text);margin:0;padding:24px 28px}
 h1{margin:0 0 4px;font-size:24px}.meta{color:var(--text-muted);font-size:13px}
-.report-head{display:flex;align-items:center;gap:16px;padding-right:48px}.report-logo{height:64px;width:auto;flex:none;display:block}.report-title{min-width:0}
+.top{display:flex;flex-wrap:wrap;align-items:center;gap:0 24px;padding-right:48px}.top-main{flex:1 1 640px;min-width:0}
+.report-head{display:flex;align-items:center;gap:16px}.report-logo{height:64px;width:auto;flex:none;display:block}.report-title{min-width:0}
+/* Embedded in the app (whose header owns the theme): hidden from the first paint, before the body script removes it. */
+html.embedded .theme-toggle{display:none!important}
 button.theme-toggle{position:absolute;top:22px;right:28px;width:34px;height:34px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:50%}
 .theme-toggle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .theme-toggle .i-sun{display:block}.theme-toggle .i-moon{display:none}
 html.light .theme-toggle .i-sun{display:none}html.light .theme-toggle .i-moon{display:block}
-.summary{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 18px;min-width:110px;color:var(--text-muted);font:inherit;font-size:13px;text-align:left;cursor:pointer}
-.card b{display:block;font-size:24px;margin-top:2px;color:var(--text)}.card.pass b{color:var(--pass)}.card.fail b{color:var(--fail)}
+.summary{display:flex;flex-wrap:wrap;align-items:stretch;gap:12px;margin:18px 0}
+.chart{margin:12px 0 12px auto;flex:none;display:flex;align-items:center;gap:18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 22px;color:var(--text-muted);font-size:14px}
+.chart svg{width:120px;height:120px;flex:none}.chart .track{stroke:var(--surface-2)}.chart .ok{stroke:var(--pass)}.chart .ko{stroke:var(--fail)}
+.chart .pct{fill:var(--text);font-size:7.5px;font-weight:700}.chart .cap{fill:var(--text-muted);font-size:4.5px}
+.chart ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}.chart li b{color:var(--text)}
+.chart i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:8px;vertical-align:-1px}.chart i.ok{background:var(--pass)}.chart i.ko{background:var(--fail)}
+.card,.stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 18px;min-width:110px;color:var(--text-muted);font:inherit;font-size:13px;text-align:left;cursor:pointer}
+.stat{cursor:default}
+.card,.stat{display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+.card b,.stat b{display:block;font-size:24px;margin-top:2px;color:var(--text)}.card.pass b{color:var(--pass)}.card.fail b{color:var(--fail)}
 .card:hover{border-color:var(--accent)}.card.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset;background:var(--accent-soft)}
 .toolbar{position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 0;background:var(--bg);border-bottom:1px solid var(--border)}
 .toolbar label{color:var(--text-muted);font-size:13px}
@@ -264,6 +304,19 @@ const HTML_SCRIPT = `
   apply();
 })();`;
 
+/** Inline SVG donut of passed vs failed test cases (circumference 100, so dash lengths are percentages). */
+function successChart(passed: number, failed: number): string {
+  const total = passed + failed;
+  const p = total ? (passed / total) * 100 : 0;
+  const f = total ? 100 - p : 0;
+  const arc = (cls: string, len: number, start: number) =>
+    len > 0
+      ? `<circle class="${cls}" cx="21" cy="21" r="15.9155" fill="none" stroke-width="5" stroke-dasharray="${len.toFixed(2)} ${(100 - len).toFixed(2)}" stroke-dashoffset="${(25 - start).toFixed(2)}"/>`
+      : '';
+  const pct = total ? `${p.toFixed(1)}%` : '—';
+  return `<div class="chart" role="img" aria-label="Success rate ${pct}: ${passed} passed, ${failed} failed"><svg viewBox="0 0 42 42" aria-hidden="true"><circle class="track" cx="21" cy="21" r="15.9155" fill="none" stroke-width="5"/>${arc('ok', p, 0)}${arc('ko', f, p)}<text class="pct" x="21" y="22" text-anchor="middle">${pct}</text><text class="cap" x="21" y="28" text-anchor="middle">success</text></svg><ul><li><b>Success rate</b></li><li><i class="ok"></i>Passed <b>${passed}</b></li><li><i class="ko"></i>Failed <b>${failed}</b></li></ul></div>`;
+}
+
 export function generateReportHtml(
   report: CertificationSuiteReport,
   theme: 'dark' | 'light' = 'light',
@@ -282,6 +335,9 @@ export function generateReportHtml(
   const allModules = `All modules`;
   const card = (label: string, value: number, statusValue: string, cls: string) =>
     `<button type="button" class="card ${cls}${statusValue ? '' : ' active'}" data-status="${statusValue}" title="${statusValue ? `Show only ${label.toLowerCase()} results` : 'Show all results'}">${label}<b>${value}</b></button>`;
+  // Informational tiles, not status filters, so they avoid the .card class the filter script binds to.
+  const validated = validatedCounts(report.results);
+  const stat = (label: string, value: number) => `<div class="stat">${label}<b>${value}</b></div>`;
   const rows = report.results
     .map((r) => {
       const status = r.status.toLowerCase();
@@ -297,10 +353,10 @@ export function generateReportHtml(
     .join('');
   return `<!doctype html>
 <html lang="en"${theme === 'light' ? ' class="light"' : ''}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Firebolt Certification Report</title>
-<style>${HTML_STYLE}</style></head>
-<body><button type="button" class="tool theme-toggle" id="f-theme" aria-label="Switch theme"><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button><div class="report-head">${showLogo ? `<img class="report-logo" src="${LOGO_DATA_URI}" alt="TDK logo">` : ''}<div class="report-title"><h1>Firebolt Certification Report</h1>
-<div class="meta">${escapeHtml(report.mode)}${report.specVersion ? ` · Firebolt Schema Validator specVersion ${escapeHtml(report.specVersion)}` : ''} · Started ${escapeHtml(formatTime(report.startedAt))} · Finished ${escapeHtml(formatTime(report.endedAt))} · Duration ${escapeHtml(formatDuration(report.endedAt - report.startedAt))} · ${moduleCounts.size} module${moduleCounts.size === 1 ? '' : 's'} tested · Overall <span class="badge ${overallStatus(report) === 'PASSED' ? 'pass' : 'fail'}">${overallStatus(report)}</span>${report.interrupted ? ` · Stopped before ${report.methodsNotRun ?? 0} method${report.methodsNotRun === 1 ? '' : 's'} could be tested` : ''}</div></div></div>
-<div class="summary">${card('Total', summary.total, '', 'total')}${card('Pass', summary.passed, 'PASS', 'pass')}${card('Fail', summary.failed, 'FAIL', 'fail')}</div>
+<style>${HTML_STYLE}</style><script>if(window.parent!==window)document.documentElement.classList.add('embedded');</script></head>
+<body><button type="button" class="tool theme-toggle" id="f-theme" aria-label="Switch theme"><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button><div class="top"><div class="top-main"><div class="report-head">${showLogo ? `<img class="report-logo" src="${LOGO_DATA_URI}" alt="TDK logo">` : ''}<div class="report-title"><h1>Firebolt Certification Report</h1>
+<div class="meta">${escapeHtml(report.mode)}${report.specVersion ? ` · Firebolt Schema Validator · Version ${escapeHtml(report.specVersion)}` : ''} · Overall <span class="badge ${overallStatus(report) === 'PASSED' ? 'pass' : 'fail'}">${overallStatus(report)}</span>${report.interrupted ? ` · Stopped before ${report.methodsNotRun ?? 0} method${report.methodsNotRun === 1 ? '' : 's'} could be tested` : ''}</div></div></div>
+<div class="summary">${card('Total test cases', summary.total, '', 'total')}${card('Pass', summary.passed, 'PASS', 'pass')}${card('Fail', summary.failed, 'FAIL', 'fail')}${stat('Validated APIs', validated.validatedApis)}${stat('Validated Events', validated.validatedEvents)}</div></div>${successChart(summary.passed, summary.failed)}</div>
 <div class="toolbar">
   <label for="f-module">Module</label><div class="dd" id="f-module-dd"><button type="button" class="tool dd-btn" id="f-module" aria-haspopup="listbox" aria-expanded="false" data-value=""><span class="dd-label">${allModules}</span><span class="dd-caret">▾</span></button><div class="dd-menu" role="listbox" hidden><button type="button" class="dd-opt selected" role="option" aria-selected="true" data-value="">${allModules}</button>${moduleOptions}</div></div>
   <input id="f-search" type="search" placeholder="Search API/event, description or log…" aria-label="Search">
@@ -413,7 +469,7 @@ function moduleSheet(name: string, results: ExecutionResult[]): XlsxSheet {
 function summarySheet(
   report: CertificationSuiteReport,
   name: string,
-  modules: Array<{ module: string; sheet: string; counts: Counts }>
+  modules: Array<{ module: string; sheet: string; counts: Counts; results: ExecutionResult[] }>
 ): XlsxSheet {
   const overall = countResults(report.results);
   const rows: XlsxCell[][] = [];
@@ -425,7 +481,7 @@ function summarySheet(
   };
   const section = (title: string) => {
     add([]);
-    add([{ value: title, style: 'section' }, ...Array(4).fill({ value: '', style: 'section' })]);
+    add([{ value: title, style: 'section' }, ...Array(6).fill({ value: '', style: 'section' })]);
     rowHeights[rows.length - 1] = 22;
   };
   const detail = (label: string, value: XlsxCell) =>
@@ -433,18 +489,20 @@ function summarySheet(
       [
         { value: label, style: 'label' },
         typeof value === 'object' && value ? value : { value: value ?? '', style: 'value' },
-        ...Array(3).fill({ value: '', style: 'value' })
+        ...Array(5).fill({ value: '', style: 'value' })
       ],
-      'B#:E#'
+      'B#:G#'
     );
   const count = (n: number, style: XlsxStyle): XlsxCell => ({ value: n, style: n ? style : 'number' });
 
-  add([{ value: 'Firebolt Certification Report', style: 'title' }], 'A#:E#');
+  add([{ value: 'Firebolt Certification Report', style: 'title' }], 'A#:G#');
   rowHeights[0] = 34;
+  add([{ value: 'Firebolt Schema Validator', style: 'subtitle' }], 'A#:G#');
+  rowHeights[1] = 20;
 
   section('Run details');
   detail('Communication mode', report.mode);
-  if (report.specVersion) detail('Firebolt Schema Validator specVersion', report.specVersion);
+  if (report.specVersion) detail('Version', report.specVersion);
   detail('Started', formatTime(report.startedAt));
   detail('Finished', formatTime(report.endedAt));
   detail('Duration', formatDuration(report.endedAt - report.startedAt));
@@ -455,29 +513,57 @@ function summarySheet(
 
   section('Results by module');
   add(
-    ['Module', 'Total', 'Passed', 'Failed', 'Pass rate'].map((value) => ({
+    ['Module', 'Total test cases', 'Passed', 'Failed', 'Validated APIs', 'Validated events', 'Pass rate'].map((value) => ({
       value,
       style: 'header' as const
     }))
   );
   rowHeights[rows.length - 1] = 22;
+  const headerRow = rows.length - 1;
+  const resultsSectionRow = headerRow - 1;
   for (const m of modules) {
+    const v = validatedCounts(m.results);
     add([
       { value: m.module, style: 'link', link: m.sheet },
       { value: m.counts.total, style: 'number' },
       count(m.counts.passed, 'pass'),
       count(m.counts.failed, 'fail'),
+      { value: v.validatedApis, style: 'number' },
+      { value: v.validatedEvents, style: 'number' },
       passRate(m.counts)
     ]);
   }
+  const v = validatedCounts(report.results);
   add([
     { value: 'Total', style: 'totalLabel' },
-    ...[overall.total, overall.passed, overall.failed].map((value) => ({
+    ...[overall.total, overall.passed, overall.failed, v.validatedApis, v.validatedEvents].map((value) => ({
       value,
       style: 'total' as const
     })),
     passRate(overall, 'totalPercent')
   ]);
+  const totalRow = rows.length - 1;
+
+  // Success chart of the overall Passed/Failed totals (columns C and D of the Total row),
+  // placed to the right of the Results by module table (from column I, leaving H as a gap), level with its heading.
+  let chart: XlsxDoughnutChart | undefined;
+  if (overall.total) {
+    chart = {
+      title: `Success rate ${((overall.passed / overall.total) * 100).toFixed(1)}%`,
+      seriesName: 'Test cases',
+      categories: [
+        { label: 'Passed', cell: [headerRow, 2] },
+        { label: 'Failed', cell: [headerRow, 3] }
+      ],
+      values: [
+        { value: overall.passed, cell: [totalRow, 2] },
+        { value: overall.failed, cell: [totalRow, 3] }
+      ],
+      colors: ['34A853', 'E5484D'],
+      from: [resultsSectionRow, 8],
+      to: [resultsSectionRow + 18, 13]
+    };
+  }
 
   return {
     name,
@@ -486,7 +572,8 @@ function summarySheet(
     rowHeights,
     showGridLines: false,
     defaultStyle: 'value',
-    columnWidths: [30, 14, 14, 14, 14]
+    columnWidths: [30, 18, 14, 14, 16, 18, 14, 3],
+    chart
   };
 }
 
@@ -572,6 +659,49 @@ export async function resolveReportPublishUrl(): Promise<string> {
     runtimeConfig.reportPublishUrl = resolvedPublishUrl;
   }
   return runtimeConfig.reportPublishUrl;
+}
+
+const THUNDER_URL = 'http://127.0.0.1:9998/jsonrpc';
+const IP_QUERY_METHOD = 'org.rdk.NetworkManager.GetIPSettings';
+const IP_QUERY_PARAMS = { interface: 'eth0', ipversion: 'IPv4' };
+
+/** The report server matches executions to devices by IP, so the app reports its own address from Thunder. */
+async function resolveDeviceIp(signal: AbortSignal): Promise<string> {
+  const response = await fetch(THUNDER_URL, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: IP_QUERY_METHOD, params: IP_QUERY_PARAMS }),
+    signal
+  });
+  const body: unknown = await response.json();
+  const ip = (body as { result?: { ipaddress?: unknown } }).result?.ipaddress;
+  if (typeof ip === 'string' && /^[0-9a-fA-F:.]+$/.test(ip) && ip !== '0.0.0.0') return ip;
+  throw new Error('Unable to determine the eth0 IP address from Thunder.');
+}
+
+export async function resolveAutomationContext(): Promise<void> {
+  if (!runtimeConfig.autoRun || !runtimeConfig.reportPublishUrl) return;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10000);
+  try {
+    const url = new URL('automation/context', runtimeConfig.reportPublishUrl);
+    url.searchParams.set('deviceIp', await resolveDeviceIp(controller.signal));
+    const response = await fetch(url.toString(), { cache: 'no-store', signal: controller.signal });
+    if (response.status === 404) {
+      console.info('No TDK execution registered for this device; using configured report naming.');
+      return;
+    }
+    if (!response.ok) throw new Error(`TDK execution registration failed: HTTP ${response.status}`);
+    const context: unknown = await response.json();
+    if (
+      typeof context !== 'object' || context === null ||
+      !('reportingId' in context) || typeof context.reportingId !== 'string' ||
+      !/^[A-Za-z0-9_-]{1,160}$/.test(context.reportingId)
+    ) throw new Error('Report server returned an invalid TDK reportingId.');
+    runtimeConfig.reportingId = context.reportingId;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 export async function publishReport(

@@ -37,7 +37,8 @@ export type XlsxStyle =
   | 'link'
   | 'total'
   | 'totalLabel'
-  | 'totalPercent';
+  | 'totalPercent'
+  | 'subtitle';
 const STYLE_INDEX: Record<XlsxStyle, number> = {
   default: 0,
   header: 1,
@@ -53,7 +54,8 @@ const STYLE_INDEX: Record<XlsxStyle, number> = {
   link: 11,
   total: 12,
   totalLabel: 13,
-  totalPercent: 14
+  totalPercent: 14,
+  subtitle: 15
 };
 
 export type XlsxCell =
@@ -77,6 +79,23 @@ export interface XlsxSheet {
   /** Row heights in points, keyed by 0-based row index. */
   rowHeights?: Record<number, number>;
   showGridLines?: boolean;
+  /** Optional doughnut chart drawn on this sheet. */
+  chart?: XlsxDoughnutChart;
+}
+
+/** Doughnut chart linked to cells on its own sheet; cached values let viewers render it without recalculating. */
+export interface XlsxDoughnutChart {
+  title: string;
+  seriesName: string;
+  /** Category labels and the 0-based [row, col] cell each one comes from. */
+  categories: Array<{ label: string; cell: [number, number] }>;
+  /** Values, one per category, and the cell each one comes from. */
+  values: Array<{ value: number; cell: [number, number] }>;
+  /** RGB colours (e.g. '34A853'), one per category. */
+  colors: string[];
+  /** 0-based top-left and bottom-right [row, col] the chart spans. */
+  from: [number, number];
+  to: [number, number];
 }
 
 const MAX_CELL_CHARS = 32767;
@@ -151,7 +170,43 @@ function sheetXml(sheet: XlsxSheet): string {
     : '';
   const hyperlinks = links.length ? `<hyperlinks>${links.join('')}</hyperlinks>` : '';
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">${views}<sheetFormatPr defaultRowHeight="15"/>${cols}<sheetData>${rows}</sheetData>${filter}${merges}${hyperlinks}<pageMargins left="0.5" right="0.5" top="0.75" bottom="0.75" header="0.3" footer="0.3"/><pageSetup orientation="landscape" fitToWidth="1" fitToHeight="0"/></worksheet>`;
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">${views}<sheetFormatPr defaultRowHeight="15"/>${cols}<sheetData>${rows}</sheetData>${filter}${merges}${hyperlinks}<pageMargins left="0.5" right="0.5" top="0.75" bottom="0.75" header="0.3" footer="0.3"/><pageSetup orientation="landscape" fitToWidth="1" fitToHeight="0"/>${sheet.chart ? '<drawing r:id="rId1"/>' : ''}</worksheet>`;
+}
+
+const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+const C_NS = 'http://schemas.openxmlformats.org/drawingml/2006/chart';
+const A_NS = 'http://schemas.openxmlformats.org/drawingml/2006/main';
+
+const relsXml = (type: string, target: string) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${REL}/${type}" Target="${target}"/></Relationships>`;
+
+const cellRef = (sheet: string, [row, col]: [number, number]) =>
+  `'${sheet.replace(/'/g, "''")}'!$${columnName(col)}$${row + 1}`;
+// Categories/values must sit in a contiguous row or column, so they are referenced as first:last.
+const refRange = (sheet: string, cells: Array<[number, number]>) =>
+  `${cellRef(sheet, cells[0])}:${cellRef(sheet, cells[cells.length - 1]).split('!')[1]}`;
+
+function drawingXml(chart: XlsxDoughnutChart): string {
+  const point = (tag: string, [row, col]: [number, number]) =>
+    `<xdr:${tag}><xdr:col>${col}</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>${row}</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:${tag}>`;
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="${A_NS}"><xdr:twoCellAnchor>${point('from', chart.from)}${point('to', chart.to)}<xdr:graphicFrame macro=""><xdr:nvGraphicFramePr><xdr:cNvPr id="2" name="${xml(chart.title)}"/><xdr:cNvGraphicFramePr/></xdr:nvGraphicFramePr><xdr:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/></xdr:xfrm><a:graphic><a:graphicData uri="${C_NS}"><c:chart xmlns:c="${C_NS}" xmlns:r="${REL}" r:id="rId1"/></a:graphicData></a:graphic></xdr:graphicFrame><xdr:clientData/></xdr:twoCellAnchor></xdr:wsDr>`;
+}
+
+function chartXml(sheet: string, chart: XlsxDoughnutChart): string {
+  const n = chart.categories.length;
+  const points = chart.colors
+    .map(
+      (rgb, i) =>
+        `<c:dPt><c:idx val="${i}"/><c:bubble3D val="0"/><c:spPr><a:solidFill><a:srgbClr val="${rgb}"/></a:solidFill><a:ln w="19050"><a:solidFill><a:srgbClr val="FFFFFF"/></a:solidFill></a:ln></c:spPr></c:dPt>`
+    )
+    .join('');
+  const strPts = chart.categories.map((c, i) => `<c:pt idx="${i}"><c:v>${xml(c.label)}</c:v></c:pt>`).join('');
+  const numPts = chart.values.map((v, i) => `<c:pt idx="${i}"><c:v>${v.value}</c:v></c:pt>`).join('');
+  const txPr = (size: number, bold: boolean) =>
+    `<c:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="${size}" b="${bold ? 1 : 0}"/></a:pPr><a:endParaRPr lang="en-US"/></a:p></c:txPr>`;
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<c:chartSpace xmlns:c="${C_NS}" xmlns:a="${A_NS}" xmlns:r="${REL}"><c:roundedCorners val="0"/><c:chart><c:title><c:tx><c:rich><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="1400" b="1"/></a:pPr><a:r><a:rPr lang="en-US" sz="1400" b="1"/><a:t>${xml(chart.title)}</a:t></a:r></a:p></c:rich></c:tx><c:overlay val="0"/></c:title><c:autoTitleDeleted val="0"/><c:plotArea><c:layout/><c:doughnutChart><c:varyColors val="1"/><c:ser><c:idx val="0"/><c:order val="0"/><c:tx><c:v>${xml(chart.seriesName)}</c:v></c:tx>${points}<c:dLbls><c:numFmt formatCode="0.0%" sourceLinked="0"/><c:spPr><a:noFill/><a:ln><a:noFill/></a:ln></c:spPr>${txPr(1100, true)}<c:showLegendKey val="0"/><c:showVal val="0"/><c:showCatName val="0"/><c:showSerName val="0"/><c:showPercent val="1"/><c:showBubbleSize val="0"/><c:showLeaderLines val="0"/></c:dLbls><c:cat><c:strRef><c:f>${xml(refRange(sheet, chart.categories.map((c) => c.cell)))}</c:f><c:strCache><c:ptCount val="${n}"/>${strPts}</c:strCache></c:strRef></c:cat><c:val><c:numRef><c:f>${xml(refRange(sheet, chart.values.map((v) => v.cell)))}</c:f><c:numCache><c:formatCode>General</c:formatCode><c:ptCount val="${n}"/>${numPts}</c:numCache></c:numRef></c:val></c:ser><c:firstSliceAng val="0"/><c:holeSize val="55"/></c:doughnutChart></c:plotArea><c:legend><c:legendPos val="b"/><c:overlay val="0"/>${txPr(1100, false)}</c:legend><c:plotVisOnly val="1"/><c:dispBlanksAs val="gap"/></c:chart><c:spPr><a:noFill/><a:ln><a:noFill/></a:ln></c:spPr></c:chartSpace>`;
 }
 
 const NAVY = 'FF1F3864';
@@ -209,7 +264,8 @@ const XFS = [
   xf(7, 0, 1, 'vertical="top"'), // link
   xf(4, 6, 1, centered), // total
   xf(4, 6, 1, 'vertical="top"'), // totalLabel
-  xf(4, 6, 1, centered, PERCENT) // totalPercent
+  xf(4, 6, 1, centered, PERCENT), // totalPercent
+  xf(3, 0, 0, 'vertical="center"') // subtitle
 ];
 
 const STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -224,6 +280,23 @@ const STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 </styleSheet>`;
 
 function packageFiles(sheets: XlsxSheet[]): Array<[string, string]> {
+  // Charts are numbered in sheet order: sheet i's chart k gets drawing{k}.xml and chart{k}.xml.
+  const charts = sheets
+    .map((s, i) => ({ sheet: s, sheetNo: i + 1 }))
+    .filter((c) => c.sheet.chart)
+    .map((c, k) => ({ ...c, chart: c.sheet.chart!, no: k + 1 }));
+  const chartTypes = charts
+    .map(
+      (c) =>
+        `<Override PartName="/xl/drawings/drawing${c.no}.xml" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/><Override PartName="/xl/charts/chart${c.no}.xml" ContentType="application/vnd.openxmlformats-officedocument.drawingml.chart+xml"/>`
+    )
+    .join('');
+  const chartFiles = charts.flatMap((c): Array<[string, string]> => [
+    [`xl/worksheets/_rels/sheet${c.sheetNo}.xml.rels`, relsXml('drawing', `../drawings/drawing${c.no}.xml`)],
+    [`xl/drawings/drawing${c.no}.xml`, drawingXml(c.chart)],
+    [`xl/drawings/_rels/drawing${c.no}.xml.rels`, relsXml('chart', `../charts/chart${c.no}.xml`)],
+    [`xl/charts/chart${c.no}.xml`, chartXml(c.sheet.name, c.chart)]
+  ]);
   const definedNames = sheets
     .map((s, i) =>
       s.autoFilter
@@ -235,7 +308,7 @@ function packageFiles(sheets: XlsxSheet[]): Array<[string, string]> {
     [
       '[Content_Types].xml',
       `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}</Types>`
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}${chartTypes}</Types>`
     ],
     [
       '_rels/.rels',
@@ -253,7 +326,8 @@ function packageFiles(sheets: XlsxSheet[]): Array<[string, string]> {
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((_, i) => `<Relationship Id="rId${i + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i + 1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`
     ],
     ['xl/styles.xml', STYLES],
-    ...sheets.map((s, i) => [`xl/worksheets/sheet${i + 1}.xml`, sheetXml(s)] as [string, string])
+    ...sheets.map((s, i) => [`xl/worksheets/sheet${i + 1}.xml`, sheetXml(s)] as [string, string]),
+    ...chartFiles
   ];
 }
 

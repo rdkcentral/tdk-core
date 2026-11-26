@@ -649,7 +649,9 @@ select {
   color: var(--text-muted);
 }
 .parameter-code {
-  height: 76px;
+  height: auto;
+  min-height: 76px;
+  max-height: 22vh;
   margin-top: 8px;
 }
 .invoke-button {
@@ -804,7 +806,7 @@ button:disabled {
     padding: 8px 0 6px;
   }
   .parameter-code {
-    height: 54px;
+    min-height: 54px;
   }
   .response-code {
     min-height: 70px;
