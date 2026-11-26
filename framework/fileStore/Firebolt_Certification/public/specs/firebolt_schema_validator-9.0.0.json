@@ -1,0 +1,6102 @@
+
+{
+  "openrpc": "1.2.4",
+  "info": {
+    "title": "Firebolt-9 API schema",
+    "version": "9.0.0",
+    "description": "OpenRPC document for the RDK Core Specs 'Firebolt 9 Core API Specification' (rdk-core-specs/video/rdk9). TextToSpeech methods are tagged deprecated in favour of SpeechSynthesis (x-alternative). Wire format follows JSON-RPC 2.0 (RPCv2=true): method and parameter names are case sensitive, params is always an object (by-name) and is omitted when a method has no parameters; a method with no return value responds with result null. Event methods (on*) take a required listen parameter; their result schema is the notification payload, and x-notification describes the on-the-wire notification params ({\"value\": x} for primitives, the object itself for objects, an array for lists). Every closed object schema sets additionalProperties:false so undocumented properties fail validation. Load in Firebolt Certification via the coreOpenRpcUrl launch parameter, e.g. ?coreOpenRpcUrl=/specs/firebolt_schema_validator-9.0.0.json"
+  },
+  "methods": [
+    {
+      "name": "Accessibility.audioDescription",
+      "summary": "Returns the audio description setting of the device",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Accessibility.onAudioDescriptionChanged",
+      "summary": "Notifies when the audio description setting changes",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object has a single member named \"value\" carrying the payload.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": true
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "Accessibility.audioDescription",
+        "payloadShape": "primitive",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Accessibility.onAudioDescriptionChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Accessibility.onAudioDescriptionChanged",
+              "params": {
+                "value": true
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Accessibility.onAudioDescriptionChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Accessibility.closedCaptionsSettings",
+      "summary": "Returns closed captions settings: enabled, and a list of zero or more preferred languages in decreasing order of preference",
+      "description": "preferredLanguages is [] if not initialized, otherwise a list of one or more ISO 639-2/B codes",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/ClosedCaptionsSettings"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": {
+              "enabled": true,
+              "preferredLanguages": [
+                "eng",
+                "spa"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Accessibility.onClosedCaptionsSettingsChanged",
+      "summary": "Notifies when closed captions settings change",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object contains all the attributes of the payload object.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/ClosedCaptionsSettings"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": {
+              "enabled": false,
+              "preferredLanguages": []
+            }
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "Accessibility.closedCaptionsSettings",
+        "payloadShape": "object",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "$ref": "#/components/schemas/ClosedCaptionsSettings"
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Accessibility.onClosedCaptionsSettingsChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Accessibility.onClosedCaptionsSettingsChanged",
+              "params": {
+                "enabled": false,
+                "preferredLanguages": []
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Accessibility.onClosedCaptionsSettingsChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Accessibility.highContrastUI",
+      "summary": "Returns the high contrast UI device setting",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "Accessibility.onHighContrastUIChanged",
+      "summary": "Notifies when the high contrast UI setting changes",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object has a single member named \"value\" carrying the payload.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": true
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "Accessibility.highContrastUI",
+        "payloadShape": "primitive",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Accessibility.onHighContrastUIChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Accessibility.onHighContrastUIChanged",
+              "params": {
+                "value": true
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Accessibility.onHighContrastUIChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Accessibility.voiceGuidanceSettings",
+      "summary": "Returns voice guidance settings: enabled, rate, and navigationHints",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/VoiceGuidanceSettings"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": {
+              "enabled": true,
+              "rate": 1,
+              "navigationHints": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Accessibility.onVoiceGuidanceSettingsChanged",
+      "summary": "Notifies when voice guidance settings change",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object contains all the attributes of the payload object.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/VoiceGuidanceSettings"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": {
+              "enabled": true,
+              "rate": 1.5,
+              "navigationHints": false
+            }
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "Accessibility.voiceGuidanceSettings",
+        "payloadShape": "object",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "$ref": "#/components/schemas/VoiceGuidanceSettings"
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Accessibility.onVoiceGuidanceSettingsChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Accessibility.onVoiceGuidanceSettingsChanged",
+              "params": {
+                "enabled": true,
+                "rate": 1.5,
+                "navigationHints": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Accessibility.onVoiceGuidanceSettingsChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Actions.start",
+      "summary": "Send an intent to the platform. Argument is a JSON document",
+      "params": [
+        {
+          "name": "intent",
+          "summary": "Intent JSON document (see Firebolt Intents Specification)",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/JsonDocument"
+          }
+        },
+        {
+          "name": "handlerAppId",
+          "summary": "App ID of the app that should handle the intent",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "intent",
+              "value": {
+                "action": "search",
+                "data": {
+                  "query": "tdk-test"
+                },
+                "context": {
+                  "source": "voice"
+                }
+              }
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Actions.intent",
+      "summary": "Returns the intent that was most recently received from the platform, as a JSON document. Typically called after transitioning to the active lifecycle state",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/IntentResult"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": {
+              "intentId": 1,
+              "intent": {
+                "action": "playback",
+                "data": {
+                  "programType": "movie",
+                  "entityId": "example-movie-id"
+                },
+                "context": {
+                  "source": "voice"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Actions.onIntent",
+      "summary": "Notifies when a new intent is received from the platform",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object contains all the attributes of the payload object.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/IntentResult"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": {
+              "intentId": 2,
+              "intent": {
+                "action": "search",
+                "data": {
+                  "query": "comedy"
+                },
+                "context": {
+                  "source": "voice"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "Actions.intent",
+        "payloadShape": "object",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "$ref": "#/components/schemas/IntentResult"
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Actions.onIntent",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Actions.onIntent",
+              "params": {
+                "intentId": 2,
+                "intent": {
+                  "action": "search",
+                  "data": {
+                    "query": "comedy"
+                  },
+                  "context": {
+                    "source": "voice"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Actions.onIntent",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Advertising.advertisingId",
+      "summary": "Returns the IFA (Identifier for Advertising)",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/AdvertisingIdResult"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": {
+              "ifa": "bd87dd10-8d1d-4b93-b1a6-a8e5d410e400",
+              "ifa_type": "sspid",
+              "lmt": "0"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device.uid",
+      "summary": "Returns a persistent unique UUID for the current app and device. Reset when the app or device is reset",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/UUID"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "ee6723b8-7ab3-462c-8d93-dbf61227998e"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device.deviceClass",
+      "summary": "Returns the class of the device",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/DeviceClass"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "stb"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device.uptime",
+      "summary": "Returns the number of seconds since most recent device boot, including any time spent during deep sleep",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/Unsigned"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": 86400
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device.timeInActiveState",
+      "summary": "Returns the number of seconds since the device transitioned to the ON power state",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/Unsigned"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": 3600
+          }
+        }
+      ],
+      "x-specific-errors": [
+        {
+          "name": "App state invalid",
+          "code": "TBD (-xxxxx in spec)",
+          "description": "The app is not in an appropriate lifecycle state to call this method"
+        }
+      ]
+    },
+    {
+      "name": "Device.chipsetId",
+      "summary": "Returns chipset ID as a printable string, e.g. 'BCM72180'",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "BCM72180"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device.hdr",
+      "summary": "Returns the HDR standards supported by the attached TV or the integral display",
+      "description": "OTT/STB device: supported by the device and indicated by the EDID of the attached TV. TV: supported by the device.",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/HDRFormatMap"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": {
+              "hdr10": true,
+              "hdr10Plus": false,
+              "dolbyVision": true,
+              "hlg": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device.onHdrChanged",
+      "summary": "Notifies when supported HDR standards change",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object contains all the attributes of the payload object.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/HDRFormatMap"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": {
+              "hdr10": true,
+              "hdr10Plus": true,
+              "dolbyVision": false,
+              "hlg": false
+            }
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "Device.hdr",
+        "payloadShape": "object",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "$ref": "#/components/schemas/HDRFormatMap"
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Device.onHdrChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Device.onHdrChanged",
+              "params": {
+                "hdr10": true,
+                "hdr10Plus": true,
+                "dolbyVision": false,
+                "hlg": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Device.onHdrChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Device.dolbyAtmosExperienceAvailable",
+      "summary": "Returns whether the user would get a Dolby Atmos experience if a Dolby Atmos track were played now",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device.onDolbyAtmosExperienceAvailableChanged",
+      "summary": "Notifies when Dolby Atmos experience availability changes",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object has a single member named \"value\" carrying the payload.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": false
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "Device.dolbyAtmosExperienceAvailable",
+        "payloadShape": "primitive",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Device.onDolbyAtmosExperienceAvailableChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Device.onDolbyAtmosExperienceAvailableChanged",
+              "params": {
+                "value": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Device.onDolbyAtmosExperienceAvailableChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Device.osName",
+      "summary": "Returns the operating system name as defined by the operator",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "RDK"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device.osVersion",
+      "summary": "Returns the operating system version as defined by the operator",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "9.0.0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device.firmware",
+      "summary": "Returns a string that identifies the firmware image of the device",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "XYZ1000_9.0.0_PROD_20261001"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device.name",
+      "summary": "Returns the device friendly name, used by network services (DIAL, Miracast, AirPlay) for device discovery",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "Living Room"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Device.onNameChanged",
+      "summary": "Notifies when the device friendly name changes",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object has a single member named \"value\" carrying the payload.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": "Bedroom"
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "Device.name",
+        "payloadShape": "primitive",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Device.onNameChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Device.onNameChanged",
+              "params": {
+                "value": "Bedroom"
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Device.onNameChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Discovery.watched",
+      "summary": "Notify the platform that content has been partially or completely watched",
+      "params": [
+        {
+          "name": "entityId",
+          "summary": "Entity ID of the watched content",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "progress",
+          "required": false,
+          "schema": {
+            "type": "number",
+            "minimum": 0,
+            "description": "VOD: 0 to 0.99, live: number of seconds"
+          }
+        },
+        {
+          "name": "completed",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "watchedOn",
+          "summary": "When the content was watched, ISO 8601 date and time in UTC",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/UtcDateTime"
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "entityId",
+              "value": "entity-xyz-123"
+            },
+            {
+              "name": "progress",
+              "value": 0.95
+            },
+            {
+              "name": "completed",
+              "value": true
+            },
+            {
+              "name": "watchedOn",
+              "value": "2026-10-28T06:00:00.000Z"
+            },
+            {
+              "name": "agePolicy",
+              "value": "app:adult"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Display.size",
+      "summary": "Returns the physical dimensions of the connected or integral display, in centimeters",
+      "description": "Returns 0, 0 on an OTT/STB device when a display is not connected over HDMI. Typical values: 43\" - 97, 56; 55\" - 123, 71; 65\" - 145, 83",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/Dimensions"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": {
+              "width": 123,
+              "height": 71
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Display.maxResolution",
+      "summary": "Returns the physical/native resolution of the connected or integral display, in pixels",
+      "description": "Returns 0, 0 on an OTT/STB device when a display is not connected over HDMI. Typical values: 1280x720, 1920x1080, 3840x2160",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/Dimensions"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": {
+              "width": 3840,
+              "height": 2160
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Display.edid",
+      "summary": "Returns the EDID (and extensions) of the connected or integral display, as a Base64 encoded string",
+      "description": "Returns an empty string on an OTT/STB device when a display is not connected over HDMI",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/Base64"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "AP///////wAQrM9BTEZBMg=="
+          }
+        }
+      ]
+    },
+    {
+      "name": "Display.colorimetry",
+      "summary": "Returns an unordered list of colorimetry values supported by the attached TV or integral display",
+      "description": "Returns one or more colorimetry values supported by the attached TV or integral display",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/DisplayColorimetry"
+          }
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": [
+              "bt709",
+              "bt2020"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Display.videoResolutions",
+      "summary": "Returns an unordered list of HD video resolutions and frame rates supported by the attached TV or integral display",
+      "description": "Returns an empty list if no TV is attached",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/DisplayVideoResolution"
+          }
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": [
+              "1080p50",
+              "1080p60",
+              "2160p60"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lifecycle2.close",
+      "summary": "Request the platform to deactivate the app, and possibly take further action",
+      "description": "window.close() maps to unload; window.minimize() maps to deactivate. The module is named Lifecycle in the C++ Client Library.",
+      "params": [
+        {
+          "name": "type",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/LifecycleCloseType"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "type",
+              "value": "deactivate"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lifecycle2.state",
+      "summary": "Returns the current lifecycle state of the app",
+      "description": "The first lifecycle state that can be observed by an app/runtime is initializing. Apps/runtimes should ordinarily use state change notifications rather than this method.",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/LifecycleState"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "active"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lifecycle2.onStateChanged",
+      "summary": "Notifies on lifecycle state changes",
+      "description": "Raised after the platform has transitioned the app/runtime to the new lifecycle state; the list always carries exactly one change. The app/runtime remains in the initializing state until the subscribe call is made. Valid transitions: initializing->paused, initializing->suspended, paused->active, active->paused, paused->suspended, suspended->paused, suspended->hibernated, hibernated->suspended, any->terminating. Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params is an array that represents one attribute (the payload list), not positional parameters.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/LifecycleStateChangeList"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": [
+              {
+                "oldState": "paused",
+                "newState": "active"
+              }
+            ]
+          }
+        }
+      ],
+      "x-notification": {
+        "payloadShape": "array",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "$ref": "#/components/schemas/LifecycleStateChangeList"
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Lifecycle2.onStateChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Lifecycle2.onStateChanged",
+              "params": [
+                {
+                  "oldState": "paused",
+                  "newState": "active"
+                }
+              ]
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Lifecycle2.onStateChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Localization.country",
+      "summary": "Returns the country, e.g. US, CA, GB, BE",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/CountryCode"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "US"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Localization.onCountryChanged",
+      "summary": "Notifies when the device country changes",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object has a single member named \"value\" carrying the payload.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/CountryCode"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": "CA"
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "Localization.country",
+        "payloadShape": "primitive",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/components/schemas/CountryCode"
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Localization.onCountryChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Localization.onCountryChanged",
+              "params": {
+                "value": "CA"
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Localization.onCountryChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Localization.preferredAudioLanguages",
+      "summary": "A list of zero or more languages in order of decreasing preference",
+      "description": "Typically two languages are present. A language may be repeated in the list. [] if not initialized.",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/LanguageList"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": [
+              "eng",
+              "spa"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Localization.onPreferredAudioLanguagesChanged",
+      "summary": "Notifies when preferred audio languages change",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params is an array that represents one attribute (the payload list), not positional parameters.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/LanguageList"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": [
+              "fra",
+              "eng"
+            ]
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "Localization.preferredAudioLanguages",
+        "payloadShape": "array",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "$ref": "#/components/schemas/LanguageList"
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Localization.onPreferredAudioLanguagesChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Localization.onPreferredAudioLanguagesChanged",
+              "params": [
+                "fra",
+                "eng"
+              ]
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Localization.onPreferredAudioLanguagesChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Localization.presentationLanguage",
+      "summary": "The presentation language of the device, e.g. en-US",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/BCP47OrEmpty"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "en-US"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Localization.onPresentationLanguageChanged",
+      "summary": "Notifies when the presentation language changes",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object has a single member named \"value\" carrying the payload.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/BCP47OrEmpty"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": "fr-CA"
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "Localization.presentationLanguage",
+        "payloadShape": "primitive",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/components/schemas/BCP47OrEmpty"
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Localization.onPresentationLanguageChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Localization.onPresentationLanguageChanged",
+              "params": {
+                "value": "fr-CA"
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Localization.onPresentationLanguageChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Localization.timeZone",
+      "summary": "Returns the current time zone in IANA format, e.g. America/New_York",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/IanaTimeZone"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "America/New_York"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Localization.onTimeZoneChanged",
+      "summary": "Notifies when the time zone changes",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object has a single member named \"value\" carrying the payload.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/IanaTimeZone"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": "Europe/London"
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "Localization.timeZone",
+        "payloadShape": "primitive",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/components/schemas/IanaTimeZone"
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Localization.onTimeZoneChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Localization.onTimeZoneChanged",
+              "params": {
+                "value": "Europe/London"
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Localization.onTimeZoneChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Metrics.ready",
+      "summary": "Inform the platform that the app is minimally usable",
+      "description": "Called automatically by Lifecycle.ready()",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.signIn",
+      "summary": "Log a sign in event",
+      "description": "Called by Discovery.signIn()",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.signOut",
+      "summary": "Log a sign out event",
+      "description": "Called by Discovery.signOut()",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.startContent",
+      "summary": "Inform the platform that your user has started content",
+      "params": [
+        {
+          "name": "entityId",
+          "summary": "Optional entity ID of the content",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "entityId",
+              "value": "content-1"
+            },
+            {
+              "name": "agePolicy",
+              "value": "app:adult"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.stopContent",
+      "summary": "Inform the platform that your user has stopped content",
+      "params": [
+        {
+          "name": "entityId",
+          "summary": "Optional entity ID of the content",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "entityId",
+              "value": "content-1"
+            },
+            {
+              "name": "agePolicy",
+              "value": "app:adult"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.page",
+      "summary": "Inform the platform that your user has navigated to a page or view",
+      "params": [
+        {
+          "name": "pageId",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "pageId",
+              "value": "home"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.error",
+      "summary": "Inform the platform of an error that has occurred in your app",
+      "params": [
+        {
+          "name": "type",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/MetricsErrorType"
+          }
+        },
+        {
+          "name": "code",
+          "summary": "App-specific error code",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "description",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "visible",
+          "summary": "Whether the error was visible to the user",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "parameters",
+          "summary": "Optional additional parameters ('arg list') to be logged with the error",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/FlatMap"
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "type",
+              "value": "other"
+            },
+            {
+              "name": "code",
+              "value": "ERR_0"
+            },
+            {
+              "name": "description",
+              "value": "Unspecified error"
+            },
+            {
+              "name": "visible",
+              "value": false
+            },
+            {
+              "name": "parameters",
+              "value": {
+                "retryCount": 0,
+                "source": "player"
+              }
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.mediaLoadStart",
+      "summary": "Called when setting the URL of a media asset to play, in order to infer load time",
+      "params": [
+        {
+          "name": "entityId",
+          "summary": "Entity ID of the content",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "entityId",
+              "value": "content-1"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.mediaPlay",
+      "summary": "Called when media playback should start due to autoplay, user-initiated play, or unpausing",
+      "params": [
+        {
+          "name": "entityId",
+          "summary": "Entity ID of the content",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "entityId",
+              "value": "content-1"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.mediaPlaying",
+      "summary": "Called when media playback actually starts due to autoplay, user-initiated play, unpausing, or recovering from a buffering interruption",
+      "params": [
+        {
+          "name": "entityId",
+          "summary": "Entity ID of the content",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "entityId",
+              "value": "content-1"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.mediaPause",
+      "summary": "Called when media playback will pause due to an intentional pause operation",
+      "params": [
+        {
+          "name": "entityId",
+          "summary": "Entity ID of the content",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "entityId",
+              "value": "content-1"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.mediaWaiting",
+      "summary": "Called when media playback will halt due to a network, buffer, or other unintentional constraint",
+      "params": [
+        {
+          "name": "entityId",
+          "summary": "Entity ID of the content",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "entityId",
+              "value": "content-1"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.mediaSeeking",
+      "summary": "Called when a seek is initiated during media playback",
+      "params": [
+        {
+          "name": "entityId",
+          "summary": "Entity ID of the content",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "target",
+          "required": true,
+          "schema": {
+            "type": "number",
+            "description": "Seek target (double)"
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "entityId",
+              "value": "content-1"
+            },
+            {
+              "name": "target",
+              "value": 0
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.mediaSeeked",
+      "summary": "Called when a seek is completed during media playback",
+      "params": [
+        {
+          "name": "entityId",
+          "summary": "Entity ID of the content",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "position",
+          "required": true,
+          "schema": {
+            "type": "number",
+            "description": "Resulting position (double)"
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "entityId",
+              "value": "content-1"
+            },
+            {
+              "name": "position",
+              "value": 0
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.mediaRateChanged",
+      "summary": "Called when the playback rate of media is changed",
+      "params": [
+        {
+          "name": "entityId",
+          "summary": "Entity ID of the content",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "rate",
+          "required": true,
+          "schema": {
+            "type": "number",
+            "description": "Playback rate (double)"
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "entityId",
+              "value": "content-1"
+            },
+            {
+              "name": "rate",
+              "value": 1
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.mediaRenditionChanged",
+      "summary": "Called when the playback rendition (e.g. bitrate, dimensions, profile) is changed",
+      "params": [
+        {
+          "name": "entityId",
+          "summary": "Entity ID of the content",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "bitrate",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Unsigned"
+          }
+        },
+        {
+          "name": "width",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Unsigned"
+          }
+        },
+        {
+          "name": "height",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Unsigned"
+          }
+        },
+        {
+          "name": "profile",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "entityId",
+              "value": "content-1"
+            },
+            {
+              "name": "bitrate",
+              "value": 5000
+            },
+            {
+              "name": "width",
+              "value": 1920
+            },
+            {
+              "name": "height",
+              "value": 1080
+            },
+            {
+              "name": "profile",
+              "value": "HDR10"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.mediaEnded",
+      "summary": "Called when playback has stopped because the end of the media was reached",
+      "params": [
+        {
+          "name": "entityId",
+          "summary": "Entity ID of the content",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "entityId",
+              "value": "content-1"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.event",
+      "summary": "Inform the platform of 1st party distributor metrics data",
+      "params": [
+        {
+          "name": "schema",
+          "summary": "URI of the schema that describes data",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Uri"
+          }
+        },
+        {
+          "name": "data",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "contentMediaType": "application/json",
+            "minLength": 1,
+            "description": "JSON document, passed as a string"
+          }
+        },
+        {
+          "name": "agePolicy",
+          "summary": "Age policy associated with the event",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/AgePolicy"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "schema",
+              "value": "xrn:firebolt:metrics"
+            },
+            {
+              "name": "data",
+              "value": "{}"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Metrics.appInfo",
+      "summary": "Inform the platform about an app's build info",
+      "params": [
+        {
+          "name": "build",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "build",
+              "value": "1.0.0"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ]
+    },
+    {
+      "name": "Network.connected",
+      "summary": "Returns whether the device has a usable network connection",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Network.onConnectedChanged",
+      "summary": "Notifies when network connectivity changes",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object has a single member named \"value\" carrying the payload.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": false
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "Network.connected",
+        "payloadShape": "primitive",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "Network.onConnectedChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "Network.onConnectedChanged",
+              "params": {
+                "value": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "Network.onConnectedChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "SpeechSynthesis.voices",
+      "summary": "Returns a list of available voices",
+      "description": "A voice or a language can be repeated in the list. At most one voice is the default for each language.",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/VoiceList"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": [
+              {
+                "name": "ava",
+                "lang": "en-US",
+                "default": true
+              },
+              {
+                "name": "amelie",
+                "lang": "fr-CA",
+                "default": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "SpeechSynthesis.onVoicesChanged",
+      "summary": "Notifies when the available voices change",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params is an array that represents one attribute (the payload list), not positional parameters.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/VoiceList"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": [
+              {
+                "name": "ava",
+                "lang": "en-US",
+                "default": true
+              }
+            ]
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "SpeechSynthesis.voices",
+        "payloadShape": "array",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "$ref": "#/components/schemas/VoiceList"
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "SpeechSynthesis.onVoicesChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "SpeechSynthesis.onVoicesChanged",
+              "params": [
+                {
+                  "name": "ava",
+                  "lang": "en-US",
+                  "default": true
+                }
+              ]
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "SpeechSynthesis.onVoicesChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "SpeechSynthesis.speak",
+      "summary": "Requests the system to speak an utterance. Returns an utteranceId if accepted",
+      "description": "Any utterance currently being spoken is interrupted (onUtteranceEvent interrupted) and events for the new request are raised using onUtteranceEvent. For Voice Guidance, supply plain text with lang, or a well-formed SSML document.",
+      "params": [
+        {
+          "name": "text",
+          "summary": "Plain text or a well-formed SSML document",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "lang",
+          "summary": "Language of the text",
+          "required": false,
+          "schema": {
+            "$ref": "#/components/schemas/BCP47"
+          }
+        },
+        {
+          "name": "voice",
+          "summary": "Voice name as returned by voices",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "volume",
+          "summary": "0 (lowest) to 1 (highest) inclusive",
+          "required": false,
+          "schema": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        {
+          "name": "rate",
+          "summary": "0.1 (slowest) to 10 (fastest) inclusive",
+          "required": false,
+          "schema": {
+            "type": "number",
+            "minimum": 0.1,
+            "maximum": 10
+          }
+        },
+        {
+          "name": "pitch",
+          "summary": "0 (lowest) to 2 (highest) inclusive",
+          "required": false,
+          "schema": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 2
+          }
+        },
+        {
+          "name": "pii",
+          "summary": "true if the text contains personally identifiable information",
+          "required": false,
+          "schema": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      ],
+      "result": {
+        "name": "utteranceId",
+        "schema": {
+          "$ref": "#/components/schemas/Unsigned"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "text",
+              "value": "Hello"
+            },
+            {
+              "name": "lang",
+              "value": "en-US"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": 1
+          }
+        }
+      ],
+      "x-specific-errors": [
+        {
+          "name": "Speech synthesis engine error",
+          "code": "TBD (-xxxxx in spec)",
+          "description": "No speech synthesis engine is available or the engine rejected the request"
+        }
+      ]
+    },
+    {
+      "name": "SpeechSynthesis.cancel",
+      "summary": "Stop the utterance",
+      "description": "Raises onUtteranceEvent(interrupted) if the utterance was synthesizing, playing or paused. Returns without error in all utterance states, or if the utterance has finished.",
+      "params": [
+        {
+          "name": "utteranceId",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Unsigned"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "utteranceId",
+              "value": 1
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ],
+      "x-specific-errors": [
+        {
+          "name": "Speech synthesis engine error",
+          "code": "TBD (-xxxxx in spec)",
+          "description": "No speech synthesis engine is available or the engine rejected the request"
+        }
+      ]
+    },
+    {
+      "name": "SpeechSynthesis.pause",
+      "summary": "Pause the utterance",
+      "description": "Raises onUtteranceEvent(paused) if the utterance was synthesizing or playing. Returns without error in all utterance states, or if the utterance has finished.",
+      "params": [
+        {
+          "name": "utteranceId",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Unsigned"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "utteranceId",
+              "value": 1
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ],
+      "x-specific-errors": [
+        {
+          "name": "Speech synthesis engine error",
+          "code": "TBD (-xxxxx in spec)",
+          "description": "No speech synthesis engine is available or the engine rejected the request"
+        }
+      ]
+    },
+    {
+      "name": "SpeechSynthesis.resume",
+      "summary": "Resume a paused or synthesizing utterance",
+      "description": "Raises onUtteranceEvent(resumed) if the utterance had previously been paused while playing. Returns without error in all utterance states, or if the utterance has finished.",
+      "params": [
+        {
+          "name": "utteranceId",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Unsigned"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "type": "null"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "utteranceId",
+              "value": 1
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": null
+          }
+        }
+      ],
+      "x-specific-errors": [
+        {
+          "name": "Speech synthesis engine error",
+          "code": "TBD (-xxxxx in spec)",
+          "description": "No speech synthesis engine is available or the engine rejected the request"
+        }
+      ]
+    },
+    {
+      "name": "SpeechSynthesis.onUtteranceEvent",
+      "summary": "Notifies events related to an utterance",
+      "description": "Progress events: synthesisStarting, playbackStarting, paused, resumed, completed, interrupted. Failure events: networkFailed, synthesisFailed, playbackFailed. Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object contains all the attributes of the payload object.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/UtteranceEvent"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": {
+              "utteranceId": 1,
+              "event": "playbackStarting"
+            }
+          }
+        }
+      ],
+      "x-notification": {
+        "payloadShape": "object",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "$ref": "#/components/schemas/UtteranceEvent"
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "SpeechSynthesis.onUtteranceEvent",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "SpeechSynthesis.onUtteranceEvent",
+              "params": {
+                "utteranceId": 1,
+                "event": "playbackStarting"
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "SpeechSynthesis.onUtteranceEvent",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Stats.memoryUsage",
+      "summary": "Returns information about container memory usage, in bytes",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/MemoryUsage"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": {
+              "userMemoryUsed": 104857600,
+              "userMemoryLimit": 268435456,
+              "gpuMemoryUsed": 33554432,
+              "gpuMemoryLimit": 134217728
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "TextToSpeech.speak",
+      "summary": "Speak the utterance immediately. Any ongoing speech is interrupted",
+      "description": "TTS_Status, not success, indicates success of the call. Raises onSpeechInterrupted if speaking is interrupted.",
+      "tags": [
+        {
+          "name": "deprecated",
+          "x-alternative": "SpeechSynthesis"
+        }
+      ],
+      "params": [
+        {
+          "name": "text",
+          "summary": "Plain text or a well-formed SSML document",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/TTSSpeakResult"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "text",
+              "value": "Hello"
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": {
+              "speechid": 1,
+              "TTS_Status": 0,
+              "success": true
+            }
+          }
+        }
+      ],
+      "deprecated": true
+    },
+    {
+      "name": "TextToSpeech.cancel",
+      "summary": "Stop speaking if an utterance is currently being spoken. Raises onSpeechInterrupted if speaking was interrupted",
+      "tags": [
+        {
+          "name": "deprecated",
+          "x-alternative": "SpeechSynthesis"
+        }
+      ],
+      "params": [
+        {
+          "name": "speechid",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/Unsigned"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/TTSResult"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [
+            {
+              "name": "speechid",
+              "value": 1
+            }
+          ],
+          "result": {
+            "name": "Default result",
+            "value": {
+              "TTS_Status": 0,
+              "success": true
+            }
+          }
+        }
+      ],
+      "deprecated": true
+    },
+    {
+      "name": "TextToSpeech.onSpeechComplete",
+      "summary": "Speech completed successfully",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object contains all the attributes of the payload object.",
+      "tags": [
+        {
+          "name": "event"
+        },
+        {
+          "name": "deprecated",
+          "x-alternative": "SpeechSynthesis"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/TTSSpeechEvent"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": {
+              "speechid": 1
+            }
+          }
+        }
+      ],
+      "x-notification": {
+        "payloadShape": "object",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "$ref": "#/components/schemas/TTSSpeechEvent"
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "TextToSpeech.onSpeechComplete",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "TextToSpeech.onSpeechComplete",
+              "params": {
+                "speechid": 1
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "TextToSpeech.onSpeechComplete",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      },
+      "deprecated": true
+    },
+    {
+      "name": "TextToSpeech.onSpeechInterrupted",
+      "summary": "Speech was stopped, due to another call to speak or cancel",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object contains all the attributes of the payload object.",
+      "tags": [
+        {
+          "name": "event"
+        },
+        {
+          "name": "deprecated",
+          "x-alternative": "SpeechSynthesis"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/TTSSpeechEvent"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": {
+              "speechid": 1
+            }
+          }
+        }
+      ],
+      "x-notification": {
+        "payloadShape": "object",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "$ref": "#/components/schemas/TTSSpeechEvent"
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "TextToSpeech.onSpeechInterrupted",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "TextToSpeech.onSpeechInterrupted",
+              "params": {
+                "speechid": 1
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "TextToSpeech.onSpeechInterrupted",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      },
+      "deprecated": true
+    },
+    {
+      "name": "TextToSpeech.onNetworkError",
+      "summary": "Utterance failed due to network",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object contains all the attributes of the payload object.",
+      "tags": [
+        {
+          "name": "event"
+        },
+        {
+          "name": "deprecated",
+          "x-alternative": "SpeechSynthesis"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/TTSSpeechEvent"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": {
+              "speechid": 1
+            }
+          }
+        }
+      ],
+      "x-notification": {
+        "payloadShape": "object",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "$ref": "#/components/schemas/TTSSpeechEvent"
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "TextToSpeech.onNetworkError",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "TextToSpeech.onNetworkError",
+              "params": {
+                "speechid": 1
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "TextToSpeech.onNetworkError",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      },
+      "deprecated": true
+    },
+    {
+      "name": "TextToSpeech.onPlaybackError",
+      "summary": "Utterance failed during playback",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object contains all the attributes of the payload object.",
+      "tags": [
+        {
+          "name": "event"
+        },
+        {
+          "name": "deprecated",
+          "x-alternative": "SpeechSynthesis"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/TTSSpeechEvent"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": {
+              "speechid": 1
+            }
+          }
+        }
+      ],
+      "x-notification": {
+        "payloadShape": "object",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "$ref": "#/components/schemas/TTSSpeechEvent"
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "TextToSpeech.onPlaybackError",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "TextToSpeech.onPlaybackError",
+              "params": {
+                "speechid": 1
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "TextToSpeech.onPlaybackError",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      },
+      "deprecated": true
+    },
+    {
+      "name": "VideoOutput.resolution",
+      "summary": "Returns the width and height of the video signal on the video output, in pixels",
+      "description": "OTT/STB device: the video resolution over HDMI. TV device: the resolution of the panel.",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/VideoResolution"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": {
+              "width": 1920,
+              "height": 1080
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "VideoOutput.onResolutionChanged",
+      "summary": "Notifies when the video output resolution changes",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object contains all the attributes of the payload object.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/VideoResolution"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": {
+              "width": 3840,
+              "height": 2160
+            }
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "VideoOutput.resolution",
+        "payloadShape": "object",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "$ref": "#/components/schemas/VideoResolution"
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "VideoOutput.onResolutionChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "VideoOutput.onResolutionChanged",
+              "params": {
+                "width": 3840,
+                "height": 2160
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "VideoOutput.onResolutionChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "VideoOutput.hdcp",
+      "summary": "Returns the current state of output protection on the video output",
+      "description": "OTT/STB device: the negotiated HDCP version, or none if no encrypted connection has been made. TV device: direct.",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/HdcpState"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "hdcp2.2"
+          }
+        }
+      ]
+    },
+    {
+      "name": "VideoOutput.onHdcpChanged",
+      "summary": "Notifies when HDCP state changes",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object has a single member named \"value\" carrying the payload.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/HdcpState"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": "none"
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "VideoOutput.hdcp",
+        "payloadShape": "primitive",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/components/schemas/HdcpState"
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "VideoOutput.onHdcpChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "VideoOutput.onHdcpChanged",
+              "params": {
+                "value": "none"
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "VideoOutput.onHdcpChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "VideoOutput.cecState",
+      "summary": "Returns whether the output of the OTT/STB device is actively being displayed on the TV",
+      "description": "active - TV is on and the device is the active source; inactive - TV is off or the device is not the active source; unsupported - CEC not enabled on the TV. TV device: returns Wrong device class error.",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/CecState"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "active"
+          }
+        }
+      ],
+      "x-specific-errors": [
+        {
+          "name": "Wrong device class",
+          "code": "TBD (-xxxxx in spec)",
+          "description": "The method is not appropriate for this class of device"
+        }
+      ]
+    },
+    {
+      "name": "VideoOutput.onCecStateChanged",
+      "summary": "Notifies when HDMI CEC state changes",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object has a single member named \"value\" carrying the payload.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/CecState"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": "inactive"
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "VideoOutput.cecState",
+        "payloadShape": "primitive",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/components/schemas/CecState"
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "VideoOutput.onCecStateChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "VideoOutput.onCecStateChanged",
+              "params": {
+                "value": "inactive"
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "VideoOutput.onCecStateChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "VideoOutput.refreshRate",
+      "summary": "Returns the refresh rate of the video signal on the video output, in Hz",
+      "description": "OTT/STB device: the refresh rate, or 0 if no TV is attached. TV device: the compositor refresh rate used for the integrated display.",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/RefreshRate"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "59.94"
+          }
+        }
+      ]
+    },
+    {
+      "name": "VideoOutput.onRefreshRateChanged",
+      "summary": "Notifies when the video output refresh rate changes",
+      "description": "Subscribe with params {\"listen\": true} and unsubscribe with {\"listen\": false}; the subscription response result is null. The result schema describes the notification payload delivered to the listener. On the wire the notification params object has a single member named \"value\" carrying the payload.",
+      "tags": [
+        {
+          "name": "event"
+        }
+      ],
+      "params": [
+        {
+          "name": "listen",
+          "summary": "true to subscribe to the notification, false to unsubscribe",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/RefreshRate"
+        }
+      },
+      "examples": [
+        {
+          "name": "Notification payload after subscribing",
+          "params": [
+            {
+              "name": "listen",
+              "value": true
+            }
+          ],
+          "result": {
+            "name": "Notification payload",
+            "value": "50"
+          }
+        }
+      ],
+      "x-notification": {
+        "subscriberFor": "VideoOutput.refreshRate",
+        "payloadShape": "primitive",
+        "subscriptionResult": {
+          "$ref": "#/components/schemas/SubscriptionResult"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/components/schemas/RefreshRate"
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        "examples": [
+          {
+            "name": "Subscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "VideoOutput.onRefreshRateChanged",
+              "params": {
+                "listen": true
+              }
+            }
+          },
+          {
+            "name": "Subscription request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": null
+            }
+          },
+          {
+            "name": "Notification",
+            "message": {
+              "jsonrpc": "2.0",
+              "method": "VideoOutput.onRefreshRateChanged",
+              "params": {
+                "value": "50"
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "method": "VideoOutput.onRefreshRateChanged",
+              "params": {
+                "listen": false
+              }
+            }
+          },
+          {
+            "name": "Unsubscribe request succeeded",
+            "message": {
+              "jsonrpc": "2.0",
+              "id": 2,
+              "result": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "VideoOutput.colorDepth",
+      "summary": "Returns the video color depth being used on the video output, in bits",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/ColorDepth"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "10"
+          }
+        }
+      ]
+    },
+    {
+      "name": "VideoOutput.colorFormat",
+      "summary": "Returns the current color format of the video signal on the active video output port or integrated display",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/ColorFormat"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "ycbcr444"
+          }
+        }
+      ]
+    },
+    {
+      "name": "VideoOutput.colorimetry",
+      "summary": "Returns the current colorimetry value of the video signal on the active video output port or integrated display",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/VideoColorimetry"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "bt709"
+          }
+        }
+      ]
+    },
+    {
+      "name": "VideoOutput.dynamicRange",
+      "summary": "Returns the current dynamic range format of the video signal on the video output",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/DynamicRange"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "hdr10"
+          }
+        }
+      ]
+    },
+    {
+      "name": "VideoOutput.quantizationRange",
+      "summary": "Returns the quantization range used on the video output",
+      "params": [],
+      "result": {
+        "name": "value",
+        "schema": {
+          "$ref": "#/components/schemas/QuantizationRange"
+        }
+      },
+      "examples": [
+        {
+          "name": "Default example",
+          "params": [],
+          "result": {
+            "name": "Default result",
+            "value": "limited"
+          }
+        }
+      ]
+    }
+  ],
+  "components": {
+    "contentDescriptors": {
+      "Listen": {
+        "name": "listen",
+        "summary": "true to subscribe to the notification, false to unsubscribe",
+        "required": true,
+        "schema": {
+          "type": "boolean"
+        }
+      }
+    },
+    "schemas": {
+      "Unsigned": {
+        "title": "Unsigned",
+        "description": "32-bit unsigned integer (Firebolt 'unsigned' type)",
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4294967295
+      },
+      "UUID": {
+        "title": "UUID",
+        "description": "RFC 4122 UUID string",
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+      },
+      "CountryCode": {
+        "title": "CountryCode",
+        "description": "ISO 3166-1 alpha-2 country code, or \"\" if not initialized",
+        "type": "string",
+        "pattern": "^([A-Z]{2})?$"
+      },
+      "ISO639_2B": {
+        "title": "ISO639_2B",
+        "description": "ISO 639-2/B three-letter language code",
+        "type": "string",
+        "pattern": "^[a-z]{3}$"
+      },
+      "LanguageList": {
+        "title": "LanguageList",
+        "type": "array",
+        "description": "Ordered list of ISO 639-2/B codes in decreasing preference; [] if not initialized. A language may be repeated",
+        "items": {
+          "$ref": "#/components/schemas/ISO639_2B"
+        }
+      },
+      "BCP47": {
+        "title": "BCP47",
+        "description": "BCP 47 language tag, e.g. en-US",
+        "type": "string",
+        "pattern": "^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*$"
+      },
+      "BCP47OrEmpty": {
+        "title": "BCP47OrEmpty",
+        "description": "BCP 47 language tag, or \"\" if not initialized",
+        "type": "string",
+        "pattern": "^([A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*)?$"
+      },
+      "AgePolicy": {
+        "title": "AgePolicy",
+        "description": "Age group to which content is directed",
+        "type": "string",
+        "enum": [
+          "app:adult",
+          "app:child",
+          "app:teen"
+        ]
+      },
+      "UtcDateTime": {
+        "title": "UtcDateTime",
+        "description": "ISO 8601 date and time in UTC: YYYY-MM-DDThh:mm:ss.sssZ",
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\\.[0-9]{3}Z$"
+      },
+      "Uri": {
+        "title": "Uri",
+        "description": "RFC 3986 URI",
+        "type": "string",
+        "format": "uri",
+        "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:[^\\s]+$"
+      },
+      "Base64": {
+        "title": "Base64",
+        "description": "Base64 encoded string (may be empty)",
+        "type": "string",
+        "contentEncoding": "base64",
+        "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+      },
+      "IanaTimeZone": {
+        "title": "IanaTimeZone",
+        "description": "IANA time zone identifier, e.g. America/New_York",
+        "type": "string",
+        "pattern": "^[A-Za-z][A-Za-z0-9_+-]*(/[A-Za-z0-9_+-]+)*$"
+      },
+      "FlatMap": {
+        "title": "FlatMap",
+        "description": "Open map of additional key/value pairs (Firebolt Types.FlatMap). Keys are app defined, so additionalProperties is constrained to primitive values rather than forbidden",
+        "type": "object",
+        "additionalProperties": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        }
+      },
+      "JsonDocument": {
+        "title": "JsonDocument",
+        "description": "Opaque JSON document whose structure is defined by another specification (e.g. Firebolt Intents). Not closed with additionalProperties:false because its members are not defined by this API",
+        "type": "object"
+      },
+      "SubscriptionResult": {
+        "title": "SubscriptionResult",
+        "description": "Result of a successful subscribe ({\"listen\":true}) or unsubscribe ({\"listen\":false}) request",
+        "type": "null"
+      },
+      "ClosedCaptionsSettings": {
+        "title": "ClosedCaptionsSettings",
+        "type": "object",
+        "description": "Captions settings: enabled, and zero or more languages in order of decreasing preference",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "preferredLanguages": {
+            "$ref": "#/components/schemas/LanguageList"
+          }
+        },
+        "required": [
+          "enabled",
+          "preferredLanguages"
+        ],
+        "additionalProperties": false
+      },
+      "VoiceGuidanceSettings": {
+        "title": "VoiceGuidanceSettings",
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "rate": {
+            "type": "number",
+            "minimum": 0.1,
+            "maximum": 10,
+            "default": 1,
+            "description": "1 is the normal rate; 0.1 to 10 inclusive"
+          },
+          "navigationHints": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled",
+          "rate",
+          "navigationHints"
+        ],
+        "additionalProperties": false
+      },
+      "AdvertisingIdResult": {
+        "title": "AdvertisingIdResult",
+        "type": "object",
+        "properties": {
+          "ifa": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UUID"
+              }
+            ],
+            "description": "Identifier for Advertising (a UUID)"
+          },
+          "ifa_type": {
+            "type": "string",
+            "enum": [
+              "dpid",
+              "sspid",
+              "sessionid"
+            ],
+            "description": "dpid = device provided ID, sspid = SSP provided ID, sessionid = session/synthetic ID"
+          },
+          "lmt": {
+            "type": "string",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "description": "Limit ad tracking"
+          }
+        },
+        "required": [
+          "ifa",
+          "ifa_type",
+          "lmt"
+        ],
+        "additionalProperties": false
+      },
+      "HDRFormatMap": {
+        "title": "HDRFormatMap",
+        "type": "object",
+        "properties": {
+          "hdr10": {
+            "type": "boolean"
+          },
+          "hdr10Plus": {
+            "type": "boolean"
+          },
+          "dolbyVision": {
+            "type": "boolean"
+          },
+          "hlg": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "hdr10",
+          "hdr10Plus",
+          "dolbyVision",
+          "hlg"
+        ],
+        "additionalProperties": false
+      },
+      "DeviceClass": {
+        "title": "DeviceClass",
+        "type": "string",
+        "enum": [
+          "ott",
+          "stb",
+          "tv"
+        ],
+        "description": "ott = no tuner/demod, no integrated display; stb = with tuner/demod, no integrated display; tv = possibly tuner/demod, with integrated display"
+      },
+      "Dimensions": {
+        "title": "Dimensions",
+        "type": "object",
+        "properties": {
+          "width": {
+            "$ref": "#/components/schemas/Unsigned"
+          },
+          "height": {
+            "$ref": "#/components/schemas/Unsigned"
+          }
+        },
+        "required": [
+          "width",
+          "height"
+        ],
+        "additionalProperties": false
+      },
+      "DisplayColorimetry": {
+        "title": "DisplayColorimetry",
+        "type": "string",
+        "enum": [
+          "bt709",
+          "bt2020"
+        ]
+      },
+      "DisplayVideoResolution": {
+        "title": "DisplayVideoResolution",
+        "type": "string",
+        "enum": [
+          "720p50",
+          "720p60",
+          "1080p50",
+          "1080p60",
+          "2160p50",
+          "2160p60"
+        ]
+      },
+      "LifecycleState": {
+        "title": "LifecycleState",
+        "type": "string",
+        "enum": [
+          "initializing",
+          "active",
+          "paused",
+          "suspended",
+          "hibernated",
+          "terminating"
+        ]
+      },
+      "LifecycleCloseType": {
+        "title": "LifecycleCloseType",
+        "type": "string",
+        "enum": [
+          "deactivate",
+          "unload",
+          "killReload",
+          "killReactivate"
+        ],
+        "description": "deactivate - app is deactivated (if active); unload - app is deactivated (if active) and terminated; killReload - app is killed, then reloaded to paused or suspended (by policy); killReactivate - app is killed, reloaded, then activated"
+      },
+      "LifecycleStateChange": {
+        "title": "LifecycleStateChange",
+        "type": "object",
+        "description": "A single lifecycle state transition. Only the documented valid transitions are accepted",
+        "properties": {
+          "oldState": {
+            "$ref": "#/components/schemas/LifecycleState"
+          },
+          "newState": {
+            "$ref": "#/components/schemas/LifecycleState"
+          }
+        },
+        "required": [
+          "oldState",
+          "newState"
+        ],
+        "additionalProperties": false,
+        "anyOf": [
+          {
+            "properties": {
+              "oldState": {
+                "const": "initializing"
+              },
+              "newState": {
+                "enum": [
+                  "paused",
+                  "suspended"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "oldState": {
+                "const": "paused"
+              },
+              "newState": {
+                "enum": [
+                  "active",
+                  "suspended"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "oldState": {
+                "const": "active"
+              },
+              "newState": {
+                "const": "paused"
+              }
+            }
+          },
+          {
+            "properties": {
+              "oldState": {
+                "const": "suspended"
+              },
+              "newState": {
+                "enum": [
+                  "paused",
+                  "hibernated"
+                ]
+              }
+            }
+          },
+          {
+            "properties": {
+              "oldState": {
+                "const": "hibernated"
+              },
+              "newState": {
+                "const": "suspended"
+              }
+            }
+          },
+          {
+            "properties": {
+              "newState": {
+                "const": "terminating"
+              }
+            }
+          }
+        ]
+      },
+      "LifecycleStateChangeList": {
+        "title": "LifecycleStateChangeList",
+        "description": "List that always carries exactly one lifecycle state change",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/LifecycleStateChange"
+        },
+        "minItems": 1,
+        "maxItems": 1
+      },
+      "MetricsErrorType": {
+        "title": "MetricsErrorType",
+        "type": "string",
+        "enum": [
+          "network",
+          "media",
+          "restriction",
+          "entitlement",
+          "other"
+        ]
+      },
+      "IntentResult": {
+        "title": "IntentResult",
+        "type": "object",
+        "properties": {
+          "intentId": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Unsigned"
+              }
+            ],
+            "description": "Monotonic: greater than the last intentId"
+          },
+          "intent": {
+            "$ref": "#/components/schemas/JsonDocument"
+          }
+        },
+        "required": [
+          "intentId",
+          "intent"
+        ],
+        "additionalProperties": false
+      },
+      "Voice": {
+        "title": "Voice",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Human-readable voice name"
+          },
+          "lang": {
+            "$ref": "#/components/schemas/BCP47"
+          },
+          "default": {
+            "type": "boolean",
+            "description": "true if the voice is the default for the language"
+          }
+        },
+        "required": [
+          "name",
+          "lang",
+          "default"
+        ],
+        "additionalProperties": false
+      },
+      "VoiceList": {
+        "title": "VoiceList",
+        "description": "Unordered list of zero or more voices. Empty if no speech synthesis engine is available or the engine rejected the request",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Voice"
+        }
+      },
+      "UtteranceEvent": {
+        "title": "UtteranceEvent",
+        "type": "object",
+        "properties": {
+          "utteranceId": {
+            "$ref": "#/components/schemas/Unsigned"
+          },
+          "event": {
+            "type": "string",
+            "enum": [
+              "synthesisStarting",
+              "playbackStarting",
+              "paused",
+              "resumed",
+              "completed",
+              "interrupted",
+              "networkFailed",
+              "synthesisFailed",
+              "playbackFailed"
+            ]
+          }
+        },
+        "required": [
+          "utteranceId",
+          "event"
+        ],
+        "additionalProperties": false
+      },
+      "MemoryUsage": {
+        "title": "MemoryUsage",
+        "type": "object",
+        "description": "Container memory usage, in bytes",
+        "properties": {
+          "userMemoryUsed": {
+            "$ref": "#/components/schemas/Unsigned"
+          },
+          "userMemoryLimit": {
+            "$ref": "#/components/schemas/Unsigned"
+          },
+          "gpuMemoryUsed": {
+            "$ref": "#/components/schemas/Unsigned"
+          },
+          "gpuMemoryLimit": {
+            "$ref": "#/components/schemas/Unsigned"
+          }
+        },
+        "required": [
+          "userMemoryUsed",
+          "userMemoryLimit",
+          "gpuMemoryUsed",
+          "gpuMemoryLimit"
+        ],
+        "additionalProperties": false
+      },
+      "TTSStatus": {
+        "title": "TTSStatus",
+        "type": "integer",
+        "enum": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "description": "0 OK, 1 Fail, 2 not enabled, 3 invalid configuration. Use TTS_Status, not success, to determine call success"
+      },
+      "TTSResult": {
+        "title": "TTSResult",
+        "type": "object",
+        "properties": {
+          "TTS_Status": {
+            "$ref": "#/components/schemas/TTSStatus"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "TTS_Status",
+          "success"
+        ],
+        "additionalProperties": false
+      },
+      "TTSSpeakResult": {
+        "title": "TTSSpeakResult",
+        "type": "object",
+        "properties": {
+          "speechid": {
+            "$ref": "#/components/schemas/Unsigned"
+          },
+          "TTS_Status": {
+            "$ref": "#/components/schemas/TTSStatus"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "speechid",
+          "TTS_Status",
+          "success"
+        ],
+        "additionalProperties": false
+      },
+      "TTSSpeechEvent": {
+        "title": "TTSSpeechEvent",
+        "type": "object",
+        "properties": {
+          "speechid": {
+            "$ref": "#/components/schemas/Unsigned"
+          }
+        },
+        "required": [
+          "speechid"
+        ],
+        "additionalProperties": false
+      },
+      "VideoResolution": {
+        "title": "VideoResolution",
+        "type": "object",
+        "description": "One of 720x480, 720x576, 1280x720, 1920x1080, 3840x2160",
+        "properties": {
+          "width": {
+            "$ref": "#/components/schemas/Unsigned"
+          },
+          "height": {
+            "$ref": "#/components/schemas/Unsigned"
+          }
+        },
+        "required": [
+          "width",
+          "height"
+        ],
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "properties": {
+              "width": {
+                "const": 720
+              },
+              "height": {
+                "const": 480
+              }
+            }
+          },
+          {
+            "properties": {
+              "width": {
+                "const": 720
+              },
+              "height": {
+                "const": 576
+              }
+            }
+          },
+          {
+            "properties": {
+              "width": {
+                "const": 1280
+              },
+              "height": {
+                "const": 720
+              }
+            }
+          },
+          {
+            "properties": {
+              "width": {
+                "const": 1920
+              },
+              "height": {
+                "const": 1080
+              }
+            }
+          },
+          {
+            "properties": {
+              "width": {
+                "const": 3840
+              },
+              "height": {
+                "const": 2160
+              }
+            }
+          }
+        ]
+      },
+      "HdcpState": {
+        "title": "HdcpState",
+        "type": "string",
+        "enum": [
+          "hdcp1.4",
+          "hdcp2.2",
+          "none",
+          "direct"
+        ]
+      },
+      "CecState": {
+        "title": "CecState",
+        "type": "string",
+        "enum": [
+          "active",
+          "inactive",
+          "unsupported"
+        ]
+      },
+      "RefreshRate": {
+        "title": "RefreshRate",
+        "description": "Refresh rate in Hz (0 if no TV attached). Documented as an enum, which JSON-RPC represents as a string; the numeric form is also accepted (see assumptions)",
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "0",
+              "23.976",
+              "24",
+              "25",
+              "29.97",
+              "30",
+              "50",
+              "59.94",
+              "60"
+            ]
+          },
+          {
+            "type": "number",
+            "enum": [
+              0,
+              23.976,
+              24,
+              25,
+              29.97,
+              30,
+              50,
+              59.94,
+              60
+            ]
+          }
+        ]
+      },
+      "ColorDepth": {
+        "title": "ColorDepth",
+        "description": "Color depth in bits (0 when a display is not connected over HDMI). Documented as an enum, which JSON-RPC represents as a string; the numeric form is also accepted (see assumptions)",
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "0",
+              "8",
+              "10",
+              "12"
+            ]
+          },
+          {
+            "type": "integer",
+            "enum": [
+              0,
+              8,
+              10,
+              12
+            ]
+          }
+        ]
+      },
+      "ColorFormat": {
+        "title": "ColorFormat",
+        "type": "string",
+        "enum": [
+          "ycbcr420",
+          "ycbcr422",
+          "ycbcr444",
+          "rgb444",
+          "none"
+        ]
+      },
+      "VideoColorimetry": {
+        "title": "VideoColorimetry",
+        "type": "string",
+        "enum": [
+          "bt2020rgb",
+          "bt2020ycc",
+          "bt709",
+          "oprgb",
+          "none"
+        ]
+      },
+      "DynamicRange": {
+        "title": "DynamicRange",
+        "type": "string",
+        "enum": [
+          "hdr10",
+          "hdr10plus",
+          "dolbyVision",
+          "hlg",
+          "sdr",
+          "none"
+        ]
+      },
+      "QuantizationRange": {
+        "title": "QuantizationRange",
+        "type": "string",
+        "enum": [
+          "limited",
+          "full",
+          "none"
+        ]
+      },
+      "JsonRpcId": {
+        "title": "JsonRpcId",
+        "type": [
+          "integer",
+          "string"
+        ]
+      },
+      "JsonRpcRequest": {
+        "title": "JsonRpcRequest",
+        "type": "object",
+        "properties": {
+          "jsonrpc": {
+            "const": "2.0"
+          },
+          "id": {
+            "$ref": "#/components/schemas/JsonRpcId"
+          },
+          "method": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Za-z0-9]*\\.[A-Za-z][A-Za-z0-9]*$"
+          },
+          "params": {
+            "type": "object",
+            "description": "Params is an object. Arrays are not used. Omitted when the method has no parameters. Left open here because the members are method specific and are validated by each method's params content descriptors"
+          }
+        },
+        "required": [
+          "jsonrpc",
+          "id",
+          "method"
+        ],
+        "additionalProperties": false
+      },
+      "JsonRpcSuccessResponse": {
+        "title": "JsonRpcSuccessResponse",
+        "type": "object",
+        "properties": {
+          "jsonrpc": {
+            "const": "2.0"
+          },
+          "id": {
+            "$ref": "#/components/schemas/JsonRpcId"
+          },
+          "result": {
+            "description": "null when there is no return value; a primitive, an array of primitives, or an object"
+          }
+        },
+        "required": [
+          "jsonrpc",
+          "id",
+          "result"
+        ],
+        "additionalProperties": false
+      },
+      "JsonRpcErrorObject": {
+        "title": "JsonRpcErrorObject",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {}
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "JsonRpcErrorResponse": {
+        "title": "JsonRpcErrorResponse",
+        "type": "object",
+        "properties": {
+          "jsonrpc": {
+            "const": "2.0"
+          },
+          "id": {
+            "type": [
+              "integer",
+              "string",
+              "null"
+            ]
+          },
+          "error": {
+            "$ref": "#/components/schemas/JsonRpcErrorObject"
+          }
+        },
+        "required": [
+          "jsonrpc",
+          "id",
+          "error"
+        ],
+        "additionalProperties": false
+      },
+      "JsonRpcNotification": {
+        "title": "JsonRpcNotification",
+        "type": "object",
+        "properties": {
+          "jsonrpc": {
+            "const": "2.0"
+          },
+          "method": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Za-z0-9]*\\.on[A-Z][A-Za-z0-9]*$"
+          },
+          "params": {
+            "type": [
+              "object",
+              "array"
+            ],
+            "description": "Object ({\"value\":x} for primitives, or the object attributes) or an array for list payloads"
+          }
+        },
+        "required": [
+          "jsonrpc",
+          "method",
+          "params"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "errors": {
+      "MethodNotKnown": {
+        "code": -32601,
+        "message": "Method not known",
+        "data": "The method is not known to the version of Firebolt on this device"
+      },
+      "ArgumentsInvalid": {
+        "code": -32602,
+        "message": "Arguments invalid",
+        "data": "The set of arguments is not valid"
+      },
+      "UnspecifiedError": {
+        "code": -32100,
+        "message": "Unspecified error",
+        "data": "Any unexpected error, e.g. memory allocation failure, transport failure"
+      },
+      "MethodNotPermitted": {
+        "code": -40300,
+        "message": "Method not permitted",
+        "data": "The app does not have permission to call this method"
+      },
+      "MethodNotSupported": {
+        "code": -50100,
+        "message": "Method not supported",
+        "data": "A non-mandatory method that is not implemented on this device"
+      }
+    }
+  },
+  "x-jsonrpc": {
+    "specification": "https://www.jsonrpc.org/specification",
+    "connection": "The Firebolt Client Library connects to the Firebolt API Gateway with the RPCv2=true query parameter and uses only compliant JSON-RPC 2.0",
+    "caseSensitive": true,
+    "specificErrors": [
+      {
+        "name": "Wrong device class",
+        "code": "TBD (-xxxxx in spec)",
+        "description": "The method is not appropriate for this class of device"
+      },
+      {
+        "name": "App state invalid",
+        "code": "TBD (-xxxxx in spec)",
+        "description": "The app is not in an appropriate lifecycle state to call this method"
+      },
+      {
+        "name": "Speech synthesis engine error",
+        "code": "TBD (-xxxxx in spec)",
+        "description": "No speech synthesis engine is available or the engine rejected the request"
+      },
+      {
+        "name": "Not found",
+        "code": "TBD (-xxxxx in spec)",
+        "description": "The named network interface does not exist"
+      }
+    ],
+    "examples": [
+      {
+        "name": "Method call with no parameters",
+        "notes": "Params is not provided",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcRequest"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "method": "Device.uid"
+        }
+      },
+      {
+        "name": "Method call with one or more parameters",
+        "notes": "Params is an object. Arrays are not used",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcRequest"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "method": "Metrics.mediaSeeked",
+          "params": {
+            "entityId": "content-1",
+            "position": 30.5
+          }
+        }
+      },
+      {
+        "name": "Error response",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcErrorResponse"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "error": {
+            "code": -40300,
+            "message": "Method not permitted"
+          }
+        }
+      },
+      {
+        "name": "Success with no return value",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcSuccessResponse"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "result": null
+        }
+      },
+      {
+        "name": "Success returning a single primitive value",
+        "notes": "result is a primitive type",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcSuccessResponse"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "result": 42
+        }
+      },
+      {
+        "name": "Success returning a single attribute that is an array of values of the same primitive type",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcSuccessResponse"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "result": [
+            "spa",
+            "eng"
+          ]
+        }
+      },
+      {
+        "name": "Success returning more than one value",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcSuccessResponse"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "result": {
+            "enabled": true,
+            "preferredLanguages": [
+              "eng"
+            ]
+          }
+        }
+      },
+      {
+        "name": "Subscribe for notification",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcRequest"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "id": 2,
+          "method": "Localization.onCountryChanged",
+          "params": {
+            "listen": true
+          }
+        }
+      },
+      {
+        "name": "Unsubscribe from notification",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcRequest"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "id": 2,
+          "method": "Localization.onCountryChanged",
+          "params": {
+            "listen": false
+          }
+        }
+      },
+      {
+        "name": "Subscription request failed",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcErrorResponse"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "id": 2,
+          "error": {
+            "code": -12345,
+            "message": "Subscription request failed"
+          }
+        }
+      },
+      {
+        "name": "Subscription request succeeded",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcSuccessResponse"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "id": 2,
+          "result": null
+        }
+      },
+      {
+        "name": "Notification of a primitive type",
+        "notes": "The params object has a single member that is always called \"value\"",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcNotification"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "method": "Audio.onVolumeChanged",
+          "params": {
+            "value": 42
+          }
+        }
+      },
+      {
+        "name": "Notification of a single attribute that is an array of values of the same primitive type",
+        "notes": "Params is an array that represents one attribute, not positional parameters",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcNotification"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "method": "Localization.onPreferredAudioLanguagesChanged",
+          "params": [
+            "spa",
+            "eng"
+          ]
+        }
+      },
+      {
+        "name": "Notification of an object",
+        "notes": "params contains all the attributes of the object",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcNotification"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "method": "VideoOutput.onResolutionChanged",
+          "params": {
+            "width": 1920,
+            "height": 1080
+          }
+        }
+      },
+      {
+        "name": "Notification of a list of objects",
+        "notes": "Params is an array that represents one attribute, not positional parameters. Rarely used",
+        "envelope": {
+          "$ref": "#/components/schemas/JsonRpcNotification"
+        },
+        "message": {
+          "jsonrpc": "2.0",
+          "method": "Lifecycle2.onStateChanged",
+          "params": [
+            {
+              "oldState": "initializing",
+              "newState": "paused"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
