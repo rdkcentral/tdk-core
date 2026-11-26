@@ -55,4 +55,4 @@ To validate that the Firebolt certification application can be installed and lau
 
 **Priority** : High
 
-**Release Version** : M156<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
+**Release Version** : M155<div align="right"><sup>[Go To Top](#head.TOC)</sup></div>
