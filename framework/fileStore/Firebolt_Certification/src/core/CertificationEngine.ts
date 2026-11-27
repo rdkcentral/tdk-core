@@ -204,7 +204,6 @@ export class CertificationEngine {
     const scope = options.scopeLabel || (options.modules?.length ? options.modules.join(', ') : 'All modules');
     const title = `Firebolt ${options.mode} Validation - ${scope}`;
     const report = buildSuiteReport(title, options.mode, started, results);
-    report.specVersion = openRpcService.specVersion() || undefined;
     // A stopped run is partial: mark it so reports never present it as a completed (PASSED) certification.
     if (methodsCompleted < methodTotal) {
       report.interrupted = true;

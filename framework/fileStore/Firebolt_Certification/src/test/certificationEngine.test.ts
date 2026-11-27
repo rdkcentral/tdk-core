@@ -40,7 +40,7 @@ vi.mock('../config/runtime', () => ({
   runtimeConfig: { logLevel: 'ERROR' }
 }));
 vi.mock('../schema/OpenRpcService', () => ({
-  openRpcService: { getMethods: () => [...catalog], getMethod: () => undefined, specVersion: () => '9.0.0' }
+  openRpcService: { getMethods: () => [...catalog], getMethod: () => undefined }
 }));
 const invoke = vi.fn(async ({ method, mode }: any) => ({
   id: method,

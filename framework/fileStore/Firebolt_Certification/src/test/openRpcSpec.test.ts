@@ -22,7 +22,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import spec from '../../public/specs/firebolt_schema_validator_9.0.0_M155.json';
+import spec from '../../public/specs/firebolt_schema_validator_9.0.0.json';
 import { schemaValidator } from '../schema/SchemaValidator';
 import { entriesToObject, positionalParams } from '../utils/helpers';
 

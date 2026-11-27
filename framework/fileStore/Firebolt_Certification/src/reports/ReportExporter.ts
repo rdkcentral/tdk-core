@@ -75,7 +75,6 @@ export function generateReportJson(report: CertificationSuiteReport): string {
     id: report.id,
     title: report.title,
     mode: report.mode,
-    version: report.specVersion,
     startedAt: report.startedAt,
     endedAt: report.endedAt,
     overallStatus: overallStatus(report),
@@ -355,7 +354,7 @@ export function generateReportHtml(
 <html lang="en"${theme === 'light' ? ' class="light"' : ''}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Firebolt Certification Report</title>
 <style>${HTML_STYLE}</style><script>if(window.parent!==window)document.documentElement.classList.add('embedded');</script></head>
 <body><button type="button" class="tool theme-toggle" id="f-theme" aria-label="Switch theme"><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button><div class="top"><div class="top-main"><div class="report-head">${showLogo ? `<img class="report-logo" src="${LOGO_DATA_URI}" alt="TDK logo">` : ''}<div class="report-title"><h1>Firebolt Certification Report</h1>
-<div class="meta">${escapeHtml(report.mode)}${report.specVersion ? ` · Firebolt Schema Validator · Version ${escapeHtml(report.specVersion)}` : ''} · Overall <span class="badge ${overallStatus(report) === 'PASSED' ? 'pass' : 'fail'}">${overallStatus(report)}</span>${report.interrupted ? ` · Stopped before ${report.methodsNotRun ?? 0} method${report.methodsNotRun === 1 ? '' : 's'} could be tested` : ''}</div></div></div>
+<div class="meta">${escapeHtml(report.mode)} · Firebolt Schema Validator · Overall <span class="badge ${overallStatus(report) === 'PASSED' ? 'pass' : 'fail'}">${overallStatus(report)}</span>${report.interrupted ? ` · Stopped before ${report.methodsNotRun ?? 0} method${report.methodsNotRun === 1 ? '' : 's'} could be tested` : ''}</div></div></div>
 <div class="summary">${card('Total test cases', summary.total, '', 'total')}${card('Pass', summary.passed, 'PASS', 'pass')}${card('Fail', summary.failed, 'FAIL', 'fail')}${stat('Validated APIs', validated.validatedApis)}${stat('Validated Events', validated.validatedEvents)}</div></div>${successChart(summary.passed, summary.failed)}</div>
 <div class="toolbar">
   <label for="f-module">Module</label><div class="dd" id="f-module-dd"><button type="button" class="tool dd-btn" id="f-module" aria-haspopup="listbox" aria-expanded="false" data-value=""><span class="dd-label">${allModules}</span><span class="dd-caret">▾</span></button><div class="dd-menu" role="listbox" hidden><button type="button" class="dd-opt selected" role="option" aria-selected="true" data-value="">${allModules}</button>${moduleOptions}</div></div>
@@ -502,7 +501,6 @@ function summarySheet(
 
   section('Run details');
   detail('Communication mode', report.mode);
-  if (report.specVersion) detail('Version', report.specVersion);
   detail('Started', formatTime(report.startedAt));
   detail('Finished', formatTime(report.endedAt));
   detail('Duration', formatDuration(report.endedAt - report.startedAt));

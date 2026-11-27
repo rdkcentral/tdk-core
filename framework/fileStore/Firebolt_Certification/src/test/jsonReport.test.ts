@@ -62,7 +62,6 @@ const report: CertificationSuiteReport = {
   id: 'r1',
   title: 'Firebolt SDK Validation - Accessibility, Device',
   mode: 'SDK',
-  specVersion: '9.0.0',
   startedAt: 0,
   endedAt: 1,
   summary: { total: 2, passed: 1, failed: 1, durationMs: 1 },
@@ -147,15 +146,12 @@ describe('JSON report', () => {
     expect(json.suites[0].tests).toHaveLength(2);
   });
 
-  it('labels the spec version as version in JSON, HTML and Excel', () => {
-    expect(json.version).toBe('9.0.0');
-    expect(json.specVersion).toBeUndefined();
-    expect(json.fireboltSchemaValidatorSpecVersion).toBeUndefined();
-    expect(generateReportHtml(report)).toContain('SDK · Firebolt Schema Validator · Version 9.0.0 · Overall');
+  it('does not include a spec version in JSON, HTML or Excel', () => {
+    expect(json.version).toBeUndefined();
+    expect(generateReportHtml(report)).toContain('SDK · Firebolt Schema Validator · Overall');
     const xlsx = new TextDecoder().decode(generateReportXlsx(report));
     expect(xlsx).toContain('>Firebolt Schema Validator<');
-    expect(xlsx).toContain('>Version<');
-    expect(xlsx).not.toContain('specVersion');
+    expect(xlsx).not.toContain('>Version<');
   });
 
   it('has no pending/skipped fields', () => {

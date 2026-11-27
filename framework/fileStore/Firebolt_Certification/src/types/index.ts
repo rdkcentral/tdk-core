@@ -35,8 +35,6 @@ export interface RuntimeConfig {
   pubSubSubscribeSuffix: string;
   pubSubPublishSuffix: string;
   communicationMode: CommunicationMode;
-  version: string;
-  fireboltVersion: string;
   logLevel: string;
   standalone: boolean;
   autoRun: boolean;
@@ -142,7 +140,6 @@ export interface CertificationSuiteReport {
   id: string;
   title: string;
   mode: CommunicationMode;
-  specVersion?: string;
   startedAt: number;
   endedAt: number;
   summary: SuiteSummary;

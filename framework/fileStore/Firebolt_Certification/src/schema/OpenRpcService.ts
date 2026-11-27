@@ -18,11 +18,11 @@
  */
 
 /**
- * @file Loads the versioned OpenRPC spec, resolves $refs and exposes its methods, schemas and example parameter sets.
+ * @file Loads the OpenRPC spec, resolves $refs and exposes its methods, schemas and example parameter sets.
  */
 
-import latestOpenRpc from '../../public/specs/firebolt_schema_validator_9.0.0_M155.json';
-import { buildExclusionMatcher, getConfiguredExclusions, runtimeConfig } from '../config/runtime';
+import bundledOpenRpc from '../../public/specs/firebolt_schema_validator_9.0.0.json';
+import { buildExclusionMatcher, getConfiguredExclusions } from '../config/runtime';
 import type { OpenRpcDocument, OpenRpcMethod, OpenRpcParameterSet } from '../types';
 import { logger } from '../utils/Logger';
 import { entriesToObject } from '../utils/helpers';
@@ -30,22 +30,9 @@ import { entriesToObject } from '../utils/helpers';
 // Firebolt Certification certifies only against its own OpenRPC.
 // At launch the spec is read from the server that hosts Firebolt Certification (public/specs/…), so editing that file only needs an app
 // reload. The copy bundled at build time is used if it cannot be fetched.
-// Spec files are named by Firebolt version and TDK monthly tag: specs/firebolt_schema_validator_<fireboltVersion>_<releaseVersion>.json.
-// LATEST_RELEASE_VERSION is used unless the version (TDK monthly tag) and/or fireboltVersion launch parameters select another
-// file; when only one is given, the file is looked up in specs/index.json. When a new file is added, list it in
-// index.json (newest first) and bump LATEST_RELEASE_VERSION (and FIREBOLT_VERSION if it changed).
-export const LATEST_RELEASE_VERSION = 'M155';
-export const FIREBOLT_VERSION = '9.0.0';
-export const SPEC_INDEX_PATH = 'specs/index.json';
-export const specPathFor = (releaseVersion: string, fireboltVersion: string = FIREBOLT_VERSION): string =>
-  `specs/firebolt_schema_validator_${fireboltVersion}_${releaseVersion}.json`;
-export const DEFAULT_SPEC_PATH = specPathFor(LATEST_RELEASE_VERSION);
-const bundledSpec = latestOpenRpc as unknown as OpenRpcDocument;
+export const SPEC_PATH = 'specs/firebolt_schema_validator_9.0.0.json';
+const bundledSpec = bundledOpenRpc as unknown as OpenRpcDocument;
 
-interface SpecIndexEntry {
-  fireboltVersion: string;
-  releaseVersion: string;
-}
 function pointer(root: any, ref: string): any {
   if (!ref.startsWith('#/')) return undefined;
   return ref
@@ -81,30 +68,17 @@ export class OpenRpcService {
   sourceUrl(): string {
     return this.source;
   }
-  /** Version of the loaded spec (info.version), or '' when nothing is loaded. */
-  specVersion(): string {
-    return String(this.doc?.info?.version || '');
-  }
 
   async load(): Promise<OpenRpcMethod[]> {
-    const releaseVersion = (runtimeConfig.version || '').trim();
-    const fireboltVersion = (runtimeConfig.fireboltVersion || '').trim();
+    const url = new URL(SPEC_PATH, document.baseURI).toString();
     let raw: OpenRpcDocument;
-    if (releaseVersion || fireboltVersion) {
-      // An explicitly requested spec must load as asked; falling back to the bundled copy would certify the wrong version.
-      const url = new URL(await this.resolveSpecPath(fireboltVersion, releaseVersion), document.baseURI).toString();
+    try {
       raw = await this.fetchSpec(url);
       this.source = url;
-    } else {
-      const url = new URL(DEFAULT_SPEC_PATH, document.baseURI).toString();
-      try {
-        raw = await this.fetchSpec(url);
-        this.source = url;
-      } catch (error) {
-        logger.warn('Hosted OpenRPC unavailable; using the copy bundled at build time', { url, error });
-        raw = bundledSpec;
-        this.source = `bundled:${DEFAULT_SPEC_PATH}`;
-      }
+    } catch (error) {
+      logger.warn('Hosted OpenRPC unavailable; using the copy bundled at build time', { url, error });
+      raw = bundledSpec;
+      this.source = `bundled:${SPEC_PATH}`;
     }
     this.doc = dereference(raw, raw) as OpenRpcDocument;
     const isExcluded = buildExclusionMatcher(getConfiguredExclusions());
@@ -112,7 +86,7 @@ export class OpenRpcService {
     this.methods = all.filter((m) => !isExcluded(m.name));
     logger.info(
       `Loaded OpenRPC document (${this.methods.length} methods, ${all.length - this.methods.length} excluded)`,
-      { url: this.source, specVersion: this.specVersion() }
+      { url: this.source }
     );
     return this.methods;
   }
@@ -132,33 +106,6 @@ export class OpenRpcService {
     const json = await response.json();
     if (!Array.isArray(json?.methods)) throw new Error(`OpenRPC document has no methods (${url})`);
     return json;
-  }
-
-  /**
-   * Spec path for the requested versions. With both, the file name is built directly; with only one, the first
-   * (newest) matching entry in specs/index.json supplies the other.
-   */
-  private async resolveSpecPath(fireboltVersion: string, releaseVersion: string): Promise<string> {
-    if (fireboltVersion && releaseVersion) return specPathFor(releaseVersion, fireboltVersion);
-    const requested = fireboltVersion ? `fireboltVersion ${fireboltVersion}` : `version ${releaseVersion}`;
-    const url = new URL(SPEC_INDEX_PATH, document.baseURI).toString();
-    let specs: unknown;
-    try {
-      const response = await fetch(url, { cache: 'no-store' });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      specs = (await response.json())?.specs;
-    } catch (error) {
-      throw new Error(
-        `Unable to read the spec index (${url}) to resolve ${requested}: ${error instanceof Error ? error.message : String(error)}`
-      );
-    }
-    const match = (Array.isArray(specs) ? (specs as SpecIndexEntry[]) : []).find(
-      (s) =>
-        (!fireboltVersion || s?.fireboltVersion === fireboltVersion) &&
-        (!releaseVersion || s?.releaseVersion === releaseVersion)
-    );
-    if (!match) throw new Error(`No OpenRPC spec listed in ${SPEC_INDEX_PATH} for ${requested}`);
-    return specPathFor(match.releaseVersion, match.fireboltVersion);
   }
 
   private toMethod(m: any): OpenRpcMethod {
