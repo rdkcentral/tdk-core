@@ -137,6 +137,9 @@ multi_animation_app_download_url = bolt_packages_base_path + "com.rdkcentral.mul
 object_animation_app_id = "com.rdkcentral.object-animation-app"
 object_animation_app_download_url = bolt_packages_base_path + "com.rdkcentral.object-animation-app+0.1.0.bolt"
 
+aamp_native_player_app_id = "com.rdkcentral.nativeplayer"
+aamp_nativeplayer_namespace = "org.rdk.nativeplayer"
+
 #************************************************************************
 #         DIFFERENT AV CODEC HLS/DASH URLs FOR CODEC TESTING
 #************************************************************************

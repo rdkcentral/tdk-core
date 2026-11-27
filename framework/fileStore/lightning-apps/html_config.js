@@ -21,4 +21,8 @@ var WEBSOCKET_URL = 'ws://127.0.0.1:9998/jsonrpc';
 var WEBSOCKET_TIMEOUT = 10000;
 var DEFAULT_EXPECTED_FPS = 30;
 var FPS_THRESHOLD = 3;
-var DROPPED_FRAMES_THRESHOLD = 10;
+var DROPPED_FRAMES_THRESHOLD = 5000;
+
+// AAMP native player (org.rdk.nativeplayer) thunder websocket variables
+var AAMP_NATIVEPLAYER_WS_HOST = 'ws://127.0.0.1';
+var AAMP_NATIVEPLAYER_WS_PORT = 10101;

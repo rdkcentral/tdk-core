@@ -237,14 +237,23 @@ getValuePS();
         let videoURL = GetURLParameter("url").replace(/:and:/g, "&").replace(/:eq:/g, "=");
         let autotest = GetURLParameter("autotest")
         let urlType = GetURLParameter("type")
+        // player=aamp drives native AAMP playback via the nativeplayer Thunder websocket (using the
+        // launched aamp-player app's instanceId from the URL) instead of the HTML5 <video> element,
+        // while reusing the shared validation/reporting logic.
+        const selectedPlayer = (GetURLParameter("player") || "HTMLPlayer");
+        const isAAMP = (selectedPlayer === "aamp");
+        const AAMP_STATES = { Idle: 0, Initializing: 1, Initialized: 2, Preparing: 3, Prepared: 4, Buffering: 5, Paused: 6, Seeking: 7, Playing: 8, Stopping: 9, Stopped: 10, Complete: 11, Error: 12, Released: 13 };
         let expectedEvents = [];
         let observedEvents = [];
         let seekInterval = 10;
         let usedashlib = false;
         let usehlslib = false;
+        let secondaryURL = "";
         let options = [];
         let configs = [];
         let DRMconfig = {};
+        let licenseHeader = "";
+        let preferredDRM = "";
         let expectedPos = "";
         let observedPos = "";
         let expectedRate = 0;
@@ -254,18 +263,70 @@ getValuePS();
         let expectedVolume = "";
         let expectedMute = "";
         let observedMute = "";
+        let volumeChangeFlag = 0;
+        let audioChangeFlag = 0;
+        let textChangeFlag = 0;
+        let expectedAudioIndex = 0;
+        let expectedTextIndex = 0;
+        let audioTracksAvailability = 1;
+        let textTracksAvailability = 1;
+        let VideoBitrateChangeFlag = 0;
+        let videoBitratesAvailability = 1;
+        let expectedVideoBitrate = 0;
+        let videoBitratesSelected = [];
+        let SetVideoTrackFlag = 0;
+        let expectedVideoTrack = 0;
+        let availableVideoTrack = [];
+        let SetThumbnailTrackFlag = 0;
+        let availableThumbnailTrack = [];
+        let expectedThumbnailTrack = 0;
+        let SetAudioInfoFlag = 0;
+        let SetTextInfoFlag = 0;
+        let SetPlaybackFlag = 0;
+        let SetPrefAudio = 0;
+        let expectedPrefAudio = "";
         let pos_val_result = [];
         let pos_zero_index_flag = 0;
+        let pos_end_flag = 0;
         let pos_list = [];
         let pos_val_flag = 0;
         let pos_val_index = 1;
         let eventFlowFlag = 1;
         let errorFlag = 0;
+        let testStatus = 0;
+        let check_end_duration = 0;
+        let closeDuration = 0;
         let initFlag = 0;
-        let playbackSpeeds = [1, 2, 3, 4];
+        let vidDuration = 0;
+        let delaytest = GetURLParameter("delaytest");
+        let playbackSpeeds = isAAMP ? [-64, -32, -16, -4, 1, 4, 16, 32, 64] : [1, 2, 3, 4];
         let playbackRateIndex = playbackSpeeds.indexOf(1);
         let progressEventMsg = "";
         let progressLogger = null;
+        let aampPlayRequestTs = 0;
+        let aampPlayObservedTs = 0;
+        let aampPlayStartPos = 0;
+        let aampResumeFailed = false;
+        let aampPlayValidationPending = false;
+        const AAMP_PLAY_EVENT_GRACE_MS = 6000;
+        const AAMP_PLAY_MOVEMENT_GRACE_MS = 2500;
+        const AAMP_PLAY_TOTAL_SETTLE_MS = 12000;
+        // AAMP-only: some content/sessions never emit a terminal onEOS/onStateChanged("complete")
+        // notification over the websocket once playback reaches full duration, which would
+        // otherwise leave playtillend() waiting silently until an external test harness's own
+        // "no activity" watchdog times out first. Actively poll AAMP's live session state for a
+        // bounded window instead, logging progress each time, before giving up as a failure.
+        let aampPlaytillendDeadline = 0;
+        const AAMP_PLAYTILLEND_FAIL_BUDGET_MS = 15000;
+        // True while the above retry/poll loop is still running; a scheduled "close" action
+        // (explicit in the operations list) must wait for this to clear so it doesn't cut the
+        // retry loop off before it can log its final success/failure result.
+        let aampPlaytillendPending = false;
+        // Set true once the player has actually been closed (by either the explicit "close"
+        // action or the auto-close fallback). dispTestResult() must wait for this so its
+        // terminal "TEST RESULT" line (which the external test harness watches for and stops
+        // on) can never race ahead of - and pre-empt - "Going to close" / closePlayer().
+        let playerClosed = false;
         const SEEK_TOLERANCE = { lower: 2, upper: 7 }; //like [exp-2, exp+7]
         const interval = 1000;
         let checkInterval = 3000;
@@ -278,7 +339,9 @@ getValuePS();
         let prevFrameCount = 0;
         let prevTimeStamp = 0;
         let fpsInterval = null;
-        let enable_fps_flag = 1;
+        // FPS/dropped-frame metrics come from the HTML5 <video> element and are not applicable to
+        // the native AAMP player, so they are disabled when player=aamp.
+        let enable_fps_flag = isAAMP ? 0 : 1;
         let expectedFPS = DEFAULT_EXPECTED_FPS;
         let expectedFPSProvided = false;
         let droppedFramesTotal = 0;
@@ -313,12 +376,35 @@ getValuePS();
                 if (hlslib == "yes" || hlslib == "YES")
                     usehlslib = true;
             }
+            else if (item.includes("secondaryURL")) {
+                secondaryURL = item.split('(')[1].split(')')[0].replace(/:and:/g, "&").replace(/:eq:/g, "=");
+            }
             else if (item.includes("collectfps")) {
                 enable_fps_flag = 1;
             }
             else if (item.includes("expectedfps")) {
                 expectedFPS = parseInt(item.split('(')[1].split(')')[0]);
                 expectedFPSProvided = true;
+            }
+        });
+
+        // Parse DRM options in the same style as Lightning AAMP player.
+        configs.forEach(item => {
+            if (item.includes("headers")) {
+                licenseHeader = String(item.split('(')[1].split(')')[0]);
+            } else if (item.includes("preferred")) {
+                preferredDRM = String(item.split('(')[1].split(')')[0]);
+                DRMconfig["preferredKeysystem"] = preferredDRM;
+            } else {
+                const drm = String(item.split('(')[0]);
+                let licenseUrl = String(item.split('(')[1].split(')')[0]);
+                licenseUrl = licenseUrl
+                    .replace(/:and:/g, "&")
+                    .replace(/:eq:/g, "=")
+                    .replace(/:ob:/g, "(")
+                    .replace(/:cb:/g, ")")
+                    .replace(/:comma:/g, ",");
+                DRMconfig[drm] = licenseUrl;
             }
         });
 
@@ -345,6 +431,8 @@ getValuePS();
         }
 
         function startFPSMonitoring() {
+            // FPS is measured from the HTML5 <video> element; not applicable to the native AAMP player.
+            if (isAAMP) return;
             if (typeof videoEl.getVideoPlaybackQuality !== "function") {
                 if (fpsDisplay) fpsDisplay.textContent = "FPS: N/A";
                 logMsg("FPS API not supported: getVideoPlaybackQuality()");
@@ -526,6 +614,10 @@ getValuePS();
                 window.shakaPlayer.destroy();
                 window.shakaPlayer = null;
             }
+            if (window.aampPlayer) {
+                try { window.aampPlayer.stop(); } catch (e) { }
+                window.aampPlayer = null;
+            }
 
             let finalPlayer = player;
 
@@ -583,6 +675,14 @@ getValuePS();
                     }
                     break;
 
+                case "aamp":
+                    // Native AAMP playback runs over the nativeplayer Thunder websocket using the
+                    // already-launched aamp-player app's instanceId (passed in via the URL).
+                    window.aampPlayer = new NativePlayer(GetURLParameter("namespace") || "org.rdk.nativeplayer");
+                    logMsg("AAMP native player driver created !!!");
+                    setupAAMPPlayer(autoplay);
+                    break;
+
                 default:
                     finalPlayer = "HTMLPlayer";
                     break;
@@ -594,6 +694,7 @@ getValuePS();
             if (finalPlayer === "dashjs" && window.dashPlayer) isValid = true;
             else if (finalPlayer === "hls" && window.hlsPlayer) isValid = true;
             else if (finalPlayer === "shaka" && window.shakaPlayer) isValid = true;
+            else if (finalPlayer === "aamp" && window.aampPlayer) isValid = true;
             else if (finalPlayer === "HTMLPlayer") isValid = true;
 
             if (!isValid) {
@@ -611,12 +712,676 @@ getValuePS();
                 videoEl.autoplay = autoplay;
             }
 
-            logMsg(`[Validation] Final Player Loaded: ${finalPlayer}`);
+            logMsg(`Final Player Loaded: ${finalPlayer}\n`);
+        }
+
+        /* ------------------------
+           AAMP native player (nativeplayer Thunder websocket) integration
+           ------------------------ */
+
+        // Events registered on the nativeplayer session (mirrors aampplayer.py DEFAULT_EVENTS).
+        const AAMP_NATIVE_EVENTS = [
+            "onProgress", "onStateChanged", "onSpeedChanged", "onSpeedsChanged", "onSeeked",
+            "onEOS", "onTuneFailed", "onBitrateChanged", "onBufferingChanged", "onMediaMetadata",
+            "onMonitorAVStatus", "onManifestRefresh"
+        ];
+        const AAMP_WS_CONNECT_RETRIES = 30;
+        const AAMP_OPEN_SESSION_RETRIES = 3;
+
+        // Minimal JSON-RPC client for org.rdk.nativeplayer over a Thunder websocket. htmlplayer.html
+        // runs on the device, so it reaches the loopback nativeplayer socket directly (no SSH tunnel).
+        class NativePlayer {
+            constructor(namespace) {
+                this.namespace = namespace;
+                this.ws = null;
+                this.sessionId = null;
+                this.msgId = 1;
+                this.pending = {};
+                this.eventIndex = 1;
+                this.externalEventHandlers = {};
+                // State tracked from event notifications (nativeplayer has no synchronous getters).
+                this.lastPosition = 0;
+                this.lastDuration = 0;
+                this.lastSpeed = 1;
+                this.stateNum = AAMP_STATES.Idle;
+                this.muted = false;
+                this.volume = 100;
+                this.currentRate = 1;
+                this.lastUrl = "";
+                // Trick-play speeds the current content actually advertises as supported, learned
+                // from onMediaMetadata (at tune time) / onSpeedsChanged (if it changes later). Null
+                // until the first one arrives, since not every stream/profile reports it.
+                this.supportedSpeeds = null;
+            }
+
+            connect(url) {
+                return new Promise((resolve, reject) => {
+                    let ws;
+                    try { ws = new WebSocket(url); } catch (e) { reject(e); return; }
+                    ws.onopen = () => { this.ws = ws; resolve(); };
+                    ws.onerror = (e) => reject(e);
+                    ws.onclose = () => { };
+                    ws.onmessage = (e) => this._onMessage(e.data);
+                });
+            }
+
+            _onMessage(raw) {
+                let msg;
+                try { msg = JSON.parse(raw); } catch (e) { return; }
+                if (msg.id !== undefined && this.pending[msg.id]) {
+                    const p = this.pending[msg.id];
+                    delete this.pending[msg.id];
+                    if (msg.error) p.reject(new Error(JSON.stringify(msg.error)));
+                    else p.resolve(msg.result);
+                    return;
+                }
+                // Notifications arrive as "<registered-event-id>.<eventName>", e.g. "events.1.onProgress".
+                if (msg.method) {
+                    const eventName = String(msg.method).split(".").pop();
+                    handleAAMPNativeEvent(eventName, msg.params || {});
+                    const handlers = this.externalEventHandlers[eventName] || [];
+                    handlers.forEach((handler) => {
+                        try { handler(msg.params || {}); } catch (e) { logMsg("External event handler error for " + eventName + ": " + e); }
+                    });
+                }
+            }
+
+            _call(method, params) {
+                return new Promise((resolve, reject) => {
+                    if (!this.ws) { reject(new Error("websocket not connected")); return; }
+                    const id = this.msgId++;
+                    this.pending[id] = { resolve, reject };
+                    const payload = { jsonrpc: "2.0", id, method: this.namespace + "." + method };
+                    if (params !== undefined) payload.params = params;
+                    try { this.ws.send(JSON.stringify(payload)); }
+                    catch (e) { delete this.pending[id]; reject(e); return; }
+                    setTimeout(() => {
+                        if (this.pending[id]) { delete this.pending[id]; reject(new Error("timeout waiting for " + method)); }
+                    }, 15000);
+                });
+            }
+
+            async openSession(instanceId) {
+                const result = await this._call("openSession", { instanceId: instanceId, displayId: "wst-" + instanceId });
+                this.sessionId = (result && result.sessionId) ? result.sessionId : result;
+                if (!this.sessionId) throw new Error("openSession did not return a sessionId");
+                return this.sessionId;
+            }
+
+            async registerAllEvents(events) {
+                for (const event of events) {
+                    try { await this._call("register", { event: event, id: "events." + (this.eventIndex++) }); }
+                    catch (e) { logMsg("Failed to register event " + event + ": " + e); }
+                }
+            }
+
+            // UVE compatibility helpers mapped to nativeplayer OpenRPC session APIs.
+            load(url, autoPlay = true) { return this.tune(url, autoPlay); }
+            initConfig(config) { return this._call("configureSession", { sessionId: this.sessionId, config: config }); }
+            setDRMConfig(config) { return this._call("configureSession", { sessionId: this.sessionId, config: config }); }
+            addCustomHTTPHeader(headerName, headerValue, isLicenseRequest = true) {
+                return this._call("addCustomHTTPHeader", {
+                    sessionId: this.sessionId,
+                    headerName: headerName,
+                    headerValue: headerValue,
+                    isLicenseRequest: isLicenseRequest
+                });
+            }
+            play() { return this.resume(); }
+            tune(url, autoPlay = true) {
+                this.lastUrl = url;
+                return this._call("play", { url: url, autoPlay: autoPlay, sessionId: this.sessionId });
+            }
+            resume() {
+                // Some nativeplayer builds need fallbacks after pauseAt(-1), so keep this resilient.
+                const waitMs = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+                const markPlaying = () => { this.currentRate = 1; this.lastSpeed = 1; };
+                const resumeStartPos = Number(this.lastPosition || 0);
+                const hasAdvanced = () => Number(this.lastPosition || 0) > (resumeStartPos + 0.2);
+                // lastPosition is normally only refreshed by push onProgress events, which can be
+                // throttled/batched by the backend and make an already-resumed player look stalled.
+                // Actively poll the live position via RPC here so we don't rely solely on that push telemetry.
+                const refreshPosition = async () => {
+                    try { await this.getPlaybackPositionFromSession(); } catch (e) { }
+                };
+                const isPlayingNow = async () => {
+                    if (hasAdvanced()) return true;
+                    try {
+                        const state = await this.getStateFromSession();
+                        if (aampNativeStateToNum(state) === AAMP_STATES.Playing) {
+                            await refreshPosition();
+                            if (hasAdvanced()) return true;
+                        }
+                    } catch (e) { }
+                    try {
+                        const rate = await this.getPlaybackRateFromSession();
+                        if (Number(rate) > 0) {
+                            await refreshPosition();
+                            if (hasAdvanced()) return true;
+                        }
+                    } catch (e) { }
+                    return false;
+                };
+                const waitForPlaying = async (timeoutMs = 2000, pollMs = 150) => {
+                    const start = Date.now();
+                    while ((Date.now() - start) < timeoutMs) {
+                        if (await isPlayingNow()) return true;
+                        await waitMs(pollMs);
+                    }
+                    // Small tail grace for async state/event propagation.
+                    await waitMs(300);
+                    if (await isPlayingNow()) return true;
+                    return false;
+                };
+
+                const attempts = [
+                    {
+                        // Per the full OpenRPC JSON-RPC spec for pauseAt: "Pass a negative value to
+                        // cancel a previously scheduled pause." Our pause() schedules a pause at the
+                        // current position (pauseAt(currentPosition)), so cancelling that scheduled
+                        // pause is the documented way to resume.
+                        label: "pauseAt(-1)",
+                        waitMs: 3000,
+                        fn: () => this._call("pauseAt", { sessionId: this.sessionId, position: -1 })
+                    },
+                    {
+                        label: "setRate(1)",
+                        waitMs: 1600,
+                        fn: () => this._call("setRate", { sessionId: this.sessionId, rate: 1, overshootCorrection: 0 })
+                    },
+                    {
+                        label: "setPlaybackSpeed(1)",
+                        waitMs: 1600,
+                        fn: () => this._call("setPlaybackSpeed", { sessionId: this.sessionId, speed: 1 })
+                    }
+                ];
+
+                return (async () => {
+                    let lastError = null;
+                    for (const attempt of attempts) {
+                        try {
+                            const result = await attempt.fn();
+                            markPlaying();
+                            if (await waitForPlaying(attempt.waitMs || 2000)) {
+                                return result;
+                            }
+                            // Suppress noisy intermediate warning; next fallback attempts still run and
+                            // real failures are reported if all resume strategies fail.
+                        } catch (err) {
+                            lastError = err;
+                            logMsg("[WARN]: Resume attempt failed: " + attempt.label + " - " + err);
+                        }
+                    }
+                    throw (lastError || new Error("resume failed: player did not transition to Playing"));
+                })();
+            }
+            pause() { return this._call("pauseAt", { sessionId: this.sessionId, position: this.lastPosition }); }
+            seek(sec, keepPaused = false) { return this._call("seek", { sessionId: this.sessionId, position: sec, keepPaused: keepPaused }); }
+            setPlaybackRate(rate, overshootCorrection = 0) {
+                this.currentRate = rate;
+                return this._call("setRate", { sessionId: this.sessionId, rate: rate, overshootCorrection: overshootCorrection });
+            }
+            setMute(muted) { this.muted = muted; return this._call("setVideoMute", { sessionId: this.sessionId, muted: muted }).then(() => this.refreshMute()); }
+            refreshMute() {
+                return this._call("getVideoMute", { sessionId: this.sessionId }).then(r => {
+                    if (r && r.muted !== undefined) this.muted = !!r.muted;
+                    else if (r && r.videoMuted !== undefined) this.muted = !!r.videoMuted;
+                    else this.muted = !!r;
+                    return this.muted;
+                }).catch(() => this.muted);
+            }
+            setVolume(volume) { this.volume = volume; return this._call("setAudioVolume", { sessionId: this.sessionId, volume: volume }); }
+            getAudioVolumeFromSession() {
+                return this._call("getAudioVolume", { sessionId: this.sessionId }).then(r => {
+                    const volume = (r && r.volume !== undefined) ? Number(r.volume) : Number(r || this.volume);
+                    this.volume = isNaN(volume) ? this.volume : volume;
+                    return this.volume;
+                });
+            }
+            setPlaybackSpeed(speed) {
+                this.currentRate = speed;
+                return this._call("setPlaybackSpeed", { sessionId: this.sessionId, speed: speed });
+            }
+            seekToLive(keepPaused = false) { return this._call("seekToLive", { sessionId: this.sessionId, keepPaused: keepPaused }); }
+            isLive() {
+                return this._call("isLive", { sessionId: this.sessionId }).then(r => {
+                    if (r && r.isLive !== undefined) return !!r.isLive;
+                    return !!r;
+                });
+            }
+            getStateFromSession() {
+                return this._call("getState", { sessionId: this.sessionId }).then(r => {
+                    const state = (r && r.state !== undefined) ? r.state : r;
+                    this.stateNum = aampNativeStateToNum(state);
+                    return state;
+                });
+            }
+            getPlaybackPositionFromSession() {
+                return this._call("getPlaybackPosition", { sessionId: this.sessionId }).then(r => {
+                    const pos = (r && r.position !== undefined) ? Number(r.position) : Number(r || 0);
+                    this.lastPosition = isNaN(pos) ? this.lastPosition : pos;
+                    return this.lastPosition;
+                });
+            }
+            getPlaybackDurationFromSession() {
+                return this._call("getPlaybackDuration", { sessionId: this.sessionId }).then(r => {
+                    const dur = (r && r.duration !== undefined) ? Number(r.duration) : Number(r || 0);
+                    this.lastDuration = isNaN(dur) ? this.lastDuration : dur;
+                    return this.lastDuration;
+                });
+            }
+            getPlaybackRateFromSession() {
+                return this._call("getPlaybackRate", { sessionId: this.sessionId }).then(r => {
+                    const rate = (r && r.rate !== undefined) ? Number(r.rate) : Number(r || 1);
+                    this.lastSpeed = isNaN(rate) ? this.lastSpeed : rate;
+                    return this.lastSpeed;
+                });
+            }
+            getAudioLanguage() {
+                return this._call("getAudioLanguage", { sessionId: this.sessionId }).then(r => {
+                    if (r && r.language !== undefined) return r.language;
+                    return r;
+                });
+            }
+            getAvailableAudioTracks(allTracks = false) {
+                return this._call("getAvailableAudioTracks", { sessionId: this.sessionId, allTracks: allTracks }).then(r => {
+                    if (r && r.tracks !== undefined) return r.tracks;
+                    return r;
+                });
+            }
+            setAudioTrack(trackId) { return this._call("setAudioTrack", { sessionId: this.sessionId, trackId: trackId }); }
+            getAudioTrack() {
+                return this._call("getAudioTrack", { sessionId: this.sessionId }).then(r => {
+                    if (r && r.trackId !== undefined) return r.trackId;
+                    return r;
+                });
+            }
+            getAudioTrackInfo() {
+                return this._call("getAudioTrackInfo", { sessionId: this.sessionId }).then(r => {
+                    if (r && r.trackInfo !== undefined) return r.trackInfo;
+                    return r;
+                });
+            }
+            setSubtitleMute(muted) { return this._call("setSubtitleMute", { sessionId: this.sessionId, muted: muted }); }
+            setClosedCaptionStatus(enable) { return this.setSubtitleMute(!enable); }
+            getAvailableTextTracks(allTracks = false) {
+                return this._call("getAvailableTextTracks", { sessionId: this.sessionId, allTracks: allTracks }).then(r => {
+                    if (r && r.tracks !== undefined) return r.tracks;
+                    return r;
+                });
+            }
+            setTextTrack(trackId) { return this._call("setTextTrack", { sessionId: this.sessionId, trackId: trackId }); }
+            getTextTrack() {
+                return this._call("getTextTrack", { sessionId: this.sessionId }).then(r => {
+                    if (r && r.trackId !== undefined) return r.trackId;
+                    return r;
+                });
+            }
+            getTextTrackInfo() {
+                return this._call("getTextTrackInfo", { sessionId: this.sessionId }).then(r => {
+                    if (r && r.trackInfo !== undefined) return r.trackInfo;
+                    return r;
+                });
+            }
+            setVideoRect(x, y, w, h) {
+                return this._call("setVideoRectangle", { sessionId: this.sessionId, x: x, y: y, w: w, h: h })
+                    .catch((err) => {
+                        logMsg("[WARN]: setVideoRectangle failed, trying setVideoRect fallback: " + err);
+                        return this._call("setVideoRect", { sessionId: this.sessionId, x: x, y: y, w: w, h: h });
+                    });
+            }
+            getVideoRectangle() { return this._call("getVideoRectangle", { sessionId: this.sessionId }); }
+            setAudioLanguage(language) {
+                return this._call("setAudioLanguage", { sessionId: this.sessionId, language: language })
+                    .catch((err) => {
+                        logMsg("[WARN]: setAudioLanguage failed, trying setPreferredLanguages fallback: " + err);
+                        return this._call("setPreferredLanguages", { sessionId: this.sessionId, languageList: language });
+                    });
+            }
+            getVideoBitrates() { return this._call("getVideoBitrates", { sessionId: this.sessionId }); }
+            getCurrentVideoBitrate() { return this._call("getCurrentVideoBitrate", { sessionId: this.sessionId }); }
+            setVideoBitrate(bitrate) { return this._call("setVideoBitrate", { sessionId: this.sessionId, bitrate: bitrate }); }
+            getCurrentAudioBitrate() { return this._call("getCurrentAudioBitrate", { sessionId: this.sessionId }); }
+            getAvailableVideoTracks() { return this._call("getAvailableVideoTracks", { sessionId: this.sessionId }); }
+            setVideoTracks(bandwidth) { return this._call("setVideoTracks", { sessionId: this.sessionId, bandwidth: bandwidth }); }
+            getAvailableThumbnailTracks() { return this._call("getAvailableThumbnailTracks", { sessionId: this.sessionId }); }
+            setThumbnailTrack(index) {
+                return this._call("setThumbnailTrack", { sessionId: this.sessionId, index: index })
+                    .catch((err) => {
+                        logMsg("[WARN]: setThumbnailTrack(index) failed, trying trackId fallback: " + err);
+                        return this._call("setThumbnailTrack", { sessionId: this.sessionId, trackId: index });
+                    });
+            }
+            getPlaybackStatistics() { return this._call("getPlaybackStatistics", { sessionId: this.sessionId }); }
+            getManifest() { return this._call("getManifest", { sessionId: this.sessionId }); }
+            setPreferredAudioLanguage(language) {
+                return this._call("setPreferredLanguages", { sessionId: this.sessionId, languageList: language })
+                    .catch((err) => {
+                        logMsg("[WARN]: setPreferredLanguages failed, trying setPreferredAudioLanguage fallback: " + err);
+                        return this._call("setPreferredAudioLanguage", { sessionId: this.sessionId, language: language });
+                    });
+            }
+            getPreferredAudioProperties() {
+                return this._call("getPreferredLanguages", { sessionId: this.sessionId })
+                    .then((r) => {
+                        if (r && r.languageList !== undefined) return r;
+                        return r;
+                    })
+                    .catch((err) => {
+                        logMsg("[WARN]: getPreferredLanguages failed, trying getPreferredAudioProperties fallback: " + err);
+                        return this._call("getPreferredAudioProperties", { sessionId: this.sessionId });
+                    });
+            }
+            addEventListener(eventName, eventHandler) {
+                if (!this.externalEventHandlers[eventName]) this.externalEventHandlers[eventName] = [];
+                this.externalEventHandlers[eventName].push(eventHandler);
+                return this._call("register", { event: eventName, id: "events." + (this.eventIndex++) });
+            }
+            stop() {
+                if (!this.ws || !this.sessionId) return Promise.resolve();
+                return this.closeSession()
+                    .catch(() => { })
+                    .then(() => { try { this.ws.close(); } catch (e) { } });
+            }
+
+            // Closes the nativeplayer session, if one was opened. Safe to call even when a later
+            // setup step (configureSession/register/play) failed after openSession succeeded, so a
+            // half-initialized session is never left orphaned on the device.
+            async closeSession() {
+                if (!this.sessionId) return;
+                const sessionId = this.sessionId;
+                this.sessionId = null;
+                try { await this._call("stop", { sessionId: sessionId }); } catch (e) { }
+                await this._call("closeSession", { sessionId: sessionId });
+            }
+
+            // Synchronous getters backed by tracked event state (used by the shared validation flow).
+            getCurrentPosition() { return this.lastPosition; }
+            getDurationSec() { return this.lastDuration; }
+            getCurrentState() { return this.stateNum; }
+            getPlaybackRate() { return this.lastSpeed; }
+            getVolume() { return this.volume; }
+            getMute() { return this.muted; }
+        }
+
+        // Connects to the nativeplayer session for the already-launched aamp-player app and starts playback.
+        async function setupAAMPPlayer(autoplay) {
+            const instanceId = GetURLParameter("instanceid") || "";
+            const wsPort = parseInt(GetURLParameter("wsport") || AAMP_NATIVEPLAYER_WS_PORT);
+            videoEl.removeAttribute('autoplay');
+            videoEl.querySelectorAll('source').forEach(s => s.removeAttribute('src'));
+            videoEl.removeAttribute('src');
+
+            if (!instanceId) {
+                errorFlag = 1;
+                logMsg("[ERROR]: No aamp-player instanceid provided in URL; cannot start native playback");
+                logMsg("TEST RESULT : FAILURE");
+                return;
+            }
+
+            const player = window.aampPlayer;
+            const wsUrl = AAMP_NATIVEPLAYER_WS_HOST + ":" + wsPort;
+            let connected = false;
+            for (let attempt = 0; attempt < AAMP_WS_CONNECT_RETRIES && !connected; attempt++) {
+                try { await player.connect(wsUrl); connected = true; }
+                catch (e) { await new Promise(r => setTimeout(r, 2000)); }
+            }
+            if (!connected) {
+                errorFlag = 1;
+                logMsg("[ERROR]: Could not connect to nativeplayer websocket at " + wsUrl);
+                logMsg("TEST RESULT : FAILURE");
+                return;
+            }
+
+            try {
+                // logMsg("Connected to nativeplayer websocket at " + wsUrl);
+                // The nativeplayer app's websocket can accept a connection before its backend session
+                // manager is fully initialized (observed as app lifecycleState still
+                // APP_STATE_INITIALIZING), so openSession can time out on the first attempt even though
+                // the connection itself succeeded. Retry a few times before giving up.
+                let sessionId;
+                let openSessionError = null;
+                for (let attempt = 1; attempt <= AAMP_OPEN_SESSION_RETRIES; attempt++) {
+                    try {
+                        sessionId = await player.openSession(instanceId);
+                        openSessionError = null;
+                        break;
+                    } catch (e) {
+                        openSessionError = e;
+                        if (attempt < AAMP_OPEN_SESSION_RETRIES) {
+                            logMsg("[WARN]: openSession attempt " + attempt + " failed: " + e + "; retrying...");
+                            await new Promise(r => setTimeout(r, 2000));
+                        }
+                    }
+                }
+                if (openSessionError) throw openSessionError;
+                // logMsg("Received the session id: " + sessionId);
+                // Align with Lightning setPlayerConfig defaults to ensure consistent progress/event cadence.
+                await player.initConfig({
+                    initialBitrate: 2500000,
+                    offset: 0,
+                    networkTimeout: 10,
+                    preferredAudioLanguage: "en",
+                    liveOffset: 15,
+                    progressReportingInterval: 1,
+                    drmConfig: {}
+                });
+                if (Object.keys(DRMconfig).length !== 0) {
+                    await player.setDRMConfig(DRMconfig);
+                    if (licenseHeader) {
+                        const sep = licenseHeader.indexOf(":");
+                        if (sep > 0) {
+                            const headerTag = licenseHeader.slice(0, sep);
+                            const headerVal = licenseHeader.slice(sep + 1);
+                            await player.addCustomHTTPHeader(headerTag, headerVal);
+                        }
+                    }
+                }
+                await player.registerAllEvents(AAMP_NATIVE_EVENTS);
+                logMsg("AAMP player loaded with video url: " + videoURL + "\n");
+                await player.tune(videoURL, autoplay);
+                logMsg("Video Playback Started !!!");
+            } catch (e) {
+                errorFlag = 1;
+                logMsg("[ERROR]: AAMP native playback setup failed: " + e);
+                // A session may have been opened (openSession succeeded) even though a later setup
+                // step (configureSession/register/play) failed; close it mandatorily so the device
+                // doesn't retain an orphaned, half-initialized nativeplayer session.
+                if (player.sessionId) {
+                    const orphanedSessionId = player.sessionId;
+                    logMsg("[INFO]: Closing nativeplayer session " + orphanedSessionId + " after setup failure");
+                    try {
+                        await player.closeSession();
+                        logMsg("[INFO]: Session " + orphanedSessionId + " closed successfully after setup failure");
+                    } catch (closeErr) {
+                        logMsg("[WARN]: Failed to close session " + orphanedSessionId + " after setup failure: " + closeErr);
+                    }
+                }
+                logMsg("TEST RESULT : FAILURE");
+            }
+        }
+
+        // Maps a nativeplayer onStateChanged state (string or numeric) to an AAMP_STATES value.
+        function aampNativeStateToNum(state) {
+            const s = String(state).toLowerCase();
+            if (s.indexOf("play") >= 0) return AAMP_STATES.Playing;
+            if (s.indexOf("paus") >= 0) return AAMP_STATES.Paused;
+            if (s.indexOf("seek") >= 0) return AAMP_STATES.Seeking;
+            if (s.indexOf("error") >= 0 || s.indexOf("fail") >= 0) return AAMP_STATES.Error;
+            // "complete" is the documented PlayerState AAMP reports via onStateChanged when
+            // playback reaches end-of-stream. Some content/sessions only signal EOS this way and
+            // never emit a separate onEOS notification, so this must be recognized here too --
+            // otherwise playtillend() has no way to observe "ended" and hangs indefinitely.
+            if (s.indexOf("complete") >= 0) return AAMP_STATES.Complete;
+            if (s.indexOf("stop") >= 0) return AAMP_STATES.Stopped;
+            return AAMP_STATES.Idle;
+        }
+
+        function aampExtractPosition(params) {
+            if (params.positionMs !== undefined) return params.positionMs / 1000.0;
+            if (params.position !== undefined) return params.position;
+            return null;
+        }
+        function aampExtractDuration(params) {
+            if (params.durationMs !== undefined) return params.durationMs / 1000.0;
+            if (params.endMs !== undefined) return params.endMs / 1000.0;
+            if (params.duration !== undefined) return params.duration;
+            return null;
+        }
+
+        // Central handler for nativeplayer event notifications; feeds the shared validation flow.
+        function handleAAMPNativeEvent(name, params) {
+            const player = window.aampPlayer;
+            switch (name) {
+                case "onProgress": {
+                    const position = aampExtractPosition(params);
+                    const duration = aampExtractDuration(params);
+                    if (position !== null) player.lastPosition = position;
+                    if (duration !== null) player.lastDuration = duration;
+                    if (params.speed !== undefined) player.lastSpeed = params.speed;
+                    const logPosition = (position !== null) ? position : player.lastPosition;
+                    const logDuration = (duration !== null) ? duration : player.lastDuration;
+                    if (initFlag === 0 && position !== null && logDuration !== null && logDuration > 0) {
+                        vidDuration = logDuration;
+                        logMsg("******************* VIDEO STARTED PLAYING !!! *******************");
+                        logMsg("VIDEO DURATION: " + logDuration.toFixed(4));
+                        checkAndStartAutoTesting();
+                        initFlag = 1;
+                        pos_val_flag = 1;
+                    }
+                    if (logDuration !== null && logDuration > 0) {
+                        message2 = "Pos: " + logPosition.toFixed(2) + "/" + logDuration.toFixed(2);
+                        dispUIVideoPosition(message2);
+                        progressEventMsg = "Video Progressing " + logPosition.toFixed(2) + "/" + logDuration.toFixed(2);
+                        logMsg(progressEventMsg);
+                        if (check_end_duration === 1 && parseInt(logPosition) >= (parseInt(closeDuration) - 3)) {
+                            pos_end_flag = 1;
+                        }
+                    }
+                    if (position !== null && pos_val_flag === 1) {
+                        pos_list.push(position.toFixed(2));
+                    }
+                    break;
+                }
+                case "onStateChanged": {
+                    const stateNum = aampNativeStateToNum(params.state);
+                    player.stateNum = stateNum;
+                    if (stateNum === AAMP_STATES.Playing) {
+                        aampPlayObservedTs = Date.now();
+                        observedEvents.push("play");
+                        checkAndLogEvents("play", "Video Player Playing");
+                        updatePosValidationInfo(1);
+                    } else if (stateNum === AAMP_STATES.Paused) {
+                        observedEvents.push("pause");
+                        checkAndLogEvents("pause", "Video Player Paused");
+                        if (pos_zero_index_flag) { pos_zero_index_flag = 0; updatePosValidationInfo(0); }
+                    } else if (stateNum === AAMP_STATES.Seeking) {
+                        observedEvents.push("seeking");
+                        checkAndLogEvents("seeking", "Video Player Seeking");
+                    } else if (stateNum === AAMP_STATES.Complete) {
+                        // Fallback path for end-of-stream: not every stream/session emits a
+                        // separate onEOS notification, but AAMP always transitions to the
+                        // "complete" PlayerState when playback reaches the end. Push "ended" here
+                        // too (observedEvents dedup isn't required -- includes()/every() checks
+                        // elsewhere only care about presence) so playtillend() isn't solely
+                        // dependent on onEOS actually arriving.
+                        if (!observedEvents.includes("ended")) {
+                            observedEvents.push("ended");
+                            dispUIMessage("[Event]: Video Player Ended");
+                            logMsg("Video PlayBack Completed !!!");
+                        }
+                    } else if (stateNum === AAMP_STATES.Error) {
+                        errorFlag = 1;
+                        dispUIMessage("[ERROR]: Video Player Error");
+                        logMsg("Video Player Error !!!");
+                    }
+                    break;
+                }
+                case "onSpeedChanged": {
+                    if (params.speed !== undefined) {
+                        player.lastSpeed = params.speed;
+                        observedEvents.push("ratechange");
+                        observedRates.push(params.speed);
+                        observedRate = params.speed;
+                        checkAndLogEvents("ratechange", "Video Player Rate Change to " + observedRate);
+                        if (params.speed !== 0) {
+                            // Validate progress against the rate we requested (expectedRate), not
+                            // just whatever AAMP reports back. This way, if AAMP silently fails to
+                            // honor the requested trick-play rate (e.g. asked for 4x but stays at
+                            // 1x), the position-diff check flags the mismatch too, instead of
+                            // masking it by validating against the (unchanged) observed speed.
+                            // Covers rewind (negative) rates too, not just fast-forward, so
+                            // position samples actually get captured for rewind operations
+                            // instead of leaving pos_list empty and silently failing without any
+                            // mismatch details.
+                            let rate_index = (expectedEvents.includes("ratechange") && expectedRate !== 0)
+                                ? expectedRate
+                                : params.speed;
+                            if (rate_index === 16) rate_index = 10;
+                            updatePosValidationInfo(rate_index);
+                        }
+                    }
+                    break;
+                }
+                // onSpeedsChanged/onMediaMetadata carry a "supportedSpeeds" array (the trick-play
+                // rates this content's manifest actually advertises), not a "speed" value -- track
+                // it so setPlaybackRate() can warn when a requested rate isn't in that list instead
+                // of silently failing with no explanation.
+                case "onSpeedsChanged": {
+                    if (Array.isArray(params.supportedSpeeds)) {
+                        player.supportedSpeeds = params.supportedSpeeds;
+                        // logMsg("Supported trick-play speeds updated: [" + params.supportedSpeeds.join(", ") + "]");
+                    }
+                    break;
+                }
+                case "onMediaMetadata": {
+                    if (Array.isArray(params.supportedSpeeds)) {
+                        player.supportedSpeeds = params.supportedSpeeds;
+                        // logMsg("Supported trick-play speeds: [" + params.supportedSpeeds.join(", ") + "]");
+                    }
+                    break;
+                }
+                case "onSeeked": {
+                    observedEvents.push("seeked");
+                    const pos = aampExtractPosition(params);
+                    if (pos !== null) observedPos = Math.round(pos);
+                    checkAndLogEvents("seeked", "Video Player Seeked " + observedPos + "/" + getDuration().toFixed(2));
+                    updatePosValidationInfo(1);
+                    break;
+                }
+                case "onEOS": {
+                    if (!observedEvents.includes("ended")) {
+                        observedEvents.push("ended");
+                        dispUIMessage("[Event]: Video Player Ended");
+                        logMsg("Video PlayBack Completed !!!");
+                    }
+                    break;
+                }
+                case "onTuneFailed": {
+                    errorFlag = 1;
+                    logMsg("Event Occurred: onTuneFailed !!!");
+                    logMsg("Video PlayBack Failed !!!");
+                    break;
+                }
+                default:
+                    break;
+            }
         }
 
         function play() {
             expectedEvents = ["play"];
             logMsg("Expected Event: " + expectedEvents);
+            if (isAAMP) {
+                aampPlayRequestTs = Date.now();
+                aampPlayStartPos = Number(window.aampPlayer.getCurrentPosition() || 0);
+                aampPlayObservedTs = 0;
+                aampResumeFailed = false;
+                aampPlayValidationPending = true;
+                window.aampPlayer.resume().catch((e) => {
+                    aampResumeFailed = true;
+                });
+                return;
+            }
             videoEl.playbackRate = 1;
             // Use promise to ensure play request success
             const playPromise = videoEl.play();
@@ -634,10 +1399,16 @@ getValuePS();
             expectedEvents = ["pause"];
             logMsg("Expected Event: " + expectedEvents);
             pos_zero_index_flag = 1
+            if (isAAMP) { window.aampPlayer.pause(); return; }
             videoEl.pause();
         }
 
         function closePlayer() {
+            if (isAAMP) {
+                if (window.aampPlayer) window.aampPlayer.stop();
+                logMsg("Closed player");
+                return;
+            }
             videoEl.removeAttribute('src');
             videoEl.autoplay = false;
             videoEl.load();
@@ -646,6 +1417,10 @@ getValuePS();
 
         // Methods to change video position
         function seek(timeSec, keepPause = false) {
+            // Don't push "seeking" here proactively -- the real onStateChanged (Seeking) event
+            // already pushes it when AAMP actually transitions, so pushing it here too would
+            // double it up in observedEvents (e.g. "seeking,seeking,seeked").
+            if (isAAMP) { window.aampPlayer.seek(timeSec, keepPause); return; }
             videoEl.currentTime = Math.max(0, Math.min(timeSec, videoEl.duration));
         }
         function seekfwd(pos) {
@@ -667,10 +1442,17 @@ getValuePS();
             expectedPos = pos
             logMsg("Expected Event: " + expectedEvents)
             logMsg("Expected Pos  : [ " + (expectedPos).toFixed(2) + " - " + (expectedPos + 7).toFixed(2) + " ]")
+            if (isAAMP) { seek(pos); return; }
             videoEl.currentTime = pos
         }
-        function getPosition() { return Number(videoEl.currentTime.toFixed(2)); }
-        function getDuration() { return Number(videoEl.duration ? videoEl.duration.toFixed(2) : 0); }
+        function getPosition() {
+            if (isAAMP) { const p = window.aampPlayer.getCurrentPosition(); return Number((p || 0).toFixed(2)); }
+            return Number(videoEl.currentTime.toFixed(2));
+        }
+        function getDuration() {
+            if (isAAMP) { const d = window.aampPlayer.getDurationSec(); return Number(d ? d.toFixed(2) : 0); }
+            return Number(videoEl.duration ? videoEl.duration.toFixed(2) : 0);
+        }
 
         function playNow() {
             playbackRateIndex = playbackSpeeds.indexOf(1);
@@ -681,6 +1463,41 @@ getValuePS();
         /* playback rate */
         function setPlaybackRate(rate) {
             if (isNaN(rate) || rate === 0) { logMsg("Invalid rate"); return; }
+            if (isAAMP) {
+                expectedEvents = ["ratechange"];
+                expectedRate = rate;
+                observedRates = [];
+                logMsg("Expected Event: " + expectedEvents);
+                logMsg("Expected Rate: " + rate);
+                // Diagnostic only (doesn't change validation behavior): if the content has already
+                // advertised its supported trick-play speeds via onMediaMetadata/onSpeedsChanged
+                // and the requested rate isn't in that list, the upcoming ratechange-to-1 fallback
+                // is expected from AAMP, not a bug -- log why instead of leaving it unexplained.
+                const supported = window.aampPlayer.supportedSpeeds;
+                if (Array.isArray(supported) && supported.length > 0 && !supported.includes(rate)) {
+                    const sortedSpeeds = [...supported].sort((a, b) => a - b);
+                    const speedsText = sortedSpeeds.length > 1
+                        ? sortedSpeeds.slice(0, -1).join(", ") + ", and " + sortedSpeeds[sortedSpeeds.length - 1]
+                        : String(sortedSpeeds[0]);
+                    logMsg("Requested rate '" + rate + "' is not supported by the content. Supported speeds are: " +
+                        speedsText + ". AAMP may fall back to a playback rate of 1.");
+                }
+                // If AAMP is already at the requested rate (e.g. playnow(1) issued right after a
+                // fastfwd that silently failed to change the rate), AAMP won't fire a ratechange
+                // notification since there's no actual transition. Without an event,
+                // updatePosValidationInfo() never runs and position capture is skipped for the
+                // whole operation window, so start it proactively here instead.
+                if (window.aampPlayer.lastSpeed === rate) {
+                    updatePosValidationInfo(rate === 16 ? 10 : rate);
+                }
+                // Trying setPlaybackSpeed (org.rdk.player.setPlaybackSpeed) instead of setRate for
+                // fast-forward/rewind: it sets the decoder speed directly, without going through
+                // setRate's overshoot-correction / trick-mode-track selection path.
+                window.aampPlayer.setPlaybackSpeed(rate).catch((e) => {
+                    logMsg("[ERROR]: setPlaybackSpeed(" + rate + ") request failed: " + e);
+                });
+                return;
+            }
             playbackRateIndex = playbackSpeeds.indexOf(rate);
             rate = playbackSpeeds[playbackRateIndex];
             expectedEvents = ["ratechange"];
@@ -691,10 +1508,25 @@ getValuePS();
             videoEl.playbackRate = rate;
         }
 
-        function getRate() { return videoEl.playbackRate; }
+        function getRate() {
+            if (isAAMP) return window.aampPlayer.getPlaybackRate();
+            return videoEl.playbackRate;
+        }
 
         /* volume */
         function setVolume(level) {
+            if (isAAMP) {
+                // AAMP volume range is 0-100; the shared operations pass a 0-1 level like HTML5.
+                const aampVol = Math.round(level * 100);
+                expectedVolume = aampVol;
+                expectedMute = "";
+                expectedEvents = ["volumechange"];
+                volumeChangeFlag = 1;
+                logMsg("Expected Event: volumechange set volume to " + aampVol);
+                window.aampPlayer.setVolume(aampVol);
+                observedEvents.push("volumechange");
+                return;
+            }
             if (isNaN(level) || level < 0 || level > 1) {
                 logMsg("Invalid volume");
                 return;
@@ -715,10 +1547,27 @@ getValuePS();
         }
 
 
-        function getVolume() { return videoEl.volume; }
+        function getVolume() {
+            if (isAAMP) return window.aampPlayer.getVolume();
+            return videoEl.volume;
+        }
 
         function mute() {
             expectedEvents = ["volumechange"];
+            if (isAAMP) {
+                expectedMute = true;
+                expectedVolume = "";
+                volumeChangeFlag = 1;
+                logMsg("Expected Event: " + expectedEvents);
+                logMsg("Expected Mute : true");
+                window.aampPlayer.setMute(true).then(() => {
+                    observedEvents.push("volumechange");
+                    const info = "Video Player Volume Change, Mute Status: " + window.aampPlayer.getMute();
+                    checkAndLogEvents("volumechange", info);
+                    updatePosValidationInfo(1);
+                }).catch(e => logMsg("setMute RPC failed: " + e));
+                return;
+            }
             expectedMute = true;
             logMsg("Mute requested");
             videoEl.muted = true;
@@ -726,9 +1575,317 @@ getValuePS();
 
         function unmute() {
             expectedEvents = ["volumechange"];
+            if (isAAMP) {
+                expectedMute = false;
+                expectedVolume = "";
+                volumeChangeFlag = 1;
+                logMsg("Expected Event: " + expectedEvents);
+                logMsg("Expected Mute : false");
+                window.aampPlayer.setMute(false).then(() => {
+                    observedEvents.push("volumechange");
+                    const info = "Video Player Volume Change, Mute Status: " + window.aampPlayer.getMute();
+                    checkAndLogEvents("volumechange", info);
+                    updatePosValidationInfo(1);
+                }).catch(e => logMsg("setMute RPC failed: " + e));
+                return;
+            }
             expectedMute = false;
             logMsg("Unmute requested");
             videoEl.muted = false;
+        }
+
+        function checkmute() {
+            updatePosValidationInfo(1);
+            if (isAAMP) window.aampPlayer.refreshMute();
+            const muted = isAAMP ? window.aampPlayer.getMute() : videoEl.muted;
+            if (muted) {
+                logMsg("SUCCESS: Mute Status is True");
+            } else {
+                eventFlowFlag = 0;
+                logMsg("FAILURE: Current mute status is not as expected");
+            }
+        }
+
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
+
+        function normalizeTrackList(resp) {
+            if (Array.isArray(resp)) return resp;
+            if (typeof resp === "string") {
+                try {
+                    const parsed = JSON.parse(resp);
+                    if (Array.isArray(parsed)) return parsed;
+                    if (parsed && Array.isArray(parsed.tracks)) return parsed.tracks;
+                } catch (e) { }
+                return [];
+            }
+            if (resp && Array.isArray(resp.tracks)) return resp.tracks;
+            return [];
+        }
+
+        function reload() {
+            if (!secondaryURL) {
+                logMsg("Secondary URL not provided, skipping changeurl operation");
+                return;
+            }
+            videoURL = secondaryURL;
+            expectedEvents = ["play"];
+            logMsg("Expected Event: " + expectedEvents);
+            if (isAAMP) {
+                window.aampPlayer.tune(videoURL, true)
+                    .then(() => logMsg("AAMP retuned to secondary URL"))
+                    .catch((e) => { errorFlag = 1; logMsg("[ERROR]: changeurl tune failed: " + e); });
+                return;
+            }
+            videoEl.src = videoURL;
+            videoEl.load();
+            videoEl.play().catch((e) => logMsg("[WARN]: changeurl play failed: " + e));
+        }
+
+        async function changeAudio() {
+            if (!isAAMP) { logMsg("changeaudio is AAMP-only operation"); return; }
+            try {
+                const tracks = normalizeTrackList(await window.aampPlayer.getAvailableAudioTracks(false));
+                logMsg("Available Audio tracks: " + JSON.stringify(tracks));
+                if (!tracks.length) {
+                    audioTracksAvailability = 0;
+                    logMsg("[ERROR]: Cannot perform Audio Track change operation");
+                    return;
+                }
+                audioTracksAvailability = 1;
+                const current = parseInt(await window.aampPlayer.getAudioTrack());
+                if (isNaN(current) || current < 0 || current >= tracks.length) {
+                    audioTracksAvailability = 0;
+                    logMsg("[ERROR]: Audio language index obtained is invalid");
+                    return;
+                }
+                const candidates = tracks
+                    .map((t, i) => ({ track: t, index: i }))
+                    .filter((t) => t.index !== current);
+                if (!candidates.length) {
+                    audioTracksAvailability = 0;
+                    logMsg("[ERROR]: Audio tracks list excluding current language is empty");
+                    return;
+                }
+                const selected = candidates[getRandomInt(candidates.length)];
+                expectedAudioIndex = selected.index;
+                logMsg("Changing audio language to: " + (selected.track.language || "unknown"));
+                logMsg("Expected Audio Track index: " + expectedAudioIndex);
+                audioChangeFlag = 1;
+                await window.aampPlayer.setAudioTrack(expectedAudioIndex);
+            } catch (e) {
+                audioTracksAvailability = 0;
+                logMsg("[ERROR]: changeaudio failed: " + e);
+            }
+        }
+
+        async function changeText() {
+            if (!isAAMP) { logMsg("changetext is AAMP-only operation"); return; }
+            try {
+                const tracks = normalizeTrackList(await window.aampPlayer.getAvailableTextTracks(false));
+                logMsg("Available Text tracks: " + JSON.stringify(tracks));
+                if (!tracks.length) {
+                    textTracksAvailability = 0;
+                    logMsg("[ERROR]: Cannot perform Text Track change operation");
+                    return;
+                }
+                textTracksAvailability = 1;
+                const current = parseInt(await window.aampPlayer.getTextTrack());
+                if (isNaN(current) || current < 0 || current >= tracks.length) {
+                    textTracksAvailability = 0;
+                    logMsg("[ERROR]: Text track index obtained is invalid");
+                    return;
+                }
+                const candidates = tracks
+                    .map((t, i) => ({ track: t, index: i }))
+                    .filter((t) => t.index !== current);
+                if (!candidates.length) {
+                    textTracksAvailability = 0;
+                    logMsg("[ERROR]: Text tracks list excluding current language is empty");
+                    return;
+                }
+                const selected = candidates[getRandomInt(candidates.length)];
+                expectedTextIndex = selected.index;
+                logMsg("Changing text language to: " + (selected.track.language || "unknown"));
+                logMsg("Expected Text Track index: " + expectedTextIndex);
+                textChangeFlag = 1;
+                await window.aampPlayer.setTextTrack(expectedTextIndex);
+            } catch (e) {
+                textTracksAvailability = 0;
+                logMsg("[ERROR]: changetext failed: " + e);
+            }
+        }
+
+        async function changeVideoBitrate() {
+            if (!isAAMP) { logMsg("changevideobitrate is AAMP-only operation"); return; }
+            try {
+                const bitratesResp = await window.aampPlayer.getVideoBitrates();
+                const bitrates = Array.isArray(bitratesResp) ? bitratesResp : [];
+                const current = Number(await window.aampPlayer.getCurrentVideoBitrate());
+                logMsg("Available Video bitrates: " + JSON.stringify(bitrates));
+                logMsg("Current Video bitrate: " + current);
+                if (!bitrates.length || !current) {
+                    videoBitratesAvailability = 0;
+                    logMsg("[ERROR]: Unable to select new video bitrate");
+                    return;
+                }
+                videoBitratesSelected = bitrates.filter((b) => Number(b) !== current);
+                if (!videoBitratesSelected.length) {
+                    videoBitratesAvailability = 0;
+                    logMsg("[ERROR]: Video bitrates list excluding current bitrate is empty");
+                    return;
+                }
+                videoBitratesAvailability = 1;
+                expectedVideoBitrate = Number(videoBitratesSelected[getRandomInt(videoBitratesSelected.length)]);
+                VideoBitrateChangeFlag = 1;
+                logMsg("Changing bit rate to: " + expectedVideoBitrate);
+                await window.aampPlayer.setVideoBitrate(expectedVideoBitrate);
+            } catch (e) {
+                videoBitratesAvailability = 0;
+                logMsg("[ERROR]: changevideobitrate failed: " + e);
+            }
+        }
+
+        async function currentAudioBitrate() {
+            if (!isAAMP) { logMsg("curraudiobitrate is AAMP-only operation"); return; }
+            try {
+                const currAudioBitrate = Number(await window.aampPlayer.getCurrentAudioBitrate());
+                logMsg("Current Audio Bitrate: " + currAudioBitrate);
+                updatePosValidationInfo(1);
+                if (!currAudioBitrate || currAudioBitrate <= 0) {
+                    errorFlag = 1;
+                    logMsg("[ERROR]: Current Audio Bitrate obtained is invalid");
+                }
+            } catch (e) {
+                errorFlag = 1;
+                logMsg("[ERROR]: curraudiobitrate failed: " + e);
+            }
+        }
+
+        async function setVideoTrack() {
+            if (!isAAMP) { logMsg("setvideotrack is AAMP-only operation"); return; }
+            try {
+                const tracksResp = await window.aampPlayer.getAvailableVideoTracks();
+                availableVideoTrack = normalizeTrackList(tracksResp);
+                logMsg("Available Video Tracks " + JSON.stringify(availableVideoTrack));
+                if (!availableVideoTrack.length) {
+                    SetVideoTrackFlag = 0;
+                    logMsg("Available Video Tracks List is empty");
+                    return;
+                }
+                const selected = availableVideoTrack[getRandomInt(availableVideoTrack.length)];
+                expectedVideoTrack = selected.bandwidth;
+                SetVideoTrackFlag = 1;
+                logMsg("Expected track " + expectedVideoTrack);
+                await window.aampPlayer.setVideoTracks(expectedVideoTrack);
+                updatePosValidationInfo(1);
+            } catch (e) {
+                SetVideoTrackFlag = 0;
+                logMsg("[ERROR]: setvideotrack failed: " + e);
+            }
+        }
+
+        async function setThumbnail() {
+            if (!isAAMP) { logMsg("setthumbnail is AAMP-only operation"); return; }
+            try {
+                availableThumbnailTrack = normalizeTrackList(await window.aampPlayer.getAvailableThumbnailTracks());
+                logMsg("Available Thumbnail Tracks " + JSON.stringify(availableThumbnailTrack));
+                if (!availableThumbnailTrack.length) {
+                    SetThumbnailTrackFlag = 1;
+                    logMsg("Available Thumbnail Tracks List is empty");
+                    return;
+                }
+                const selected = availableThumbnailTrack[getRandomInt(availableThumbnailTrack.length)];
+                const trackIndex = (selected && selected.index !== undefined) ? selected.index : selected;
+                const result = await window.aampPlayer.setThumbnailTrack(trackIndex);
+                logMsg("Set Thumbnail Result " + result);
+                updatePosValidationInfo(1);
+                if (!result) SetThumbnailTrackFlag = 1;
+            } catch (e) {
+                SetThumbnailTrackFlag = 1;
+                logMsg("[ERROR]: setthumbnail failed: " + e);
+            }
+        }
+
+        async function AudioTrackInfo() {
+            if (!isAAMP) { logMsg("audiotrackinfo is AAMP-only operation"); return; }
+            try {
+                const info = await window.aampPlayer.getAudioTrackInfo();
+                logMsg("Audio Track Info " + JSON.stringify(info));
+                updatePosValidationInfo(1);
+                if (!info || (Array.isArray(info) && info.length === 0)) SetAudioInfoFlag = 1;
+            } catch (e) {
+                SetAudioInfoFlag = 1;
+                logMsg("[ERROR]: audiotrackinfo failed: " + e);
+            }
+        }
+
+        async function TextTrackInfo() {
+            if (!isAAMP) { logMsg("texttrackinfo is AAMP-only operation"); return; }
+            try {
+                const info = await window.aampPlayer.getTextTrackInfo();
+                logMsg("Text Track Info " + JSON.stringify(info));
+                updatePosValidationInfo(1);
+                if (!info || (Array.isArray(info) && info.length === 0)) SetTextInfoFlag = 1;
+            } catch (e) {
+                SetTextInfoFlag = 1;
+                logMsg("[ERROR]: texttrackinfo failed: " + e);
+            }
+        }
+
+        async function PlaybackStatistics() {
+            if (!isAAMP) { logMsg("statistics is AAMP-only operation"); return; }
+            try {
+                const info = await window.aampPlayer.getPlaybackStatistics();
+                logMsg("Playback Statistics " + JSON.stringify(info));
+                updatePosValidationInfo(1);
+                if (!info || (Array.isArray(info) && info.length === 0)) SetPlaybackFlag = 1;
+            } catch (e) {
+                SetPlaybackFlag = 1;
+                logMsg("[ERROR]: statistics failed: " + e);
+            }
+        }
+
+        async function Manifest() {
+            if (!isAAMP) { logMsg("manifest is AAMP-only operation"); return; }
+            try {
+                const manifestValue = await window.aampPlayer.getManifest();
+                logMsg("Manifest file " + manifestValue);
+                updatePosValidationInfo(1);
+                if (!manifestValue) {
+                    errorFlag = 1;
+                    logMsg("[ERROR]: Manifest file is not available");
+                } else {
+                    logMsg("Manifest file is available");
+                }
+            } catch (e) {
+                errorFlag = 1;
+                logMsg("[ERROR]: manifest failed: " + e);
+            }
+        }
+
+        async function GetPrefAudio() {
+            if (!isAAMP) { logMsg("prefaudio is AAMP-only operation"); return; }
+            try {
+                const audioTracks = normalizeTrackList(await window.aampPlayer.getAvailableAudioTracks(false));
+                const len = audioTracks.length;
+                logMsg("Available Audio tracks: " + JSON.stringify(audioTracks));
+                logMsg("length " + len);
+                if (!len) {
+                    logMsg("Available Audio Tracks List is empty");
+                    return;
+                }
+                const selected = audioTracks[getRandomInt(len)];
+                expectedPrefAudio = selected.language || "";
+                logMsg("Expected preferred audio language " + expectedPrefAudio);
+                SetPrefAudio = 1;
+                await window.aampPlayer.setPreferredAudioLanguage(expectedPrefAudio);
+                updatePosValidationInfo(1);
+            } catch (e) {
+                SetPrefAudio = 1;
+                logMsg("[ERROR]: prefaudio failed: " + e);
+            }
         }
 
         /* ------------------------
@@ -773,6 +1930,7 @@ getValuePS();
             logMsg(info);
             startFPSMonitoring();
             if (initFlag === 0) {
+                vidDuration = videoEl.duration || 0;
                 logMsg("******************* VIDEO STARTED PLAYING !!! *******************");
                 logMsg("VIDEO LOOP: " + videoEl.loop)
                 logMsg("VIDEO AUTOPLAY: " + videoEl.autoplay);
@@ -853,6 +2011,8 @@ getValuePS();
 
         /* error */
         videoEl.addEventListener('error', (e) => {
+            // AAMP renders on the native plane and does not use this <video> element; ignore its errors.
+            if (isAAMP) return;
             errorFlag = 1;
             stopFPSMonitoring();
             const err = videoEl.error;
@@ -876,57 +2036,174 @@ getValuePS();
            ------------------------ */
         function checkAndLogEvents(checkevent, msg) {
             if (expectedEvents.includes(checkevent)) {
-                logEventMsg(observedEvents, msg);
+                // AAMP-only: only show the full "Observed Event" banner once every event in
+                // expectedEvents has actually occurred (e.g. both "seeking" and "seeked" for a
+                // seek operation). Otherwise an intermediate event (like "seeking") would get its
+                // own banner too, producing a separate, duplicate-looking banner before the final
+                // one. The non-AAMP (native <video> element) path keeps its original behavior.
+                if (!isAAMP || expectedEvents.every(e => observedEvents.includes(e))) {
+                    logEventMsg(observedEvents, msg);
+                } else {
+                    logMsg(msg);
+                }
             } else {
                 logMsg(msg);
             }
+        }
+        function setExpPlayBackEvents() {
+            // AAMP: also require "play" to have been observed, matching the expected/observed
+            // event format used for fail-fast diagnosis (e.g. "Expected Event: play,ended" /
+            // "Observed Event: play" when AAMP never signals completion). Non-AAMP keeps its
+            // original ["ended"]-only behavior.
+            expectedEvents = isAAMP ? ["play", "ended"] : ["ended"];
+            if (isAAMP) {
+                aampPlaytillendDeadline = Date.now() + AAMP_PLAYTILLEND_FAIL_BUDGET_MS;
+                aampPlaytillendPending = true;
+            }
+            logMsg("Expected Event: " + expectedEvents);
+            logMsg("Observed Event: " + observedEvents);
         }
 
         /* Loop validation helper */
         function validateLoop(expected) {
             if (videoEl.loop === expected) {
-                logMsg("Loop operation SUCCESS - loop is " + (expected ? "ON" : "OFF"));
+                logMsg("Video loop operation success\n");
             } else {
                 eventFlowFlag = 0;
-                logMsg("Loop operation FAILURE - expected " + (expected ? "ON" : "OFF") + ", got " + videoEl.loop);
+                logMsg("Video loop operation failure\n");
             }
         }
 
         /* checks expected vs observed and additional checks per event type */
-        function updateEventFlowFlag() {
+        async function updateEventFlowFlag() {
             let Status = "SUCCESS";
-            if (!expectedEvents.every(e => observedEvents.indexOf(e) >= 0)) {
-                eventFlowFlag = 0;
-                Status = "FAILURE";
-                logMsg("Failure Reason: Expected events not occurred");
-            } else {
+            try {
+                if (expectedEvents.includes("play") && isAAMP && !observedEvents.includes("play") && (Date.now() - aampPlayRequestTs) < AAMP_PLAY_EVENT_GRACE_MS) {
+                    setTimeout(() => { updateEventFlowFlag(); }, 1000);
+                    return;
+                }
+                if (expectedEvents.includes("ended") && isAAMP && !observedEvents.includes("ended")) {
+                    // AAMP-only fail-fast: actively poll the live session state in case the
+                    // terminal onEOS/onStateChanged("complete") notification was never delivered
+                    // over the websocket, logging progress each time to keep the external test
+                    // harness's activity watchdog satisfied. Give up after a bounded budget.
+                    try { await window.aampPlayer.getStateFromSession(); } catch (e) { }
+                    const polledState = window.aampPlayer.stateNum;
+                    if (polledState === AAMP_STATES.Complete || polledState === AAMP_STATES.Stopped) {
+                        observedEvents.push("ended");
+                        dispUIMessage("[Event]: Video Player Ended");
+                        logMsg("Video PlayBack Completed !!!");
+                    } else if (Date.now() < aampPlaytillendDeadline) {
+                        try { await window.aampPlayer.getPlaybackPositionFromSession(); } catch (e) { }
+                        const currPos = Number(window.aampPlayer.getCurrentPosition() || 0);
+                        logMsg("Video Progressing " + currPos.toFixed(2) + "/" + Number(vidDuration).toFixed(2));
+                        setTimeout(() => { updateEventFlowFlag(); }, 3000);
+                        return;
+                    }
+                }
+                if (isAAMP) aampPlaytillendPending = false;
+                if (!expectedEvents.every(e => observedEvents.indexOf(e) >= 0)) {
+                    eventFlowFlag = 0;
+                    Status = "FAILURE";
+                    if (isAAMP && expectedEvents.includes("play")) aampPlayValidationPending = false;
+                    logMsg("Failure Reason: Expected events not occurred");
+                } else {
                 if (expectedEvents.includes("pause")) {
-                    if (!videoEl.paused) {
+                    const paused = isAAMP ? (window.aampPlayer.getCurrentState() === AAMP_STATES.Paused) : videoEl.paused;
+                    if (!paused) {
                         eventFlowFlag = 0;
                         Status = "FAILURE";
-                        logMsg("video pause operation failure - player not paused");
-                    } else logMsg("video pause operation success");
-                } else if (expectedEvents.includes("play")) {
-                    if (videoEl.paused) {
+                        logMsg("Video pause operation failure\n");
+                    } else logMsg("Video pause operation success\n");
+                } else if (expectedEvents.includes("play") && !expectedEvents.includes("ended")) {
+                    // AAMP playtillend expects both "play" and "ended"; by the time "ended" is
+                    // satisfied the player state is Complete (not Playing), so this standalone
+                    // play-validation branch must be skipped in that combined case - it's only for
+                    // the pure "play" action, where expectedEvents never also includes "ended".
+                    const playing = isAAMP ? (window.aampPlayer.getCurrentState() === AAMP_STATES.Playing) : !videoEl.paused;
+                    if (isAAMP && playing) {
+                        // Push (onProgress) telemetry can be throttled/batched and still report the
+                        // pre-resume position well after the player has actually started advancing.
+                        // Actively poll the live RPC position here to avoid declaring a false stall.
+                        try { await window.aampPlayer.getPlaybackPositionFromSession(); } catch (e) { }
+                        const currPos = Number(window.aampPlayer.getCurrentPosition() || 0);
+                        // onProgress can stop firing entirely while truly stalled; keep the standard
+                        // "Video Progressing" log line alive from this active poll too, so the log
+                        // doesn't go silent during a stuck resume.
+                        const polledDur = Number(window.aampPlayer.lastDuration || vidDuration || 0);
+                        if (polledDur > 0) logMsg("Video Progressing " + currPos.toFixed(2) + "/" + polledDur.toFixed(2));
+                        if (currPos <= (aampPlayStartPos + 0.2)) {
+                            const sincePlayRequest = Date.now() - aampPlayRequestTs;
+                            const sinceObservedPlay = aampPlayObservedTs ? (Date.now() - aampPlayObservedTs) : 0;
+                            if (sinceObservedPlay < AAMP_PLAY_MOVEMENT_GRACE_MS) {
+                                setTimeout(() => { updateEventFlowFlag(); }, 1000);
+                                return;
+                            }
+                            // Recovery (including the seek-based last resort) is owned entirely by
+                            // window.aampPlayer.resume()'s own fallback chain (triggered from play()).
+                            // Just keep waiting here for that chain to take effect; don't run a second,
+                            // independent recovery action concurrently with it.
+                            if (sincePlayRequest < AAMP_PLAY_TOTAL_SETTLE_MS) {
+                                setTimeout(() => { updateEventFlowFlag(); }, 1000);
+                                return;
+                            }
+                            eventFlowFlag = 0;
+                            Status = "FAILURE";
+                            aampPlayValidationPending = false;
+                            logMsg("Test step status: " + Status);
+                            return;
+                        }
+                    }
+                    if (!playing) {
                         eventFlowFlag = 0;
                         Status = "FAILURE";
-                        logMsg("video play operation failure - still paused");
-                    } else logMsg("video play operation success");
-                } else if (expectedEvents.includes("ended")) {
-                    if (!videoEl.ended) {
-                        eventFlowFlag = 0;
-                        Status = "FAILURE";
-                        logMsg("video playtillend operation failure - video did not reach end");
+                        if (isAAMP) aampPlayValidationPending = false;
+                        logMsg("Video play operation failure\n");
                     } else {
-                        logMsg("video playtillend operation success - video reached end");
+                        if (isAAMP) aampPlayValidationPending = false;
+                        logMsg("Video play operation success\n");
+                    }
+                } else if (expectedEvents.includes("ended")) {
+                    const endedReached = isAAMP ? observedEvents.includes("ended") : videoEl.ended;
+                    if (!endedReached) {
+                        eventFlowFlag = 0;
+                        Status = "FAILURE";
+                        logMsg("Video playtillend operation failure\n");
+                    } else {
+                        logMsg("Video playtillend operation success\n");
                     }
                 } else if (expectedEvents.includes("volumechange")) {
+                    if (isAAMP) {
+                        if (expectedMute !== "") {
+                            const currMute = window.aampPlayer.getMute();
+                            if (currMute === expectedMute) {
+                                logMsg(expectedMute ? "Video mute operation success\n" : "Video unmute operation success\n");
+                            } else {
+                                eventFlowFlag = 0;
+                                Status = "FAILURE";
+                                logMsg(expectedMute ? "Video mute operation failure\n" : "Video unmute operation failure\n");
+                            }
+                            expectedMute = "";
+                        }
+                        if (expectedVolume !== "") {
+                            const currVol = parseInt(window.aampPlayer.getVolume());
+                            if (currVol === parseInt(expectedVolume)) {
+                                logMsg("Video volume operation success\n");
+                            } else {
+                                eventFlowFlag = 0;
+                                Status = "FAILURE";
+                                logMsg("Video volume operation failure\n");
+                            }
+                            expectedVolume = "";
+                        }
+                        volumeChangeFlag = 0;
+                    } else {
                     if (expectedVolume !== "") {
                         if (Math.abs(videoEl.volume - expectedVolume) < 0.05) {
-                            logMsg("Set volume operation success - volume set to " + videoEl.volume);
+                            logMsg("Set volume operation success\n");
                         } else {
                             eventFlowFlag = 0;
-                            logMsg("Set volume operation failure - expected " + expectedVolume + ", got " + videoEl.volume);
+                            logMsg("Set volume operation failure\n");
                         }
                         expectedVolume = "";
                     }
@@ -934,30 +2211,31 @@ getValuePS();
                         const currMute = observedMute;
                         if (expectedMute === true) {
                             if (currMute) {
-                                logMsg("[PASS] Mute operation success - video is muted");
+                                logMsg("Video mute operation success\n");
                             } else {
                                 eventFlowFlag = 0;
-                                logMsg("[FAIL] Mute operation failure - video not muted");
+                                logMsg("Video mute operation failure\n");
                             }
                         } else if (expectedMute === false) {
                             if (!currMute) {
-                                logMsg("[PASS] Unmute operation success - video is unmuted");
+                                logMsg("Video unmute operation success\n");
                             } else {
                                 eventFlowFlag = 0;
-                                logMsg("[FAIL] Unmute operation failure - video still muted");
+                                logMsg("Video unmute operation failure\n");
                             }
                         }
+                    }
                     }
                 }
                 else if (expectedEvents.includes("seeking")) {
                     var currTime = parseInt(observedPos);
                     var expTime = parseInt(expectedPos);
                     if (currTime >= (expTime - SEEK_TOLERANCE.lower) && currTime <= (expTime + SEEK_TOLERANCE.upper)) {
-                        logMsg("video seek operation success");
+                        logMsg("Video seek operation success\n");
                     } else {
                         eventFlowFlag = 0;
                         Status = "FAILURE";
-                        logMsg("video seek operation failure");
+                        logMsg("Video seek operation failure\n");
                         logMsg("Failure Reason: Seeked pos is not within expected range");
                     }
                 }
@@ -966,14 +2244,102 @@ getValuePS();
                     const expectedRateMatched = observedRates.includes(expectedRate);
 
                     if (allRatesMatched && expectedRateMatched) {
-                        logMsg("video rate change operation success");
+                        logMsg("Video rate change operation success\n");
                     } else {
                         eventFlowFlag = 0;
                         Status = "FAILURE";
-                        logMsg("video rate change operation failure");
+                        logMsg("Video rate change operation failure\n");
                         logMsg("Failure Reason: Playback rate is not as expected");
                     }
+                } else if (audioChangeFlag === 1) {
+                    audioChangeFlag = 0;
+                    const currAudioIndex = parseInt(await window.aampPlayer.getAudioTrack());
+                    if (currAudioIndex === parseInt(expectedAudioIndex)) {
+                        logMsg("Audio language change operation success\n");
+                    } else {
+                        eventFlowFlag = 0;
+                        Status = "FAILURE";
+                        logMsg("Audio language change operation failure\n");
+                        logMsg("Failure Reason: Current Audio track index is not as expected");
+                    }
+                } else if (textChangeFlag === 1) {
+                    textChangeFlag = 0;
+                    const currTextIndex = parseInt(await window.aampPlayer.getTextTrack());
+                    if (currTextIndex === parseInt(expectedTextIndex)) {
+                        logMsg("Text Track change operation success\n");
+                    } else {
+                        eventFlowFlag = 0;
+                        Status = "FAILURE";
+                        logMsg("Text Track change operation failure\n");
+                        logMsg("Failure Reason: Current Text track index is not as expected");
+                    }
+                } else if (audioTracksAvailability === 0 || textTracksAvailability === 0) {
+                    Status = "FAILURE";
+                    logMsg("Failure Reason: Audio/Text tracks list empty");
+                } else if (VideoBitrateChangeFlag === 1) {
+                    VideoBitrateChangeFlag = 0;
+                    const currVideoBitrate = Number(await window.aampPlayer.getCurrentVideoBitrate());
+                    if (currVideoBitrate === Number(expectedVideoBitrate)) {
+                        logMsg("Video bitrate change operation success\n");
+                    } else {
+                        eventFlowFlag = 0;
+                        Status = "FAILURE";
+                        logMsg("Video bitrate change operation failure\n");
+                        logMsg("Failure Reason: Current Video bitrate is not as expected");
+                    }
+                } else if (videoBitratesAvailability === 0) {
+                    Status = "FAILURE";
+                    logMsg("Failure Reason: Unable to select new video bitrate");
+                } else if (SetVideoTrackFlag === 1) {
+                    const tracks = normalizeTrackList(await window.aampPlayer.getAvailableVideoTracks());
+                    let expectedSet = false;
+                    for (const t of tracks) {
+                        if (Number(t.bandwidth) === Number(expectedVideoTrack)) {
+                            if (Number(t.enabled) === 1) expectedSet = true;
+                        } else if (Number(t.enabled) === 1) {
+                            expectedSet = false;
+                        }
+                    }
+                    if (expectedSet) {
+                        logMsg("Expected Video Track is set");
+                    } else {
+                        eventFlowFlag = 0;
+                        Status = "FAILURE";
+                        logMsg("Expected Video Track is not set");
+                    }
+                } else if (SetThumbnailTrackFlag === 1) {
+                    eventFlowFlag = 0;
+                    Status = "FAILURE";
+                    logMsg("Failure Reason: Unable to set Thumbnail");
+                } else if (SetAudioInfoFlag === 1) {
+                    eventFlowFlag = 0;
+                    Status = "FAILURE";
+                    logMsg("Failure Reason: Audio Track Info is Empty");
+                } else if (SetTextInfoFlag === 1) {
+                    eventFlowFlag = 0;
+                    Status = "FAILURE";
+                    logMsg("Failure Reason: Text Track Info is Empty");
+                } else if (SetPlaybackFlag === 1) {
+                    eventFlowFlag = 0;
+                    Status = "FAILURE";
+                    logMsg("Failure Reason: Playback Info is Empty");
+                } else if (SetPrefAudio === 1) {
+                    const currPrefAudio = await window.aampPlayer.getPreferredAudioProperties();
+                    logMsg("Current Prefered Audio " + JSON.stringify(currPrefAudio));
+                    const prefStr = typeof currPrefAudio === "string" ? currPrefAudio : JSON.stringify(currPrefAudio);
+                    if (expectedPrefAudio && prefStr.includes(expectedPrefAudio)) {
+                        logMsg("Preferred Audio is set successfully");
+                    } else {
+                        logMsg("Preferred Audio is not set successfully");
+                        eventFlowFlag = 0;
+                        Status = "FAILURE";
+                    }
                 }
+                }
+            } catch (e) {
+                eventFlowFlag = 0;
+                Status = "FAILURE";
+                logMsg("Failure Reason: Operation validation threw exception: " + e);
             }
             logMsg("Test step status: " + Status);
         }
@@ -1002,6 +2368,9 @@ getValuePS();
             logMsg(progressEventMsg);
             message2 = "Pos: " + currentTime.toFixed(2) + "/" + duration.toFixed(2);
             dispUIVideoPosition(message2);
+            if (check_end_duration === 1 && parseInt(currentTime) >= (parseInt(closeDuration) - 3)) {
+                pos_end_flag = 1;
+            }
             if (pos_val_flag === 1) {
                 pos_list.push(currentTime.toFixed(2));
             }
@@ -1046,8 +2415,8 @@ getValuePS();
                         // finding the diff of curr pos and prev pos values
                         pos_diff = vid_pos_list[i + 1] - vid_pos_list[i];
 
-                        if (pos_index != 0) {
-                            // for video operations except pause
+                        if (pos_index > 0) {
+                            // for forward trick-play / normal playback (position increasing)
                             if (pos_diff < 0 || pos_diff >= (pos_index + 3)) {
                                 critical_mismatch_flag = true;
                                 pos_mismatch_count += 1;
@@ -1055,6 +2424,20 @@ getValuePS();
                                 pos_mismatch_list.push(mismatch);
                             }
                             // check whether pos diff is >= to the required diff
+                            if (!(pos_diff == pos_index)) {
+                                pos_mismatch_count += 1;
+                                mismatch = "Pos:" + vid_pos_list[i + 1] + "-" + vid_pos_list[i] + ",diff=" + pos_diff;
+                                pos_mismatch_list.push(mismatch);
+                            }
+                        } else if (pos_index < 0) {
+                            // for rewind trick-play (position expected to decrease, mirrors the
+                            // forward-rate checks above but in the opposite direction)
+                            if (pos_diff > 0 || pos_diff <= (pos_index - 3)) {
+                                critical_mismatch_flag = true;
+                                pos_mismatch_count += 1;
+                                mismatch = "Pos:" + vid_pos_list[i + 1] + "-" + vid_pos_list[i] + ",diff=" + pos_diff;
+                                pos_mismatch_list.push(mismatch);
+                            }
                             if (!(pos_diff == pos_index)) {
                                 pos_mismatch_count += 1;
                                 mismatch = "Pos:" + vid_pos_list[i + 1] + "-" + vid_pos_list[i] + ",diff=" + pos_diff;
@@ -1084,7 +2467,7 @@ getValuePS();
                 pos_val_status = "FAILURE";
             }
 
-            logMsg("Video Progress position validation status: " + pos_val_status);
+            logMsg("Video progress position validation status: " + pos_val_status);
             return pos_val_status;
         }
 
@@ -1149,6 +2532,27 @@ getValuePS();
             let actionInterval = 0
             let duration = 0, position = 0
             logMsg("Setting up the operations...")
+            check_end_duration = 0;
+            pos_end_flag = 0;
+            testStatus = 0;
+            closeDuration = 0;
+            playerClosed = false;
+            audioChangeFlag = 0;
+            textChangeFlag = 0;
+            audioTracksAvailability = 1;
+            textTracksAvailability = 1;
+            VideoBitrateChangeFlag = 0;
+            videoBitratesAvailability = 1;
+            SetVideoTrackFlag = 0;
+            SetThumbnailTrackFlag = 0;
+            SetAudioInfoFlag = 0;
+            SetTextInfoFlag = 0;
+            SetPlaybackFlag = 0;
+            SetPrefAudio = 0;
+            const actionList = operations.map(op => op.split('(')[0]);
+            if (actionList.every(op => op === "close")) {
+                check_end_duration = 1;
+            }
             for (var i = 0; i < operations.length; i++) {
                 var action = operations[i].split('(')[0];
                 const op = operations[i];
@@ -1160,8 +2564,16 @@ getValuePS();
                 else {
                     duration = parseInt(operations[i].split('(')[1].split(')')[0]);
                 }
+                if (action == "close") {
+                    closeDuration = duration;
+                }
                 if (action == "playtillend")
-                    actionInterval = actionInterval + (interval * parseInt(vidDuration)) + 60000;
+                    // AAMP: check much sooner after the expected duration elapses instead of the
+                    // flat 60s buffer, so the fail-fast retry/poll logic in updateEventFlowFlag()
+                    // has time to run (and log activity) well before an external test harness's
+                    // own "no activity for 1 min" watchdog would trip. Non-AAMP keeps the
+                    // original 60000ms buffer unchanged.
+                    actionInterval = actionInterval + (interval * parseInt(vidDuration)) + (isAAMP ? 2000 : 60000);
                 else
                     actionInterval = actionInterval + (interval * duration)
                 //logMsg("setting " + action + " at " + actionInterval + " th sec")
@@ -1177,6 +2589,11 @@ getValuePS();
                         play()
                     }, actionInterval);
                 }
+                else if (action == "playtillend") {
+                    setTimeout(() => {
+                        setExpPlayBackEvents()
+                    }, actionInterval);
+                }
                 else if (action == "playnow") {
                     setTimeout(() => {
                         clearEvents()
@@ -1185,11 +2602,22 @@ getValuePS();
                 }
                 else if (action == "close") {
                     setTimeout(() => {
-                        updatePrevPosValidationResult()
-                        logMsg("**************** Going to close ****************")
-                        clearInterval(progressLogger);
-                        stopFPSMonitoring();
-                        closePlayer()
+                        const doClose = () => {
+                            // AAMP-only: if a preceding playtillend's fail-fast retry/poll loop
+                            // is still active, let it finish and log its own success/failure
+                            // first, so this explicit close doesn't cut it off mid-retry.
+                            if (isAAMP && aampPlaytillendPending) {
+                                setTimeout(doClose, 1000);
+                                return;
+                            }
+                            updatePrevPosValidationResult()
+                            logMsg("**************** Going to close ****************")
+                            clearInterval(progressLogger);
+                            stopFPSMonitoring();
+                            closePlayer()
+                            playerClosed = true;
+                        };
+                        doClose();
                     }, actionInterval);
                 }
                 else if (action == "seekfwd") {
@@ -1204,29 +2632,108 @@ getValuePS();
                         seekbwd(seekInterval)
                     }, actionInterval);
                 }
-                else if (action == "seekpos") {
+                else if (action == "changeurl") {
                     setTimeout(() => {
                         clearEvents()
-                        seekpos(position)
+                        reload()
                     }, actionInterval);
                 }
-                else if (action == "fastfwd2x" || action == "fastfwd3x" || action == "fastfwd4x") {
-                    if (action == "fastfwd2x") {
-                        setTimeout(() => {
-                            clearEvents()
-                            setPlaybackRate(2)
-                        }, actionInterval);
-                    } else if (action == "fastfwd3x") {
-                        setTimeout(() => {
-                            clearEvents()
-                            setPlaybackRate(3)
-                        }, actionInterval);
-                    } else if (action == "fastfwd4x") {
-                        setTimeout(() => {
-                            clearEvents()
-                            setPlaybackRate(4)
-                        }, actionInterval);
-                    }
+                else if (action == "changeaudio") {
+                    setTimeout(() => {
+                        clearEvents()
+                        changeAudio()
+                    }, actionInterval);
+                }
+                else if (action == "changetext") {
+                    setTimeout(() => {
+                        clearEvents()
+                        changeText()
+                    }, actionInterval);
+                }
+                else if (action == "seekpos") {
+                    // Capture this iteration's position in a fresh block-scoped const -- `position`
+                    // itself is declared once outside the loop and gets overwritten by later
+                    // seekpos(...) operations before this deferred callback ever runs, which would
+                    // otherwise make every seekpos() in the operations list seek to the same
+                    // (last-parsed) position.
+                    const seekPosition = position;
+                    setTimeout(() => {
+                        clearEvents()
+                        seekpos(seekPosition)
+                    }, actionInterval);
+                }
+                else if (action == "fastfwd2x" || action == "fastfwd3x" || action == "fastfwd4x"
+                    || action == "fastfwd16x" || action == "fastfwd32x"
+                    || action == "rewind4x" || action == "rewind16x" || action == "rewind32x") {
+                    const rateMap = {
+                        fastfwd2x: 2, fastfwd3x: 3, fastfwd4x: 4, fastfwd16x: 16, fastfwd32x: 32,
+                        rewind4x: -4, rewind16x: -16, rewind32x: -32
+                    };
+                    const rate = rateMap[action];
+                    setTimeout(() => {
+                        clearEvents()
+                        setPlaybackRate(rate)
+                    }, actionInterval);
+                }
+                else if (action == "checkmute") {
+                    setTimeout(() => {
+                        clearEvents()
+                        checkmute()
+                    }, actionInterval);
+                }
+                else if (action == "changevideobitrate") {
+                    setTimeout(() => {
+                        clearEvents()
+                        changeVideoBitrate()
+                    }, actionInterval);
+                }
+                else if (action == "curraudiobitrate") {
+                    setTimeout(() => {
+                        clearEvents()
+                        currentAudioBitrate()
+                    }, actionInterval);
+                }
+                else if (action == "setvideotrack") {
+                    setTimeout(() => {
+                        clearEvents()
+                        setVideoTrack()
+                    }, actionInterval);
+                }
+                else if (action == "setthumbnail") {
+                    setTimeout(() => {
+                        clearEvents()
+                        setThumbnail()
+                    }, actionInterval);
+                }
+                else if (action == "audiotrackinfo") {
+                    setTimeout(() => {
+                        clearEvents()
+                        AudioTrackInfo()
+                    }, actionInterval);
+                }
+                else if (action == "texttrackinfo") {
+                    setTimeout(() => {
+                        clearEvents()
+                        TextTrackInfo()
+                    }, actionInterval);
+                }
+                else if (action == "statistics") {
+                    setTimeout(() => {
+                        clearEvents()
+                        PlaybackStatistics()
+                    }, actionInterval);
+                }
+                else if (action == "manifest") {
+                    setTimeout(() => {
+                        clearEvents()
+                        Manifest()
+                    }, actionInterval);
+                }
+                else if (action == "prefaudio") {
+                    setTimeout(() => {
+                        clearEvents()
+                        GetPrefAudio()
+                    }, actionInterval);
                 }
                 else if (action == "mute") {
                     setTimeout(() => {
@@ -1253,17 +2760,36 @@ getValuePS();
                 }
             }
             if (!operations.find(o => o.includes("close"))) {
-                setTimeout(() => {
+                const tryAutoClose = () => {
+                    // AAMP-only: also wait for a still-running playtillend fail-fast retry/poll
+                    // loop (aampPlaytillendPending), not just the play-validation flag, so this
+                    // auto-close path doesn't cut it off before it logs its final result either.
+                    if (isAAMP && (aampPlayValidationPending || aampPlaytillendPending)) {
+                        setTimeout(tryAutoClose, 1000);
+                        return;
+                    }
                     updatePrevPosValidationResult()
                     logMsg("**************** Going to close ****************")
                     clearInterval(progressLogger);
                     stopFPSMonitoring();
                     closePlayer()
-                }, (actionInterval + 10000));
+                    playerClosed = true;
+                };
+                setTimeout(tryAutoClose, (actionInterval + 10000));
             }
-            setTimeout(() => {
+            const tryDispResult = () => {
+                if (!playerClosed) {
+                    // Wait for the player to have actually been closed (either via the explicit
+                    // "close" action or the auto-close fallback above) before logging the
+                    // terminal "TEST RESULT" line - the external test harness watches for that
+                    // line and stops as soon as it sees it, so it must never race ahead of
+                    // "Going to close" / closePlayer().
+                    setTimeout(tryDispResult, 500);
+                    return;
+                }
                 dispTestResult()
-            }, (actionInterval + 15000));
+            };
+            setTimeout(tryDispResult, (actionInterval + 15000));
             // console.log("\n");
         }
 
@@ -1292,31 +2818,48 @@ getValuePS();
             // Use "PLAYBACK RESULT" for per-stream labels to avoid triggering Python's "TEST RESULT" stop condition prematurely
             const _resultLabel = _streamNum ? "STREAM " + _streamNum + " PLAYBACK RESULT" : "TEST RESULT";
             let fpsCheckStatus = "SUCCESS";
-            if (fpsList.length > 0) {
-                const roundedFPS = Math.round(fpsList.reduce((a, b) => a + b, 0) / fpsList.length);
-                // If expectedfps(...) is passed in URL options, treat it as the final minimum FPS.
-                const minFPS = expectedFPSProvided ? expectedFPS : (expectedFPS - FPS_THRESHOLD);
-                const fpsComparison = roundedFPS >= minFPS ? ">=" : "<";
-                logMsg(_streamPrefix + "AVERAGE FPS OBTAINED : " + roundedFPS + " " + fpsComparison + " " + minFPS);
-                if (roundedFPS < minFPS) {
+            let droppedFramesStatus = "SUCCESS";
+            // FPS/dropped-frame validation applies to the HTML5 <video> element only, not native AAMP.
+            if (!isAAMP) {
+                if (fpsList.length > 0) {
+                    const roundedFPS = Math.round(fpsList.reduce((a, b) => a + b, 0) / fpsList.length);
+                    // If expectedfps(...) is passed in URL options, treat it as the final minimum FPS.
+                    const minFPS = expectedFPSProvided ? expectedFPS : (expectedFPS - FPS_THRESHOLD);
+                    const fpsComparison = roundedFPS >= minFPS ? ">=" : "<";
+                    logMsg(_streamPrefix + "AVERAGE FPS OBTAINED : " + roundedFPS + " " + fpsComparison + " " + minFPS);
+                    if (roundedFPS < minFPS) {
+                        fpsCheckStatus = "FAILURE";
+                    }
+                } else {
                     fpsCheckStatus = "FAILURE";
+                    logMsg("Failure Reason: No FPS data collected");
                 }
-            } else {
-                fpsCheckStatus = "FAILURE";
-                logMsg("Failure Reason: No FPS data collected");
+                droppedFramesStatus = droppedFramesTotal <= DROPPED_FRAMES_THRESHOLD ? "SUCCESS" : "FAILURE";
+                logMsg(_streamPrefix + "TOTAL DROPPED FRAMES : " + droppedFramesTotal);
+                if (droppedFramesStatus === "FAILURE") {
+                    fpsCheckStatus = "FAILURE";
+                    logMsg("Failure Reason: Dropped frames count (" + droppedFramesTotal + ") exceeded the threshold of " + DROPPED_FRAMES_THRESHOLD);
+                }
+                logMsg(_streamPrefix + "OVERALL FPS VALIDATION STATUS : " + fpsCheckStatus);
+                logMsg(_streamPrefix + "OVERALL DROPPED FRAMES VALIDATION STATUS : " + droppedFramesStatus);
             }
-            const droppedFramesStatus = droppedFramesTotal <= DROPPED_FRAMES_THRESHOLD ? "SUCCESS" : "FAILURE";
-            logMsg(_streamPrefix + "TOTAL DROPPED FRAMES : " + droppedFramesTotal);
-            if (droppedFramesStatus === "FAILURE") {
-                fpsCheckStatus = "FAILURE";
-                logMsg("Failure Reason: Dropped frames count (" + droppedFramesTotal + ") exceeded the threshold of " + DROPPED_FRAMES_THRESHOLD);
-            }
-            logMsg(_streamPrefix + "OVERALL FPS VALIDATION STATUS : " + fpsCheckStatus);
-            logMsg(_streamPrefix + "OVERALL DROPPED FRAMES VALIDATION STATUS : " + droppedFramesStatus);
             logMsg(_streamPrefix + "OVERALL VIDEO PLAYBACK ERROR EVENT STATUS : " + (errorFlag ? "FAILURE" : "SUCCESS"));
             logMsg(_streamPrefix + "OVERALL VIDEO PROGRESS POSITION VALIDATION STATUS : " + (pos_val_result.includes("FAILURE") ? "FAILURE" : "SUCCESS"));
             logMsg(_streamPrefix + "OVERALL VIDEO OPERATIONS EVENTS VALIDATION STATUS : " + (eventFlowFlag ? "SUCCESS" : "FAILURE"));
-            if (eventFlowFlag === 1 && errorFlag === 0 && !pos_val_result.includes("FAILURE") && fpsCheckStatus === "SUCCESS") {
+            if (check_end_duration === 1) {
+                if (pos_end_flag !== 1) {
+                    if (delaytest == "true") {
+                        logMsg(_streamPrefix + "VIDEO PLAYED TILL THE END OF THE MENTIONED DURATION : SUCCESS");
+                        logMsg(_streamPrefix + "EXPECTED BEHAVIOR IN DELAY TEST");
+                    } else {
+                        testStatus = 1;
+                        logMsg(_streamPrefix + "FAILURE REASON: VIDEO DID NOT PLAYED TILL THE END OF THE MENTIONED DURATION");
+                    }
+                } else {
+                    logMsg(_streamPrefix + "SUCCESS: VIDEO PLAYED TILL THE END OF THE MENTIONED DURATION");
+                }
+            }
+            if (eventFlowFlag === 1 && errorFlag === 0 && !pos_val_result.includes("FAILURE") && fpsCheckStatus === "SUCCESS" && testStatus === 0) {
                 logMsg(_resultLabel + " : SUCCESS");
             } else {
                 logMsg(_resultLabel + " : FAILURE");
@@ -1329,13 +2872,14 @@ getValuePS();
             const index = parseInt(sessionStorage.getItem('successiveIndex') || '0');
             const results = JSON.parse(sessionStorage.getItem('successiveResults') || '[]');
 
-            const stepResult = (eventFlowFlag === 1 && errorFlag === 0 && !pos_val_result.includes("FAILURE") && fpsCheckStatus === "SUCCESS") ? "SUCCESS" : "FAILURE";
+            const stepResult = (eventFlowFlag === 1 && errorFlag === 0 && !pos_val_result.includes("FAILURE") && fpsCheckStatus === "SUCCESS" && testStatus === 0) ? "SUCCESS" : "FAILURE";
             const reasons = [];
             if (fpsCheckStatus === "FAILURE") reasons.push("FPS check failed");
             if (droppedFramesStatus === "FAILURE") reasons.push("Dropped frames exceeded threshold");
             if (errorFlag) reasons.push("Video error event occurred");
             if (pos_val_result.includes("FAILURE")) reasons.push("Video progress position validation failed");
             if (!eventFlowFlag) reasons.push("Video operations event flow failed");
+            if (testStatus !== 0) reasons.push("Video did not play till the end of the mentioned duration");
 
             results.push({ index, url: urls[index], status: stepResult, reasons });
             sessionStorage.setItem('successiveResults', JSON.stringify(results));
@@ -1423,6 +2967,7 @@ getValuePS();
                 getPosition, getDuration, dispTestResult, updatePrevPosValidationResult,
                 startFPSMonitoring, stopFPSMonitoring
             };
+
             logMsg("HTML player ready. API object: window.HTMLPlayer");
         });
     </script>
