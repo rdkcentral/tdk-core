@@ -1,0 +1,153 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2026 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @file Tests for the Excel report: package structure, Summary sheet and per-module sheets.
+ */
+
+import { describe, expect, it, vi } from 'vitest';
+import { buildSuiteReport } from '../reports/ReportBuilder';
+import { generateReportXlsx, logText, reportFileName } from '../reports/ReportExporter';
+import type { ExecutionResult } from '../types';
+
+vi.mock('../config/runtime', () => ({
+  runtimeConfig: { logLevel: 'ERROR', reportingId: '', macAddress: '', appId: 'firebolt-certification' }
+}));
+
+const results: ExecutionResult[] = [
+  {
+    id: '1',
+    method: 'Device.name',
+    mode: 'SDK',
+    status: 'FAIL',
+    durationMs: 12,
+    timestamp: 0,
+    params: {},
+    expectedFormat: 'string (not empty)',
+    exampleResponse: 'Living Room',
+    response: 'Kitchen <TV> & "box"',
+    description: 'Returns the device name',
+    failureReason: ['Name is too long']
+  },
+  {
+    id: '2',
+    method: 'Accessibility.onVoiceGuidanceSettingsChanged',
+    mode: 'SDK',
+    status: 'PASS',
+    durationMs: 3000,
+    timestamp: 0,
+    params: { listen: true },
+    expectedFormat: 'null',
+    eventAction: 'subscribe',
+    response: null
+  }
+];
+
+const captures = (re: RegExp, source: string): string[] => {
+  const out: string[] = [];
+  for (let m = re.exec(source); m; m = re.exec(source)) out.push(m[1]);
+  return out;
+};
+
+describe('Excel report', () => {
+  const report = buildSuiteReport('Firebolt SDK Validation - Accessibility, Device', 'SDK', Date.now(), results);
+  const bytes = generateReportXlsx(report);
+  const text = new TextDecoder().decode(bytes);
+
+  it('is a ZIP package with the workbook parts', () => {
+    expect([...bytes.slice(0, 4)]).toEqual([0x50, 0x4b, 0x03, 0x04]);
+    for (const part of [
+      '[Content_Types].xml',
+      'xl/workbook.xml',
+      'xl/styles.xml',
+      'xl/worksheets/sheet1.xml',
+      'xl/worksheets/sheet3.xml'
+    ])
+      expect(text).toContain(part);
+  });
+  it('puts the Summary sheet first, then one sheet per module in name order', () => {
+    const sheets = captures(/<sheet name="([^"]+)" sheetId/g, text);
+    expect(sheets).toEqual(['Summary', 'Accessibility', 'Device']);
+  });
+  it('summarises overall and per-module results with links to the module sheets', () => {
+    expect(text).toContain('Firebolt Certification Report');
+    expect(text).toContain('Results by module');
+    expect(text).toContain(`location="'Accessibility'!A1"`);
+    expect(text).toContain(`location="'Device'!A1"`);
+  });
+  it('module sheets have Method, Description, Status and Log columns', () => {
+    const device = text.slice(text.indexOf('xl/worksheets/sheet3.xml<?xml'));
+    const headers = captures(
+      /<c r="[A-Z]1" t="inlineStr" s="\d+"><is><t xml:space="preserve">([^<]+)<\/t>/g,
+      device.slice(0, device.indexOf('</worksheet>'))
+    );
+    expect(headers).toEqual(['Sl No', 'APIs/Events', 'Description', 'Status', 'Log']);
+    expect(device).toContain('Returns the device name');
+  });
+  it('Log order: expected format, actual response, failure reason (failures only), then sample response (XML-escaped)', () => {
+    // No parameters → no Parameters section.
+    expect(logText(results[0])).toBe(
+      'Method:\nDevice.name\n\nExpected response format (OpenRPC schema):\nstring (not empty)\n\nActual response:\n"Kitchen <TV> & \\"box\\""\n\nFailure reason:\nName is too long\n\nSample response:\n"Living Room"'
+    );
+    // Passing result → no Failure reason section.
+    expect(logText(results[1])).toBe(
+      'Method:\nAccessibility.onVoiceGuidanceSettingsChanged (Subscribe)\n\nParameters:\n{\n  "listen": true\n}\n\nExpected response format (OpenRPC schema):\nnull\n\nActual response:\nnull'
+    );
+    expect(logText(results[0])).not.toContain('illustration only');
+    expect(text).toContain('Kitchen &lt;TV&gt; &amp;');
+  });
+  it('summary has no suite name and no SDK, overall-result or footnote rows', () => {
+    const summary = text.slice(
+      text.indexOf('xl/worksheets/sheet1.xml<?xml'),
+      text.indexOf('xl/worksheets/sheet2.xml<?xml')
+    );
+    expect(summary).not.toContain('Firebolt SDK Validation');
+    expect(summary).not.toContain('>Suite<');
+    for (const gone of ['>core<', 'Overall result', 'Generated ', 'Pass rate *', 'Pass rate = '])
+      expect(summary).not.toContain(gone);
+    expect(text).not.toContain('<tabColor');
+  });
+  it('draws a Passed/Failed success chart on the Summary sheet, linked to the Total row', () => {
+    expect(text).not.toContain('Overall success');
+    // Right of the Results by module table (column I), level with its heading row (row 12), legend under the doughnut.
+    expect(text).toContain('<xdr:from><xdr:col>8</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>11</xdr:row>');
+    expect(text).toContain('<c:legendPos val="b"/>');
+    expect(text).toContain('<drawing r:id="rId1"/>');
+    expect(text).toContain('/xl/charts/chart1.xml');
+    expect(text).toContain('xl/worksheets/_rels/sheet1.xml.rels');
+    expect(text).toContain('Target="../charts/chart1.xml"');
+    const chart = text.slice(text.indexOf('xl/charts/chart1.xml<?xml'));
+    expect(chart).toContain('<c:doughnutChart>');
+    expect(chart).toContain('Success rate 50.0%');
+    expect(chart).toContain("<c:f>'Summary'!$C$13:$D$13</c:f>");
+    expect(chart).toContain("<c:f>'Summary'!$C$16:$D$16</c:f>");
+    expect(chart).toContain('<c:pt idx="0"><c:v>Passed</c:v></c:pt><c:pt idx="1"><c:v>Failed</c:v></c:pt>');
+    expect(chart).toContain('<c:pt idx="0"><c:v>1</c:v></c:pt><c:pt idx="1"><c:v>1</c:v></c:pt>');
+    // Module sheets get no drawing.
+    expect(text).not.toContain('sheet2.xml.rels');
+  });
+  it('omits the chart when there are no results', () => {
+    const empty = new TextDecoder().decode(generateReportXlsx(buildSuiteReport('x', 'SDK', Date.now(), [])));
+    expect(empty).not.toContain('chart1.xml');
+    expect(empty).not.toContain('<drawing ');
+  });
+  it('uses the .xlsx file name', () => {
+    expect(reportFileName(report, 'xlsx')).toMatch(/^firebolt-certification-refAppExecReport-\d{8}-\d{6}\.xlsx$/);
+  });
+});
