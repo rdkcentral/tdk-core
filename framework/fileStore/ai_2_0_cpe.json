@@ -1,0 +1,25 @@
+{
+  "ai2_0_config": {
+    "version": "2.0",
+    "cpe_type": "CPE",
+    "enabled": true,
+    "modules": []
+  },
+  "downloadManager": {
+    "dm_test_url_large": "https://tools.rdkcentral.com:8443/images//lib32-middleware-test-image-RPI4-raspberrypi4-64-rdke-feature-RDKECOREMW-584-OTA.wic.tar.gz",
+    "dm_test_url_medium": "http://192.168.29.38/com.rdk.cobalt_rpi4_bundle_rialto_v0.9.5.tar.gz",
+    "dm_test_url_small": "https://jsonplaceholder.typicode.com/posts/1",
+    "dm_test_url_video": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    "timeouts": {
+      "progressCheckTimeout": 25,
+      "waitInterval": 2,
+      "pauseResumeWait": 3
+    },
+    "defaults": {
+      "priority": "true",
+      "retries": "2",
+      "rateLimit": "0",
+      "rateLimitTest": "512000"
+    }
+  }
+}
