@@ -14,16 +14,8 @@ RDKV_CERT_AVS_AppPackageManager
    - [AppPackageManager_Uninstall_InvalidParameter](#apppackagemanager_uninstall_invalidparameter)
    - [AppPackageManager_Install_InvalidParameters](#apppackagemanager_install_invalidparameters)
    - [AppPackageManager_Uninstall_EmptyParameters](#apppackagemanager_uninstall_emptyparameters)
-   - [AppPackageManager_Unlock_Package_EmptyParameters](#apppackagemanager_unlock_package_emptyparameters)
-   - [AppPackageManager_Unlock_Package_InvalidPackageId_EmptyVersion](#apppackagemanager_unlock_package_invalidpackageid_emptyversion)
-   - [AppPackageManager_Unlock_Package_EmptyPackageId_InvalidVersion](#apppackagemanager_unlock_package_emptypackageid_invalidversion)
-   - [AppPackageManager_GetLockedInfo_EmptyParameters](#apppackagemanager_getlockedinfo_emptyparameters)
-   - [AppPackageManager_GetLockedInfo_InvalidPackageId_EmptyVersion](#apppackagemanager_getlockedinfo_invalidpackageid_emptyversion)
-   - [AppPackageManager_GetLockedInfo_EmptyPackageId_InvalidVersion](#apppackagemanager_getlockedinfo_emptypackageid_invalidversion)
    - [AppPackageManager_Uninstall_TwoTimes](#apppackagemanager_uninstall_twotimes)
    - [AppPackageManager_Install_EmptyParameters](#apppackagemanager_install_emptyparameters)
-   - [AppPackageManager_Lock_Package_EmptyParameters](#apppackagemanager_lock_package_emptyparameters)
-   - [AppPackageManager_Lock_Package_InvalidParameters](#apppackagemanager_lock_package_invalidparameters)
    - [AppPackageManager_Package_State_After_Install](#apppackagemanager_package_state_after_install)
    - [AppPackageManager_Package_State_After_Uninstall](#apppackagemanager_package_state_after_uninstall)
    - [AppPackageManager_Config_ValidParameters](#apppackagemanager_config_validparameters)
@@ -31,17 +23,6 @@ RDKV_CERT_AVS_AppPackageManager
    - [AppPackageManager_Config_InvalidParameters](#apppackagemanager_config_invalidparameters)
    - [AppPackageManager_Config_EmptyPackageId_ValidVersion](#apppackagemanager_config_emptypackageid_validversion)
    - [AppPackageManager_Config_ValidPackageId_EmptyVersion](#apppackagemanager_config_validpackageid_emptyversion)
-   - [AppPackageManager_Lock_Package_ValidParameters](#apppackagemanager_lock_package_validparameters)
-   - [AppPackageManager_Lock_Package_EmptyPackageId](#apppackagemanager_lock_package_emptypackageid)
-   - [AppPackageManager_Lock_Package_EmptyVersion](#apppackagemanager_lock_package_emptyversion)
-   - [AppPackageManager_Lock_Package_EmptyLockReason](#apppackagemanager_lock_package_emptylockreason)
-   - [AppPackageManager_Lock_Package_InvalidPackageId](#apppackagemanager_lock_package_invalidpackageid)
-   - [AppPackageManager_Lock_Package_InvalidVersion](#apppackagemanager_lock_package_invalidversion)
-   - [AppPackageManager_Lock_Package_NoParameters](#apppackagemanager_lock_package_noparameters)
-   - [AppPackageManager_Unlock_Package_ValidParameters](#apppackagemanager_unlock_package_validparameters)
-   - [AppPackageManager_Unlock_Package_NoParameters](#apppackagemanager_unlock_package_noparameters)
-   - [AppPackageManager_GetLockedInfo_ValidParameters](#apppackagemanager_getlockedinfo_validparameters)
-   - [AppPackageManager_GetLockedInfo_NoParameters](#apppackagemanager_getlockedinfo_noparameters)
    - [AppPackageManager_On_AppInstallationStatus_Event](#apppackagemanager_on_appinstallationstatus_event)
    - [AppPackageManager_GetPackageState_ValidPackageId_InvalidVersion](#apppackagemanager_getpackagestate_validpackageid_invalidversion)
    - [AppPackageManager_GetPackageState_InvalidPackageId_ValidVersion](#apppackagemanager_getpackagestate_invalidpackageid_validversion)
@@ -263,138 +244,12 @@ Verify that the uninstall method handles empty parameters correctly
 
 ---
 
-<a id="apppackagemanager_unlock_package_emptyparameters"></a>
-### TestCase Name
-AppPackageManager_Unlock_Package_EmptyParameters
-
-### TestCase ID
-PM_09
-
-### TestCase Objective
-Verify that the uninstall method handles invalid parameters correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Uninstall invalid parameters | Invoke uninstall on org.rdk.AppPackageManager with packageId: "invalid_package_id"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.uninstall", "params": {"packageId": "invalid_package_id"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
-
----
-
-<a id="apppackagemanager_unlock_package_invalidpackageid_emptyversion"></a>
-### TestCase Name
-AppPackageManager_Unlock_Package_InvalidPackageId_EmptyVersion
-
-### TestCase ID
-PM_10
-
-### TestCase Objective
-Verify that the unlock method handles empty parameters correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Unlock package empty parameters | Invoke unlock on org.rdk.AppPackageManager with packageId: "", version: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "", "version": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `Could not access requested service` |
-
----
-
-<a id="apppackagemanager_unlock_package_emptypackageid_invalidversion"></a>
-### TestCase Name
-AppPackageManager_Unlock_Package_EmptyPackageId_InvalidVersion
-
-### TestCase ID
-PM_11
-
-### TestCase Objective
-Verify that the unlock method handles invalid packageId with empty version correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Unlock package InvalidPackageId EmptyVersion | Invoke unlock on org.rdk.AppPackageManager with packageId: "invalid_package_id", version: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "invalid_package_id", "version": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `Could not access requested service` |
-
----
-
-<a id="apppackagemanager_getlockedinfo_emptyparameters"></a>
-### TestCase Name
-AppPackageManager_GetLockedInfo_EmptyParameters
-
-### TestCase ID
-PM_12
-
-### TestCase Objective
-Verify that the unlock method handles empty packageId with invalid version correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Unlock package EmptyPackageId InvalidVersion | Invoke unlock on org.rdk.AppPackageManager with packageId: "", version: "invalid_version"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "", "version": "invalid_version"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `Could not access requested service` |
-
----
-
-<a id="apppackagemanager_getlockedinfo_invalidpackageid_emptyversion"></a>
-### TestCase Name
-AppPackageManager_GetLockedInfo_InvalidPackageId_EmptyVersion
-
-### TestCase ID
-PM_13
-
-### TestCase Objective
-Verify that the getLockedInfo method handles empty parameters correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | GetLockedInfo empty parameters | Invoke getLockedInfo on org.rdk.AppPackageManager with packageId: "", version: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.getLockedInfo", "params": {"packageId": "", "version": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `Could not access requested service` |
-
----
-
-<a id="apppackagemanager_getlockedinfo_emptypackageid_invalidversion"></a>
-### TestCase Name
-AppPackageManager_GetLockedInfo_EmptyPackageId_InvalidVersion
-
-### TestCase ID
-PM_14
-
-### TestCase Objective
-Verify that the getLockedInfo method handles invalid packageId with empty version correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | GetLockedInfo InvalidPackageId EmptyVersion | Invoke getLockedInfo on org.rdk.AppPackageManager with packageId: "invalid_package_id", version: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.getLockedInfo", "params": {"packageId": "invalid_package_id", "version": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `Could not access requested service` |
-
----
-
 <a id="apppackagemanager_uninstall_twotimes"></a>
 ### TestCase Name
 AppPackageManager_Uninstall_TwoTimes
 
 ### TestCase ID
-PM_15
-
-### TestCase Objective
-Verify that the getLockedInfo method handles empty packageId with invalid version correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | GetLockedInfo EmptyPackageId InvalidVersion | Invoke getLockedInfo on org.rdk.AppPackageManager with packageId: "", version: "invalid_version"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.getLockedInfo", "params": {"packageId": "", "version": "invalid_version"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `Could not access requested service` |
-
----
-
-<a id="apppackagemanager_install_emptyparameters"></a>
-### TestCase Name
-AppPackageManager_Install_EmptyParameters
-
-### TestCase ID
-PM_16
+PM_09
 
 ### TestCase Objective
 Verify uninstall method with valid parameters and perform two consecutive uninstall operations
@@ -426,12 +281,12 @@ Verify uninstall method with valid parameters and perform two consecutive uninst
 
 ---
 
-<a id="apppackagemanager_lock_package_emptyparameters"></a>
+<a id="apppackagemanager_install_emptyparameters"></a>
 ### TestCase Name
-AppPackageManager_Lock_Package_EmptyParameters
+AppPackageManager_Install_EmptyParameters
 
 ### TestCase ID
-PM_17
+PM_10
 
 ### TestCase Objective
 Verify that the install method handles empty parameters correctly
@@ -444,48 +299,12 @@ Verify that the install method handles empty parameters correctly
 
 ---
 
-<a id="apppackagemanager_lock_package_invalidparameters"></a>
-### TestCase Name
-AppPackageManager_Lock_Package_InvalidParameters
-
-### TestCase ID
-PM_18
-
-### TestCase Objective
-Verify that the lock method handles empty parameters correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Lock package empty parameters | Invoke lock on org.rdk.AppPackageManager with packageId: "", version: "", lockReason: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "", "version": "", "lockReason": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `Could not access requested service` |
-
----
-
 <a id="apppackagemanager_package_state_after_install"></a>
 ### TestCase Name
 AppPackageManager_Package_State_After_Install
 
 ### TestCase ID
-PM_19
-
-### TestCase Objective
-Verify that the lock method handles invalid parameters correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Lock package invalid parameters | Invoke lock on org.rdk.AppPackageManager with packageId: "invalid_package_id", version: "invalid_version", lockReason: "invalid_reason"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "invalid_package_id", "version": "invalid_version", "lockReason": "invalid_reason"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `Could not access requested service` |
-
----
-
-<a id="apppackagemanager_package_state_after_uninstall"></a>
-### TestCase Name
-AppPackageManager_Package_State_After_Uninstall
-
-### TestCase ID
-PM_20
+PM_11
 
 ### TestCase Objective
 Verify that the package state method works correctly after installing a package with valid parameters
@@ -514,12 +333,12 @@ Verify that the package state method works correctly after installing a package 
 
 ---
 
-<a id="apppackagemanager_config_validparameters"></a>
+<a id="apppackagemanager_package_state_after_uninstall"></a>
 ### TestCase Name
-AppPackageManager_Config_ValidParameters
+AppPackageManager_Package_State_After_Uninstall
 
 ### TestCase ID
-PM_21
+PM_12
 
 ### TestCase Objective
 Verify that the package state method works correctly after uninstalling a package with valid parameters
@@ -550,12 +369,12 @@ Verify that the package state method works correctly after uninstalling a packag
 
 ---
 
-<a id="apppackagemanager_config_emptyparameters"></a>
+<a id="apppackagemanager_config_validparameters"></a>
 ### TestCase Name
-AppPackageManager_Config_EmptyParameters
+AppPackageManager_Config_ValidParameters
 
 ### TestCase ID
-PM_22
+PM_13
 
 ### TestCase Objective
 Verify that the config method works correctly with valid parameters
@@ -580,12 +399,12 @@ Verify that the config method works correctly with valid parameters
 
 ---
 
-<a id="apppackagemanager_config_invalidparameters"></a>
+<a id="apppackagemanager_config_emptyparameters"></a>
 ### TestCase Name
-AppPackageManager_Config_InvalidParameters
+AppPackageManager_Config_EmptyParameters
 
 ### TestCase ID
-PM_23
+PM_14
 
 ### TestCase Objective
 Verify that the config method handles empty parameters correctly
@@ -598,12 +417,12 @@ Verify that the config method handles empty parameters correctly
 
 ---
 
-<a id="apppackagemanager_config_emptypackageid_validversion"></a>
+<a id="apppackagemanager_config_invalidparameters"></a>
 ### TestCase Name
-AppPackageManager_Config_EmptyPackageId_ValidVersion
+AppPackageManager_Config_InvalidParameters
 
 ### TestCase ID
-PM_24
+PM_15
 
 ### TestCase Objective
 Verify that the config method handles invalid parameters correctly
@@ -616,12 +435,12 @@ Verify that the config method handles invalid parameters correctly
 
 ---
 
-<a id="apppackagemanager_config_validpackageid_emptyversion"></a>
+<a id="apppackagemanager_config_emptypackageid_validversion"></a>
 ### TestCase Name
-AppPackageManager_Config_ValidPackageId_EmptyVersion
+AppPackageManager_Config_EmptyPackageId_ValidVersion
 
 ### TestCase ID
-PM_25
+PM_16
 
 ### TestCase Objective
 Verify that the config method handles empty packageId with valid version correctly
@@ -634,12 +453,12 @@ Verify that the config method handles empty packageId with valid version correct
 
 ---
 
-<a id="apppackagemanager_lock_package_validparameters"></a>
+<a id="apppackagemanager_config_validpackageid_emptyversion"></a>
 ### TestCase Name
-AppPackageManager_Lock_Package_ValidParameters
+AppPackageManager_Config_ValidPackageId_EmptyVersion
 
 ### TestCase ID
-PM_26
+PM_17
 
 ### TestCase Objective
 Verify that the config method handles valid packageId with empty version correctly
@@ -652,289 +471,12 @@ Verify that the config method handles valid packageId with empty version correct
 
 ---
 
-<a id="apppackagemanager_lock_package_emptypackageid"></a>
-### TestCase Name
-AppPackageManager_Lock_Package_EmptyPackageId
-
-### TestCase ID
-PM_27
-
-### TestCase Objective
-Verify that the lock method works correctly with valid parameters
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Uninstall_Existing_Package_Before_Install
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check existing package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
-| 2 | Uninstall existing package | Uninstall on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
-#### TestCase Pre-condition 2: Download_Install_Package
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Download valid parameters | Download on DownloadManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
-| 2 | Install package on device | Install on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_2>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 3 | Verify installed package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Lock package valid parameters | Invoke lock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
-### TestCase Post-condition
-
-#### TestCase Post-condition 1: Unlock_Package_After_Lock
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Unlock package for management | Unlock on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
-
-<a id="apppackagemanager_lock_package_emptyversion"></a>
-### TestCase Name
-AppPackageManager_Lock_Package_EmptyVersion
-
-### TestCase ID
-PM_28
-
-### TestCase Objective
-Verify that the lock method handles empty packageId correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Lock package EmptyPackageId | Invoke lock on org.rdk.AppPackageManager with packageId: "", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
-
----
-
-<a id="apppackagemanager_lock_package_emptylockreason"></a>
-### TestCase Name
-AppPackageManager_Lock_Package_EmptyLockReason
-
-### TestCase ID
-PM_29
-
-### TestCase Objective
-Verify that the lock method handles empty version correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Lock package EmptyVersion | Invoke lock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
-
----
-
-<a id="apppackagemanager_lock_package_invalidpackageid"></a>
-### TestCase Name
-AppPackageManager_Lock_Package_InvalidPackageId
-
-### TestCase ID
-PM_30
-
-### TestCase Objective
-Verify that the lock method handles empty lockReason correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Lock package EmptyLockReason | Invoke lock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: ""<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": ""}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
-
----
-
-<a id="apppackagemanager_lock_package_invalidversion"></a>
-### TestCase Name
-AppPackageManager_Lock_Package_InvalidVersion
-
-### TestCase ID
-PM_31
-
-### TestCase Objective
-Verify that the lock method handles invalid packageId correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Lock package InvalidPackageId | Invoke lock on org.rdk.AppPackageManager with packageId: "invalid_package_id", version: "<PACKAGEMANAGER_APPLICATION_VERSION>", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "invalid_package_id", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
-
----
-
-<a id="apppackagemanager_lock_package_noparameters"></a>
-### TestCase Name
-AppPackageManager_Lock_Package_NoParameters
-
-### TestCase ID
-PM_32
-
-### TestCase Objective
-Verify that the lock method handles invalid version correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Lock package InvalidVersion | Invoke lock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "invalid_version", lockReason: "TestingPurpose"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "invalid_version", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
-
----
-
-<a id="apppackagemanager_unlock_package_validparameters"></a>
-### TestCase Name
-AppPackageManager_Unlock_Package_ValidParameters
-
-### TestCase ID
-PM_33
-
-### TestCase Objective
-Verify that the lock method handles missing parameters correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Lock package NoParameters | Invoke lock on org.rdk.AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
-
----
-
-<a id="apppackagemanager_unlock_package_noparameters"></a>
-### TestCase Name
-AppPackageManager_Unlock_Package_NoParameters
-
-### TestCase ID
-PM_34
-
-### TestCase Objective
-Verify that the unlock method works correctly with valid parameters
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Uninstall_Existing_Package_Before_Install
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check existing package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
-| 2 | Uninstall existing package | Uninstall on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
-#### TestCase Pre-condition 2: Download_Install_Package
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Download valid parameters | Download on DownloadManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
-| 2 | Install package on device | Install on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_2>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 3 | Verify installed package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
-
-#### TestCase Pre-condition 3: Lock_Package_Before_Unlock
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Lock package valid parameters | Lock on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Unlock package for management | Invoke unlock on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
-
-<a id="apppackagemanager_getlockedinfo_validparameters"></a>
-### TestCase Name
-AppPackageManager_GetLockedInfo_ValidParameters
-
-### TestCase ID
-PM_35
-
-### TestCase Objective
-Verify that the unlock method handles missing parameters correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Unlock package NoParameters | Invoke unlock on org.rdk.AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
-
----
-
-<a id="apppackagemanager_getlockedinfo_noparameters"></a>
-### TestCase Name
-AppPackageManager_GetLockedInfo_NoParameters
-
-### TestCase ID
-PM_36
-
-### TestCase Objective
-Verify that the getLockedInfo method works correctly with valid parameters
-
-### TestCase Pre-condition
-
-#### TestCase Pre-condition 1: Uninstall_Existing_Package_Before_Install
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Check existing package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Verify that the package list is returned successfully |
-| 2 | Uninstall existing package | Uninstall on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.uninstall", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
-#### TestCase Pre-condition 2: Download_Install_Package
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Download valid parameters | Download on DownloadManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.DownloadManager.1.download", "params": {"url": "<PACKAGEMANAGER_APPLICATION_HOSTEDURL>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that a valid downloadId is returned |
-| 2 | Install package on device | Install on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.install", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "fileLocator": "<result_step_2>", "name": "<PACKAGEMANAGER_ADDITIONALMETADATA_NAME>", "value": "<PACKAGEMANAGER_ADDITIONALMETADATA_VALUE>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-| 3 | Verify installed package | Get packages from AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.listPackages"}' http://127.0.0.1:9998/jsonrpc` | Confirm that the installed package is present in the package list |
-
-#### TestCase Pre-condition 3: Lock_Package_Before_GetLockedInfo
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Lock package valid parameters | Lock on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.lock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>", "lockReason": "TestingPurpose"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | GetLockedInfo valid parameters | Invoke getLockedInfo on org.rdk.AppPackageManager with packageId: "<PACKAGEMANAGER_APPLICATION_NAME>", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.getLockedInfo", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call is successful and returns a non-null, non-empty response  |
-
-### TestCase Post-condition
-
-#### TestCase Post-condition 1: Unlock_Package_After_GetLockedInfo
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Unlock package for management | Unlock on AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.unlock", "params": {"packageId": "<PACKAGEMANAGER_APPLICATION_NAME>", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | Verify that the API call succeeds with null/empty result |
-
----
-
 <a id="apppackagemanager_on_appinstallationstatus_event"></a>
 ### TestCase Name
 AppPackageManager_On_AppInstallationStatus_Event
 
 ### TestCase ID
-PM_37
-
-### TestCase Objective
-Verify that the getLockedInfo method handles missing parameters correctly
-
-### Test Steps
-
-| # | Step Name | Step Description | Expected Result |
-| --- | --- | --- | --- |
-| 1 | Get locked info without required parameters (error case) | Invoke getLockedInfo on org.rdk.AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.getLockedInfo"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
-
----
-
-<a id="apppackagemanager_getpackagestate_validpackageid_invalidversion"></a>
-### TestCase Name
-AppPackageManager_GetPackageState_ValidPackageId_InvalidVersion
-
-### TestCase ID
-PM_38
+PM_18
 
 ### TestCase Objective
 Verify that the appInstallationStatus event is triggered with correct status during app installation and uninstallation
@@ -962,12 +504,12 @@ Verify that the appInstallationStatus event is triggered with correct status dur
 
 ---
 
-<a id="apppackagemanager_getpackagestate_invalidpackageid_validversion"></a>
+<a id="apppackagemanager_getpackagestate_validpackageid_invalidversion"></a>
 ### TestCase Name
-AppPackageManager_GetPackageState_InvalidPackageId_ValidVersion
+AppPackageManager_GetPackageState_ValidPackageId_InvalidVersion
 
 ### TestCase ID
-PM_39
+PM_19
 
 ### TestCase Objective
 Verify that the getPackageState method handles valid packageId with invalid version correctly
@@ -980,12 +522,12 @@ Verify that the getPackageState method handles valid packageId with invalid vers
 
 ---
 
-<a id="apppackagemanager_getpackagestate_noparameters"></a>
+<a id="apppackagemanager_getpackagestate_invalidpackageid_validversion"></a>
 ### TestCase Name
-AppPackageManager_GetPackageState_NoParameters
+AppPackageManager_GetPackageState_InvalidPackageId_ValidVersion
 
 ### TestCase ID
-PM_40
+PM_20
 
 ### TestCase Objective
 Verify that the getPackageState method handles invalid packageId with valid version correctly
@@ -995,6 +537,24 @@ Verify that the getPackageState method handles invalid packageId with valid vers
 | # | Step Name | Step Description | Expected Result |
 | --- | --- | --- | --- |
 | 1 | GetPackageState InvalidPackageId ValidVersion | Invoke packageState on org.rdk.AppPackageManager with packageId: "invalid_package_id", version: "<PACKAGEMANAGER_APPLICATION_VERSION>"<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.packageState", "params": {"packageId": "invalid_package_id", "version": "<PACKAGEMANAGER_APPLICATION_VERSION>"}}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
+
+---
+
+<a id="apppackagemanager_getpackagestate_noparameters"></a>
+### TestCase Name
+AppPackageManager_GetPackageState_NoParameters
+
+### TestCase ID
+PM_21
+
+### TestCase Objective
+Verify that the getPackageState method handles missing parameters correctly
+
+### Test Steps
+
+| # | Step Name | Step Description | Expected Result |
+| --- | --- | --- | --- |
+| 1 | Get package state without required parameters (error case) | Invoke packageState on org.rdk.AppPackageManager<br>`curl -d '{"jsonrpc": "2.0", "id": 3, "method": "org.rdk.AppPackageManager.1.packageState"}' http://127.0.0.1:9998/jsonrpc` | API returns expected error message `ERROR_GENERAL` |
 
 ## Plugin Post-conditions
 

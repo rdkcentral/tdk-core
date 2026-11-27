@@ -2866,7 +2866,7 @@
         </method>
 	<method name="NetworkManager_Start_Wifi_Scan" api="StartWiFiScan" type="method" desc="Initiates WiFi scanning">
             <params>
-                <param tag="frequency"/>
+                <param tag="frequencies" type="list"/>
                 <param tag="ssids" type="list"/>
             </params>
         </method>
@@ -3836,7 +3836,8 @@
                 <param tag="packageId" defaultValue="null" type="string"/>
             </params>
         </method>
-        <method name="Unlock_Package" api="unlock" type="method" desc="Unlocks a package">
+        <!-- The platform team confirmed that the documentation for the lock, unlock, and getLockedInfo APIs is incorrect therefore commented out -->
+        <!--method name="Unlock_Package" api="unlock" type="method" desc="Unlocks a package">
             <params>
                 <param tag="packageId" defaultValue="null" type="string"/>
                 <param tag="version" defaultValue="null" type="string"/>
@@ -3854,7 +3855,7 @@
                 <param tag="packageId" defaultValue="null" type="string"/>
                 <param tag="version" defaultValue="null" type="string"/>
             </params>
-        </method>
+        </method-->
         <method name="Package_State" api="packageState" type="method" desc="Retrieves the current state of a package">
             <params>
                 <param tag="packageId" defaultValue="null" type="string"/>
