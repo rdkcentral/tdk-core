@@ -7,6 +7,20 @@ RDKV_CERT_FIREBOLT_SchemaValidation
 ## Table Of Contents
 - [Objective](#head.Objective)
 - [Coverage](#head.Coverage)
+  - [Accessibility](#head.Module.Accessibility)
+  - [Actions](#head.Module.Actions)
+  - [Advertising](#head.Module.Advertising)
+  - [Device](#head.Module.Device)
+  - [Discovery](#head.Module.Discovery)
+  - [Display](#head.Module.Display)
+  - [Lifecycle2](#head.Module.Lifecycle2)
+  - [Localization](#head.Module.Localization)
+  - [Metrics](#head.Module.Metrics)
+  - [Network](#head.Module.Network)
+  - [SpeechSynthesis](#head.Module.SpeechSynthesis)
+  - [Stats](#head.Module.Stats)
+  - [TextToSpeech](#head.Module.TextToSpeech)
+  - [VideoOutput](#head.Module.VideoOutput)
 - [Precondition](#head.Precondition)
 - [Test Steps](#head.TestSteps)
 - [Test Attributes](#head.Attributes)
@@ -20,6 +34,7 @@ To validate that the Firebolt APIs and events on the device conform to the Fireb
 The test covers 67 APIs and 24 events across 14 Firebolt modules, listed below by module in the order they are executed. `Lifecycle2.close` is excluded by default because it would close the certification application. The status, parameters, expected response format, actual response and failure reason of every API and event are recorded in the reports.
 ### Modules
 
+<a name="head.Module.Accessibility"></a>
 #### Accessibility
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
@@ -33,6 +48,7 @@ The test covers 67 APIs and 24 events across 14 Firebolt modules, listed below b
 |7|`Accessibility.voiceGuidanceSettings`|API|Returns voice guidance settings: enabled, rate, and navigationHints|None|Result must be an object with `enabled` (boolean), `rate` (number (0.1 to 10)), `navigationHints` (boolean). No other properties allowed|
 |8|`Accessibility.onVoiceGuidanceSettingsChanged`|Event|Notifies when voice guidance settings change|`{"listen": true}` (subscribe), then `{"listen": false}` (unsubscribe)|Subscribe reply must be `null` and unsubscribe reply must be `null`|
 
+<a name="head.Module.Actions"></a>
 #### Actions
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
@@ -41,12 +57,14 @@ The test covers 67 APIs and 24 events across 14 Firebolt modules, listed below b
 |2|`Actions.intent`|API|Returns the intent that was most recently received from the platform, as a JSON document. Typically called after transitioning to the active lifecycle state|None|Result must be an object with `intentId` (integer (>= 0)), `intent` (JSON object). No other properties allowed|
 |3|`Actions.onIntent`|Event|Notifies when a new intent is received from the platform|`{"listen": true}` (subscribe), then `{"listen": false}` (unsubscribe)|Subscribe reply must be `null` and unsubscribe reply must be `null`|
 
+<a name="head.Module.Advertising"></a>
 #### Advertising
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
 |-|-----------|----|------------|-----------------|---------------|
 |1|`Advertising.advertisingId`|API|Returns the IFA (Identifier for Advertising)|None|Result must be an object with `ifa` (string (pattern-validated)), `ifa_type` (one of `dpid`, `sspid`, `sessionid`), `lmt` (one of `0`, `1`). No other properties allowed|
 
+<a name="head.Module.Device"></a>
 #### Device
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
@@ -66,12 +84,14 @@ The test covers 67 APIs and 24 events across 14 Firebolt modules, listed below b
 |13|`Device.name`|API|Returns the device friendly name, used by network services (DIAL, Miracast, AirPlay) for device discovery|None|Result must be a string|
 |14|`Device.onNameChanged`|Event|Notifies when the device friendly name changes|`{"listen": true}` (subscribe), then `{"listen": false}` (unsubscribe)|Subscribe reply must be `null` and unsubscribe reply must be `null`|
 
+<a name="head.Module.Discovery"></a>
 #### Discovery
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
 |-|-----------|----|------------|-----------------|---------------|
 |1|`Discovery.watched`|API|Notify the platform that content has been partially or completely watched|`{"entityId": "entity-xyz-123", "progress": 0.95, "completed": true, "watchedOn": "2026-10-28T06:00:00.000Z", "agePolicy": "app:adult"}`|Result must be `null`|
 
+<a name="head.Module.Display"></a>
 #### Display
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
@@ -82,6 +102,7 @@ The test covers 67 APIs and 24 events across 14 Firebolt modules, listed below b
 |4|`Display.colorimetry`|API|Returns an unordered list of colorimetry values supported by the attached TV or integral display|None|Result must be an array of one of `bt709`, `bt2020`|
 |5|`Display.videoResolutions`|API|Returns an unordered list of HD video resolutions and frame rates supported by the attached TV or integral display|None|Result must be an array of one of `720p50`, `720p60`, `1080p50`, `1080p60`, `2160p50`, `2160p60`|
 
+<a name="head.Module.Lifecycle2"></a>
 #### Lifecycle2
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
@@ -90,6 +111,7 @@ The test covers 67 APIs and 24 events across 14 Firebolt modules, listed below b
 |2|`Lifecycle2.state`|API|Returns the current lifecycle state of the app|None|Result must be one of `initializing`, `active`, `paused`, `suspended`, `hibernated`, `terminating`|
 |3|`Lifecycle2.onStateChanged`|Event|Notifies on lifecycle state changes|`{"listen": true}` (subscribe), then `{"listen": false}` (unsubscribe)|Subscribe reply must be `null` and unsubscribe reply must be `null`|
 
+<a name="head.Module.Localization"></a>
 #### Localization
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
@@ -103,6 +125,7 @@ The test covers 67 APIs and 24 events across 14 Firebolt modules, listed below b
 |7|`Localization.timeZone`|API|Returns the current time zone in IANA format, e.g. America/New_York|None|Result must be a string (pattern-validated)|
 |8|`Localization.onTimeZoneChanged`|Event|Notifies when the time zone changes|`{"listen": true}` (subscribe), then `{"listen": false}` (unsubscribe)|Subscribe reply must be `null` and unsubscribe reply must be `null`|
 
+<a name="head.Module.Metrics"></a>
 #### Metrics
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
@@ -127,6 +150,7 @@ The test covers 67 APIs and 24 events across 14 Firebolt modules, listed below b
 |18|`Metrics.event`|API|Inform the platform of 1st party distributor metrics data|`{"schema": "xrn:firebolt:metrics", "data": "{}"}`|Result must be `null`|
 |19|`Metrics.appInfo`|API|Inform the platform about an app's build info|`{"build": "1.0.0"}`|Result must be `null`|
 
+<a name="head.Module.Network"></a>
 #### Network
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
@@ -134,6 +158,7 @@ The test covers 67 APIs and 24 events across 14 Firebolt modules, listed below b
 |1|`Network.connected`|API|Returns whether the device has a usable network connection|None|Result must be a boolean|
 |2|`Network.onConnectedChanged`|Event|Notifies when network connectivity changes|`{"listen": true}` (subscribe), then `{"listen": false}` (unsubscribe)|Subscribe reply must be `null` and unsubscribe reply must be `null`|
 
+<a name="head.Module.SpeechSynthesis"></a>
 #### SpeechSynthesis
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
@@ -146,12 +171,14 @@ The test covers 67 APIs and 24 events across 14 Firebolt modules, listed below b
 |6|`SpeechSynthesis.resume`|API|Resume a paused or synthesizing utterance|`{"utteranceId": 1}`|Result must be `null`|
 |7|`SpeechSynthesis.onUtteranceEvent`|Event|Notifies events related to an utterance|`{"listen": true}` (subscribe), then `{"listen": false}` (unsubscribe)|Subscribe reply must be `null` and unsubscribe reply must be `null`|
 
+<a name="head.Module.Stats"></a>
 #### Stats
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
 |-|-----------|----|------------|-----------------|---------------|
 |1|`Stats.memoryUsage`|API|Returns information about container memory usage, in bytes|None|Result must be an object with `userMemoryUsed` (integer (>= 0)), `userMemoryLimit` (integer (>= 0)), `gpuMemoryUsed` (integer (>= 0)), `gpuMemoryLimit` (integer (>= 0)). No other properties allowed|
 
+<a name="head.Module.TextToSpeech"></a>
 #### TextToSpeech
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
@@ -163,6 +190,7 @@ The test covers 67 APIs and 24 events across 14 Firebolt modules, listed below b
 |5|`TextToSpeech.onNetworkError`|Event (deprecated)|Utterance failed due to network|`{"listen": true}` (subscribe), then `{"listen": false}` (unsubscribe)|Subscribe reply must be `null` and unsubscribe reply must be `null`|
 |6|`TextToSpeech.onPlaybackError`|Event (deprecated)|Utterance failed during playback|`{"listen": true}` (subscribe), then `{"listen": false}` (unsubscribe)|Subscribe reply must be `null` and unsubscribe reply must be `null`|
 
+<a name="head.Module.VideoOutput"></a>
 #### VideoOutput
 
 |#|API / Event|Type|What it does|Parameters passed|Expected result|
