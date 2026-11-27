@@ -63,6 +63,10 @@ setup_vts_module() {
         power_manager|deepsleep_manager|rmf_audio_capture|hdmi_cec)
             echo "setup_vts_module: moving ${_src_dir} -> ${_new_dir} ..."
             mv "$_src_dir" "$_new_dir" || return 1
+            if [ ! -f "${_vts_root}/libut_control.so" ]; then
+                echo "Copying libut_control.so to VTS root directory"
+                cp "${_new_dir}/libut_control.so" "${_vts_root}/libut_control.so"
+            fi
             ln -sf "${_vts_root}/libut_control.so" "${_new_dir}/libut_control.so"
             unset _vts_root _src_module _new_module _binary _yaml _src_dir _new_dir
             return 0
@@ -83,8 +87,8 @@ setup_vts_module() {
 
     mkdir -p "$_new_dir" || return 1
 
-    # Symlink libut_control.so into the source module dir (idempotent)
-    if [ ! -f "${_src_dir}/libut_control.so" ]; then
+    if [  ! -f "${_vts_root}/libut_control.so" ]; then
+        mv "${_src_dir}/libut_control.so" "${_vts_root}/libut_control.so"
         ln -sf "${_vts_root}/libut_control.so" "${_src_dir}/libut_control.so"
     fi
 
