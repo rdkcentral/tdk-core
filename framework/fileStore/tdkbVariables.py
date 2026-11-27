@@ -21,16 +21,3 @@
 # Export all TDKB variables
 #------------------------------------------------------------------------------
 
-TDK_PATH="/usr/ccsp/tdk/"
-XDNS_DEFAULT_IPV4=""
-XDNS_DEFAULT_IPV6=""
-TEL_CONFIG_URL=""
-DNS_SERVER_IP=""
-#if your wifi client has BTM capability, give value as "TRUE", otherwise as "FALSE"
-BTM_CLIENT_CAPABILITY=""
-#Give the Port Number to which LAN client is connected
-LAN_PORT_Number=""
-#This is test value used in security mode SET operaton,but not a real secret
-SAE_PASS="asdf@1234"
-#This is used in security mode SET operation
-ENCRYPTION_MODE="AES"

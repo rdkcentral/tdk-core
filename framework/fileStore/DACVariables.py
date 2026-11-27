@@ -16,34 +16,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
-# DAC Service Names
-DOBBY_SERVICE = "dobby.service"
-DSM_SERVICE = "dsm.service"
-
-# Process Names
-DOBBY_DAEMON_PROCESS = "DobbyDaemon"
-DSM_PROCESS = "dsm"
-
+# Suite Specific Configuration
 # Binary Names
 CRUN_BINARY = "crun"
 DOBBYTOOL_BINARY = "DobbyTool"
-
-# DAC Container Testing
-DAC_TEST_DIR = "/dac"
-OCI_BUNDLE_NAME = "iperf3filogic.tar.gz"
-OCI_BUNDLE_NAME_2 = "iperf3bundlecopy.tar.gz"
-LOCAL_FILE_SERVER_IP = ""  # To be configured based on test environment
-LOCAL_FILE_SERVER_PORT = ""  # To be configured based on test environment
-BUNDLE_DOWNLOAD_URL = f"http://{LOCAL_FILE_SERVER_IP}:{LOCAL_FILE_SERVER_PORT}/{OCI_BUNDLE_NAME}"
-BUNDLE_DOWNLOAD_URL_2 = f"http://{LOCAL_FILE_SERVER_IP}:{LOCAL_FILE_SERVER_PORT}/{OCI_BUNDLE_NAME_2}"
 IPERF3_BINARY_PATH = "/usr/bin/iperf3"
 IPERF3_SERVER_CONTAINER = "iperf_server"
 IPERF3_CLIENT_CONTAINER = "test_client"
 INTERFACE_IP = "127.0.0.1"
+DAC_TEST_DIR = "/dac"
 
-# USP-PA and DSM Parameters
-IPERF3_SERVER_IP = ""  # IP of the iperf3 server to be set in bundle config.json
-DESTINATION_DIR = "destination"
 DU_INSTALL_PARAM = "Device.SoftwareModules.InstallDU"
 DU_UNINSTALL_PARAM_1 = "Device.SoftwareModules.DeploymentUnit.1.Uninstall"
 DU_UNINSTALL_PARAM_2 = "Device.SoftwareModules.DeploymentUnit.2.Uninstall"
@@ -56,6 +38,11 @@ EU1_STATUS_PARAM = "Device.SoftwareModules.ExecutionUnit.1.Status"
 EU1_NAME_PARAM = "Device.SoftwareModules.ExecutionUnit.1.Name"
 EU2_NAME_PARAM = "Device.SoftwareModules.ExecutionUnit.2.Name"
 
+# USP-PA and DSM Parameters
+IPERF3_SERVER_IP = ""  # IP of the iperf3 server to be set in bundle config.json
+
+DESTINATION_DIR = "destination"
+
 # Expected Values
 EXPECTED_DU_STATUS = "Installed"
 EXPECTED_EU_STATUS_ACTIVE = "Active"
@@ -64,11 +51,18 @@ EXPECTED_EU_STATUS_ACTIVE = "Active"
 EXPECTED_ENABLED_STATE = "enabled"
 EXPECTED_ACTIVE_STATE = "active (running)"
 
-# Factory Reset Parameters
-FACTORY_RESET_PARAM = "Device.X_CISCO_COM_DeviceControl.FactoryReset"
-FACTORY_RESET_VALUE = "Router,Wifi,VoIP,Dect,MoCA"
-
-# Wait Times (in seconds)
-FACTORY_RESET_WAIT_TIME = 300
 CLIENT_COMPLETION_WAIT_TIME = 10
 BUNDLE_INSTALL_WAIT_TIME = 10
+
+
+# Environment Specific Configuration
+
+# DAC Container Testing
+OCI_BUNDLE_NAME = "iperf3filogic.tar.gz"
+OCI_BUNDLE_NAME_2 = "iperf3bundlecopy.tar.gz"
+LOCAL_FILE_SERVER_IP = ""  # To be configured based on test environment
+LOCAL_FILE_SERVER_PORT = ""  # To be configured based on test environment
+BUNDLE_DOWNLOAD_URL = f"http://{LOCAL_FILE_SERVER_IP}:{LOCAL_FILE_SERVER_PORT}/{OCI_BUNDLE_NAME}"
+BUNDLE_DOWNLOAD_URL_2 = f"http://{LOCAL_FILE_SERVER_IP}:{LOCAL_FILE_SERVER_PORT}/{OCI_BUNDLE_NAME_2}"
+
+
