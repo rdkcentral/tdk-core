@@ -25,7 +25,7 @@ app_download_url = ""
 # Must match DEFAULT_REPORT_PUBLISH_URL in the web app's src/config/runtime.ts.
 report_server_url = ""
 # Relative to fileStore, or an absolute path on the Test Manager host.
-reports_directory = "Firebolt_Certification/firebolt_certification_report/reports"
+reports_directory = "firebolt_webapp/firebolt_certification_report/reports"
 
 # Leave empty to read PACKAGEMANAGER_FILE_LOCATOR from the device/type config.
 file_locator_prefix = ""
